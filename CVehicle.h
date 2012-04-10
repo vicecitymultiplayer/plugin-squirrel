@@ -34,8 +34,11 @@
 			unsigned int GetDamage();
 			bool GetAlarm();
 			bool GetLights();
-			int GetDriver();
+			CPlayer * GetDriver();
 			int GetID();
+			int GetSyncSource();
+			int GetSyncType();
+			bool GetWrecked();
 
 		public:
 			void Delete();
@@ -45,6 +48,13 @@
 			void SetPartStatus( int part, int status );
 			int GetTyreStatus( int tyre );
 			void SetTyreStatus( int part, int status );
+			bool GetStreamedForPlayer( CPlayer player );
+			CPlayer * GetOccupant( int slot );
+			int SetHandlingData( int rule, float value );
+			float GetHandlingData( int rule );
+			int ResetHandlingData( int rule );
+			int ResetAllHandling();
+			int IsHandlingSet( int rule );
 
 		public:
 			int nVehicleId;

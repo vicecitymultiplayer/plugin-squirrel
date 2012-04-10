@@ -94,7 +94,7 @@ unsigned int CVehicle::GetDamage() { return functions->GetVehicleDamageData( thi
 bool CVehicle::GetAlarm() { return functions->GetVehicleAlarm( this->nVehicleId ); }
 bool CVehicle::GetLights() { return functions->GetVehicleLights( this->nVehicleId ); }
 
-int CVehicle::GetDriver()
+CPlayer * CVehicle::GetDriver()
 {
 	int driver = -1;
 	for( int i = 0; i < functions->GetMaxPlayers(); i++ )
@@ -109,7 +109,10 @@ int CVehicle::GetDriver()
 		}
 	}
 
-	return driver;
+	if( driver == -1 )
+		return NULL;
+	else
+		return &playerMap[driver];
 }
 
 void CVehicle::Delete() { functions->DeleteVehicle( this->nVehicleId ); delete this; /* <<-- Very hackish indeed */ }
@@ -120,6 +123,27 @@ void CVehicle::SetPartStatus( int part, int status ) { functions->SetVehiclePart
 int CVehicle::GetTyreStatus( int tyre ) { return functions->GetVehicleTyreStatus( this->nVehicleId, tyre ); }
 void CVehicle::SetTyreStatus( int tyre, int status ) { functions->SetVehicleTyreStatus( this->nVehicleId, tyre, status ); }
 int CVehicle::GetID() { return this->nVehicleId; }
+
+int CVehicle::GetSyncSource() { return functions->GetVehicleSyncSource( this->nVehicleId ); }
+int CVehicle::GetSyncType() { return functions->GetVehicleSyncType( this->nVehicleId ); }
+bool CVehicle::GetStreamedForPlayer( CPlayer player ) { return functions->IsVehicleStreamedForPlayer( this->nVehicleId, player.nPlayerId ); }
+bool CVehicle::GetWrecked() { return functions->IsVehicleWrecked( this->nVehicleId ); }
+
+CPlayer * CVehicle::GetOccupant( int slot )
+{
+	int nPlayerId = functions->GetVehicleOccupant( this->nVehicleId, slot );
+	
+	if( nPlayerId == -1 )
+		return NULL;
+	else
+		return &playerMap[nPlayerId];
+}
+
+int CVehicle::SetHandlingData( int rule, float value ) { return functions->SetInstHandlingRule( this->nVehicleId, rule, value ); }
+float CVehicle::GetHandlingData( int rule ) { return functions->GetInstHandlingRule( this->nVehicleId, rule ); }
+int CVehicle::ResetHandlingData( int rule ) { functions->ResetInstHandlingRule( this->nVehicleId, rule ); }
+int CVehicle::ResetAllHandling() { functions->ResetInstHandling( this->nVehicleId ); }
+int CVehicle::IsHandlingSet( int rule ) { return functions->ExistsInstHandlingRule( this->nVehicleId, rule ); }
 
 void RegisterVehicle()
 {
@@ -144,8 +168,11 @@ void RegisterVehicle()
 	// Read-only properties
 	c
 		.Prop( _SC("Model"), &CVehicle::GetModel )
-		.Prop( _SC("DriverID"), &CVehicle::GetDriver )
-		.Prop( _SC("ID"), &CVehicle::GetID );
+		.Prop( _SC("Driver"), &CVehicle::GetDriver )
+		.Prop( _SC("ID"), &CVehicle::GetID )
+		.Prop( _SC("SyncSource"), &CVehicle::GetSyncSource )
+		.Prop( _SC("SyncType"), &CVehicle::GetSyncType )
+		.Prop( _SC("Wrecked"), &CVehicle::GetWrecked );
 
 	// Functions
 	c
@@ -157,7 +184,14 @@ void RegisterVehicle()
 		.Func( _SC("GetTyre"), &CVehicle::GetTyreStatus )
 		.Func( _SC("SetTyre"), &CVehicle::SetTyreStatus )
 		.Func( _SC("GetTire"), &CVehicle::GetTyreStatus )
-		.Func( _SC("SetTire"), &CVehicle::SetTyreStatus );
+		.Func( _SC("SetTire"), &CVehicle::SetTyreStatus )
+		.Func( _SC("StreamedForPlayer"), &CVehicle::GetStreamedForPlayer )
+		.Func( _SC("GetOccupant"), &CVehicle::GetOccupant )
+		.Func( _SC("SetHandlingData"), &CVehicle::SetHandlingData )
+		.Func( _SC("GetHandlingData"), &CVehicle::GetHandlingData )
+		.Func( _SC("ResetHandlingData"), &CVehicle::ResetHandlingData )
+		.Func( _SC("ResetAllHandling"), &CVehicle::ResetAllHandling )
+		.Func( _SC("IsHandlingSet"), &CVehicle::IsHandlingSet );
 
 	RootTable(v).Bind( _SC("CVehicle"), c );
 }

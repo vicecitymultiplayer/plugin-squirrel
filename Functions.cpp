@@ -115,13 +115,20 @@ void RegisterGlobals()
 		.Func( _SC("GetWastedSettings"), &GetWastedSettings );
 
 	RootTable(v)
-		.Func( _SC("dofile"), &dofile )
-		.Func( _SC("compilefile"), &compilefile );
-
-	RootTable(v)
 		.Func( _SC("HideMapObject"), &HideMapObject )
 		.Func( _SC("ShowMapObject"), &ShowMapObject )
 		.Func( _SC("ShowAllMapObjects"), &ShowAllMapObjects );
+
+	RootTable(v)
+		.Func( _SC("ForceAllSelect"), &ForceAllSelect );
+
+	RootTable(v)
+		.Func( _SC("ResetAllVehicleHandling"), &ResetAllVehicleHandling )
+		.Func( _SC("IsHandlingRuleSet"), &IsHandlingRuleSet )
+		.Func( _SC("SetHandlingRule"), &SetHandlingRule )
+		.Func( _SC("GetHandlingRule"), &GetHandlingRule )
+		.Func( _SC("ResetHandlingRule"), &ResetHandlingRule )
+		.Func( _SC("ResetVehicleHandling"), &ResetVehicleHandling );
 }
 
 void RegisterConstants()

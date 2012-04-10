@@ -400,3 +400,11 @@ bool ShowMapObject( int nModelId, float x, float y, float z )
 }
 
 bool ShowAllMapObjects() { return functions->ShowAllMapObjects(); }
+void ForceAllSelect() { functions->ForceAllSelect(); }
+
+int ResetAllVehicleHandling() { return functions->ResetAllVehicleHandlings(); }
+bool IsHandlingRuleSet( int model, int rule ) { return functions->ExistsHandlingRule( model, rule ); }
+int SetHandlingRule( int model, int rule, float value ) { return functions->SetHandlingRule( model, rule, value ); }
+float GetHandlingRule( int model, int rule ) { return functions->GetHandlingRule( model, rule ); }
+int ResetHandlingRule( int model, int rule ) { return functions->ResetHandlingRule( model, rule ); }
+int ResetVehicleHandling( int model ) { return functions->ResetHandling( model ); }

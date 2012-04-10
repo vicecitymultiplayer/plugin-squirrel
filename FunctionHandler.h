@@ -112,3 +112,11 @@ void compilefile( const SQChar * filename, const SQChar * outfile );
 bool HideMapObject( int nModelId, float x, float y, float z );
 bool ShowMapObject( int nModelId, float x, float y, float z );
 bool ShowAllMapObjects();
+void ForceAllSelect();
+
+int ResetAllVehicleHandling();
+bool IsHandlingRuleSet( int model, int rule );
+int SetHandlingRule( int model, int rule, float value );
+float GetHandlingRule( int model, int rule );
+int ResetHandlingRule( int model, int rule );
+int ResetVehicleHandling( int model );

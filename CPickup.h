@@ -1,4 +1,5 @@
 #include "main.h"
+#include "CPlayer.h"
 
 #ifndef pickup
 	class CPickup
@@ -22,6 +23,7 @@
 
 		public:
 			void Delete();
+			bool StreamedToPlayer( CPlayer player );
 			
 		public:
 			int nPickupId;
