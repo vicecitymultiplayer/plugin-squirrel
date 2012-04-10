@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Handlers">
+      <UniqueIdentifier>{6f385f5b-d8ba-4ce9-9be0-df4ac74345c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Handlers">
+      <UniqueIdentifier>{afadf92e-e466-487c-aba9-a670d9af7732}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Handlers\Classes">
+      <UniqueIdentifier>{48e767c1-0020-4056-aa4b-cc03b4971bb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Handlers\Classes">
+      <UniqueIdentifier>{723b036b-2abb-4229-92f6-7cb6f6043c89}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="VCMP.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="main.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CallbackHandler.h">
+      <Filter>Header Files\Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="FunctionHandler.h">
+      <Filter>Header Files\Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="Functions.h">
+      <Filter>Header Files\Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="CPickup.h">
+      <Filter>Header Files\Handlers\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlayer.h">
+      <Filter>Header Files\Handlers\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="CObject.h">
+      <Filter>Header Files\Handlers\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="CVehicle.h">
+      <Filter>Header Files\Handlers\Classes</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CallbackHandler.cpp">
+      <Filter>Source Files\Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="FunctionHandler.cpp">
+      <Filter>Source Files\Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="Functions.cpp">
+      <Filter>Source Files\Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="CObject.cpp">
+      <Filter>Source Files\Handlers\Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="CPickup.cpp">
+      <Filter>Source Files\Handlers\Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="CPlayer.cpp">
+      <Filter>Source Files\Handlers\Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="CVehicle.cpp">
+      <Filter>Source Files\Handlers\Classes</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
