@@ -31,6 +31,3 @@ void OnPlayerBeginTyping( int nPlayerId );
 void OnPlayerEndTyping( int nPlayerId );
 int OnLoginAttempt( char* playerName, const char* password, const char* pszIpAddress );
 void OnNameChangeable( char * playerName, char ** namePtr );
-
-// Player map
-extern std::map<int, CPlayer> playerMap;

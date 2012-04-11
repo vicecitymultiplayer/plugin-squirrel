@@ -166,3 +166,6 @@ class CVehicle;
 
 extern PluginFuncs*              functions;
 extern HSQUIRRELVM               v;
+
+// Player map
+extern std::map<int, CPlayer> playerMap;

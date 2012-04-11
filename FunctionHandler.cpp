@@ -381,7 +381,7 @@ WastedSettings GetWastedSettings()
 	);
 }
 
-bool HideMapObject( int nModelId, float x, float y, float z )
+void HideMapObject( int nModelId, float x, float y, float z )
 {
 	int x2 = floor( ( x * 10 ) + 0.5 );
 	int y2 = floor( ( y * 10 ) + 0.5 );
@@ -390,7 +390,7 @@ bool HideMapObject( int nModelId, float x, float y, float z )
 	functions->HideMapObject( nModelId, x2, y2, z2 );
 }
 
-bool ShowMapObject( int nModelId, float x, float y, float z )
+void ShowMapObject( int nModelId, float x, float y, float z )
 {
 	int x2 = floor( ( x * 10 ) + 0.5 );
 	int y2 = floor( ( y * 10 ) + 0.5 );
@@ -399,12 +399,12 @@ bool ShowMapObject( int nModelId, float x, float y, float z )
 	functions->ShowMapObject( nModelId, x2, y2, z2 );
 }
 
-bool ShowAllMapObjects() { return functions->ShowAllMapObjects(); }
+void ShowAllMapObjects() { functions->ShowAllMapObjects(); }
 void ForceAllSelect() { functions->ForceAllSelect(); }
 
-int ResetAllVehicleHandling() { return functions->ResetAllVehicleHandlings(); }
+void ResetAllVehicleHandling() { functions->ResetAllVehicleHandlings(); }
 bool IsHandlingRuleSet( int model, int rule ) { return functions->ExistsHandlingRule( model, rule ); }
-int SetHandlingRule( int model, int rule, float value ) { return functions->SetHandlingRule( model, rule, value ); }
+void SetHandlingRule( int model, int rule, float value ) { functions->SetHandlingRule( model, rule, value ); }
 float GetHandlingRule( int model, int rule ) { return functions->GetHandlingRule( model, rule ); }
-int ResetHandlingRule( int model, int rule ) { return functions->ResetHandlingRule( model, rule ); }
-int ResetVehicleHandling( int model ) { return functions->ResetHandling( model ); }
+void ResetHandlingRule( int model, int rule ) { functions->ResetHandlingRule( model, rule ); }
+void ResetVehicleHandling( int model ) { functions->ResetHandling( model ); }

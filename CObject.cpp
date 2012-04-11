@@ -1,4 +1,5 @@
 #include "CObject.h"
+#include "CPlayer.h"
 #include "main.h"
 
 void CObject::SetWorld( int world ) { functions->SetObjectWorld( this->nObjectId, world ); }
@@ -65,6 +66,12 @@ void CObject::RotateByEuler( Vector rotOffset, int time )
 
 void CObject::SetAlpha( int alpha, int fadeTime ) { functions->SetObjectAlpha( this->nObjectId, alpha, fadeTime ); }
 int CObject::GetID() { return this->nObjectId; }
+bool CObject::StreamedToPlayer( CPlayer player ) { return functions->IsObjectStreamedForPlayer( this->nObjectId, player.nPlayerId ); }
+
+void CObject::SetReportingShots( bool toReport ) { functions->SetObjectShotReport( this->nObjectId, toReport ); }
+void CObject::SetReportingBumps( bool toReport ) { functions->SetObjectBumpReport( this->nObjectId, toReport ); }
+bool CObject::GetReportingShots() { return functions->IsObjectShotReport( this->nObjectId ); }
+bool CObject::GetReportingBumps() { return functions->IsObjectBumpReport( this->nObjectId ); }
 
 void RegisterObject()
 {
@@ -73,7 +80,9 @@ void RegisterObject()
 	// Read-write properties
 	c
 		.Prop( _SC("World"), &CObject::GetWorld, &CObject::SetWorld )
-		.Prop( _SC("Pos"), &CObject::GetPos, &CObject::SetPos );
+		.Prop( _SC("Pos"), &CObject::GetPos, &CObject::SetPos )
+		.Prop( _SC("TrackingShots"), &CObject::GetReportingShots, &CObject::SetReportingShots )
+		.Prop( _SC("TrackingBumps"), &CObject::GetReportingBumps, &CObject::SetReportingBumps );
 
 	// Read-only properties
 	c

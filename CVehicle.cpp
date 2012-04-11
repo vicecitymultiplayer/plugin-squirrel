@@ -1,4 +1,4 @@
-#include "CallbackHandler.h"
+#include "CPlayer.h"
 #include "CVehicle.h"
 #include "main.h"
 
@@ -141,9 +141,9 @@ CPlayer * CVehicle::GetOccupant( int slot )
 
 int CVehicle::SetHandlingData( int rule, float value ) { return functions->SetInstHandlingRule( this->nVehicleId, rule, value ); }
 float CVehicle::GetHandlingData( int rule ) { return functions->GetInstHandlingRule( this->nVehicleId, rule ); }
-int CVehicle::ResetHandlingData( int rule ) { functions->ResetInstHandlingRule( this->nVehicleId, rule ); }
-int CVehicle::ResetAllHandling() { functions->ResetInstHandling( this->nVehicleId ); }
-int CVehicle::IsHandlingSet( int rule ) { return functions->ExistsInstHandlingRule( this->nVehicleId, rule ); }
+void CVehicle::ResetHandlingData( int rule ) { functions->ResetInstHandlingRule( this->nVehicleId, rule ); }
+void CVehicle::ResetAllHandling() { functions->ResetInstHandling( this->nVehicleId ); }
+bool CVehicle::IsHandlingSet( int rule ) { return functions->ExistsInstHandlingRule( this->nVehicleId, rule ); }
 
 void RegisterVehicle()
 {

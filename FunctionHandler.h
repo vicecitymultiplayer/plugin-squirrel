@@ -106,17 +106,14 @@ Bounds GetWorldBounds();
 void SetWastedSettings( int deathTime, int fadeTime, float fadeInSpeed, float fadeOutSpeed, cRGB colour, int corpseFadeDelay, int corpseFadeTime );
 WastedSettings GetWastedSettings();
 
-void dofile( const SQChar * filename );
-void compilefile( const SQChar * filename, const SQChar * outfile );
-
-bool HideMapObject( int nModelId, float x, float y, float z );
-bool ShowMapObject( int nModelId, float x, float y, float z );
-bool ShowAllMapObjects();
+void HideMapObject( int nModelId, float x, float y, float z );
+void ShowMapObject( int nModelId, float x, float y, float z );
+void ShowAllMapObjects();
 void ForceAllSelect();
 
-int ResetAllVehicleHandling();
+void ResetAllVehicleHandling();
 bool IsHandlingRuleSet( int model, int rule );
-int SetHandlingRule( int model, int rule, float value );
+void SetHandlingRule( int model, int rule, float value );
 float GetHandlingRule( int model, int rule );
-int ResetHandlingRule( int model, int rule );
-int ResetVehicleHandling( int model );
+void ResetHandlingRule( int model, int rule );
+void ResetVehicleHandling( int model );

@@ -119,7 +119,7 @@ int OnPlayerRequestEnter( int nPlayerId, int nVehicleId, int nSlotId )
 	CVehicle vehicleInstance;
 	vehicleInstance.nVehicleId = nVehicleId;
 
-	Function callback = RootTable().GetFunction( _SC("onPlayerRequestEnter") );
+	Function callback = RootTable().GetFunction( _SC("onPlayerEnteringVehicle") );
 	if( !callback.IsNull() )
 		return callback.Evaluate<int>( playerInstance, vehicleInstance, nSlotId );
 	else
@@ -133,9 +133,13 @@ void OnPlayerEnterVehicle( int nPlayerId, int nVehicleId, int nSlotId )
 	CVehicle vehicleInstance;
 	vehicleInstance.nVehicleId = nVehicleId;
 
-	Function callback = RootTable().GetFunction( _SC("onPlayerEnterVehicle") );
+	Function callback  = RootTable().GetFunction( _SC("onPlayerEnterVehicle") );
+	Function callback2 = RootTable().GetFunction( _SC("onPlayerEnteredVehicle") );
+
 	if( !callback.IsNull() )
 		callback( playerInstance, vehicleInstance, nSlotId );
+	else if( !callback2.IsNull() )
+		callback2( playerInstance, vehicleInstance, nSlotId );
 }
 
 void OnPlayerExitVehicle( int nPlayerId, int nVehicleId )
@@ -350,11 +354,31 @@ void OnVehicleUpdate( int nVehicleId, int nUpdateType )
 	// Check for onVehicleHealthChange triggers
 	if( lastHP != hp )
 	{
+		Function callback = RootTable().GetFunction( _SC("onVehicleHealthChange") );
+		if( !callback.IsNull() )
+		{
+			CVehicle vehInst   = CVehicle();
+			vehInst.nVehicleId = nVehicleId;
+
+			callback( vehInst, lastHP, hp );
+		}
+
+		lastVehHP[nVehicleId]  = hp;
 	}
 
 	// Check for onVehicleMove triggers
 	if( lastPos.x != x || lastPos.y != y || lastPos.z != z )
 	{
+		Function callback = RootTable().GetFunction( _SC("onVehicleMove") );
+		if( !callback.IsNull() )
+		{
+			CVehicle vehInst   = CVehicle();
+			vehInst.nVehicleId = nVehicleId;
+
+			callback( vehInst, lastPos.x, lastPos.y, lastPos.z, x, y, z );
+		}
+
+		lastVehPos[nVehicleId] = Vector( x, y, z );
 	}
 }
 
@@ -381,21 +405,41 @@ void OnPlayerUpdate( int nPlayerId, int nUpdateType )
 	// Check for onPlayerMove triggers
 	if( lastPos.x != x || lastPos.y != y || lastPos.z != z )
 	{
+		Function callback = RootTable().GetFunction( _SC("onPlayerMove") );
+		if( !callback.IsNull() )
+			callback( playerMap[nPlayerId], lastPos.x, lastPos.y, lastPos.z, x, y, z );
+
+		lastPlrPos[nPlayerId] = Vector( x, y, z );
 	}
 
 	// Check for onPlayerHealthChange triggers
 	if( lastHP != hp )
 	{
+		Function callback = RootTable().GetFunction( _SC("onPlayerHealthChange") );
+		if( !callback.IsNull() )
+			callback( playerMap[nPlayerId], lastHP, hp );
+
+		lastPlrHP[nPlayerId] = hp;
 	}
 
 	// Check for onPlayerArmourChange triggers
 	if( lastArmour != armour )
 	{
+		Function callback = RootTable().GetFunction( _SC("onPlayerArmourChange") );
+		if( !callback.IsNull() )
+			callback( playerMap[nPlayerId], lastArmour, armour );
+
+		lastPlrArmour[nPlayerId] = armour;
 	}
 
 	// Check for onPlayerWeaponChange triggers
 	if( lastWep != wep )
 	{
+		Function callback = RootTable().GetFunction( _SC("onPlayerMove") );
+		if( !callback.IsNull() )
+			callback( playerMap[nPlayerId], lastWep, wep );
+
+		lastPlrWep[nPlayerId] = wep;
 	}
 }
 

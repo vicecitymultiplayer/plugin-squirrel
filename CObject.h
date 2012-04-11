@@ -6,6 +6,8 @@
 		public:
 			void SetWorld( int world );
 			void SetPos( Vector pos );
+			void SetReportingShots( bool toReport );
+			void SetReportingBumps( bool toReport );
 
 		public:
 			int GetModel();
@@ -15,6 +17,8 @@
 			Quaternion GetRotation();
 			Vector GetRotationEuler();
 			int GetID();
+			bool GetReportingShots();
+			bool GetReportingBumps();
 
 		public:
 			void Delete();
@@ -25,6 +29,7 @@
 			void RotateToEuler( Vector rotation, int time );
 			void RotateByEuler( Vector rotOffset, int time );
 			void SetAlpha( int alpha, int fadeTime );
+			bool StreamedToPlayer( CPlayer player );
 			
 		public:
 			int nObjectId;

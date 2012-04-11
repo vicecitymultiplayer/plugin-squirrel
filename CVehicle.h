@@ -52,9 +52,9 @@
 			CPlayer * GetOccupant( int slot );
 			int SetHandlingData( int rule, float value );
 			float GetHandlingData( int rule );
-			int ResetHandlingData( int rule );
-			int ResetAllHandling();
-			int IsHandlingSet( int rule );
+			void ResetHandlingData( int rule );
+			void ResetAllHandling();
+			bool IsHandlingSet( int rule );
 
 		public:
 			int nVehicleId;

@@ -1,6 +1,4 @@
 #include "main.h"
-#include "CObject.h"
-#include "CVehicle.h"
 
 #ifndef playerc
 	class CPlayer
@@ -67,6 +65,7 @@
 			bool Typing();
 			bool ShowingMarkers();
 			bool GetCameraLocked();
+			int GetKey();
 
 		public:
 			void Kick();

@@ -1,20 +1,11 @@
+#include "CObject.h"
 #include "CPlayer.h"
+#include "CVehicle.h"
 #include "main.h"
 
-void CPlayer::SetPosition( Vector pos )
-{
-	functions->SetPlayerPos( this->nPlayerId, pos.x, pos.y, pos.z );
-}
-
-void CPlayer::SetHealth( float health )
-{
-	functions->SetPlayerHealth( this->nPlayerId, health );
-}
-
-void CPlayer::SetArmour( float armour )
-{
-	functions->SetPlayerArmour( this->nPlayerId, armour );
-}
+void CPlayer::SetPosition( Vector pos ) { functions->SetPlayerPos( this->nPlayerId, pos.x, pos.y, pos.z ); }
+void CPlayer::SetHealth( float health ) { functions->SetPlayerHealth( this->nPlayerId, health ); }
+void CPlayer::SetArmour( float armour ) { functions->SetPlayerArmour( this->nPlayerId, armour ); }
 
 bool CPlayer::StreamedToPlayer( CPlayer player ) { return functions->IsPlayerStreamedForPlayer( player.nPlayerId, this->nPlayerId ); }
 void CPlayer::SetAdmin( bool toSetAdmin ) { functions->SetPlayerAdmin( this->nPlayerId, toSetAdmin ); }
@@ -33,11 +24,23 @@ void CPlayer::SetColour( cRGB colour )
 
 void CPlayer::SetMoney( int money )
 {
+	int oldCash = functions->GetPlayerMoney( this->nPlayerId );
+
+	Function callback = RootTable().GetFunction( _SC("onPlayerCashChange") );
+	if( !callback.IsNull() )
+		callback( playerMap[nPlayerId], oldCash, money );
+
 	functions->SetPlayerMoney( this->nPlayerId, money );
 }
 
 void CPlayer::SetScore( int score )
 {
+	int oldScore = functions->GetPlayerScore( this->nPlayerId );
+
+	Function callback = RootTable().GetFunction( _SC("onPlayerScoreChange") );
+	if( !callback.IsNull() )
+		callback( playerMap[nPlayerId], oldScore, score );
+
 	functions->SetPlayerScore( this->nPlayerId, score );
 }
 
@@ -46,6 +49,10 @@ void CPlayer::SetHeading( float heading ) { functions->SetPlayerHeading( this->n
 void CPlayer::SetAlpha( int alpha, int fadeTime ) { functions->SetPlayerAlpha( this->nPlayerId, alpha, fadeTime ); }
 void CPlayer::SetVehicle( CVehicle * vehiclePointer )
 {
+	Function callback = RootTable().GetFunction( _SC("onPlayerEnterVehicle") );
+	if( !callback.IsNull() )
+		callback( playerMap[nPlayerId], vehiclePointer );
+
 	functions->PutPlayerInVehicle( this->nPlayerId, vehiclePointer->nVehicleId, 0, 1, 1 );
 }
 
@@ -233,6 +240,7 @@ int CPlayer::GetID() { return this->nPlayerId; }
 void CPlayer::Select() { functions->ForcePlayerSelect( this->nPlayerId ); }
 bool CPlayer::GetCameraLocked() { return functions->IsCameraLocked( this->nPlayerId ); }
 void CPlayer::RestoreCamera() { functions->RestoreCamera( this->nPlayerId ); }
+int CPlayer::GetKey() { return functions->GetPlayerKey( this->nPlayerId ); }
 
 void RegisterPlayer()
 {
@@ -278,6 +286,7 @@ void RegisterPlayer()
 		.Prop( _SC("ID"), &CPlayer::GetID )
 		.Prop( _SC("IP"), &CPlayer::GetIP )
 		.Prop( _SC("IsSpawned"), &CPlayer::GetSpawned )
+		.Prop( _SC("Key"), &CPlayer::GetKey )
 		.Prop( _SC("Name"), &CPlayer::GetName )
 		.Prop( _SC("Ping"), &CPlayer::GetPing )
 		.Prop( _SC("Spawned"), &CPlayer::GetSpawned )
