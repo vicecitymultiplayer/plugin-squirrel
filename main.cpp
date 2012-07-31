@@ -13,15 +13,20 @@
 #include "CPlayer.h"
 #include "CVehicle.h"
 
+// Console stuff
+#include "ConsoleUtils.h"
+
 // Squirrel's print function
 void printfunc(HSQUIRRELVM v, const SQChar *s, ...) 
 { 
 	va_list arglist; 
 	va_start(arglist, s); 
-	scvprintf(s, arglist);
+	char * outbuf = new char[768];
+	vsprintf(outbuf, s, arglist);
 	va_end(arglist); 
 
-	printf( "\n" );
+	OutputScriptInfo( outbuf );
+	delete outbuf;
 } 
 
 // Squirrel's error function
@@ -34,10 +39,10 @@ void errorfunc(HSQUIRRELVM v, const SQChar *s, ...)
 }
 
 // Definitions
-PluginFuncs*				functions;
-PluginInfo*					information;
-PluginCallbacks*			callbacks;
-HSQUIRRELVM					v;
+PluginFuncs		*	functions;
+PluginInfo		* 	information;
+PluginCallbacks *	callbacks;
+HSQUIRRELVM			v;
 
 void RegisterStructures()
 {
@@ -188,28 +193,27 @@ extern "C" EXPORT unsigned int VcmpPluginInit( PluginFuncs* givenPluginFuncs, Pl
 	if( strlen(gamemode) > 0 )
 	{
 		// Print the initialization message.
-		functions->printf( ">> Loaded Squirrel frontend by Stormeus." );
-
-		// Convert multi-byte to wide char
-		const size_t newSize  = 256;
-		wchar_t wcMode[newSize];
-		
-		mbstowcs( wcMode, gamemode, newSize );
+		OutputMessage( "Loaded Squirrel frontend by Stormeus." );
 		
 		// Hit it!
 		try
 		{
 			Script script;
-			script.CompileFile( wcMode );
+			script.CompileFile( "SqVCMP_Entry.nut" );
 			script.Run();
+
+			Function callback = RootTable( v ).GetFunction( _SC("onScriptLoad") );
+			if( !callback.IsNull() )
+				callback();
 		}
-		catch( Exception )
+		catch( Exception e )
 		{
-			functions->printf( ">> ERROR: The given gamemode does not exist." );
+			OutputError( "The given gamemode does not exist." );
+			OutputError( e.Message().c_str() );
 		}
 	}
 	else
-		functions->printf( ">> ERROR: No gamemode was specified. Squirrel frontend dropping." );
+		OutputError( "No gamemode was specified." );
 
 	// Done!
 	return 1;

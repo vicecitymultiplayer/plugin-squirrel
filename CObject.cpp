@@ -33,7 +33,12 @@ Vector CObject::GetRotationEuler()
 	return Vector( x, y, z );
 }
 
-void CObject::Delete() { functions->DeleteObject( this->nObjectId ); delete this; }
+void CObject::Delete()
+{
+	functions->DeleteObject( this->nObjectId );
+	delete this;
+}
+
 void CObject::MoveTo( Vector pos, int time )
 {
 	functions->MoveObjectTo( this->nObjectId, pos.x, pos.y, pos.z, time );
@@ -66,7 +71,13 @@ void CObject::RotateByEuler( Vector rotOffset, int time )
 
 void CObject::SetAlpha( int alpha, int fadeTime ) { functions->SetObjectAlpha( this->nObjectId, alpha, fadeTime ); }
 int CObject::GetID() { return this->nObjectId; }
-bool CObject::StreamedToPlayer( CPlayer player ) { return functions->IsObjectStreamedForPlayer( this->nObjectId, player.nPlayerId ); }
+bool CObject::StreamedToPlayer( CPlayer * player )
+{
+	if( player != NULL )
+		return functions->IsObjectStreamedForPlayer( this->nObjectId, player->nPlayerId );
+
+	return false;
+}
 
 void CObject::SetReportingShots( bool toReport ) { functions->SetObjectShotReport( this->nObjectId, toReport ); }
 void CObject::SetReportingBumps( bool toReport ) { functions->SetObjectBumpReport( this->nObjectId, toReport ); }

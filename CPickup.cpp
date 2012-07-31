@@ -22,9 +22,16 @@ Vector CPickup::GetPos()
 
 int CPickup::GetModel() { return functions->PickupGetModel( this->nPickupId ); }
 int CPickup::GetQuantity() { return functions->PickupGetQuantity( this->nPickupId ); }
-void CPickup::Delete() { functions->DeletePickup( this->nPickupId ); delete this; }
+void CPickup::Delete()
+{
+	functions->DeletePickup( this->nPickupId );
+	pickupMap[this->nPickupId] = NULL;
+
+	delete this;
+}
+
 int CPickup::GetID() { return this->nPickupId; }
-bool CPickup::StreamedToPlayer( CPlayer player ) { return functions->IsPickupStreamedForPlayer( this->nPickupId, player.nPlayerId ); }
+bool CPickup::StreamedToPlayer( CPlayer * player ) { return functions->IsPickupStreamedForPlayer( this->nPickupId, player->nPlayerId ); }
 
 void RegisterPickup()
 {
@@ -46,7 +53,7 @@ void RegisterPickup()
 
 	// Functions
 	c
-		.Func( _SC("Delete"), &CPickup::Delete )
+		.Func( _SC("Remove"), &CPickup::Delete )
 		.Func( _SC("StreamedToPlayer"), &CPickup::StreamedToPlayer );
 
 	RootTable(v).Bind( _SC("CPickup"), c );

@@ -7,7 +7,13 @@ void CPlayer::SetPosition( Vector pos ) { functions->SetPlayerPos( this->nPlayer
 void CPlayer::SetHealth( float health ) { functions->SetPlayerHealth( this->nPlayerId, health ); }
 void CPlayer::SetArmour( float armour ) { functions->SetPlayerArmour( this->nPlayerId, armour ); }
 
-bool CPlayer::StreamedToPlayer( CPlayer player ) { return functions->IsPlayerStreamedForPlayer( player.nPlayerId, this->nPlayerId ); }
+bool CPlayer::StreamedToPlayer( CPlayer * player )
+{
+	if( player != NULL )
+		return functions->IsPlayerStreamedForPlayer( player->nPlayerId, this->nPlayerId );
+
+	return NULL;
+}
 void CPlayer::SetAdmin( bool toSetAdmin ) { functions->SetPlayerAdmin( this->nPlayerId, toSetAdmin ); }
 void CPlayer::SetWorld( int world ) { functions->SetPlayerWorld( this->nPlayerId, world ); }
 void CPlayer::SetSecWorld( int world ) { functions->SetPlayerSecWorld( this->nPlayerId, world ); }
@@ -80,19 +86,10 @@ bool CPlayer::Typing() { return functions->IsPlayerTyping( this->nPlayerId ); }
 
 SQChar * CPlayer::GetIP()
 {
-	char ip[16];
+	char * ip = new char[16];
 	functions->GetPlayerIP( this->nPlayerId, ip, 16 );
 
-	// Convert to a wide char
-	const size_t newSize  = 64;
-	wchar_t wcData[newSize];
-
-	mbstowcs( wcData, ip, newSize );
-
-	// Cast to SQChar *
-	SQChar * sqData = wcData;
-
-	return sqData;
+	return ip;
 }
 
 bool CPlayer::GetSpawned() { return functions->IsPlayerSpawned( this->nPlayerId ); }
@@ -103,19 +100,10 @@ int CPlayer::GetState() { return functions->GetPlayerState( this->nPlayerId ); }
 
 SQChar * CPlayer::GetName()
 {
-	char name[64];
+	char * name = new char[64];
 	functions->GetPlayerName( this->nPlayerId, name, 64 );
 
-	// Convert to a wide char
-	const size_t newSize  = 256;
-	wchar_t wcData[newSize];
-
-	mbstowcs( wcData, name, newSize );
-
-	// Cast to SQChar *
-	SQChar * sqData = wcData;
-
-	return sqData;
+	return name;
 }
 
 int CPlayer::GetTeam() { return functions->GetPlayerTeam( this->nPlayerId ); }
@@ -147,12 +135,7 @@ CVehicle * CPlayer::GetVehicle()
 	if( vehicleId < 1 )
 		return NULL;
 	else
-	{
-		static CVehicle vehInstance;
-		vehInstance.nVehicleId = vehicleId;
-
-		return &vehInstance;
-	}
+		return vehicleMap[vehicleId];
 }
 
 bool CPlayer::GetFrozen() { return !functions->EnabledPlayerControllable( this->nPlayerId ); }
@@ -209,12 +192,7 @@ CVehicle * CPlayer::StandingOnVehicle()
 	if( veh < 1 )
 		return NULL;
 	else
-	{
-		static CVehicle vehicleInstance;
-		vehicleInstance.nVehicleId = veh;
-
-		return &vehicleInstance;
-	}
+		return vehicleMap[veh];
 }
 
 CObject * CPlayer::StandingOnObject()

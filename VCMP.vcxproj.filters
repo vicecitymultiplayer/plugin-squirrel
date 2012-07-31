@@ -39,9 +39,6 @@
     <ClInclude Include="FunctionHandler.h">
       <Filter>Header Files\Handlers</Filter>
     </ClInclude>
-    <ClInclude Include="Functions.h">
-      <Filter>Header Files\Handlers</Filter>
-    </ClInclude>
     <ClInclude Include="CPickup.h">
       <Filter>Header Files\Handlers\Classes</Filter>
     </ClInclude>
@@ -54,6 +51,15 @@
     <ClInclude Include="CVehicle.h">
       <Filter>Header Files\Handlers\Classes</Filter>
     </ClInclude>
+    <ClInclude Include="ConsoleUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Functions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Constants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -63,9 +69,6 @@
       <Filter>Source Files\Handlers</Filter>
     </ClCompile>
     <ClCompile Include="FunctionHandler.cpp">
-      <Filter>Source Files\Handlers</Filter>
-    </ClCompile>
-    <ClCompile Include="Functions.cpp">
       <Filter>Source Files\Handlers</Filter>
     </ClCompile>
     <ClCompile Include="CObject.cpp">
@@ -79,6 +82,12 @@
     </ClCompile>
     <ClCompile Include="CVehicle.cpp">
       <Filter>Source Files\Handlers\Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="ConsoleUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Functions.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

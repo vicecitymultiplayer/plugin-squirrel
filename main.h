@@ -7,6 +7,7 @@
 	#define EXPORT
 #endif
 
+#include "Constants.h"
 #include "VCMP.h"
 
 #include <math.h>
@@ -168,4 +169,6 @@ extern PluginFuncs*              functions;
 extern HSQUIRRELVM               v;
 
 // Player map
-extern std::map<int, CPlayer> playerMap;
+extern CPlayer  * playerMap[MAX_PLAYERS];
+extern CPickup  * pickupMap[MAX_PICKUPS];
+extern CVehicle * vehicleMap[MAX_VEHICLES];

@@ -112,10 +112,18 @@ CPlayer * CVehicle::GetDriver()
 	if( driver == -1 )
 		return NULL;
 	else
-		return &playerMap[driver];
+		return playerMap[driver];
 }
 
-void CVehicle::Delete() { functions->DeleteVehicle( this->nVehicleId ); delete this; /* <<-- Very hackish indeed */ }
+void CVehicle::Delete()
+{
+	functions->DeleteVehicle( this->nVehicleId );
+	vehicleMap[this->nVehicleId] = NULL;
+
+	// oh man
+	delete this;
+}
+
 void CVehicle::Respawn() { functions->RespawnVehicle( this->nVehicleId ); }
 void CVehicle::Kill() { functions->KillVehicle( this->nVehicleId ); }
 int CVehicle::GetPartStatus( int part ) { return functions->GetVehiclePartStatus( this->nVehicleId, part ); }
@@ -126,7 +134,14 @@ int CVehicle::GetID() { return this->nVehicleId; }
 
 int CVehicle::GetSyncSource() { return functions->GetVehicleSyncSource( this->nVehicleId ); }
 int CVehicle::GetSyncType() { return functions->GetVehicleSyncType( this->nVehicleId ); }
-bool CVehicle::GetStreamedForPlayer( CPlayer player ) { return functions->IsVehicleStreamedForPlayer( this->nVehicleId, player.nPlayerId ); }
+bool CVehicle::GetStreamedForPlayer( CPlayer * player )
+{
+	if( player != NULL )
+		return functions->IsVehicleStreamedForPlayer( this->nVehicleId, player->nPlayerId );
+
+	return false;
+}
+
 bool CVehicle::GetWrecked() { return functions->IsVehicleWrecked( this->nVehicleId ); }
 
 CPlayer * CVehicle::GetOccupant( int slot )
@@ -136,7 +151,7 @@ CPlayer * CVehicle::GetOccupant( int slot )
 	if( nPlayerId == -1 )
 		return NULL;
 	else
-		return &playerMap[nPlayerId];
+		return playerMap[nPlayerId];
 }
 
 int CVehicle::SetHandlingData( int rule, float value ) { return functions->SetInstHandlingRule( this->nVehicleId, rule, value ); }
