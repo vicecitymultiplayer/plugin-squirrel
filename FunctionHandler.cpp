@@ -554,7 +554,170 @@ SQChar * GetDistrictName ( float x, float y )
 
 SQChar * GetSkinName     ( int skinID )
 {
-	return "whatever";
+	switch( skinID )
+	{
+		case 0:   return "Tommy Vercetti";
+		case 1:   return "Cop";
+		case 2:   return "SWAT";
+		case 3:   return "FBI";
+		case 4:   return "Army";
+		case 5:   return "Paramedic";
+		case 6:   return "Firefighter";
+		case 7:   return "Golf Guy #1";
+		case 8:   return NULL;
+		case 9:   return "Bum Lady #1";
+		case 10:  return "Bum Lady #2";
+		case 11:  return "Punk #1";
+		case 12:  return "Lawyer";
+		case 13:  return "Spanish Lady #1";
+		case 14:  return "Spanish Lady #2";
+		case 15:  return "Cool Guy #1";
+		case 16:  return "Arabic Guy";
+		case 17:  return "Beach Lady #1";
+		case 18:  return "Beach Lady #2";
+		case 19:  return "Beach Guy #1";
+		case 20:  return "Beach Guy #2";
+		case 21:  return "Office Lady #1";
+		case 22:  return "Waitress #1";
+		case 23:  return "Food Lady";
+		case 24:  return "Prostitute #1";
+		case 25:  return "Bum Lady #3";
+		case 26:  return "Bum Guy #1";
+		case 27:  return "Garbageman #1";
+		case 28:  return "Taxi Driver #1";
+		case 29:  return "Haitian #1";
+		case 30:  return "Criminal #1";
+		case 31:  return "Hood Lady";
+		case 32:  return "Granny #1";
+		case 33:  return "Businessman #1";
+		case 34:  return "Church Guy";
+		case 35:  return "Club Lady";
+		case 36:  return "Church Lady";
+		case 37:  return "Pimp";
+		case 38:  return "Beach Lady #3";
+		case 39:  return "Beach Guy #3";
+		case 40:  return "Beach Lady #4";
+		case 41:  return "Beach Guy #4";
+		case 42:  return "Businessman #2";
+		case 43:  return "Prostitute #2";
+		case 44:  return "Bum Lady #4";
+		case 45:  return "Bum Guy #2";
+		case 46:  return "Haitian #2";
+		case 47:  return "Construction Worker #1";
+		case 48:  return "Punk #2";
+		case 49:  return "Prostitute #3";
+		case 50:  return "Granny #2";
+		case 51:  return "Punk #3";
+		case 52:  return "Businessman #3";
+		case 53:  return "Spanish Lady #3";
+		case 54:  return "Spanish Lady #4";
+		case 55:  return "Cool Guy #2";
+		case 56:  return "Businessman #4";
+		case 57:  return "Beach Lady #5";
+		case 58:  return "Beach Guy #5";
+		case 59:  return "Beach Lady #6";
+		case 60:  return "Beach Guy #6";
+		case 61:  return "Construction Worker #2";
+		case 62:  return "Golf Guy #2";
+		case 63:  return "Golf Lady";
+		case 64:  return "Golf Guy #3";
+		case 65:  return "Beach Lady #7";
+		case 66:  return "Beach Guy #7";
+		case 67:  return "Office Lady #2";
+		case 68:  return "Businessman #5";
+		case 69:  return "Businessman #6";
+		case 70:  return "Prostitute #2";
+		case 71:  return "Bum Lady #4";
+		case 72:  return "Bum Guy #3";
+		case 73:  return "Spanish Guy";
+		case 74:  return "Taxi Driver #2";
+		case 75:  return "Gym Lady";
+		case 76:  return "Gym Guy";
+		case 77:  return "Skate Lady";
+		case 78:  return "Skate Guy";
+		case 79:  return "Shopper #1";
+		case 80:  return "Shopper #2";
+		case 81:  return "Tourist #1";
+		case 82:  return "Tourist #2";
+		case 83:  return "Cuban #1";
+		case 84:  return "Cuban #2";
+		case 85:  return "Haitian #3";
+		case 86:  return "Haitian #4";
+		case 87:  return "Shark #1";
+		case 88:  return "Shark #2";
+		case 89:  return "Diaz Guy #1";
+		case 90:  return "Diaz Guy #2";
+		case 91:  return "DBP Security #1";
+		case 92:  return "DBP Security #2";
+		case 93:  return "Biker #1";
+		case 94:  return "Biker #2";
+		case 95:  return "Vercetti Guy #1";
+		case 96:  return "Vercetti Guy #2";
+		case 97:  return "Undercover Cop #1";
+		case 98:  return "Undercover Cop #2";
+		case 99:  return "Undercover Cop #3";
+		case 100: return "Undercover Cop #4";
+		case 101: return "Undercover Cop #5";
+		case 102: return "Undercover Cop #6";
+		case 103: return "Rich Guy";
+		case 104: return "Cool Guy #3";
+		case 105: return "Prostitute #3";
+		case 106: return "Prostitute #4";
+		case 107: return "Love Fist #1";
+		case 108: return "Ken Rosenburg";
+		case 109: return "Candy Suxx";
+		case 110: return "Hilary";
+		case 111: return "Love Fist #2";
+		case 112: return "Phil";
+		case 113: return "Rockstar Guy";
+		case 114: return "Sonny";
+		case 115: return "Lance";
+		case 116: return "Mercedes";
+		case 117: return "Love Fist #3";
+		case 118: return "Alex Shrub";
+		case 119: return "Lance (Cop)";
+		case 120: return "Lance";
+		case 121: return "Cortez";
+		case 122: return "Love Fist #4";
+		case 123: return "Columbian Guy #1";
+		case 124: return "Hilary (Robber)";
+		case 125: return "Mercedes";
+		case 126: return "Cam";
+		case 127: return "Cam (Robber)";
+		case 128: return "Phil (One Arm)";
+		case 129: return "Phil (Robber)";
+		case 130: return "Cool Guy #4";
+		case 131: return "Pizza Man";
+		case 132: return "Taxi Driver #1";
+		case 133: return "Taxi Driver #2";
+		case 134: return "Sailor #1";
+		case 135: return "Sailor #2";
+		case 136: return "Sailor #3";
+		case 137: return "Chef";
+		case 138: return "Criminal #2";
+		case 139: return "French Guy";
+		case 140: return "Garbageman #2";
+		case 141: return "Haitian #5";
+		case 142: return "Waitress #2";
+		case 143: return "Sonny Guy #1";
+		case 144: return "Sonny Guy #2";
+		case 145: return "Sonny Guy #3";
+		case 146: return "Columbian Guy #2";
+		case 147: return "Haitian #6";
+		case 148: return "Beach Guy #8";
+		case 149: return "Garbageman #3";
+		case 150: return "Garbageman #4";
+		case 151: return "Garbageman #5";
+		case 152: return "Tranny";
+		case 153: return "Thug #5";
+		case 154: return "SpandEx Guy #1";
+		case 155: return "SpandEx Guy #2";
+		case 156: return "Stripper #1";
+		case 157: return "Stripper #2";
+		case 158: return "Stripper #3";
+		case 159: return "Store Clerk";
+		default:  return NULL;
+	}
 }
 
 int      GetWeaponID     ( const SQChar * name )
@@ -580,7 +743,7 @@ float DistanceFromPoint ( float x1, float y1, float x2, float y2 )
 void ReloadScripts     ( void )
 {
 	// Are we allowed to reload?
-	if( pCore->canReload )
+	/*if( pCore->canReload )
 	{
 		// Let's not reload the scripts for now
 		pCore->canReload = false;
@@ -590,7 +753,9 @@ void ReloadScripts     ( void )
 
 		// Load the script
 		pCore->LoadScript();
-	}
+	}*/
+
+	OutputWarning( "ReloadScripts is not implemented at the moment." );
 }
 
 int      GetVehicleModelFromName ( SQChar * name )
