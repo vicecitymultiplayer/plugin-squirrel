@@ -929,4 +929,4 @@ void NewTimer ( SQChar * function, int interval, int repeat )
 }
 
 // These functions are non-functional at the moment
-void NewSocket      ( SQChar * function ) { OutputWarning( "NewSocket is not implemented at the moment." );
+void NewSocket      ( SQChar * function ) { OutputWarning( "NewSocket is not implemented at the moment." ); }

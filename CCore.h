@@ -7,6 +7,14 @@
 // Include this header only once
 #pragma once
 
+// Define a structure for timer maps
+struct Timer
+{
+	// The interval to run it at
+
+	// The script function to use
+};
+
 // Define the core class
 class CCore
 {

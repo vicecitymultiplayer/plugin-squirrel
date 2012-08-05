@@ -165,13 +165,8 @@ class CVehicle;
 // Definitions
 #define _SQ( x ) SQInteger x( HSQUIRRELVM v )
 
-extern PluginFuncs*              functions;
-extern HSQUIRRELVM               v;
-
-// Player map
-extern CPlayer  * playerMap[MAX_PLAYERS];
-extern CPickup  * pickupMap[MAX_PICKUPS];
-extern CVehicle * vehicleMap[MAX_VEHICLES];
+extern PluginFuncs*    functions;
+extern HSQUIRRELVM     v;
 
 // Functions
 void printfunc(HSQUIRRELVM v, const SQChar *s, ...);
