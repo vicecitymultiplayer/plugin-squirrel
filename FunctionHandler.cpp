@@ -765,7 +765,117 @@ int      GetVehicleModelFromName ( SQChar * name )
 
 SQChar * GetVehicleNameFromModel ( int model )
 {
-	return "whatever";
+	switch( model )
+	{
+		case 130: return "Landstalker";
+		case 131: return "Idaho";
+		case 132: return "Stinger";
+		case 133: return "Linerunner";
+		case 134: return "Perennial";
+		case 135: return "Sentinel";
+		case 136: return "Rio";
+		case 137: return "Firetruck";
+		case 138: return "Trashmaster";
+		case 139: return "Stretch";
+		case 140: return "Manana";
+		case 141: return "Infernus";
+		case 142: return "Voodoo";
+		case 143: return "Pony";
+		case 144: return "Mule";
+		case 145: return "Cheetah";
+		case 146: return "Ambulance";
+		case 147: return "FBI Washington";
+		case 148: return "Moonbeam";
+		case 149: return "Esperanto";
+		case 150: return "Taxi";
+		case 151: return "Washington";
+		case 152: return "Bobcat";
+		case 153: return "Mr. Whoopee";
+		case 154: return "BF Injection";
+		case 155: return "Hunter";
+		case 156: return "Police";
+		case 157: return "Enforcer";
+		case 158: return "Securicar";
+		case 159: return "Banshee";
+		case 160: return "Predator";
+		case 161: return "Bus";
+		case 162: return "Rhino";
+		case 163: return "Barracks OL";
+		case 164: return "Cuban Hermes";
+		case 165: return "Helicopter";
+		case 166: return "Angel";
+		case 167: return "Coach";
+		case 168: return "Cabbie";
+		case 169: return "Stallion";
+		case 170: return "Rumpo";
+		case 171: return "RC Bandit";
+		case 172: return "Romero's Hearse";
+		case 173: return "Packer";
+		case 174: return "Sentinel XS";
+		case 175: return "Admiral";
+		case 176: return "Squalo";
+		case 177: return "Sea Sparrow";
+		case 178: return "Pizza Boy";
+		case 179: return "Gang Burrito";
+		case 180: return "Airtrain";
+		case 181: return "Deaddodo";
+		case 182: return "Speeder";
+		case 183: return "Reefer";
+		case 184: return "Tropic";
+		case 185: return "Flatbed";
+		case 186: return "Yankee";
+		case 187: return "Caddy";
+		case 188: return "Zebra Cab";
+		case 189: return "Top Fun";
+		case 190: return "Skimmer";
+		case 191: return "PCJ-600";
+		case 192: return "Faggio";
+		case 193: return "Freeay";
+		case 194: return "RC Baron";
+		case 195: return "RC Raider";
+		case 196: return "Glendale";
+		case 197: return "Oceanic";
+		case 198: return "Sanchez";
+		case 199: return "Sparrow";
+		case 200: return "Patriot";
+		case 201: return "Love Fist";
+		case 202: return "Coast Guard";
+		case 203: return "Dinghy";
+		case 204: return "Hermes";
+		case 205: return "Sabre";
+		case 206: return "Sabre Turbo";
+		case 207: return "Phoenix";
+		case 208: return "Walton";
+		case 209: return "Regina";
+		case 210: return "Comet";
+		case 211: return "Deluxo";
+		case 212: return "Burrito";
+		case 213: return "Spand Express";
+		case 214: return "Marquis";
+		case 215: return "Baggage Handler";
+		case 216: return "Kaufman Cab";
+		case 217: return "Maverick";
+		case 218: return "VCN Maverick";
+		case 219: return "Rancher";
+		case 220: return "FBI Rancher";
+		case 221: return "Virgo";
+		case 222: return "Greenwood";
+		case 223: return "Cuban Jetmax";
+		case 224: return "Hotring Racer #1";
+		case 225: return "Sandking";
+		case 226: return "Blista Compact";
+		case 227: return "Police Maverick";
+		case 228: return "Boxville";
+		case 229: return "Benson";
+		case 230: return "Mesa Grande";
+		case 231: return "RC Goblin";
+		case 232: return "Hotring Racer #2";
+		case 233: return "Hotring Racer #3";
+		case 234: return "Bloodring Banger #1";
+		case 235: return "Bloodring Banger #2";
+		case 236: return "Vice Squad Cheetah";
+		default:  return NULL;
+	}
 }
 
 // These functions are for compatibility, but will be deprecated
@@ -792,11 +902,31 @@ SQChar * GetFullTime     ( void )
 	return date;
 }
 
-// These functions are non-functional at the moment
-void GetWeatherRate ( void )      { OutputWarning( "GetWeatherRate is not implemented at the moment." ); }
-void SetWeatherRate ( int rate )  { OutputWarning( "SetWeatherRate is not implemented at the moment." ); }
-void GetWeatherLock ( void )      { OutputWarning( "GetWeatherLock is not implemented at the moment." ); }
-void SetWeatherLock ( bool lock ) { OutputWarning( "SetWeatherLock is not implemented at the moment." ); }
+// These functions are in the process of being implemented
+void GetWeatherRate ( void )
+{
+	OutputWarning( "GetWeatherRate is not implemented at the moment." );
+}
 
-void NewSocket      ( SQChar * function ) { OutputWarning( "NewSocket is not implemented at the moment." ); }
-void NewTimer       ( SQChar * function, int interval, int repeat ) { OutputWarning( "NewTimer is not implemented at the moment." ); }
+void SetWeatherRate ( int rate )
+{
+	OutputWarning( "SetWeatherRate is not implemented at the moment." );
+}
+
+void GetWeatherLock ( void )
+{
+	OutputWarning( "GetWeatherLock is not implemented at the moment." );
+}
+
+void SetWeatherLock ( bool lock )
+{
+	OutputWarning( "SetWeatherLock is not implemented at the moment." );
+}
+
+void NewTimer ( SQChar * function, int interval, int repeat )
+{
+	OutputWarning( "NewTimer is not implemented at the moment." );
+}
+
+// These functions are non-functional at the moment
+void NewSocket      ( SQChar * function ) { OutputWarning( "NewSocket is not implemented at the moment." );

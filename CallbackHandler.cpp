@@ -73,9 +73,8 @@ void OnShutdownServer()
 
 void OnFrame( float fElapsedTime )
 {
-	Function callback = RootTable().GetFunction( _SC("onFrame") );
-	if( !callback.IsNull() )
-		callback( fElapsedTime );
+	// Process any timers we have
+	//pCore->ProcessTimers(fElapsedTime);
 }
 
 void OnPlayerConnect( int nPlayerId )
