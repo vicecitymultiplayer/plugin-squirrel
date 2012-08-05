@@ -73,6 +73,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -89,12 +90,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CallbackHandler.h" />
+    <ClInclude Include="CCore.h" />
     <ClInclude Include="CObject.h" />
     <ClInclude Include="ConsoleUtils.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="CPickup.h" />
     <ClInclude Include="CPlayer.h" />
     <ClInclude Include="CVehicle.h" />
+    <ClInclude Include="Exports.h" />
     <ClInclude Include="FunctionHandler.h" />
     <ClInclude Include="Functions.h" />
     <ClInclude Include="main.h" />
@@ -102,11 +105,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CallbackHandler.cpp" />
+    <ClCompile Include="CCore.cpp" />
     <ClCompile Include="CObject.cpp" />
     <ClCompile Include="ConsoleUtils.cpp" />
     <ClCompile Include="CPickup.cpp" />
     <ClCompile Include="CPlayer.cpp" />
     <ClCompile Include="CVehicle.cpp" />
+    <ClCompile Include="Exports.cpp" />
     <ClCompile Include="FunctionHandler.cpp" />
     <ClCompile Include="Functions.cpp" />
     <ClCompile Include="main.cpp" />

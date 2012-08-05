@@ -1,7 +1,11 @@
 #include "CObject.h"
 #include "CPlayer.h"
 #include "CVehicle.h"
+#include "CCore.h"
 #include "main.h"
+
+// The core
+extern CCore * pCore;
 
 void CPlayer::SetPosition( Vector pos ) { functions->SetPlayerPos( this->nPlayerId, pos.x, pos.y, pos.z ); }
 void CPlayer::SetHealth( float health ) { functions->SetPlayerHealth( this->nPlayerId, health ); }
@@ -34,7 +38,7 @@ void CPlayer::SetMoney( int money )
 
 	Function callback = RootTable().GetFunction( _SC("onPlayerCashChange") );
 	if( !callback.IsNull() )
-		callback( playerMap[nPlayerId], oldCash, money );
+		callback( pCore->playerMap[nPlayerId], oldCash, money );
 
 	functions->SetPlayerMoney( this->nPlayerId, money );
 }
@@ -45,7 +49,7 @@ void CPlayer::SetScore( int score )
 
 	Function callback = RootTable().GetFunction( _SC("onPlayerScoreChange") );
 	if( !callback.IsNull() )
-		callback( playerMap[nPlayerId], oldScore, score );
+		callback( pCore->playerMap[nPlayerId], oldScore, score );
 
 	functions->SetPlayerScore( this->nPlayerId, score );
 }
@@ -57,7 +61,7 @@ void CPlayer::SetVehicle( CVehicle * vehiclePointer )
 {
 	Function callback = RootTable().GetFunction( _SC("onPlayerEnterVehicle") );
 	if( !callback.IsNull() )
-		callback( playerMap[nPlayerId], vehiclePointer );
+		callback( pCore->playerMap[nPlayerId], vehiclePointer );
 
 	functions->PutPlayerInVehicle( this->nPlayerId, vehiclePointer->nVehicleId, 0, 1, 1 );
 }
@@ -135,7 +139,7 @@ CVehicle * CPlayer::GetVehicle()
 	if( vehicleId < 1 )
 		return NULL;
 	else
-		return vehicleMap[vehicleId];
+		return pCore->vehicleMap[vehicleId];
 }
 
 bool CPlayer::GetFrozen() { return !functions->EnabledPlayerControllable( this->nPlayerId ); }
@@ -192,7 +196,7 @@ CVehicle * CPlayer::StandingOnVehicle()
 	if( veh < 1 )
 		return NULL;
 	else
-		return vehicleMap[veh];
+		return pCore->vehicleMap[veh];
 }
 
 CObject * CPlayer::StandingOnObject()

@@ -1,5 +1,9 @@
+#include "CCore.h"
 #include "CPickup.h"
 #include "main.h"
+
+// Core instance
+extern CCore * pCore;
 
 void CPickup::SetWorld( int world ) { functions->SetPickupWorld( this->nPickupId, world ); }
 void CPickup::SetAlpha( int alpha ) { functions->PickupSetAlpha( this->nPickupId, alpha ); }
@@ -9,7 +13,7 @@ void CPickup::SetPos( Vector pos ) { functions->PickupSetPos( this->nPickupId, p
 
 int CPickup::GetWorld() { return functions->GetPickupWorld( this->nPickupId ); }
 int CPickup::GetAlpha() { return functions->PickupGetAlpha( this->nPickupId ); }
-bool CPickup::GetAuto() { return functions->PickupIsAutomatic( this->nPickupId ); }
+bool CPickup::GetAuto() { return ( functions->PickupIsAutomatic( this->nPickupId ) == 1 ? true : false ); }
 int CPickup::GetAutoTimer() { return functions->GetPickupAutoTimer( this->nPickupId ); }
 
 Vector CPickup::GetPos()
@@ -25,13 +29,13 @@ int CPickup::GetQuantity() { return functions->PickupGetQuantity( this->nPickupI
 void CPickup::Delete()
 {
 	functions->DeletePickup( this->nPickupId );
-	pickupMap[this->nPickupId] = NULL;
+	pCore->pickupMap[this->nPickupId] = NULL;
 
 	delete this;
 }
 
 int CPickup::GetID() { return this->nPickupId; }
-bool CPickup::StreamedToPlayer( CPlayer * player ) { return functions->IsPickupStreamedForPlayer( this->nPickupId, player->nPlayerId ); }
+bool CPickup::StreamedToPlayer( CPlayer * player ) { return ( functions->IsPickupStreamedForPlayer( this->nPickupId, player->nPlayerId ) == 1 ? true : false ); }
 
 void RegisterPickup()
 {

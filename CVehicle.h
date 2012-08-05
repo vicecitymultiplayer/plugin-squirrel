@@ -51,7 +51,7 @@ class CVehicle
 		bool GetStreamedForPlayer( CPlayer * player );
 		CPlayer * GetOccupant( int slot );
 		int SetHandlingData( int rule, float value );
-		float GetHandlingData( int rule );
+		double GetHandlingData( int rule );
 		void ResetHandlingData( int rule );
 		void ResetAllHandling();
 		bool IsHandlingSet( int rule );

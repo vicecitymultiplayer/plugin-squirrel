@@ -1,5 +1,11 @@
 #include "FunctionHandler.h"
+#include "Functions.h"
 #include "ConsoleUtils.h"
+#include "CCore.h"
+#include "main.h"
+
+// Tha core
+extern CCore * pCore;
 
 void ClientMessage( const SQChar * message, CPlayer * player, int r, int g, int b, int a )
 {
@@ -20,7 +26,7 @@ void ClientMessageToAll ( const SQChar* message, int r, int g, int b, int a )
 	for( int i = 0; i < functions->GetMaxPlayers(); i++ )
 	{
 		if( functions->IsPlayerConnected( i ) )
-			ClientMessage( message, playerMap[i], r, g, b, a );
+			ClientMessage( message, pCore->playerMap[i], r, g, b, a );
 	}
 }
 
@@ -165,7 +171,7 @@ CVehicle * CreateVehicle( int model, int world, Vector pos, float angle, int col
 	{
 		CVehicle * vehInst  = new CVehicle;
 		vehInst->nVehicleId = vId;
-		vehicleMap[vId]     = vehInst;
+		pCore->vehicleMap[vId]     = vehInst;
 		
 		return vehInst;
 	}
@@ -204,7 +210,7 @@ CObject * CreateObject( int model, int world, Vector pos, int alpha )
 CPickup * FindPickup( int id )
 {
 	if( id < MAX_PICKUPS )
-		return pickupMap[id];
+		return pCore->pickupMap[id];
 
 	return NULL;
 }
@@ -212,7 +218,7 @@ CPickup * FindPickup( int id )
 CPlayer * FindPlayer( int id )
 {
 	if( id < MAX_PLAYERS )
-		return playerMap[id];
+		return pCore->playerMap[id];
 
 	return NULL;
 }
@@ -233,7 +239,7 @@ CObject * FindObject( int id )
 CVehicle * FindVehicle( int id )
 {
 	if( id < MAX_VEHICLES )
-		return vehicleMap[id];
+		return pCore->vehicleMap[id];
 
 	return NULL;
 }
@@ -340,7 +346,7 @@ void ForceAllSelect() { functions->ForceAllSelect(); }
 void ResetAllVehicleHandling() { functions->ResetAllVehicleHandlings(); }
 bool IsHandlingRuleSet( int model, int rule ) { return ( functions->ExistsHandlingRule( model, rule ) != 0 ); }
 void SetHandlingRule( int model, int rule, float value ) { functions->SetHandlingRule( model, rule, value ); }
-float GetHandlingRule( int model, int rule ) { return functions->GetHandlingRule( model, rule ); }
+double GetHandlingRule( int model, int rule ) { return functions->GetHandlingRule( model, rule ); }
 void ResetHandlingRule( int model, int rule ) { functions->ResetHandlingRule( model, rule ); }
 void ResetVehicleHandling( int model ) { functions->ResetHandling( model ); }
 
@@ -573,6 +579,18 @@ float DistanceFromPoint ( float x1, float y1, float x2, float y2 )
 
 void ReloadScripts     ( void )
 {
+	// Are we allowed to reload?
+	if( pCore->canReload )
+	{
+		// Let's not reload the scripts for now
+		pCore->canReload = false;
+
+		// Load the virtual machine
+		pCore->LoadVM();
+
+		// Load the script
+		pCore->LoadScript();
+	}
 }
 
 int      GetVehicleModelFromName ( SQChar * name )
@@ -589,7 +607,7 @@ SQChar * GetVehicleNameFromModel ( int model )
 DWORD    GetTime         ( void )
 {
 	OutputWarning( "GetTime is deprecated and may be removed in the future.\n"
-		"          Please use Squirrel's time() function instead.\n" );
+		"          Please use Squirrel's time() function instead." );
 
 	return time( NULL );
 }
@@ -597,7 +615,7 @@ DWORD    GetTime         ( void )
 SQChar * GetFullTime     ( void )
 {
 	OutputWarning( "GetFullTime is deprecated and may be removed in the future.\n"
-		"          Please use Squirrel's date() function instead.\n" );
+		"          Please use Squirrel's date() function instead." );
 	
 	char * date = new char[96];
 	time_t rawtime;

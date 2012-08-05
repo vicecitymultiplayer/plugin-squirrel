@@ -19,6 +19,13 @@ void OutputScriptInfo( const char * msg )
 	#endif
 }
 
+void OutputDebug( const char * msg )
+{
+	#ifdef _DEBUG
+		OutputMessage( msg );
+	#endif
+}
+
 void OutputMessage( const char * msg )
 {
 	#ifdef WIN32

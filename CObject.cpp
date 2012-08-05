@@ -74,15 +74,15 @@ int CObject::GetID() { return this->nObjectId; }
 bool CObject::StreamedToPlayer( CPlayer * player )
 {
 	if( player != NULL )
-		return functions->IsObjectStreamedForPlayer( this->nObjectId, player->nPlayerId );
+		return ( functions->IsObjectStreamedForPlayer( this->nObjectId, player->nPlayerId ) == 1 ? true : false );
 
 	return false;
 }
 
 void CObject::SetReportingShots( bool toReport ) { functions->SetObjectShotReport( this->nObjectId, toReport ); }
 void CObject::SetReportingBumps( bool toReport ) { functions->SetObjectBumpReport( this->nObjectId, toReport ); }
-bool CObject::GetReportingShots() { return functions->IsObjectShotReport( this->nObjectId ); }
-bool CObject::GetReportingBumps() { return functions->IsObjectBumpReport( this->nObjectId ); }
+bool CObject::GetReportingShots() { return ( functions->IsObjectShotReport( this->nObjectId ) == 1 ? true : false ); }
+bool CObject::GetReportingBumps() { return ( functions->IsObjectBumpReport( this->nObjectId ) == 1 ? true : false ); }
 
 void RegisterObject()
 {

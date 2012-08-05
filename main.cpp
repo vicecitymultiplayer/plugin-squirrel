@@ -8,6 +8,7 @@
 #include "Functions.h"
 
 // Classes
+#include "CCore.h"
 #include "CObject.h"
 #include "CPickup.h"
 #include "CPlayer.h"
@@ -42,7 +43,10 @@ void errorfunc(HSQUIRRELVM v, const SQChar *s, ...)
 PluginFuncs		*	functions;
 PluginInfo		* 	information;
 PluginCallbacks *	callbacks;
-HSQUIRRELVM			v;
+CCore           *   pCore;
+
+// See CCore.cpp for original definition
+extern HSQUIRRELVM  v;
 
 void RegisterStructures()
 {
@@ -118,22 +122,17 @@ void RegisterStructures()
 
 extern "C" EXPORT unsigned int VcmpPluginInit( PluginFuncs* givenPluginFuncs, PluginCallbacks* givenPluginCalls, PluginInfo* givenPluginInfo )
 {
-	// Open a Squirrel virtual machine
-	v = sq_open(1024);
-	
-	// Set the internal error handlers up
-	sqstd_seterrorhandlers(v);
-
-	// Set up our print function
-	sq_setprintfunc( v, printfunc, errorfunc );
-
-	// Set our default VM
-	DefaultVM::Set(v);
-
 	// Hook into the server
 	functions   = givenPluginFuncs;
 	callbacks   = givenPluginCalls;
 	information = givenPluginInfo;
+
+	// Set our plugin information
+	information->uPluginVer = BUILD_VER + BUILD_NO;
+	strcpy( information->szName, "SqVCMP 0.4 v0.9pre" );
+	
+	// Get a core instance
+	pCore = CCore::GetInstance();
 
 	// Server events
 	callbacks->OnInitServer         = OnInitServer;
@@ -170,50 +169,6 @@ extern "C" EXPORT unsigned int VcmpPluginInit( PluginFuncs* givenPluginFuncs, Pl
 	callbacks->OnCommandMessage     = OnCommandMessage;
 	callbacks->OnPrivateMessage     = OnPrivateMessage;
 	callbacks->OnInternalCommand    = OnInternalCommand;
-
-	// Register our structures
-	RegisterStructures();
-
-	// Register our functions
-	RegisterGlobals();
-
-	// Register our constants
-	RegisterConstants();
-
-	// Register the classes
-	RegisterObject();
-	RegisterPickup();
-	RegisterPlayer();
-	RegisterVehicle();
-
-	// Get the gamemode name
-	char gamemode[64] = "SqVCMP_Entry.nut";
-
-	// Load the gamemode if and only if we have a name
-	if( strlen(gamemode) > 0 )
-	{
-		// Print the initialization message.
-		OutputMessage( "Loaded Squirrel frontend by Stormeus." );
-		
-		// Hit it!
-		try
-		{
-			Script script;
-			script.CompileFile( "SqVCMP_Entry.nut" );
-			script.Run();
-
-			Function callback = RootTable( v ).GetFunction( _SC("onScriptLoad") );
-			if( !callback.IsNull() )
-				callback();
-		}
-		catch( Exception e )
-		{
-			OutputError( "The given gamemode does not exist." );
-			OutputError( e.Message().c_str() );
-		}
-	}
-	else
-		OutputError( "No gamemode was specified." );
 
 	// Done!
 	return 1;

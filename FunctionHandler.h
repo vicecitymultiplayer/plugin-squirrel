@@ -129,7 +129,7 @@ void ForceAllSelect    ( void );
 void ResetAllVehicleHandling ( void );
 bool IsHandlingRuleSet       ( int model, int rule );
 void SetHandlingRule         ( int model, int rule, float value );
-float GetHandlingRule        ( int model, int rule );
+double GetHandlingRule       ( int model, int rule );
 void ResetHandlingRule       ( int model, int rule );
 void ResetVehicleHandling    ( int model );
 

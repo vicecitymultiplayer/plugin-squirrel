@@ -172,3 +172,8 @@ extern HSQUIRRELVM               v;
 extern CPlayer  * playerMap[MAX_PLAYERS];
 extern CPickup  * pickupMap[MAX_PICKUPS];
 extern CVehicle * vehicleMap[MAX_VEHICLES];
+
+// Functions
+void printfunc(HSQUIRRELVM v, const SQChar *s, ...);
+void errorfunc(HSQUIRRELVM v, const SQChar *s, ...);
+void RegisterStructures();
