@@ -35,7 +35,7 @@ int OnInitServer()
 
 	// Check if this is a debug mode. If it is, append the build number.
 	#ifdef _DEBUG
-		sprintf( initMsg, "%s (b%04d)", initMsg, BUILD_NO );
+		sprintf( initMsg, "%s (vn%d)", initMsg, BUILD_VER );
 	#endif
 
 	// Print the initialization message.
