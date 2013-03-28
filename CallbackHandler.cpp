@@ -45,10 +45,16 @@ int OnInitServer()
 	// Load the script
 	pCore->LoadScript();
 
+	// Prohibit reloading at this time.
+	pCore->canReload = false;
+
 	Function callback = RootTable( v ).GetFunction( _SC("onServerStart") );
 	if( !callback.IsNull() )
 		callback();
 	
+	// Reallow reloading.
+	pCore->canReload = true;
+
 	return 1;
 }
 

@@ -52,31 +52,6 @@ CCore::~CCore()
 // Load the VM
 void CCore::LoadVM()
 {
-	// See if the VM is open
-	if( v != NULL )
-	{
-		// See if the script is already open
-		if( script != NULL )
-		{
-			// Unload the script
-			Function callback = RootTable().GetFunction( _SC( "onScriptUnload" ) );
-			if( !callback.IsNull() )
-				callback();
-
-			// Destroy the instance
-			delete script;
-		
-			// Remove dangling pointers
-			script = NULL;
-		}
-
-		// Close the virtual machine
-		sq_close( v );
-		
-		// Get rid of dangling pointers
-		v = NULL;
-	}
-
 	// Initialize the virtual machine
 	v = sq_open( 1024 );
 
@@ -89,6 +64,13 @@ void CCore::LoadVM()
 	// Set our default VM in Sqrat
 	DefaultVM::Set( v );
 
+	// Register our entities so they're accessible by scripts
+	this->RegisterEntities();
+}
+
+// Register *everything*
+void CCore::RegisterEntities()
+{
 	// Register our structures
 	RegisterStructures();
 
@@ -123,12 +105,15 @@ void CCore::LoadScript()
 			script->CompileFile( gamemode );
 			script->Run();
 
+			// No reloading at this point.
+			this->canReload = false;
+
 			Function callback = RootTable( v ).GetFunction( _SC( "onScriptLoad" ) );
 			if( !callback.IsNull() )
 				callback();
 
-			// Allow script reloading again
-			canReload = true;
+			// You are now free to move about the cabin.
+			this->canReload = true;
 		}
 		catch( Sqrat::Exception e )
 		{

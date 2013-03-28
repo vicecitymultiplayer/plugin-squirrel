@@ -37,6 +37,7 @@ class CCore
 		~CCore();
 		void LoadScript();
 		void LoadVM();
+		void RegisterEntities();
 		void Release();
 
 		// Class maps
@@ -44,12 +45,11 @@ class CCore
 		CPickup  * pickupMap[MAX_PICKUPS];
 		CVehicle * vehicleMap[MAX_VEHICLES];
 
-		// Can we reload the scripts?
-		bool canReload;
-
-	protected:
 		// Sqrat's script
 		Script * script;
+
+		// Can we reload the scripts?
+		bool canReload;
 
 	private:
 		// Constructor

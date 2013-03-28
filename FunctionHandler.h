@@ -162,14 +162,13 @@ void ReloadScripts      ( void );
 unsigned char GetVehicleModelFromName ( SQChar * name );
 SQChar *      GetVehicleNameFromModel ( int model );
 
-// These functions are for compatibility, but will be deprecated
-DWORD    GetTime         ( void );
-SQChar * GetFullTime     ( void );
-
-// These functions are non-functional at the moment
 void GetWeatherRate ( void );
 void SetWeatherRate ( int rate );
 void GetWeatherLock ( void );
 void SetWeatherLock ( bool lock );
 
-void NewTimer       ( SQChar * function, int interval, int repeat );
+/* <TODO> */ void /* </TODO> */ NewTimer       ( SQChar * function, int interval, int repeat );
+
+// These functions are for compatibility, but will be deprecated
+DWORD    GetTime         ( void );
+SQChar * GetFullTime     ( void );

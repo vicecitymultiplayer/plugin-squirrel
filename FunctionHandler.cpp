@@ -962,7 +962,7 @@ char GetWeaponID( const SQChar * name )
 	}
 }
 
-DWORD SQGetTickCount  ( void ) { return GetTickCount(); }
+DWORD SQGetTickCount( void ) { return GetTickCount(); }
 
 bool InPoly( float x, float y, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4 )
 {
@@ -1055,24 +1055,41 @@ float DistanceFromPoint( float x1, float y1, float x2, float y2 )
 	return matrixF;
 }
 
+// <TODO>
 void ReloadScripts( void )
 {
 	// Are we allowed to reload?
-	/*if( pCore->canReload )
+	if( pCore->canReload )
 	{
 		// Let's not reload the scripts for now
 		pCore->canReload = false;
 
-		// Load the virtual machine
-		pCore->LoadVM();
+		// Reset the global table
+		sq_newtable(v);
+		sq_setroottable(v);
 
-		// Load the script
-		pCore->LoadScript();
-	}*/
+		// Reload all global module entities
+		pCore->RegisterEntities();
 
-	OutputWarning( "ReloadScripts is not implemented at the moment." );
+		// Re-run the script
+		//pCore->script->Run();
+
+		// Trigger the onScriptLoad event
+		Function callback = RootTable( v ).GetFunction( _SC( "onScriptLoad" ) );
+		if( !callback.IsNull() )
+			callback();
+
+		// You are now free to move about the cabin
+		pCore->canReload = true;
+
+		// And now we dance
+		OutputMessage( "Scripts reloaded." );
+	}
+	else
+		OutputError( "The server refused to reload. Is this an infinite loop?" );
 }
 
+// <TODO>
 unsigned char GetVehicleModelFromName( SQChar * name )
 {
 	return -1;
@@ -1217,27 +1234,31 @@ SQChar * GetFullTime( void )
 	return date;
 }
 
-// These functions are in the process of being implemented
+// <TODO>
 void GetWeatherRate( void )
 {
 	OutputWarning( "GetWeatherRate is not implemented at the moment." );
 }
 
+// <TODO>
 void SetWeatherRate( int rate )
 {
 	OutputWarning( "SetWeatherRate is not implemented at the moment." );
 }
 
+// <TODO>
 void GetWeatherLock( void )
 {
 	OutputWarning( "GetWeatherLock is not implemented at the moment." );
 }
 
+// <TODO>
 void SetWeatherLock( bool lock )
 {
 	OutputWarning( "SetWeatherLock is not implemented at the moment." );
 }
 
+// <TODO>
 void NewTimer( SQChar * function, int interval, int repeat )
 {
 	OutputWarning( "NewTimer is not implemented at the moment." );
