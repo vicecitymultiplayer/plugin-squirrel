@@ -966,7 +966,85 @@ DWORD SQGetTickCount  ( void ) { return GetTickCount(); }
 
 bool InPoly( float x, float y, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4 )
 {
-	return false;
+	float minX = x1;
+	{
+		if( x2 < minX )
+			minX = x2;
+
+		if(	x3 < minX )
+			minX = x3;
+
+		if( x4 < minX )
+			minX = x4;
+	}
+
+	float minY = y1;
+	{
+		if( y2 < minY )
+			minY = y2;
+
+		if( y3 < minY )
+			minY = y3;
+
+		if( y4 < minY )
+			minY = y4;
+	}
+
+	if( x < minX || y < minY )
+		return false;
+
+	// ---------------------------------
+
+	float maxX = x1;
+	{
+		if( x2 > maxX )
+			maxX = x2;
+
+		if( x3 > maxX )
+			maxX = x3;
+
+		if( x4 > maxX )
+			maxX = x4;
+	}
+
+	float maxY = y1;
+	{
+		if( y2 > maxY )
+			maxY = y2;
+
+		if( y3 > maxY )
+			maxY = y3;
+
+		if( y4 > maxY )
+			maxY = y4;
+	}
+
+	if( x > maxX || y > maxY )
+		return false;
+
+	// ---------------------------------
+	float polyX[4], polyY[4];
+	polyX[0] = x1;
+	polyX[1] = x2;
+	polyX[2] = x3;
+	polyX[3] = x4;
+
+	polyY[0] = y1;
+	polyY[1] = y2;
+	polyY[2] = y3;
+	polyY[3] = y4;
+
+	// http://en.wikipedia.org/wiki/Even-odd_rule
+	bool isInPath = false;
+	for( char i = 0, j = 2; i < 3; i++ )
+	{
+		if( ( polyY[i] > y ) != ( polyY[j] > y ) && ( x < ( polyX[j] - polyX[i] ) * ( y - polyY[i] ) / ( polyY[j] - polyY[i] + polyX[i] ) ) )
+			isInPath = !( isInPath );
+
+		j = i;
+	}
+
+	return isInPath;
 }
 
 float DistanceFromPoint( float x1, float y1, float x2, float y2 )
