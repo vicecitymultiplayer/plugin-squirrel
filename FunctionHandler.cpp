@@ -720,19 +720,256 @@ SQChar * GetSkinName     ( int skinID )
 	}
 }
 
-int      GetWeaponID     ( const SQChar * name )
+char GetWeaponID( const SQChar * name )
 {
-	return -1;
+	// Get characters we might need
+	int char1, char2, char3;
+	if( name == NULL || strlen(name) < 1 )
+		return 0;
+	
+	char1 = tolower(name[0]);
+	if( strlen(name) >= 3 )
+	{
+		char3 = tolower(name[2]);
+		char2 = tolower(name[1]);
+	}
+	else if( strlen(name) >= 2 )
+		char2 = tolower(name[1]);
+
+	switch( char1 )
+	{
+		// [F]ists, [F]lamethrower
+		case 'f':
+		{
+			// [Fi]sts
+			if( char2 && char2 == 'i' )
+				return 0;
+			
+			// Default to flamethrower
+			else
+				return 31;
+
+			break;
+		}
+
+		case 'b':
+			// [Br]ass Knuckles
+			if( char2 && char2 == 'r' )
+				return 1;
+
+			// [Ba]seball Bat
+			return 6;
+
+		// [S]crewdriver, [S]hotgun, [S]PAS-12 Shotgun, [S]tubby/[S]awnoff Shotgun, [Si]lenced Ingram [S]niper Rifle
+		case 's':
+		{
+			switch( char2 )
+			{
+				// [Sc]rewdriver
+				case 'c':
+					return 2;
+
+				// [Sh]otgun
+				case 'h':
+					return 19;
+
+				// [SP]AS-12 / [Sp]az Shotgun
+				case 'p':
+					return 20;
+
+				// [St]ubby / [Sa]wnoff Shotgun
+				case 't':
+				case 'a':
+					return 21;
+
+				// [Si]lenced Ingram
+				case 'i':
+					return 24;
+
+				// [Sn]iper
+				case 'n':
+					return 28;
+
+				// Default to screwdriver
+				default:
+					return 2;
+			}
+		}
+
+		// [G]olf Club, [G]renade
+		case 'g':
+		{
+			// [Go]lf Club
+			if( char2 && char2 == 'o' )
+				return 3;
+
+			// Grenades being more popular in servers, default to grenade
+			else
+				return 12;
+
+			break;
+		}
+
+		// [N]ightstick
+		case 'n':
+			return 4;
+
+		// [K]nife, [K]atana
+		case 'k':
+		{
+			// [Kn]ife
+			if( char2 && char2 == 'n' )
+				return 5;
+
+			// Default to katana
+			else
+				return 10;
+
+			break;
+		}
+
+		// [H]ammer
+		case 'h':
+			return 7;
+
+		// [M]eat Cleaver, [M]achete, [M]olotov Cocktail, [M]P5, [M]4, [M]60, [M]inigun
+		case 'm':
+		{
+			switch( char2 )
+			{
+				// [Me]at Cleaver
+				case 'e':
+					return 8;
+
+				// [Ma]chete
+				case 'a':
+					return 9;
+
+				// [Mo]lotov Cocktail
+				case 'o':
+					return 15;
+
+				// [MP]5
+				case 'p':
+					return 25;
+
+				// [M4]
+				case '4':
+					return 26;
+
+				// [M6]0
+				case '6':
+					return 32;
+
+				// [Mi]nigun
+				case 'i':
+					return 33;
+
+				// Default to M4
+				default:
+					return 26;
+			}
+
+			break;
+		}
+
+		// [C]leaver, [C]hainsaw, [C]olt .45
+		case 'c':
+		{
+			switch( char2 )
+			{
+				// [Cl]eaver
+				case 'l':
+					return 8;
+
+				// [Ch]ainsaw
+				case 'h':
+					return 11;
+
+				// Default to Colt .45
+				default:
+					return 17;
+			}
+
+			break;
+		}
+
+		// [R]emote Detonation Grenade, [R]uger, [R]ocket Launcher / [R]PG
+		case 'r':
+		{
+			switch( char2 )
+			{
+				// [Re]mote Detonation Grenade
+				case 'e':
+					return 13;
+
+				// [Ro]cket Launcher, [RP]G
+				case 'o':
+				case 'p':
+					return 30;
+
+				// [Ru]ger
+				case 'u':
+					return 27;
+
+				// Default to ruger
+				default:
+					return 27;
+			}
+		}
+
+		// [T]ear Gas, [T]EC-9
+		case 't':
+		{
+			// Both of them have E as a second character anyways.
+			if( char2 )
+			{
+				// [Tea]r Gas
+				if( char3 && char3 == 'a' )
+					return 14;
+
+				// Default to TEC-9
+				else
+					return 22;
+			}
+
+			// Default to TEC-9 if no second character exists.
+			else
+				return 22;
+
+			break;
+		}
+
+		// [P]ython
+		case 'p':
+			return 18;
+
+		// [U]zi
+		case 'u':
+			return 23;
+
+		// [I]ngram
+		case 'i':
+			return 24;
+
+		// [L]aserscope Sniper
+		case 'l':
+			return 29;
+
+		// Default to fists
+		default:
+			return 0;
+	}
 }
 
-DWORD    SQGetTickCount  ( void ) { return GetTickCount(); }
+DWORD SQGetTickCount  ( void ) { return GetTickCount(); }
 
-bool InPoly             ( float x, float y, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4 )
+bool InPoly( float x, float y, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4 )
 {
 	return false;
 }
 
-float DistanceFromPoint ( float x1, float y1, float x2, float y2 )
+float DistanceFromPoint( float x1, float y1, float x2, float y2 )
 {
 	float matrixX = pow( (x2 - x1), 2 );
 	float matrixY = pow( (y2 - y1), 2 );
@@ -740,7 +977,7 @@ float DistanceFromPoint ( float x1, float y1, float x2, float y2 )
 	return matrixF;
 }
 
-void ReloadScripts     ( void )
+void ReloadScripts( void )
 {
 	// Are we allowed to reload?
 	/*if( pCore->canReload )
@@ -758,7 +995,7 @@ void ReloadScripts     ( void )
 	OutputWarning( "ReloadScripts is not implemented at the moment." );
 }
 
-int      GetVehicleModelFromName ( SQChar * name )
+unsigned char GetVehicleModelFromName( SQChar * name )
 {
 	return -1;
 }
@@ -879,7 +1116,7 @@ SQChar * GetVehicleNameFromModel ( int model )
 }
 
 // These functions are for compatibility, but will be deprecated
-DWORD    GetTime         ( void )
+DWORD GetTime( void )
 {
 	OutputWarning( "GetTime is deprecated and may be removed in the future.\n"
 		"          Please use Squirrel's time() function instead." );
@@ -887,7 +1124,7 @@ DWORD    GetTime         ( void )
 	return time( NULL );
 }
 
-SQChar * GetFullTime     ( void )
+SQChar * GetFullTime( void )
 {
 	OutputWarning( "GetFullTime is deprecated and may be removed in the future.\n"
 		"          Please use Squirrel's date() function instead." );
@@ -903,30 +1140,27 @@ SQChar * GetFullTime     ( void )
 }
 
 // These functions are in the process of being implemented
-void GetWeatherRate ( void )
+void GetWeatherRate( void )
 {
 	OutputWarning( "GetWeatherRate is not implemented at the moment." );
 }
 
-void SetWeatherRate ( int rate )
+void SetWeatherRate( int rate )
 {
 	OutputWarning( "SetWeatherRate is not implemented at the moment." );
 }
 
-void GetWeatherLock ( void )
+void GetWeatherLock( void )
 {
 	OutputWarning( "GetWeatherLock is not implemented at the moment." );
 }
 
-void SetWeatherLock ( bool lock )
+void SetWeatherLock( bool lock )
 {
 	OutputWarning( "SetWeatherLock is not implemented at the moment." );
 }
 
-void NewTimer ( SQChar * function, int interval, int repeat )
+void NewTimer( SQChar * function, int interval, int repeat )
 {
 	OutputWarning( "NewTimer is not implemented at the moment." );
 }
-
-// These functions are non-functional at the moment
-void NewSocket      ( SQChar * function ) { OutputWarning( "NewSocket is not implemented at the moment." ); }

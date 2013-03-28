@@ -152,8 +152,6 @@ void RegisterGlobals()
 		.Func( _SC( "SetWeatherRate" ), SetWeatherRate )
 		.Func( _SC( "GetWeatherLock" ), GetWeatherLock )
 		.Func( _SC( "SetWeatherLock" ), SetWeatherLock )
-
-		.Func( _SC( "NewSocket" ), NewSocket )
 		.Func( _SC( "NewTimer" ), NewTimer );
 }
 

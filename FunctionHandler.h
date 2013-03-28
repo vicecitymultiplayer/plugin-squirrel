@@ -152,15 +152,15 @@ void SendPlayerMessage  ( CPlayer * playerToFake, CPlayer * playerTo, const SQCh
 SQChar * GetWeaponName   ( int weaponID );
 SQChar * GetDistrictName ( float x, float y );
 SQChar * GetSkinName     ( int skinID );
-int      GetWeaponID     ( const SQChar * name );
+char     GetWeaponID     ( const SQChar * name );
 DWORD    SQGetTickCount  ( void );
 
 bool  InPoly            ( float x, float y, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4 );
 float DistanceFromPoint ( float x1, float y1, float x2, float y2 );
-void ReloadScripts     ( void );
+void ReloadScripts      ( void );
 
-int      GetVehicleModelFromName ( SQChar * name );
-SQChar * GetVehicleNameFromModel ( int model );
+unsigned char GetVehicleModelFromName ( SQChar * name );
+SQChar *      GetVehicleNameFromModel ( int model );
 
 // These functions are for compatibility, but will be deprecated
 DWORD    GetTime         ( void );
@@ -172,5 +172,4 @@ void SetWeatherRate ( int rate );
 void GetWeatherLock ( void );
 void SetWeatherLock ( bool lock );
 
-void NewSocket      ( SQChar * function );
 void NewTimer       ( SQChar * function, int interval, int repeat );
