@@ -1075,6 +1075,9 @@ void ReloadScripts( void )
 
 		// Set up our print and error functions
 		sq_setprintfunc( v, printfunc, errorfunc );
+		
+		// Release the old root table to free old binds
+		Sqrat::RootTable(v).Release();
 
 		// Push this new root table
 		sq_setroottable(v);
@@ -1089,6 +1092,8 @@ void ReloadScripts( void )
 		Function callback = RootTable( v ).GetFunction( _SC( "onScriptLoad" ) );
 		if( !callback.IsNull() )
 			callback();
+
+		callback.Release();
 
 		// You are now free to move about the cabin
 		pCore->canReload = true;
@@ -1245,30 +1250,6 @@ SQChar * GetFullTime( void )
 	return date;
 }
 
-// <TODO>
-void GetWeatherRate( void )
-{
-	OutputWarning( "GetWeatherRate is not implemented at the moment." );
-}
-
-// <TODO>
-void SetWeatherRate( int rate )
-{
-	OutputWarning( "SetWeatherRate is not implemented at the moment." );
-}
-
-// <TODO>
-void GetWeatherLock( void )
-{
-	OutputWarning( "GetWeatherLock is not implemented at the moment." );
-}
-
-// <TODO>
-void SetWeatherLock( bool lock )
-{
-	OutputWarning( "SetWeatherLock is not implemented at the moment." );
-}
-
 // This function is so convoluted, we have to tiptoe around Sqrat.
 // This had better work.
 // <TODO>
@@ -1320,7 +1301,7 @@ SQInteger NewTimer( HSQUIRRELVM v )
 			return sq_throwerror( v, "The timer's maximum number of pulses must be >= 0" );
 		else
 		{
-			CTimer * pTimer = new CTimer;
+			CTimer     * pTimer  = new CTimer;
 			TimerParam * pParams = NULL;
 
 			pTimer->pFunc = RootTable(v).GetFunction(pFuncName);

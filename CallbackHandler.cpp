@@ -52,6 +52,8 @@ int OnInitServer()
 	Function callback = RootTable( v ).GetFunction( _SC("onServerStart") );
 	if( !callback.IsNull() )
 		callback();
+
+	callback.Release();
 	
 	// Reallow reloading.
 	pCore->canReload = true;
@@ -70,6 +72,8 @@ void OnShutdownServer()
 
 	if( !callback.IsNull() )
 		callback();
+
+	callback.Release();
 
 	// Dereference the core
 	pCore->Release();
@@ -91,6 +95,8 @@ void OnPlayerConnect( int nPlayerId )
 	Function callback = RootTable().GetFunction( _SC("onPlayerJoin") );
 	if( !callback.IsNull() )
 		callback.Execute<CPlayer *>(newPlayer);
+
+	callback.Release();
 }
 
 void OnPlayerDisconnect( int nPlayerId, int nReason )
@@ -124,6 +130,8 @@ int OnPlayerRequestClass( int nPlayerId, int nOffset )
 
 	if( !callback.IsNull() )
 		returnValue = callback.Evaluate<int, CPlayer *, int>( playerInstance, nOffset );
+
+	callback.Release();
 	
 	return returnValue;
 }
@@ -137,6 +145,8 @@ int OnPlayerRequestSpawn( int nPlayerId )
 
 	if( !callback.IsNull() )
 		returnValue = callback.Evaluate<int, CPlayer *>( playerInstance );
+
+	callback.Release();
 	
 	return returnValue;
 }
@@ -148,6 +158,8 @@ void OnPlayerSpawn( int nPlayerId )
 	Function callback = RootTable().GetFunction( _SC("onPlayerSpawn") );
 	if( !callback.IsNull() )
 		callback.Execute<CPlayer *>( playerInstance );
+
+	callback.Release();
 }
 
 void OnPlayerDeath( int nPlayerId, int nKillerId, int nReason, int nBodyPart )
@@ -159,6 +171,8 @@ void OnPlayerDeath( int nPlayerId, int nKillerId, int nReason, int nBodyPart )
 		Function callback = RootTable().GetFunction( _SC("onPlayerDeath") );
 		if( !callback.IsNull() )
 			callback.Execute<CPlayer *, int>( playerInstance, nReason );
+
+		callback.Release();
 	}
 	else
 	{
@@ -172,6 +186,8 @@ void OnPlayerDeath( int nPlayerId, int nKillerId, int nReason, int nBodyPart )
 
 		if( !callback.IsNull() )
 			callback.Execute<CPlayer *, CPlayer *, int, int>( playerInstance, killerInstance, nReason, nBodyPart );
+
+		callback.Release();
 	}
 }
 
@@ -185,7 +201,8 @@ int OnPlayerRequestEnter( int nPlayerId, int nVehicleId, int nSlotId )
 
 	if( !callback.IsNull() && playerInstance != NULL && vehicleInstance != NULL )
 		returnValue = callback.Evaluate<int, CPlayer *, CVehicle *, int>( playerInstance, vehicleInstance, nSlotId );
-	
+
+	callback.Release();
 	return returnValue;
 }
 
@@ -197,6 +214,8 @@ void OnPlayerEnterVehicle( int nPlayerId, int nVehicleId, int nSlotId )
 	Function callback  = RootTable().GetFunction( _SC("onPlayerEnterVehicle") );
 	if( !callback.IsNull() && playerInstance != NULL && vehicleInstance != NULL )
 		callback.Execute<CPlayer *, CVehicle *, int>( playerInstance, vehicleInstance, nSlotId );
+
+	callback.Release();
 }
 
 void OnPlayerExitVehicle( int nPlayerId, int nVehicleId )
@@ -207,6 +226,8 @@ void OnPlayerExitVehicle( int nPlayerId, int nVehicleId )
 	Function callback = RootTable().GetFunction( _SC("onPlayerExitVehicle") );
 	if( !callback.IsNull() )
 		callback.Execute<CPlayer *, CVehicle *>( playerInstance, vehicleInstance );
+
+	callback.Release();
 }
 
 int OnPickupClaimPicked( int nPickupId, int nPlayerId )
@@ -219,7 +240,8 @@ int OnPickupClaimPicked( int nPickupId, int nPlayerId )
 
 	if( !callback.IsNull() )
 		returnValue = callback.Evaluate<int, CPlayer *, CPickup *>( playerInstance, pickupInstance );
-	
+
+	callback.Release();
 	return returnValue;
 }
 
@@ -231,6 +253,8 @@ void OnPickupPickedUp( int nPickupId, int nPlayerId )
 	Function callback = RootTable().GetFunction( _SC("onPickupPickedUp") );
 	if( !callback.IsNull() )
 		callback.Execute<CPlayer *, CPickup *>( playerInstance, pickupInstance );
+
+	callback.Release();
 }
 
 void OnPickupRespawn( int nPickupId )
@@ -240,6 +264,8 @@ void OnPickupRespawn( int nPickupId )
 	Function callback = RootTable().GetFunction( _SC("onPickupRespawn") );
 	if( !callback.IsNull() )
 		callback.Execute<CPickup *>( pickupInstance );
+
+	callback.Release();
 }
 
 void OnVehicleExplode( int nVehicleId )
@@ -249,6 +275,8 @@ void OnVehicleExplode( int nVehicleId )
 	Function callback = RootTable().GetFunction( _SC("onVehicleExplode") );
 	if( !callback.IsNull() )
 		callback.Execute<CVehicle *>( vehicleInstance );
+
+	callback.Release();
 }
 
 void OnVehicleRespawn( int nVehicleId )
@@ -258,6 +286,8 @@ void OnVehicleRespawn( int nVehicleId )
 	Function callback = RootTable().GetFunction( _SC("onVehicleRespawn") );
 	if( !callback.IsNull() )
 		callback.Execute<CVehicle *>( vehicleInstance );
+
+	callback.Release();
 }
 
 int OnPublicMessage( int nPlayerId, const char* pszText )
@@ -269,7 +299,8 @@ int OnPublicMessage( int nPlayerId, const char* pszText )
 
 	if( !callback.IsNull() )
 		returnValue = callback.Evaluate<int, CPlayer *, const char *>( playerInstance, pszText );
-	
+
+	callback.Release();
 	return returnValue;
 }
 
@@ -292,9 +323,10 @@ int OnCommandMessage( int nPlayerId, const char* pszText )
 		while( szTok != NULL )
 			strcat( szArguments, szTok );
 
-		returnValue = callback.Evaluate<int, CPlayer *, char *, char *>( playerInstance, szCmd, szArguments );
+		callback.Release();
 	}
-
+	
+	callback.Release();
 	return returnValue;
 }
 
@@ -309,6 +341,7 @@ int OnPrivateMessage( int nPlayerId, int nTargetId, const char* pszText )
 	if( !callback.IsNull() )
 		returnValue = callback.Evaluate<int, CPlayer *, CPlayer *, const char *>( playerInstance, targetInstance, pszText );
 	
+	callback.Release();
 	return returnValue;
 }
 
@@ -319,6 +352,8 @@ void OnPlayerBeginTyping( int nPlayerId )
 
 	if( !callback.IsNull() )
 		callback.Execute<CPlayer *>( playerInstance );
+
+	callback.Release();
 }
 
 void OnPlayerEndTyping( int nPlayerId )
@@ -328,6 +363,8 @@ void OnPlayerEndTyping( int nPlayerId )
 
 	if( !callback.IsNull() )
 		callback.Execute<CPlayer *>( playerInstance );
+
+	callback.Release();
 }
 
 int OnLoginAttempt( char* playerName, const char* password, const char* pszIpAddress )
@@ -337,7 +374,8 @@ int OnLoginAttempt( char* playerName, const char* password, const char* pszIpAdd
 
 	if( !callback.IsNull() )
 		returnValue = callback.Evaluate<int, char *, const char *, const char *>(playerName, password, pszIpAddress);
-	
+
+	callback.Release();
 	return returnValue;
 }
 
@@ -350,6 +388,8 @@ void OnNameChangeable( char * playerName, char ** namePtr )
 		if( name && strlen(name) > 0 )
 			namePtr = &name;
 	}
+
+	callback.Release();
 }
 
 void OnVehicleUpdate( int nVehicleId, int nUpdateType )
@@ -372,7 +412,8 @@ void OnVehicleUpdate( int nVehicleId, int nUpdateType )
 			CVehicle * vehInst = pCore->vehicleMap[nVehicleId];
 			callback.Execute<CVehicle *, float, float>( vehInst, lastHP, hp );
 		}
-
+		
+		callback.Release();
 		vehInfo.lastHP = hp;
 	}
 
@@ -386,6 +427,7 @@ void OnVehicleUpdate( int nVehicleId, int nUpdateType )
 			callback.Execute<CVehicle *, float, float, float, float, float, float>( vehInst, lastPos.x, lastPos.y, lastPos.z, x, y, z );
 		}
 
+		callback.Release();
 		vehInfo.lastX = x;
 		vehInfo.lastY = y;
 		vehInfo.lastZ = z;
@@ -415,7 +457,8 @@ void OnPlayerUpdate( int nPlayerId, int nUpdateType )
 		Function callback = RootTable().GetFunction( _SC("onPlayerMove") );
 		if( !callback.IsNull() )
 			callback( pCore->playerMap[nPlayerId], lastPos.x, lastPos.y, lastPos.z, x, y, z );
-
+		
+		callback.Release();
 		plrInfo.lastX = x;
 		plrInfo.lastY = y;
 		plrInfo.lastZ = z;
@@ -427,7 +470,8 @@ void OnPlayerUpdate( int nPlayerId, int nUpdateType )
 		Function callback = RootTable().GetFunction( _SC("onPlayerHealthChange") );
 		if( !callback.IsNull() )
 			callback( pCore->playerMap[nPlayerId], lastHP, hp );
-
+		
+		callback.Release();
 		plrInfo.lastHP = hp;
 	}
 
@@ -437,7 +481,8 @@ void OnPlayerUpdate( int nPlayerId, int nUpdateType )
 		Function callback = RootTable().GetFunction( _SC("onPlayerArmourChange") );
 		if( !callback.IsNull() )
 			callback( pCore->playerMap[nPlayerId], lastArmour, armour );
-
+		
+		callback.Release();
 		plrInfo.lastArmour = armour;
 	}
 
@@ -447,7 +492,8 @@ void OnPlayerUpdate( int nPlayerId, int nUpdateType )
 		Function callback = RootTable().GetFunction( _SC("onPlayerWeaponChange") );
 		if( !callback.IsNull() )
 			callback( pCore->playerMap[nPlayerId], lastWep, wep );
-
+		
+		callback.Release();
 		plrInfo.lastWep = wep;
 	}
 

@@ -4,7 +4,7 @@
 void  CTimer::Delete()          { this->committingSeppuku = true; }
 float CTimer::GetElapsedTicks() { return this->ticksElapsed; }
 
-bool  CTimer::Pulse( float elapsedTime )
+bool CTimer::Pulse( float elapsedTime )
 {
 	this->ticksElapsed += elapsedTime;
 
@@ -12,11 +12,13 @@ bool  CTimer::Pulse( float elapsedTime )
 		return true;
 	else if( this->ticksElapsed >= this->intervalInTicks )
 	{
+		if( !this->pFunc.IsNull() )
+			this->pFunc.Execute();
+
 		this->ticksElapsed = 0.0f;
 		this->pulseCount++;
-		this->pFunc.Execute();
 
-		if( this->maxNumberOfPulses > 0 && this->pulseCount >= this->maxNumberOfPulses )
+		if( this->pFunc.IsNull() || ( this->maxNumberOfPulses > 0 && this->pulseCount >= this->maxNumberOfPulses ) )
 		{
 			// Assisted suicide
 			return true;

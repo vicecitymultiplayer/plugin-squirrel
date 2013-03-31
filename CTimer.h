@@ -18,6 +18,14 @@ class CTimer
 			this->pulseCount = 0;
 			this->isPaused = false;
 		}
+
+		~CTimer()
+		{
+			if( params != NULL )
+				delete [] params;
+
+			this->pFunc.Release();
+		}
 		
 		bool Pulse( float elapsedTime );
 		

@@ -146,11 +146,6 @@ void RegisterGlobals()
 
 		.Func( _SC( "GetTime" ), GetTime )
 		.Func( _SC( "GetFullTime" ), GetFullTime )
-		
-		.Func( _SC( "GetWeatherRate" ), GetWeatherRate )
-		.Func( _SC( "SetWeatherRate" ), SetWeatherRate )
-		.Func( _SC( "GetWeatherLock" ), GetWeatherLock )
-		.Func( _SC( "SetWeatherLock" ), SetWeatherLock )
 
 		.SquirrelFunc( _SC( "NewTimer" ), NewTimer );
 }
