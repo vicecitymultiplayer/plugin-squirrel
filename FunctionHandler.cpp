@@ -1064,6 +1064,9 @@ void ReloadScripts( void )
 		// Let's not reload the scripts for now
 		pCore->canReload = false;
 
+		// Get rid of ALL declared timers
+		pCore->DropAllTimers();
+
 		// Reset the global table
 		sq_newtable(v);
 
@@ -1268,6 +1271,7 @@ void SetWeatherLock( bool lock )
 
 // This function is so convoluted, we have to tiptoe around Sqrat.
 // This had better work.
+// <TODO>
 SQInteger NewTimer( HSQUIRRELVM v )
 {
 	// char * pFuncName, float interval, int maxPulses

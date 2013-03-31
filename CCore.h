@@ -30,6 +30,7 @@ class CCore
 		~CCore();
 		void AddTimer( CTimer * pTimer );
 		void LoadScript();
+		void DropAllTimers();
 		void LoadVM();
 		void ProcessTimers( float elapsedTime );
 		void RegisterEntities();
