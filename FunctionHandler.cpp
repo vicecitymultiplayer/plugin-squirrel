@@ -324,18 +324,18 @@ WastedSettings GetWastedSettings()
 
 void HideMapObject( int nModelId, float x, float y, float z )
 {
-	int x2 = floor( ( x * 10 ) + 0.5 );
-	int y2 = floor( ( y * 10 ) + 0.5 );
-	int z2 = floor( ( y * 10 ) + 0.5 );
+	int x2 = static_cast<int>(floor( ( x * 10.0f ) + 0.5f ));
+	int y2 = static_cast<int>(floor( ( y * 10.0f ) + 0.5f ));
+	int z2 = static_cast<int>(floor( ( y * 10.0f ) + 0.5f ));
 
 	functions->HideMapObject( nModelId, x2, y2, z2 );
 }
 
 void ShowMapObject( int nModelId, float x, float y, float z )
 {
-	int x2 = floor( ( x * 10 ) + 0.5 );
-	int y2 = floor( ( y * 10 ) + 0.5 );
-	int z2 = floor( ( y * 10 ) + 0.5 );
+	int x2 = static_cast<int>(floor( ( x * 10.0f ) + 0.5f ));
+	int y2 = static_cast<int>(floor( ( y * 10.0f ) + 0.5f ));
+	int z2 = static_cast<int>(floor( ( y * 10.0f ) + 0.5f ));
 
 	functions->ShowMapObject( nModelId, x2, y2, z2 );
 }
@@ -1066,13 +1066,21 @@ void ReloadScripts( void )
 
 		// Reset the global table
 		sq_newtable(v);
+
+		// Set the default internal error handlers up
+		sqstd_seterrorhandlers( v );
+
+		// Set up our print and error functions
+		sq_setprintfunc( v, printfunc, errorfunc );
+
+		// Push this new root table
 		sq_setroottable(v);
 
 		// Reload all global module entities
 		pCore->RegisterEntities();
 
 		// Re-run the script
-		//pCore->script->Run();
+		pCore->script->Run();
 
 		// Trigger the onScriptLoad event
 		Function callback = RootTable( v ).GetFunction( _SC( "onScriptLoad" ) );
@@ -1216,7 +1224,7 @@ DWORD GetTime( void )
 	OutputWarning( "GetTime is deprecated and may be removed in the future.\n"
 		"          Please use Squirrel's time() function instead." );
 
-	return time( NULL );
+	return static_cast<DWORD>( time( NULL ) );
 }
 
 SQChar * GetFullTime( void )
@@ -1258,8 +1266,72 @@ void SetWeatherLock( bool lock )
 	OutputWarning( "SetWeatherLock is not implemented at the moment." );
 }
 
-// <TODO>
-void NewTimer( SQChar * function, int interval, int repeat )
+// This function is so convoluted, we have to tiptoe around Sqrat.
+// This had better work.
+SQInteger NewTimer( HSQUIRRELVM v )
 {
-	OutputWarning( "NewTimer is not implemented at the moment." );
+	// char * pFuncName, float interval, int maxPulses
+	if( sq_gettop( v ) < 4 )
+		return sq_throwerror( v, "Unexpected number of parameters for NewTimer [string, float, float]" );
+	else if( sq_gettype( v, 2 ) != OT_STRING )
+		return sq_throwerror( v, "The function name must be given as a string." );
+	else if( sq_gettype( v, 3 ) != OT_FLOAT && sq_gettype( v, 3 ) != OT_INTEGER )
+		return sq_throwerror( v, "The interval must be a float or integer." );
+	else if( sq_gettype( v, 4 ) != OT_FLOAT && sq_gettype( v, 4 ) != OT_INTEGER )
+		return sq_throwerror( v, "The maximum number of timer pulses must be a float or integer." );
+	else
+	{
+		const SQChar * pFuncName;
+		SQInteger maxPulses;
+		SQFloat fInterval;
+
+		sq_getstring( v, 2, &pFuncName );
+		{
+			if( sq_gettype( v, 3 ) == OT_INTEGER )
+			{
+				SQInteger interval;
+				sq_getinteger( v, 3, &interval );
+
+				fInterval = static_cast<SQFloat>(interval);
+			}
+			else
+				sq_getfloat( v, 3, &fInterval );
+
+			if( sq_gettype( v, 4 ) == OT_FLOAT )
+			{
+				SQFloat fMaxPulses;
+				sq_getfloat( v, 4, &fMaxPulses );
+
+				maxPulses = static_cast<SQInteger>(fMaxPulses);
+			}
+			else
+				sq_getinteger( v, 4, &maxPulses );
+		}	
+
+		if( RootTable(v).GetFunction( pFuncName ).IsNull() )
+			return sq_throwerror( v, "The given timer callback does not exist." );
+		else if( fInterval <= 0.0f )
+			return sq_throwerror( v, "The timer's interval must be > 0" );
+		else if( maxPulses < 0 )
+			return sq_throwerror( v, "The timer's maximum number of pulses must be >= 0" );
+		else
+		{
+			CTimer * pTimer = new CTimer;
+			TimerParam * pParams = NULL;
+
+			pTimer->pFunc = RootTable(v).GetFunction(pFuncName);
+			pTimer->intervalInTicks   = fInterval;
+			pTimer->maxNumberOfPulses = maxPulses;
+			pTimer->params = pParams;
+
+			pCore->AddTimer(pTimer);
+
+			// Even after having to go through hell to implement something as simple as this
+			// with exception handling, Sqrat lures me back in with nice object binding.
+			//
+			// Simply push the CTimer pointer and it'll be recognized by the scripts.
+			sq_pushuserpointer( v, pTimer );
+			return 1;
+		}
+	}
 }

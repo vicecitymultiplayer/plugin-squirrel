@@ -129,10 +129,12 @@ extern "C" EXPORT unsigned int VcmpPluginInit( PluginFuncs* givenPluginFuncs, Pl
 
 	// Set our plugin information
 	information->uPluginVer = BUILD_VER;
-	strcpy( information->szName, "SqVCMP 0.4 v0.9pre" );
+	information->nPluginId  = 0x5704315 + 0x1;
+	strcpy( information->szName, "SqVCMP 0.4 v0.9b1" );
 	
 	// Get a core instance
 	pCore = CCore::GetInstance();
+	pCore->pSrvPlayerDisconnect = callbacks->OnPlayerDisconnect;
 
 	// Server events
 	callbacks->OnInitServer         = OnInitServer;

@@ -1,5 +1,4 @@
 #include "CCore.h"
-#include "CObject.h"
 #include "Functions.h"
 #include "ConsoleUtils.h"
 
@@ -16,8 +15,12 @@ HSQUIRRELVM v;
 CCore::CCore()
 {
 	// Reset this stuff
-	v      = NULL;
-	script = NULL;
+	v           = NULL;
+	script      = NULL;
+
+	// Construct all timer arrays
+	for( int i = 0; i < this->maxTimers; i++ )
+		pTimerArray[i] = NULL;
 
 	// Set up the canReload variable
 	canReload = false;
@@ -64,13 +67,50 @@ void CCore::LoadVM()
 	// Set our default VM in Sqrat
 	DefaultVM::Set( v );
 
+	// Force Sqrat to enable error handling
+	Sqrat::ErrorHandling::Enable(true);
+
 	// Register our entities so they're accessible by scripts
 	this->RegisterEntities();
+}
+
+// Process any timers
+void CCore::AddTimer(CTimer * pTimer)
+{
+	for( int i = 0; i < this->maxTimers; i++ )
+	{
+		if( pTimerArray[i] == NULL )
+		{
+			pTimerArray[i] = pTimer;
+			return;
+		}
+	}
+}
+
+void CCore::ProcessTimers(float elapsedTime)
+{
+	for( int i = 0; i < this->maxTimers; i++ )
+	{
+		if( pTimerArray[i] != NULL && !pTimerArray[i]->isPaused )
+		{
+			if( pTimerArray[i]->Pulse( elapsedTime * 1000.0f ) == true )
+			{
+				delete pTimerArray[i];
+				pTimerArray[i] = NULL;
+			}
+		}
+	}
 }
 
 // Register *everything*
 void CCore::RegisterEntities()
 {
+	// Register all necessary core libraries
+	sqstd_register_iolib( v );
+	sqstd_register_bloblib( v );
+	sqstd_register_mathlib( v );
+	sqstd_register_stringlib( v );
+
 	// Register our structures
 	RegisterStructures();
 
@@ -84,6 +124,7 @@ void CCore::RegisterEntities()
 	RegisterObject();
 	RegisterPickup();
 	RegisterPlayer();
+	RegisterTimer();
 	RegisterVehicle();
 }
 
@@ -104,22 +145,22 @@ void CCore::LoadScript()
 		{
 			script->CompileFile( gamemode );
 			script->Run();
-
-			// No reloading at this point.
-			this->canReload = false;
-
-			Function callback = RootTable( v ).GetFunction( _SC( "onScriptLoad" ) );
-			if( !callback.IsNull() )
-				callback();
-
-			// You are now free to move about the cabin.
-			this->canReload = true;
 		}
 		catch( Sqrat::Exception e )
 		{
 			OutputError( "The given gamemode could not be loaded." );
 			OutputError( e.Message().c_str() );
 		}
+
+		// No reloading at this point.
+		this->canReload = false;
+
+		Function callback = RootTable( v ).GetFunction( _SC( "onScriptLoad" ) );
+		if( !callback.IsNull() )
+			callback();
+
+		// You are now free to move about the cabin.
+		this->canReload = true;
 	}
 	else
 		OutputError( "No Squirrel gamemode was specified." );
@@ -133,7 +174,7 @@ void CCore::Release()
 		refCount--;
 			
 	// See if we should destroy our instance
-	if( refCount == 0 && pCoreInstance != NULL )
+	if( refCount <= 0 && pCoreInstance != NULL )
 	{
 		// Delete the core instance
 		delete pCoreInstance;

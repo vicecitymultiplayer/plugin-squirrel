@@ -6,6 +6,7 @@
 #include "CObject.h"
 #include "CPickup.h"
 #include "CPlayer.h"
+#include "CTimer.h"
 #include "CVehicle.h"
 
 #pragma once
@@ -167,7 +168,7 @@ void SetWeatherRate ( int rate );
 void GetWeatherLock ( void );
 void SetWeatherLock ( bool lock );
 
-/* <TODO> */ void /* </TODO> */ NewTimer       ( SQChar * function, int interval, int repeat );
+SQInteger NewTimer( HSQUIRRELVM v );
 
 // These functions are for compatibility, but will be deprecated
 DWORD    GetTime         ( void );

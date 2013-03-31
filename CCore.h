@@ -1,19 +1,12 @@
 #include "main.h"
 #include "CPickup.h"
 #include "CPlayer.h"
+#include "CTimer.h"
 #include "CVehicle.h"
 #include "ConsoleUtils.h"
 
 // Include this header only once
 #pragma once
-
-// Define a structure for timer maps
-struct Timer
-{
-	// The interval to run it at
-
-	// The script function to use
-};
 
 // Define the core class
 class CCore
@@ -35,8 +28,10 @@ class CCore
 		}
 		
 		~CCore();
+		void AddTimer( CTimer * pTimer );
 		void LoadScript();
 		void LoadVM();
+		void ProcessTimers( float elapsedTime );
 		void RegisterEntities();
 		void Release();
 
@@ -51,6 +46,9 @@ class CCore
 		// Can we reload the scripts?
 		bool canReload;
 
+		// Storage for the old OnPlayerDisconnect pointer
+		void * pSrvPlayerDisconnect;
+
 	private:
 		// Constructor
 		CCore();
@@ -63,6 +61,10 @@ class CCore
 
 		// The singleton instance itself
 		static CCore * pCoreInstance;
+
+		// Our list of timers.
+		static const int maxTimers = 255;
+		CTimer * pTimerArray[maxTimers];
 
 		// Reference count
 		static unsigned short refCount;

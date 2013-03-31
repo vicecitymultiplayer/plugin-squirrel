@@ -26,7 +26,10 @@ extern "C"
 {
 	#include "squirrel/squirrel.h"
 	#include "squirrel/sqstdaux.h"
+	#include "squirrel/sqstdblob.h"
 	#include "squirrel/sqstdio.h"
+	#include "squirrel/sqstdmath.h"
+	#include "squirrel/sqstdstring.h"
 }
 
 // A definition needed for Squirrel's print function
@@ -46,6 +49,7 @@ using namespace Sqrat;
 class CObject;
 class CPickup;
 class CPlayer;
+class CTimer;
 class CVehicle;
 
 // Structure definitions

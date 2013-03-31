@@ -4,6 +4,8 @@
 #include "CCore.h"
 #include "main.h"
 
+inline bool Boolify( unsigned int n ) { return ( n == 1 ? true : false ); }
+
 // The core
 extern CCore * pCore;
 
@@ -14,7 +16,7 @@ void CPlayer::SetArmour( float armour ) { functions->SetPlayerArmour( this->nPla
 bool CPlayer::StreamedToPlayer( CPlayer * player )
 {
 	if( player != NULL )
-		return functions->IsPlayerStreamedForPlayer( player->nPlayerId, this->nPlayerId );
+		return Boolify( functions->IsPlayerStreamedForPlayer( player->nPlayerId, this->nPlayerId ) );
 
 	return NULL;
 }
@@ -85,8 +87,8 @@ Vector CPlayer::GetPosition()
 }
 
 int CPlayer::GetClass() { return functions->GetPlayerClass( this->nPlayerId ); }
-bool CPlayer::GetAdmin() { return functions->IsPlayerAdmin( this->nPlayerId ); }
-bool CPlayer::Typing() { return functions->IsPlayerTyping( this->nPlayerId ); }
+bool CPlayer::GetAdmin() { return Boolify( functions->IsPlayerAdmin( this->nPlayerId ) == 1 ); }
+bool CPlayer::Typing() { return Boolify( functions->IsPlayerTyping( this->nPlayerId ) ); }
 
 SQChar * CPlayer::GetIP()
 {
@@ -96,7 +98,7 @@ SQChar * CPlayer::GetIP()
 	return ip;
 }
 
-bool CPlayer::GetSpawned() { return functions->IsPlayerSpawned( this->nPlayerId ); }
+bool CPlayer::GetSpawned() { return Boolify( functions->IsPlayerSpawned( this->nPlayerId ) == 1 ); }
 int CPlayer::GetWorld() { return functions->GetPlayerWorld( this->nPlayerId ); }
 int CPlayer::GetSecWorld() { return functions->GetPlayerSecWorld( this->nPlayerId ); }
 int CPlayer::GetUniqueWorld() { return functions->GetPlayerUniqueWorld( this->nPlayerId ); }
@@ -143,12 +145,12 @@ CVehicle * CPlayer::GetVehicle()
 }
 
 bool CPlayer::GetFrozen() { return !functions->EnabledPlayerControllable( this->nPlayerId ); }
-bool CPlayer::GetDrivebyEnabled() { return functions->EnabledPlayerDriveby( this->nPlayerId ); }
-bool CPlayer::GetWhiteScanlines() { return functions->EnabledPlayerWhiteScanlines( this->nPlayerId ); }
-bool CPlayer::GetGreenScanlines() { return functions->EnabledPlayerGreenScanlines( this->nPlayerId ); }
-bool CPlayer::GetWidescreen() { return functions->EnabledPlayerWidescreen( this->nPlayerId ); }
-bool CPlayer::GetOnRadar() { return functions->EnabledPlayerHasMarker( this->nPlayerId ); }
-bool CPlayer::GetCanAttack() { return functions->EnabledPlayerAttackPriv( this->nPlayerId ); }
+bool CPlayer::GetDrivebyEnabled() { return Boolify( functions->EnabledPlayerDriveby( this->nPlayerId ) ); }
+bool CPlayer::GetWhiteScanlines() { return Boolify( functions->EnabledPlayerWhiteScanlines( this->nPlayerId ) ); }
+bool CPlayer::GetGreenScanlines() { return Boolify( functions->EnabledPlayerGreenScanlines( this->nPlayerId ) ); }
+bool CPlayer::GetWidescreen() { return Boolify( functions->EnabledPlayerWidescreen( this->nPlayerId ) ); }
+bool CPlayer::GetOnRadar() { return Boolify( functions->EnabledPlayerHasMarker( this->nPlayerId ) ); }
+bool CPlayer::GetCanAttack() { return Boolify( functions->EnabledPlayerAttackPriv( this->nPlayerId ) ); }
 int CPlayer::GetWeaponSlot() { return functions->GetPlayerWeaponSlot( this->nPlayerId ); }
 int CPlayer::GetWeapon() { return functions->GetPlayerWeapon( this->nPlayerId ); }
 int CPlayer::GetWeaponAmmo() { return functions->GetPlayerWeaponAmmo( this->nPlayerId ); }
@@ -159,7 +161,7 @@ void CPlayer::Spawn() { functions->ForcePlayerSpawn( this->nPlayerId ); }
 void CPlayer::GiveMoney( int money ) { functions->GivePlayerMoney( this->nPlayerId, money ); }
 
 void CPlayer::ShowMarkers( bool setMarkers ) { functions->TogglePlayerShowMarkers( this->nPlayerId, setMarkers ); }
-bool CPlayer::ShowingMarkers() { return functions->EnabledPlayerShowMarkers( this->nPlayerId ); }
+bool CPlayer::ShowingMarkers() { return Boolify( functions->EnabledPlayerShowMarkers( this->nPlayerId ) ); }
 
 void CPlayer::AddSpeed( Vector speed )
 {
@@ -220,7 +222,7 @@ int CPlayer::GetWeaponAtSlot( int slot ) { return functions->GetPlayerWeaponAtSl
 int CPlayer::GetAmmoAtSlot( int slot ) { return functions->GetPlayerAmmoAtSlot( this->nPlayerId, slot ); }
 int CPlayer::GetID() { return this->nPlayerId; }
 void CPlayer::Select() { functions->ForcePlayerSelect( this->nPlayerId ); }
-bool CPlayer::GetCameraLocked() { return functions->IsCameraLocked( this->nPlayerId ); }
+bool CPlayer::GetCameraLocked() { return Boolify( functions->IsCameraLocked( this->nPlayerId ) ); }
 void CPlayer::RestoreCamera() { functions->RestoreCamera( this->nPlayerId ); }
 int CPlayer::GetKey() { return functions->GetPlayerKey( this->nPlayerId ); }
 

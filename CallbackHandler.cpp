@@ -14,10 +14,11 @@
 savedVehicleData lastVehInfo[MAX_VEHICLES];
 savedPlayerData  lastPlrInfo[MAX_PLAYERS];
 
-// Externalize the core instance
+// Externalize the core instance and other critical variables
 extern CCore * pCore;
-extern PluginInfo		* 	information;
-       SquirrelExports	*	pExp;
+extern PluginInfo       *   information;
+extern PluginCallbacks  *   callbacks;
+       SquirrelExports  *   pExp;
 
 int OnInitServer()
 {
@@ -72,15 +73,12 @@ void OnShutdownServer()
 
 	// Dereference the core
 	pCore->Release();
-
-	// Remove dangling pointers
-	pCore = NULL;
 }
 
 void OnFrame( float fElapsedTime )
 {
 	// Process any timers we have
-	//pCore->ProcessTimers(fElapsedTime);
+	pCore->ProcessTimers(fElapsedTime);
 }
 
 void OnPlayerConnect( int nPlayerId )
@@ -97,21 +95,24 @@ void OnPlayerConnect( int nPlayerId )
 
 void OnPlayerDisconnect( int nPlayerId, int nReason )
 {
-	CPlayer * playerInstance = pCore->playerMap[ nPlayerId ];
+	if( pCore )
+	{
+		CPlayer * playerInstance = pCore->playerMap[ nPlayerId ];
 
-	Function callback = RootTable().GetFunction( _SC("onPlayerPart") );
-	if( !callback.IsNull() )
-		callback( playerInstance, nReason );
+		Function callback = RootTable().GetFunction( _SC("onPlayerPart") );
+		if( !callback.IsNull() )
+			callback( playerInstance, nReason );
 
-	// Insert a blank instance that does nothing
-	pCore->playerMap[nPlayerId] = NULL;
+		// Insert a blank instance that does nothing
+		pCore->playerMap[nPlayerId] = NULL;
 
-	// Nullify the current instance
-	delete playerInstance;
-	delete pCore->playerMap[nPlayerId];
+		// Nullify the current instance
+		delete playerInstance;
+		delete pCore->playerMap[nPlayerId];
 
-	playerInstance              = NULL;
-	pCore->playerMap[nPlayerId] = NULL;
+		playerInstance              = NULL;
+		pCore->playerMap[nPlayerId] = NULL;
+	}
 }
 
 int OnPlayerRequestClass( int nPlayerId, int nOffset )

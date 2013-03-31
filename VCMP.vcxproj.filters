@@ -72,6 +72,9 @@
     <ClInclude Include="Exports.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="CTimer.h">
+      <Filter>Header Files\Handlers\Classes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -106,6 +109,9 @@
     </ClCompile>
     <ClCompile Include="Exports.cpp">
       <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="CTimer.cpp">
+      <Filter>Source Files\Handlers\Classes</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

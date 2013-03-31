@@ -152,7 +152,7 @@ void RegisterGlobals()
 		.Func( _SC( "GetWeatherLock" ), GetWeatherLock )
 		.Func( _SC( "SetWeatherLock" ), SetWeatherLock )
 
-		.Func( _SC( "NewTimer" ), NewTimer );
+		.SquirrelFunc( _SC( "NewTimer" ), NewTimer );
 }
 
 void RegisterConstants()
