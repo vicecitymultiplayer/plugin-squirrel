@@ -107,10 +107,7 @@ void CCore::DropAllTimers()
 	for( int i = 0; i < this->maxTimers; i++ )
 	{
 		if( pTimerArray[i] != NULL )
-		{
-			delete pTimerArray[i];
-			pTimerArray[i] = NULL;
-		}
+			pTimerArray[i]->committingSeppuku = true;
 	}
 }
 

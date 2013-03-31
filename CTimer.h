@@ -17,6 +17,11 @@ class CTimer
 			this->ticksElapsed = 0.0f;
 			this->pulseCount = 0;
 			this->isPaused = false;
+
+			this->maxNumberOfPulses = 0;
+			this->intervalInTicks = 0.0f;
+			this->params = NULL;
+			this->pFunc = Sqrat::Function();
 		}
 
 		~CTimer()
@@ -55,7 +60,7 @@ class CTimer
 		// The list of parameters
 		TimerParam * params;
 
-	private:
+		// Are we killing ourselves off?
 		bool committingSeppuku;
 };
 
