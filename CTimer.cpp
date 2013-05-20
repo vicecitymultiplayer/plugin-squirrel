@@ -1,5 +1,6 @@
 #include "CCore.h"
 #include "CTimer.h"
+#include <cassert>
 
 void  CTimer::Delete()          { this->committingSeppuku = true; }
 float CTimer::GetElapsedTicks() { return this->ticksElapsed; }
@@ -48,8 +49,12 @@ bool CTimer::Pulse( float elapsedTime )
 								break;
 
 							case OT_FLOAT:
-								printf( "Pushed float, pointer %p\n", itr->pData );
-								sq_pushfloat( v, *(SQFloat *)(itr->pData) );
+								float fTmp;
+								assert( sizeof( float ) == sizeof( itr->pData ) );
+								memcpy( &fTmp, &itr->pData, sizeof( float ) );
+
+								printf( "Pushed float %.3f, pointer %p\n", fTmp, itr->pData );
+								sq_pushfloat( v, fTmp );
 								break;
 
 							case OT_BOOL:
