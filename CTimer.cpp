@@ -31,9 +31,54 @@ bool CTimer::Pulse( float elapsedTime )
 				int nArgs = 1;
 
 				// See if we have any parameters to pass along
-				if( this->params != NULL )
+				if( this->paramCount > 0 )
 				{
-					
+					for( unsigned char i = 0; i < paramCount; i++ )
+					{
+						printf( "Pushed type %d, pointer %p\n", this->params[i].datatype, this->params[i].pData );
+						switch( this->params[i].datatype )
+						{
+							case OT_INTEGER:
+								sq_pushinteger( v, *(SQInteger *)this->params[i].pData );
+								break;
+
+							case OT_FLOAT:
+								sq_pushfloat( v, *(SQFloat *)this->params[i].pData );
+								break;
+
+							case OT_BOOL:
+								sq_pushbool( v, *(SQBool *)this->params[i].pData );
+								break;
+
+							case OT_STRING:
+								sq_pushstring( v, reinterpret_cast<const SQChar *>(this->params[i].pData), -1 );
+								printf( "%s\n", *(SQChar *)(this->params[i].pData) );
+								break;
+
+							case OT_TABLE:
+							case OT_ARRAY:
+							case OT_CLASS:
+							case OT_CLOSURE:
+							case OT_GENERATOR:
+							case OT_WEAKREF:
+								sq_pushobject( v, *(HSQOBJECT *)this->params[i].pData );
+								break;
+								
+							case OT_INSTANCE:
+							case OT_USERDATA:
+							case OT_USERPOINTER:
+							case OT_NATIVECLOSURE:
+								sq_pushuserpointer( v, (SQUserPointer *)this->params[i].pData );
+								break;
+
+							case OT_NULL:
+								sq_pushnull( v );
+								break;
+
+							default:
+								break;
+						}
+					}
 				}
 				
 				// Call the function

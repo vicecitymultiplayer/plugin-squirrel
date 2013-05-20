@@ -5,7 +5,7 @@
 typedef struct
 {
 	void * pData;
-	unsigned char datatype; // This is some shitty programming yo
+	SQObjectType datatype; // This is some shitty programming yo
 } TimerParam;
 
 class CTimer
@@ -22,6 +22,7 @@ class CTimer
 			this->intervalInTicks = 0.0f;
 			this->params = NULL;
 			this->pFunc = NULL;
+			this->paramCount = 0;
 		}
 
 		~CTimer()
@@ -57,6 +58,9 @@ class CTimer
 
 		// The list of parameters
 		TimerParam * params;
+
+		// The parameter count
+		unsigned char paramCount;
 
 		// Are we killing ourselves off?
 		bool committingSeppuku;

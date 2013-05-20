@@ -1302,10 +1302,14 @@ SQInteger NewTimer( HSQUIRRELVM v )
 		{
 			CTimer     * pTimer  = new CTimer;
 			TimerParam * pParams = NULL;
+
 			if( sq_gettop( v ) > 4 )
 			{
+				printf( "Number of parameters: %d\n", sq_gettop( v ) );
 				TimerParam * pTempParams = new TimerParam[sq_gettop(v) - 4];
-				for( int i = 5; i < sq_gettop( v ); i++ )
+				pTimer->paramCount = sq_gettop(v) - 4;
+
+				for( int i = 5; i <= sq_gettop( v ); i++ )
 				{
 					TimerParam pTempParam;
 					pTempParam.datatype = sq_gettype( v, i );
@@ -1353,9 +1357,10 @@ SQInteger NewTimer( HSQUIRRELVM v )
 							break;
 
 						default:
-							pTempParam.datatype = -1;
 							break;
 					}
+
+					printf( "Stored typed %d, pointer %p\n", pTempParam.datatype, pTempParam.pData );
 				}
 
 				pParams = pTempParams;
