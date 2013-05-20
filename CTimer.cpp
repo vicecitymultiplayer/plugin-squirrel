@@ -12,13 +12,48 @@ bool CTimer::Pulse( float elapsedTime )
 		return true;
 	else if( this->ticksElapsed >= this->intervalInTicks )
 	{
-		if( !this->pFunc.IsNull() )
-			this->pFunc.Execute();
+		// Start ridiculous block of timer call code
+		{
+			int top = sq_gettop( v );
+
+			// Push a new environment for the function call
+			sq_pushroottable( v );
+			sq_pushstring( v, _SC(this->pFunc), -1 );
+
+			// Check if we found the function
+			if( SQ_SUCCEEDED( sq_get( v, -2 ) ) )
+			{
+				// Push a new root table for this function
+				sq_pushroottable( v );
+				
+				// Count the number of arguments that we have so far
+				// The root table counts as an argument.
+				int nArgs = 1;
+
+				// See if we have any parameters to pass along
+				if( this->params != NULL )
+				{
+					
+				}
+				
+				// Call the function
+				sq_call( v, 4, 0, 1 );
+			}
+			else
+			{
+				// Restore the previous environment
+				sq_settop( v, top );
+
+				// Function not found. Kill the timer.
+				this->committingSeppuku = true;
+				return true;
+			}
+		}
 
 		this->ticksElapsed = 0.0f;
 		this->pulseCount++;
 
-		if( this->pFunc.IsNull() || ( this->maxNumberOfPulses > 0 && this->pulseCount >= this->maxNumberOfPulses ) )
+		if( this->maxNumberOfPulses > 0 && this->pulseCount >= this->maxNumberOfPulses )
 		{
 			// Assisted suicide
 			return true;

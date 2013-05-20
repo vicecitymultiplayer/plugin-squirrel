@@ -21,15 +21,13 @@ class CTimer
 			this->maxNumberOfPulses = 0;
 			this->intervalInTicks = 0.0f;
 			this->params = NULL;
-			this->pFunc = Sqrat::Function();
+			this->pFunc = NULL;
 		}
 
 		~CTimer()
 		{
 			if( params != NULL )
 				delete [] params;
-
-			this->pFunc.Release();
 		}
 		
 		bool Pulse( float elapsedTime );
@@ -55,7 +53,7 @@ class CTimer
 		unsigned int pulseCount;
 
 		// The script function to use
-		Sqrat::Function pFunc;
+		SQChar * pFunc;
 
 		// The list of parameters
 		TimerParam * params;

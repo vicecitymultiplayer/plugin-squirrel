@@ -1252,7 +1252,6 @@ SQChar * GetFullTime( void )
 
 // This function is so convoluted, we have to tiptoe around Sqrat.
 // This had better work.
-// <TODO>
 SQInteger NewTimer( HSQUIRRELVM v )
 {
 	// char * pFuncName, float interval, int maxPulses
@@ -1303,8 +1302,66 @@ SQInteger NewTimer( HSQUIRRELVM v )
 		{
 			CTimer     * pTimer  = new CTimer;
 			TimerParam * pParams = NULL;
+			if( sq_gettop( v ) > 4 )
+			{
+				TimerParam * pTempParams = new TimerParam[sq_gettop(v) - 4];
+				for( int i = 5; i < sq_gettop( v ); i++ )
+				{
+					TimerParam pTempParam;
+					pTempParam.datatype = sq_gettype( v, i );
 
-			pTimer->pFunc = RootTable(v).GetFunction(pFuncName);
+					switch( sq_gettype( v, i ) )
+					{
+						case OT_INTEGER:
+							sq_getinteger( v, i, (SQInteger *)pTempParam.pData );
+							break;
+
+						case OT_FLOAT:
+							sq_getfloat( v, i, (SQFloat *)pTempParam.pData );
+							break;
+
+						case OT_BOOL:
+							sq_getbool( v, i, (SQBool *)pTempParam.pData );
+							break;
+
+						case OT_STRING:
+							sq_getstring( v, i, reinterpret_cast<const SQChar **>(const_cast<const void **>(&pTempParam.pData)) );
+							break;
+
+						case OT_TABLE:
+						case OT_ARRAY:
+						case OT_CLASS:
+						case OT_CLOSURE:
+						case OT_GENERATOR:
+						case OT_WEAKREF:
+							sq_resetobject( (HSQOBJECT *)pTempParam.pData );
+							sq_getstackobj( v, i, (HSQOBJECT *)pTempParam.pData );
+							sq_addref( v, (HSQOBJECT *)pTempParam.pData );
+							break;
+
+						case OT_INSTANCE:
+							sq_getinstanceup( v, i, (SQUserPointer *)pTempParam.pData, NULL );
+							break;
+
+						case OT_USERDATA:
+						case OT_USERPOINTER:
+						case OT_NATIVECLOSURE:
+							sq_getuserpointer( v, i, (SQUserPointer *)pTempParam.pData );
+							break;
+
+						case OT_NULL:
+							break;
+
+						default:
+							pTempParam.datatype = -1;
+							break;
+					}
+				}
+
+				pParams = pTempParams;
+			}
+
+			pTimer->pFunc = const_cast<SQChar *>(pFuncName);
 			pTimer->intervalInTicks   = fInterval;
 			pTimer->maxNumberOfPulses = maxPulses;
 			pTimer->params = pParams;
