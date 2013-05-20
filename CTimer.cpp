@@ -74,11 +74,15 @@ bool CTimer::Pulse( float elapsedTime )
 								break;
 								
 							case OT_INSTANCE:
+								sq_createinstance( v, -1 );
+								sq_setinstanceup( v, -1, itr->pData );
+								break;
+
 							case OT_USERDATA:
 							case OT_USERPOINTER:
 							case OT_NATIVECLOSURE:
 								printf( "Pushed closure/instance, pointer %p\n", itr->pData );
-								sq_pushuserpointer( v, *(SQUserPointer *)itr->pData );
+								sq_pushuserpointer( v, (SQUserPointer)itr->pData );
 								break;
 
 							case OT_NULL:
