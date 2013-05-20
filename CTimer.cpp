@@ -40,11 +40,9 @@ bool CTimer::Pulse( float elapsedTime )
 					// Iterate through the vector of parameters
 					for( itr = this->params.begin(); itr < this->params.end(); ++itr )
 					{
-						printf( "Pushed type %d, pointer %p\n", itr->datatype, itr->pData );
 						switch( itr->datatype )
 						{
 							case OT_INTEGER:
-								printf( "Pushed integer, pointer %p\n", itr->pData );
 								sq_pushinteger( v, (SQInteger)itr->pData );
 								break;
 
@@ -53,19 +51,15 @@ bool CTimer::Pulse( float elapsedTime )
 								assert( sizeof( float ) == sizeof( itr->pData ) );
 								memcpy( &fTmp, &itr->pData, sizeof( float ) );
 
-								printf( "Pushed float %.3f, pointer %p\n", fTmp, itr->pData );
 								sq_pushfloat( v, fTmp );
 								break;
 
 							case OT_BOOL:
-								printf( "Pushed boolean, pointer %p\n", itr->pData );
 								sq_pushbool( v, (SQBool)itr->pData );
 								break;
 
 							case OT_STRING:
-								printf( "Pushed string, pointer %p\n", itr->pData );
 								sq_pushstring( v, reinterpret_cast<const SQChar *>(itr->pData), -1 );
-								printf( "%s\n", (SQChar *)itr->pData );
 								break;
 
 							case OT_TABLE:
@@ -91,7 +85,6 @@ bool CTimer::Pulse( float elapsedTime )
 								break;
 
 							case OT_NULL:
-								printf( "Pushed null, pointer %p\n", itr->pData );
 								sq_pushnull( v );
 								break;
 
