@@ -1,4 +1,6 @@
 #include "main.h"
+#include <stdlib.h>
+#include <vector>
 #pragma once
 
 // Define structures for timer maps
@@ -20,15 +22,16 @@ class CTimer
 
 			this->maxNumberOfPulses = 0;
 			this->intervalInTicks = 0.0f;
-			this->params = NULL;
 			this->pFunc = NULL;
 			this->paramCount = 0;
+
+			this->params.clear();
 		}
 
 		~CTimer()
 		{
-			if( params != NULL )
-				delete [] params;
+			if( params.size() > 0 )
+				params.clear();
 		}
 		
 		bool Pulse( float elapsedTime );
@@ -57,7 +60,7 @@ class CTimer
 		SQChar * pFunc;
 
 		// The list of parameters
-		TimerParam * params;
+		std::vector<TimerParam> params;
 
 		// The parameter count
 		unsigned char paramCount;

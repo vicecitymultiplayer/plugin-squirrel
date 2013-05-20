@@ -1306,7 +1306,6 @@ SQInteger NewTimer( HSQUIRRELVM v )
 			if( sq_gettop( v ) > 4 )
 			{
 				printf( "Number of parameters: %d\n", sq_gettop( v ) );
-				TimerParam * pTempParams = new TimerParam[sq_gettop(v) - 4];
 				pTimer->paramCount = sq_gettop(v) - 4;
 
 				for( int i = 5; i <= sq_gettop( v ); i++ )
@@ -1340,7 +1339,7 @@ SQInteger NewTimer( HSQUIRRELVM v )
 						case OT_WEAKREF:
 							sq_resetobject( (HSQOBJECT *)pTempParam.pData );
 							sq_getstackobj( v, i, (HSQOBJECT *)&pTempParam.pData );
-							sq_addref( v, (HSQOBJECT *)pTempParam.pData );
+							sq_addref( v, (HSQOBJECT *)&pTempParam.pData );
 							break;
 
 						case OT_INSTANCE:
@@ -1361,15 +1360,13 @@ SQInteger NewTimer( HSQUIRRELVM v )
 					}
 
 					printf( "Stored typed %d, pointer %p\n", pTempParam.datatype, pTempParam.pData );
+					pTimer->params.push_back(pTempParam);
 				}
-
-				pParams = pTempParams;
 			}
 
 			pTimer->pFunc = const_cast<SQChar *>(pFuncName);
 			pTimer->intervalInTicks   = fInterval;
 			pTimer->maxNumberOfPulses = maxPulses;
-			pTimer->params = pParams;
 
 			pCore->AddTimer(pTimer);
 

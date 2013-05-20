@@ -33,30 +33,34 @@ bool CTimer::Pulse( float elapsedTime )
 				// See if we have any parameters to pass along
 				if( this->paramCount > 0 )
 				{
-					for( unsigned char i = 0; i < paramCount; i++ )
+					// Create a vector iterator
+					std::vector<TimerParam>::iterator itr;
+
+					// Iterate through the vector of parameters
+					for( itr = this->params.begin(); itr < this->params.end(); ++itr )
 					{
-						printf( "Pushed type %d, pointer %p\n", this->params[i].datatype, this->params[i].pData );
-						switch( this->params[i].datatype )
+						printf( "Pushed type %d, pointer %p\n", itr->datatype, itr->pData );
+						switch( itr->datatype )
 						{
 							case OT_INTEGER:
-								printf( "Pushed integer, pointer %p\n", this->params[i].pData );
-								sq_pushinteger( v, *(SQInteger *)this->params[i].pData );
+								printf( "Pushed integer, pointer %p\n", itr->pData );
+								sq_pushinteger( v, (SQInteger)itr->pData );
 								break;
 
 							case OT_FLOAT:
-								printf( "Pushed float, pointer %p\n", this->params[i].pData );
-								sq_pushfloat( v, *(SQFloat *)this->params[i].pData );
+								printf( "Pushed float, pointer %p\n", itr->pData );
+								sq_pushfloat( v, *(SQFloat *)(itr->pData) );
 								break;
 
 							case OT_BOOL:
-								printf( "Pushed boolean, pointer %p\n", this->params[i].pData );
-								sq_pushbool( v, *(SQBool *)this->params[i].pData );
+								printf( "Pushed boolean, pointer %p\n", itr->pData );
+								sq_pushbool( v, (SQBool)itr->pData );
 								break;
 
 							case OT_STRING:
-								printf( "Pushed string, pointer %p\n", this->params[i].pData );
-								sq_pushstring( v, reinterpret_cast<const SQChar *>(this->params[i].pData), -1 );
-								printf( "%s\n", *(SQChar *)(this->params[i].pData) );
+								printf( "Pushed string, pointer %p\n", itr->pData );
+								sq_pushstring( v, reinterpret_cast<const SQChar *>(itr->pData), -1 );
+								printf( "%s\n", (SQChar *)itr->pData );
 								break;
 
 							case OT_TABLE:
@@ -65,31 +69,32 @@ bool CTimer::Pulse( float elapsedTime )
 							case OT_CLOSURE:
 							case OT_GENERATOR:
 							case OT_WEAKREF:
-								printf( "Pushed object, pointer %p\n", this->params[i].pData );
-								sq_pushobject( v, *(HSQOBJECT *)this->params[i].pData );
+								printf( "Pushed object, pointer %p\n", itr->pData );
+								sq_pushobject( v, *(HSQOBJECT *)itr->pData );
 								break;
 								
 							case OT_INSTANCE:
 							case OT_USERDATA:
 							case OT_USERPOINTER:
 							case OT_NATIVECLOSURE:
-								printf( "Pushed closure/instance, pointer %p\n", this->params[i].pData );
-								sq_pushuserpointer( v, *(SQUserPointer *)this->params[i].pData );
+								printf( "Pushed closure/instance, pointer %p\n", itr->pData );
+								sq_pushuserpointer( v, *(SQUserPointer *)itr->pData );
 								break;
 
 							case OT_NULL:
-								printf( "Pushed null, pointer %p\n", this->params[i].pData );
+								printf( "Pushed null, pointer %p\n", itr->pData );
 								sq_pushnull( v );
 								break;
 
 							default:
+								printf( "UNKNOWN PUSH TYPE\n" );
 								break;
 						}
 					}
 				}
 				
 				// Call the function
-				printf( "%d\n", nArgs );
+				printf( "Arg count: %d\n", nArgs );
 				sq_call( v, nArgs, 0, 1 );
 			}
 			else
@@ -101,6 +106,9 @@ bool CTimer::Pulse( float elapsedTime )
 				this->committingSeppuku = true;
 				return true;
 			}
+
+			// Restore the previous environment
+			sq_settop( v, top );
 		}
 
 		this->ticksElapsed = 0.0f;
