@@ -1314,18 +1314,18 @@ SQInteger NewTimer( HSQUIRRELVM v )
 					TimerParam pTempParam;
 					pTempParam.datatype = sq_gettype( v, i );
 
-					switch( sq_gettype( v, i ) )
+					switch( pTempParam.datatype )
 					{
 						case OT_INTEGER:
-							sq_getinteger( v, i, (SQInteger *)pTempParam.pData );
+							sq_getinteger( v, i, (SQInteger *)&pTempParam.pData );
 							break;
 
 						case OT_FLOAT:
-							sq_getfloat( v, i, (SQFloat *)pTempParam.pData );
+							sq_getfloat( v, i, (SQFloat *)&pTempParam.pData );
 							break;
 
 						case OT_BOOL:
-							sq_getbool( v, i, (SQBool *)pTempParam.pData );
+							sq_getbool( v, i, (SQBool *)&pTempParam.pData );
 							break;
 
 						case OT_STRING:
@@ -1339,18 +1339,18 @@ SQInteger NewTimer( HSQUIRRELVM v )
 						case OT_GENERATOR:
 						case OT_WEAKREF:
 							sq_resetobject( (HSQOBJECT *)pTempParam.pData );
-							sq_getstackobj( v, i, (HSQOBJECT *)pTempParam.pData );
+							sq_getstackobj( v, i, (HSQOBJECT *)&pTempParam.pData );
 							sq_addref( v, (HSQOBJECT *)pTempParam.pData );
 							break;
 
 						case OT_INSTANCE:
-							sq_getinstanceup( v, i, (SQUserPointer *)pTempParam.pData, NULL );
+							sq_getinstanceup( v, i, (SQUserPointer *)&pTempParam.pData, NULL );
 							break;
 
 						case OT_USERDATA:
 						case OT_USERPOINTER:
 						case OT_NATIVECLOSURE:
-							sq_getuserpointer( v, i, (SQUserPointer *)pTempParam.pData );
+							sq_getuserpointer( v, i, (SQUserPointer *)&pTempParam.pData );
 							break;
 
 						case OT_NULL:
