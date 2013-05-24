@@ -158,7 +158,7 @@ DWORD    SQGetTickCount  ( void );
 
 bool  InPoly            ( float x, float y, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4 );
 float DistanceFromPoint ( float x1, float y1, float x2, float y2 );
-void ReloadScripts      ( void );
+void ReloadScripts      ( bool shouldCleanWorld = true );
 
 unsigned char GetVehicleModelFromName ( SQChar * name );
 SQChar *      GetVehicleNameFromModel ( int model );

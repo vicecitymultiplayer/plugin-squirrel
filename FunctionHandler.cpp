@@ -169,9 +169,9 @@ CVehicle * CreateVehicle( int model, int world, Vector pos, float angle, int col
 		return NULL;
 	else
 	{
-		CVehicle * vehInst  = new CVehicle;
-		vehInst->nVehicleId = vId;
-		pCore->vehicleMap[vId]     = vehInst;
+		CVehicle * vehInst     = new CVehicle;
+		vehInst->nVehicleId    = vId;
+		pCore->vehicleMap[vId] = vehInst;
 		
 		return vehInst;
 	}
@@ -187,6 +187,7 @@ CPickup * CreatePickup( int model, int world, int quantity, Vector pos, int alph
 	{
 		CPickup * pickupInst  = new CPickup;
 		pickupInst->nPickupId = pId;
+		pCore->pickupMap[pId] = pickupInst;
 
 		return pickupInst;
 	}
@@ -200,10 +201,11 @@ CObject * CreateObject( int model, int world, Vector pos, int alpha )
 		return NULL;
 	else
 	{
-		static CObject objInst;
-		objInst.nObjectId = oId;
+		CObject * objInst     = new CObject;
+		objInst->nObjectId    = oId;
+		pCore->objectMap[oId] = objInst;
 
-		return &objInst;
+		return objInst;
 	}
 }
 
@@ -225,15 +227,10 @@ CPlayer * FindPlayer( int id )
 
 CObject * FindObject( int id )
 {
-	if( functions->GetObjectModel( id ) < 1 )
-		return NULL;
-	else
-	{
-		static CObject objInst;
-		objInst.nObjectId = id;
+	if( id < MAX_OBJECTS )
+		return pCore->objectMap[id];
 
-		return &objInst;
-	}
+	return NULL;
 }
 
 CVehicle * FindVehicle( int id )
@@ -1055,8 +1052,7 @@ float DistanceFromPoint( float x1, float y1, float x2, float y2 )
 	return matrixF;
 }
 
-// <TODO>
-void ReloadScripts( void )
+void ReloadScripts( bool shouldCleanWorld )
 {
 	// Are we allowed to reload?
 	if( pCore->canReload )
@@ -1066,6 +1062,10 @@ void ReloadScripts( void )
 
 		// Get rid of ALL declared timers
 		pCore->DropAllTimers();
+
+		// Clean the world if we're asked to
+		if( shouldCleanWorld )
+			pCore->CleanWorld();
 
 		// Reset the global table
 		sq_newtable(v);
@@ -1091,7 +1091,7 @@ void ReloadScripts( void )
 		// Trigger the onScriptLoad event
 		Function callback = RootTable( v ).GetFunction( _SC( "onScriptLoad" ) );
 		if( !callback.IsNull() )
-			callback();
+			callback(false);
 
 		callback.Release();
 

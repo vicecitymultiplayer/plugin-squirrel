@@ -29,6 +29,7 @@ class CCore
 		
 		~CCore();
 		void AddTimer( CTimer * pTimer );
+		void CleanWorld();
 		void LoadScript();
 		void DropAllTimers();
 		void LoadVM();
@@ -40,6 +41,7 @@ class CCore
 		CPlayer  * playerMap[MAX_PLAYERS];
 		CPickup  * pickupMap[MAX_PICKUPS];
 		CVehicle * vehicleMap[MAX_VEHICLES];
+		CObject  * objectMap[MAX_OBJECTS];
 
 		// Sqrat's script
 		Script * script;

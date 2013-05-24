@@ -111,6 +111,19 @@ void CCore::DropAllTimers()
 	}
 }
 
+void CCore::CleanWorld()
+{
+	unsigned int i;
+	for( i = 0; i < MAX_VEHICLES; i++ )
+		vehicleMap[i]->Delete();
+
+	for( i = 0; i < MAX_PICKUPS; i++ )
+		pickupMap[i]->Delete();
+
+	for( i = 0; i < MAX_OBJECTS; i++ )
+		objectMap[i]->Delete();
+}
+
 // Register *everything*
 void CCore::RegisterEntities()
 {
@@ -169,7 +182,7 @@ void CCore::LoadScript()
 
 		Function callback = RootTable( v ).GetFunction( _SC( "onScriptLoad" ) );
 		if( !callback.IsNull() )
-			callback();
+			callback(true);
 
 		// You are now free to move about the cabin.
 		this->canReload = true;
