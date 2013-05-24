@@ -1333,12 +1333,14 @@ SQInteger NewTimer( HSQUIRRELVM v )
 						case OT_TABLE:
 						case OT_ARRAY:
 						case OT_CLASS:
-						case OT_CLOSURE:
-						case OT_GENERATOR:
-						case OT_WEAKREF:
 							sq_resetobject( (HSQOBJECT *)pTempParam.pData );
 							sq_getstackobj( v, i, (HSQOBJECT *)&pTempParam.pData );
 							sq_addref( v, (HSQOBJECT *)&pTempParam.pData );
+							break;
+
+						case OT_CLOSURE:
+						case OT_NATIVECLOSURE:
+							sq_getstackobj( v, i, (HSQOBJECT *)&pTempParam.pData );
 							break;
 
 						case OT_INSTANCE:
@@ -1347,7 +1349,6 @@ SQInteger NewTimer( HSQUIRRELVM v )
 
 						case OT_USERDATA:
 						case OT_USERPOINTER:
-						case OT_NATIVECLOSURE:
 							sq_getuserpointer( v, i, (SQUserPointer *)&pTempParam.pData );
 							break;
 

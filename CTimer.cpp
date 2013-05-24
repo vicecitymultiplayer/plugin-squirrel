@@ -64,12 +64,14 @@ bool CTimer::Pulse( float elapsedTime )
 
 							case OT_TABLE:
 							case OT_ARRAY:
-							case OT_CLASS:
 							case OT_CLOSURE:
-							case OT_GENERATOR:
-							case OT_WEAKREF:
+							case OT_NATIVECLOSURE:
+								HSQOBJECT oTmp;
+								assert( sizeof( HSQOBJECT ) == sizeof( itr->pData ) );
+								memcpy( &oTmp, &itr->pData, sizeof( float ) );
+
 								printf( "Pushed object, pointer %p\n", itr->pData );
-								sq_pushobject( v, *(HSQOBJECT *)itr->pData );
+								sq_pushobject( v, oTmp );
 								break;
 								
 							case OT_INSTANCE:
@@ -79,8 +81,7 @@ bool CTimer::Pulse( float elapsedTime )
 
 							case OT_USERDATA:
 							case OT_USERPOINTER:
-							case OT_NATIVECLOSURE:
-								printf( "Pushed closure/instance, pointer %p\n", itr->pData );
+								printf( "Pushed pointer, pointer %p\n", itr->pData );
 								sq_pushuserpointer( v, (SQUserPointer)itr->pData );
 								break;
 
