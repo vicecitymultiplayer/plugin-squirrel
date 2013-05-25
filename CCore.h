@@ -71,4 +71,7 @@ class CCore
 
 		// Reference count
 		static unsigned short refCount;
+
+		// Sets everything in all maps to NULL
+		void CleanGarbageMaps();
 };

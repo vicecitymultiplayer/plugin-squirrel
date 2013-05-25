@@ -22,6 +22,9 @@ CCore::CCore()
 	for( int i = 0; i < this->maxTimers; i++ )
 		pTimerArray[i] = NULL;
 
+	// Clean up all the maps
+	this->CleanGarbageMaps();
+	
 	// Set up the canReload variable
 	canReload = false;
 
@@ -111,17 +114,41 @@ void CCore::DropAllTimers()
 	}
 }
 
+void CCore::CleanGarbageMaps()
+{
+	unsigned int i;
+	for( i = 0; i < MAX_VEHICLES; i++ )
+		vehicleMap[i] = NULL;
+
+	for( i = 0; i < MAX_PICKUPS; i++ )
+		pickupMap[i] = NULL;
+
+	for( i = 0; i < MAX_OBJECTS; i++ )
+		objectMap[i] = NULL;
+}
+
 void CCore::CleanWorld()
 {
 	unsigned int i;
 	for( i = 0; i < MAX_VEHICLES; i++ )
-		vehicleMap[i]->Delete();
+	{
+		if( vehicleMap[i] != NULL )
+			vehicleMap[i]->Delete();
+	}
 
 	for( i = 0; i < MAX_PICKUPS; i++ )
-		pickupMap[i]->Delete();
+	{
+		if( pickupMap[i] != NULL )
+			pickupMap[i]->Delete();
+	}
 
 	for( i = 0; i < MAX_OBJECTS; i++ )
-		objectMap[i]->Delete();
+	{
+		if( objectMap[i] != NULL )
+			objectMap[i]->Delete();
+	}
+
+	this->CleanGarbageMaps();
 }
 
 // Register *everything*
@@ -150,7 +177,7 @@ void CCore::RegisterEntities()
 	RegisterVehicle();
 
 	// Signal outside plugins to register whatever the hell they want
-	functions->SendCustomCommand( 0x7D6E22D8, NULL );
+	functions->SendCustomCommand( 0x7D6E22D8, "" );
 }
 
 // Load the script
