@@ -133,8 +133,7 @@ extern "C" EXPORT unsigned int VcmpPluginInit( PluginFuncs* givenPluginFuncs, Pl
 
 	// Set our plugin information
 	information->uPluginVer = BUILD_VER;
-	information->nPluginId  = 0x06BF845A;
-	strcpy( information->szName, "SqVCMP 1.x" );
+	strcpy( information->szName, "SQHost1" );
 
 	// Define our exports
 	pExp                = new SquirrelExports;
@@ -143,7 +142,7 @@ extern "C" EXPORT unsigned int VcmpPluginInit( PluginFuncs* givenPluginFuncs, Pl
 
 	// Export them
 	functions->ExportFunctions( information->nPluginId, (void **)&pExp, sizeof( SquirrelExports ) );
-	
+
 	// Get a core instance
 	pCore = CCore::GetInstance();
 	pCore->pSrvPlayerDisconnect = callbacks->OnPlayerDisconnect;
