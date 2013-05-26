@@ -109,13 +109,10 @@ void OnPlayerDisconnect( int nPlayerId, int nReason )
 		if( !callback.IsNull() )
 			callback( playerInstance, nReason );
 
-		// Insert a blank instance that does nothing
-		pCore->playerMap[nPlayerId] = NULL;
-
-		// Nullify the current instance
+		// Destroy the player instance we had
 		delete playerInstance;
-		delete pCore->playerMap[nPlayerId];
 
+		// Destroy all references
 		playerInstance              = NULL;
 		pCore->playerMap[nPlayerId] = NULL;
 	}

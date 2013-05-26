@@ -209,7 +209,7 @@ void CCore::LoadScript()
 
 		Function callback = RootTable( v ).GetFunction( _SC( "onScriptLoad" ) );
 		if( !callback.IsNull() )
-			callback(true);
+			callback();
 
 		// You are now free to move about the cabin.
 		this->canReload = true;

@@ -1052,7 +1052,7 @@ float DistanceFromPoint( float x1, float y1, float x2, float y2 )
 	return matrixF;
 }
 
-void ReloadScripts( bool shouldCleanWorld )
+void ReloadScripts( void )
 {
 	// Are we allowed to reload?
 	if( pCore->canReload )
@@ -1063,9 +1063,8 @@ void ReloadScripts( bool shouldCleanWorld )
 		// Get rid of ALL declared timers
 		pCore->DropAllTimers();
 
-		// Clean the world if we're asked to
-		if( shouldCleanWorld )
-			pCore->CleanWorld();
+		// Clean the world up
+		pCore->CleanWorld();
 
 		// Reset the global table
 		sq_newtable(v);
@@ -1091,7 +1090,7 @@ void ReloadScripts( bool shouldCleanWorld )
 		// Trigger the onScriptLoad event
 		Function callback = RootTable( v ).GetFunction( _SC( "onScriptLoad" ) );
 		if( !callback.IsNull() )
-			callback(false);
+			callback();
 
 		callback.Release();
 
