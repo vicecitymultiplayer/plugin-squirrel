@@ -7,9 +7,6 @@
 // Script and VM core
 #include "CCore.h"
 
-// Module exports
-#include "Exports.h"
-
 // Create arrays for several structures.
 savedVehicleData lastVehInfo[MAX_VEHICLES];
 savedPlayerData  lastPlrInfo[MAX_PLAYERS];
@@ -18,18 +15,9 @@ savedPlayerData  lastPlrInfo[MAX_PLAYERS];
 extern CCore * pCore;
 extern PluginInfo       *   information;
 extern PluginCallbacks  *   callbacks;
-       SquirrelExports  *   pExp;
 
 int OnInitServer()
 {
-	// Define our exports
-	pExp                = new SquirrelExports;
-	pExp->GetSquirrelVM = pfGetSquirrelVM;
-	pExp->uStructSize   = sizeof( SquirrelExports );
-
-	// Export them
-	functions->ExportFunctions( information->nPluginId, (void **)&pExp, sizeof( SquirrelExports ) );
-
 	// Create a buffer for the initialization message
 	char initMsg[64];
 	sprintf( initMsg, "Loaded SqVCMP 0.4 frontend by Stormeus. (v0.9)" );

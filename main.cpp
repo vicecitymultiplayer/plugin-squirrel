@@ -17,6 +17,10 @@
 // Console stuff
 #include "ConsoleUtils.h"
 
+// Module exports
+#include "Exports.h"
+SquirrelExports * pExp;
+
 // Squirrel's print function
 void printfunc(HSQUIRRELVM v, const SQChar *s, ...) 
 { 
@@ -131,6 +135,14 @@ extern "C" EXPORT unsigned int VcmpPluginInit( PluginFuncs* givenPluginFuncs, Pl
 	information->uPluginVer = BUILD_VER;
 	information->nPluginId  = 0x06BF845A;
 	strcpy( information->szName, "SqVCMP 1.x" );
+
+	// Define our exports
+	pExp                = new SquirrelExports;
+	pExp->GetSquirrelVM = pfGetSquirrelVM;
+	pExp->uStructSize   = sizeof( SquirrelExports );
+
+	// Export them
+	functions->ExportFunctions( information->nPluginId, (void **)&pExp, sizeof( SquirrelExports ) );
 	
 	// Get a core instance
 	pCore = CCore::GetInstance();
