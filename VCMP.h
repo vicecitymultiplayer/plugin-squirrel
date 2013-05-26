@@ -272,6 +272,9 @@ typedef int (*PFunc_AddVehicleRelSpeed) (int nVehicleId, float fX, float fY, flo
 typedef int (*PFunc_SetVehicleTurnSpeed) (int nVehicleId, float fX, float fY, float fZ);
 typedef int (*PFunc_GetVehicleTurnSpeed) (int nVehicleId, float* pfX, float* pfY, float* pfZ);
 typedef int (*PFunc_AddVehicleTurnSpeed) (int nVehicleId, float fX, float fY, float fZ);
+typedef int (*PFunc_SetVehicleRelTurnSpeed) (int nVehicleId, float fX, float fY, float fZ);
+typedef int (*PFunc_GetVehicleRelTurnSpeed) (int nVehicleId, float* pfX, float* pfY, float* pfZ);
+typedef int (*PFunc_AddVehicleRelTurnSpeed) (int nVehicleId, float fX, float fY, float fZ);
 typedef int (*PFunc_SetVehicleSpawnPos) (int nVehicleId, float fPosX, float fPosY, float fPosZ, float fAngleZ);
 typedef int (*PFunc_GetVehicleSpawnPos) (int nVehicleId, float* pfPosX, float* pfPosY, float* pfPosZ, float* pfAngleZ);
 typedef int (*PFunc_SetVehicleSpawnRot) (int nVehicleId, float fX, float fY, float fZ, float fW);
@@ -575,6 +578,9 @@ struct PluginFuncs {
 	PFunc_SetVehicleTurnSpeed			SetVehicleTurnSpeed;
 	PFunc_GetVehicleTurnSpeed			GetVehicleTurnSpeed;
 	PFunc_AddVehicleTurnSpeed			AddVehicleTurnSpeed;
+	PFunc_SetVehicleRelTurnSpeed		SetVehicleRelTurnSpeed;
+	PFunc_GetVehicleRelTurnSpeed		GetVehicleRelTurnSpeed;
+	PFunc_AddVehicleRelTurnSpeed		AddVehicleRelTurnSpeed;
 	PFunc_SetVehicleSpawnPos			SetVehicleSpawnPos;
 	PFunc_GetVehicleSpawnPos			GetVehicleSpawnPos;
 	PFunc_SetVehicleSpawnRot			SetVehicleSpawnRot;

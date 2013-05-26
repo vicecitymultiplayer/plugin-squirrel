@@ -164,6 +164,52 @@ void CVehicle::ResetHandlingData( int rule ) { functions->ResetInstHandlingRule(
 void CVehicle::ResetAllHandling() { functions->ResetInstHandling( this->nVehicleId ); }
 bool CVehicle::IsHandlingSet( int rule ) { return ( functions->ExistsInstHandlingRule( this->nVehicleId, rule ) == 1 ? true : false ); }
 
+Quaternion CVehicle::GetRotation()
+{
+	float w, x, y, z;
+	functions->GetVehicleRot( this->nVehicleId, &x, &y, &z, &w );
+
+	return Quaternion(w, x, y, z);
+}
+
+Vector CVehicle::GetSpeed()
+{
+	float x, y, z;
+	functions->GetVehicleSpeed( this->nVehicleId, &x, &y, &z );
+
+	return Vector( x, y, z );
+}
+
+Vector CVehicle::GetRelativeSpeed()
+{
+	float x, y, z;
+	functions->GetVehicleRelSpeed( this->nVehicleId, &x, &y, &z );
+
+	return Vector( x, y, z );
+}
+
+Vector CVehicle::GetTurnSpeed()
+{
+	float x, y, z;
+	functions->GetVehicleTurnSpeed( this->nVehicleId, &x, &y, &z );
+
+	return Vector( x, y, z );
+}
+
+Vector CVehicle::GetRelativeTurnSpeed()
+{
+	float x, y, z;
+	functions->GetVehicleRelTurnSpeed( this->nVehicleId, &x, &y, &z );
+
+	return Vector( x, y, z );
+}
+
+void CVehicle::SetRotation( Quaternion rotation ) { functions->SetVehicleRot( this->nVehicleId, rotation.x, rotation.y, rotation.z, rotation.w ); }
+void CVehicle::SetSpeed( Vector speed ) { functions->SetVehicleSpeed( this->nVehicleId, speed.x, speed.y, speed.z ); }
+void CVehicle::SetRelativeSpeed( Vector speed ) { functions->SetVehicleRelSpeed( this->nVehicleId, speed.x, speed.y, speed.z ); }
+void CVehicle::SetTurnSpeed( Vector speed ) { functions->SetVehicleTurnSpeed( this->nVehicleId, speed.x, speed.y, speed.z ); }
+void CVehicle::SetRelativeTurnSpeed( Vector speed ) { functions->SetVehicleRelTurnSpeed( this->nVehicleId, speed.x, speed.y, speed.z ); }
+
 void RegisterVehicle()
 {
 	Class <CVehicle> c(v);
@@ -182,8 +228,14 @@ void RegisterVehicle()
 		.Prop( _SC("Locked"), &CVehicle::GetLocked, &CVehicle::SetLocked )
 		.Prop( _SC("Damage"), &CVehicle::GetDamage, &CVehicle::SetDamage )
 		.Prop( _SC("Alarm"), &CVehicle::GetAlarm, &CVehicle::SetAlarm )
-		.Prop( _SC("Lights"), &CVehicle::GetLights, &CVehicle::SetLights );
-
+		.Prop( _SC("Lights"), &CVehicle::GetLights, &CVehicle::SetLights )
+		.Prop( _SC("Angle"), &CVehicle::GetRotation, &CVehicle::SetRotation )
+		.Prop( _SC("Rotation"), &CVehicle::GetRotation, &CVehicle::SetRotation )
+		.Prop( _SC("Speed"), &CVehicle::GetSpeed, &CVehicle::SetSpeed )
+		.Prop( _SC("RelativeSpeed"), &CVehicle::GetRelativeSpeed, &CVehicle::SetRelativeSpeed )
+		.Prop( _SC("TurnSpeed"), &CVehicle::GetTurnSpeed, &CVehicle::SetTurnSpeed )
+		.Prop( _SC("RelativeTurnSpeed"), &CVehicle::GetRelativeTurnSpeed, &CVehicle::SetRelativeTurnSpeed );
+	
 	// Read-only properties
 	c
 		.Prop( _SC("Model"), &CVehicle::GetModel )

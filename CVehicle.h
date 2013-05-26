@@ -18,6 +18,11 @@ class CVehicle
 		void SetDamage( unsigned int damage );
 		void SetAlarm( bool isAlarmOn );
 		void SetLights( bool lightsOn );
+		void SetRotation( Quaternion rotation );
+		void SetSpeed( Vector speed );
+		void SetRelativeSpeed( Vector speed );
+		void SetTurnSpeed( Vector speed );
+		void SetRelativeTurnSpeed( Vector speed );
 
 	public:
 		int GetWorld();
@@ -39,6 +44,11 @@ class CVehicle
 		int GetSyncSource();
 		int GetSyncType();
 		bool GetWrecked();
+		Quaternion GetRotation();
+		Vector GetSpeed();
+		Vector GetRelativeSpeed();
+		Vector GetTurnSpeed();
+		Vector GetRelativeTurnSpeed();
 
 	public:
 		void Delete();
