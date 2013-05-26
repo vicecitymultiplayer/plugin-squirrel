@@ -175,9 +175,6 @@ void CCore::RegisterEntities()
 	RegisterPlayer();
 	RegisterTimer();
 	RegisterVehicle();
-
-	// Signal outside plugins to register whatever the hell they want
-	functions->SendCustomCommand( 0x7D6E22D8, "" );
 }
 
 // Load the script
