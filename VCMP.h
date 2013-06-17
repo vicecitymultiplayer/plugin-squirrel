@@ -237,7 +237,7 @@ typedef int (*PFunc_RestoreCamera) (int nPlayerId);
 typedef unsigned int (*PFunc_IsCameraLocked) (int nPlayerId);
 
 //PLAYERS: misc
-typedef int (*PFunc_SetPlayerAnimation) (int nPlayerId, int nAnimationId);
+typedef int (*PFunc_SetPlayerAnimation) (int nPlayerId, int nGroupId, int nAnimationId);
 typedef int (*PFunc_SetPlayerWantedLevel) (int nPlayerId, int nLevel);
 typedef int (*PFunc_GetPlayerStandingOnVehicle) (int nPlayerId);
 typedef int (*PFunc_GetPlayerStandingOnObject) (int nPlayerId);

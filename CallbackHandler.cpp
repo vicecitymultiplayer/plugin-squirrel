@@ -300,7 +300,7 @@ int OnCommandMessage( int nPlayerId, const char* pszText )
 
 	if( !callback.IsNull() )
 	{
-		char * szText = const_cast<char *>(pszText);
+		char * szText = strdup( pszText );
 		char * szCmd  = strtok( szText, " " );
 		if( szCmd == NULL )
 			return 0;
@@ -311,7 +311,8 @@ int OnCommandMessage( int nPlayerId, const char* pszText )
 		while( szTok != NULL )
 			strcat( szArguments, szTok );
 
-		callback.Release();
+		returnValue = callback.Evaluate<int>( playerInstance, szCmd, szArguments );
+		free( szText );
 	}
 	
 	callback.Release();

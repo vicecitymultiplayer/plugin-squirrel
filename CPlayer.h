@@ -80,7 +80,8 @@ class CPlayer
 		void SetCameraPos( Vector pos, Vector look );
 		void SetCameraFollow( bool toFollow );
 		void Disarm();
-		void Animation( int anim );
+		void CompatAnimation( int anim );
+		void Animation( int group, int anim );
 		CVehicle * StandingOnVehicle();
 		CObject * StandingOnObject();
 		void GiveWeapon( int weapon, int ammo );

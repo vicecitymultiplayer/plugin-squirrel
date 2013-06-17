@@ -190,7 +190,8 @@ void CPlayer::SetCameraPos( Vector pos, Vector look )
 }
 
 void CPlayer::Disarm() { functions->RemoveAllWeapons( this->nPlayerId ); }
-void CPlayer::Animation( int anim ) { functions->SetPlayerAnimation( this->nPlayerId, anim ); }
+void CPlayer::CompatAnimation( int anim ) { functions->SetPlayerAnimation( this->nPlayerId, 0, anim ); }
+void CPlayer::Animation( int group, int anim ) { functions->SetPlayerAnimation( this->nPlayerId, group, anim ); }
 
 CVehicle * CPlayer::StandingOnVehicle()
 {
@@ -295,7 +296,8 @@ void RegisterPlayer()
 		.Func( _SC("RemoveWeapon"), &CPlayer::RemoveWeapon )
 		.Func( _SC("Select"), &CPlayer::Select )
 		.Func( _SC("SetAlpha"), &CPlayer::SetAlpha )
-		.Func( _SC("SetAnim"), &CPlayer::Animation )
+		.Overload<void (CPlayer::*)(int, int)>( _SC("SetAnim"), &CPlayer::Animation )
+		.Overload<void (CPlayer::*)(int)>( _SC("SetAnim"), &CPlayer::CompatAnimation )
 		.Func( _SC("SetCameraPos"), &CPlayer::SetCameraPos )
 		.Func( _SC("SetInterior"), &CPlayer::SetInterior )
 		.Func( _SC("SetWantedLevel"), &CPlayer::SetWantedLevel )

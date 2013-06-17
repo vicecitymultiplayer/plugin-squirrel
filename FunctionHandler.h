@@ -160,13 +160,8 @@ bool  InPoly            ( float x, float y, float x1, float y1, float x2, float 
 float DistanceFromPoint ( float x1, float y1, float x2, float y2 );
 void ReloadScripts      ( void );
 
-unsigned char GetVehicleModelFromName ( SQChar * name );
+int GetVehicleModelFromName ( SQChar * name );
 SQChar *      GetVehicleNameFromModel ( int model );
-
-void GetWeatherRate ( void );
-void SetWeatherRate ( int rate );
-void GetWeatherLock ( void );
-void SetWeatherLock ( bool lock );
 
 SQInteger NewTimer( HSQUIRRELVM v );
 

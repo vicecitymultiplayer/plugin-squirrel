@@ -1105,7 +1105,7 @@ void ReloadScripts( void )
 }
 
 // <TODO>
-unsigned char GetVehicleModelFromName( SQChar * name )
+int GetVehicleModelFromName( SQChar * name )
 {
 	return -1;
 }
