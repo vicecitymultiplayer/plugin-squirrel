@@ -687,6 +687,7 @@ typedef int (*PCback_OnCommandMessage) (int nPlayerId, const char* pszText);
 typedef int (*PCback_OnPrivateMessage) (int nPlayerId, int nTargetId, const char* pszText);
 typedef int (*PCback_OnInternalCommand) (unsigned int uCmdType, const char* pszText);
 typedef int (*PCback_OnLoginAttempt) (char* pszPlayerName, const char* pszUserPassword, const char* pszIpAddress);
+typedef void (*PCback_OnEntityPoolChange) (int nEntityType, int nEntityId, unsigned int bDeleted);
 
 struct PluginCallbacks {
 	unsigned int				uStructSize;
@@ -719,4 +720,5 @@ struct PluginCallbacks {
 	PCback_OnPrivateMessage		OnPrivateMessage;
 	PCback_OnInternalCommand	OnInternalCommand;
 	PCback_OnLoginAttempt		OnLoginAttempt;
+	PCback_OnEntityPoolChange	OnEntityPoolChange;
 };

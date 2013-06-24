@@ -28,10 +28,8 @@ int CPickup::GetModel() { return functions->PickupGetModel( this->nPickupId ); }
 int CPickup::GetQuantity() { return functions->PickupGetQuantity( this->nPickupId ); }
 void CPickup::Delete()
 {
+	//PS! this instance will be deleted due to a callback!!!
 	functions->DeletePickup( this->nPickupId );
-	pCore->pickupMap[this->nPickupId] = NULL;
-
-	delete this;
 }
 
 int CPickup::GetID() { return this->nPickupId; }

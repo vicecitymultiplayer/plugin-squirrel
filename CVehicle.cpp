@@ -121,11 +121,8 @@ CPlayer * CVehicle::GetDriver()
 
 void CVehicle::Delete()
 {
+	//PS! this instance will be deleted due to a callback!!!
 	functions->DeleteVehicle( this->nVehicleId );
-	pCore->vehicleMap[this->nVehicleId] = NULL;
-
-	// oh man
-	delete this;
 }
 
 void CVehicle::Respawn() { functions->RespawnVehicle( this->nVehicleId ); }

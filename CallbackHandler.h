@@ -39,6 +39,8 @@ void OnNameChangeable      ( char * playerName, char ** namePtr );
 
 int  OnInternalCommand     ( unsigned int uCmdType, const char* pszText );
 
+void OnEntityPoolChange      (int nEntityType, int nEntityId, unsigned int bDeleted);
+
 // Define some structures for tracking player data
 struct savedPlayerData
 {

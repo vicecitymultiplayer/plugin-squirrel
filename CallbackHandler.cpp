@@ -301,17 +301,15 @@ int OnCommandMessage( int nPlayerId, const char* pszText )
 	if( !callback.IsNull() )
 	{
 		char * szText = strdup( pszText );
-		char * szCmd  = strtok( szText, " " );
-		if( szCmd == NULL )
-			return 0;
+		char * szSpacePos = strchr( szText, ' ' );
 
-		char * szArguments = "";
-		char * szTok       = strtok( NULL, " " );
+		if(szSpacePos) {
+			szSpacePos[0] = '\0';
+		}
 
-		while( szTok != NULL )
-			strcat( szArguments, szTok );
+		const char * szArguments = szSpacePos ? &szSpacePos[1] : "";
 
-		returnValue = callback.Evaluate<int>( playerInstance, szCmd, szArguments );
+		returnValue = callback.Evaluate<int>( playerInstance, szText, szArguments );
 		free( szText );
 	}
 	
@@ -493,4 +491,46 @@ void OnPlayerUpdate( int nPlayerId, int nUpdateType )
 int OnInternalCommand( unsigned int uCmdType, const char* pszText )
 {
 	return 1;
+}
+
+void OnEntityPoolChange (int nEntityType, int nEntityId, unsigned int bDeleted) {
+	if(nEntityType == 1) {
+		if(!bDeleted) {
+			pCore->vehicleMap[nEntityId] = new CVehicle;
+			pCore->vehicleMap[nEntityId]->nVehicleId = nEntityId;
+		}
+		else {
+			if(pCore->vehicleMap[nEntityId] != NULL) {
+				delete pCore->vehicleMap[nEntityId];
+			}
+
+			pCore->vehicleMap[nEntityId] = NULL;
+		}
+	}
+	else if(nEntityType == 2) {
+		if(!bDeleted) {
+			pCore->objectMap[nEntityId] = new CObject;
+			pCore->objectMap[nEntityId]->nObjectId = nEntityId;
+		}
+		else {
+			if(pCore->objectMap[nEntityId] != NULL) {
+				delete pCore->objectMap[nEntityId];
+			}
+
+			pCore->objectMap[nEntityId] = NULL;
+		}
+	}
+	else if(nEntityType == 3) {
+		if(!bDeleted) {
+			pCore->pickupMap[nEntityId] = new CPickup;
+			pCore->pickupMap[nEntityId]->nPickupId = nEntityId;
+		}
+		else {
+			if(pCore->pickupMap[nEntityId] != NULL) {
+				delete pCore->pickupMap[nEntityId];
+			}
+
+			pCore->pickupMap[nEntityId] = NULL;
+		}
+	}
 }

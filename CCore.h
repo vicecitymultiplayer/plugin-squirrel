@@ -3,6 +3,7 @@
 #include "CPlayer.h"
 #include "CTimer.h"
 #include "CVehicle.h"
+#include "CObject.h"
 #include "ConsoleUtils.h"
 
 // Include this header only once

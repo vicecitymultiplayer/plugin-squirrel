@@ -35,8 +35,8 @@ Vector CObject::GetRotationEuler()
 
 void CObject::Delete()
 {
+	//PS! this instance will be deleted due to a callback!!!
 	functions->DeleteObject( this->nObjectId );
-	delete this;
 }
 
 void CObject::MoveTo( Vector pos, int time )
