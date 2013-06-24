@@ -1053,21 +1053,18 @@ void ReloadScripts( void )
 
 		// Clean the world up
 		pCore->CleanWorld();
-
-		// Reset the global table
-		sq_newtable(v);
-
-		// Set the default internal error handlers up
-		sqstd_seterrorhandlers( v );
-
-		// Set up our print and error functions
-		sq_setprintfunc( v, printfunc, errorfunc );
 		
 		// Release the old root table to free old binds
 		Sqrat::RootTable(v).Release();
 
 		// Push this new root table
 		sq_setroottable(v);
+
+		// Set the default internal error handlers up
+		sqstd_seterrorhandlers( v );
+
+		// Set up our print and error functions
+		sq_setprintfunc( v, printfunc, errorfunc );
 
 		// Reload all global module entities
 		pCore->RegisterEntities();

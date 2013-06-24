@@ -6,6 +6,12 @@
 #include "CObject.h"
 #include "ConsoleUtils.h"
 
+#include <sqstdio.h>
+#include <sqstdmath.h>
+#include <sqstdstring.h>
+#include <sqstdaux.h>
+#include <sqstdblob.h>
+
 // Include this header only once
 #pragma once
 

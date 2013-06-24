@@ -61,9 +61,6 @@ void CCore::LoadVM()
 	// Initialize the virtual machine
 	v = sq_open( 1024 );
 
-	// Set the default internal error handlers up
-	sqstd_seterrorhandlers( v );
-
 	// Set up our print and error functions
 	sq_setprintfunc( v, printfunc, errorfunc );
 
@@ -72,6 +69,9 @@ void CCore::LoadVM()
 
 	// Force Sqrat to enable error handling
 	Sqrat::ErrorHandling::Enable(true);
+
+	// Push a root table
+	sq_pushroottable( v );
 
 	// Register our entities so they're accessible by scripts
 	this->RegisterEntities();
@@ -154,12 +154,6 @@ void CCore::CleanWorld()
 // Register *everything*
 void CCore::RegisterEntities()
 {
-	// Register all necessary core libraries
-	sqstd_register_iolib( v );
-	sqstd_register_bloblib( v );
-	sqstd_register_mathlib( v );
-	sqstd_register_stringlib( v );
-
 	// Register our structures
 	RegisterStructures();
 
@@ -175,6 +169,22 @@ void CCore::RegisterEntities()
 	RegisterPlayer();
 	RegisterTimer();
 	RegisterVehicle();
+
+	// Register all necessary core libraries
+	if( SQ_FAILED( sqstd_register_iolib( v ) ) )
+		OutputWarning( "sqstd_iolib failed to load." );
+
+	if( SQ_FAILED( sqstd_register_bloblib( v ) ) )
+		OutputWarning( "sqstd_bloblib failed to load." );
+
+	if( SQ_FAILED( sqstd_register_mathlib( v ) ) )
+		OutputWarning( "sqstd_mathlib failed to load." );
+	
+	if( SQ_FAILED( sqstd_register_stringlib( v ) ) )
+		OutputWarning( "sqstd_stringlib failed to load." );
+
+	// Set the default internal error handlers up
+	sqstd_seterrorhandlers( v );
 }
 
 // Load the script
