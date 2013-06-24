@@ -4,6 +4,9 @@
 class CVehicle
 {
 	public:
+		CVehicle( int lnVehicleId, bool lIsOurs = true ) { this->isOurs = lIsOurs; this->nVehicleId = lnVehicleId; }
+
+	public:
 		void SetWorld( int world );
 		void SetImmunity( int immunity );
 		void SetPosition( Vector pos );
@@ -67,6 +70,7 @@ class CVehicle
 		bool IsHandlingSet( int rule );
 
 	public:
+		bool isOurs;
 		int nVehicleId;
 };
 

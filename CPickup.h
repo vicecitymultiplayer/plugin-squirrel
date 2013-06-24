@@ -5,6 +5,9 @@
 class CPickup
 {
 	public:
+		CPickup( int lnPickupId, bool lIsOurs = true ) { this->isOurs = lIsOurs; this->nPickupId = lnPickupId; }
+
+	public:
 		void SetWorld( int world );
 		void SetAlpha( int alpha );
 		void SetAuto( bool automatic );
@@ -27,6 +30,7 @@ class CPickup
 			
 	public:
 		int nPickupId;
+		bool isOurs;
 };
 
 void RegisterPickup();

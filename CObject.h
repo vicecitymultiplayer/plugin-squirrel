@@ -4,6 +4,9 @@
 class CObject
 {
 	public:
+		CObject( int lnObjectId, bool lIsOurs = true ) { this->isOurs = lIsOurs; this->nObjectId = lnObjectId; }
+
+	public:
 		void SetWorld( int world );
 		void SetPos( Vector pos );
 		void SetReportingShots( bool toReport );
@@ -33,6 +36,7 @@ class CObject
 			
 	public:
 		int nObjectId;
+		bool isOurs;
 };
 
 void RegisterObject();

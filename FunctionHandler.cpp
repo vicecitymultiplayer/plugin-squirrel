@@ -169,31 +169,38 @@ CVehicle * CreateVehicle( int model, int world, Vector pos, float angle, int col
 		return NULL;
 	else
 	{
-		return pCore->vehicleMap[vId];
+		CVehicle * v = new CVehicle( vId );
+		pCore->vehicleMap[vId] = v;
+
+		return v;
 	}
 }
 
 CPickup * CreatePickup( int model, int world, int quantity, Vector pos, int alpha, bool isAuto )
 {
 	int pId = functions->CreatePickup( model, world, quantity, pos.x, pos.y, pos.z, alpha, isAuto );
-
 	if( pId < 0 )
 		return NULL;
 	else
 	{
-		return pCore->pickupMap[pId];
+		CPickup * p = new CPickup( pId );
+		pCore->pickupMap[pId] = p;
+
+		return p;
 	}
 }
 
 CObject * CreateObject( int model, int world, Vector pos, int alpha )
 {
 	int oId = functions->CreateObject( model, world, pos.x, pos.y, pos.z, alpha );
-
 	if( oId < 0 )
 		return NULL;
 	else
 	{
-		return pCore->objectMap[oId];
+		CObject * o = new CObject( oId );
+		pCore->objectMap[oId] = o;
+
+		return o;
 	}
 }
 

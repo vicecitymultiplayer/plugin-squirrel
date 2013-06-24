@@ -114,41 +114,35 @@ void CCore::DropAllTimers()
 	}
 }
 
-void CCore::CleanGarbageMaps()
-{
-	unsigned int i;
-	for( i = 0; i < MAX_VEHICLES; i++ )
-		vehicleMap[i] = NULL;
-
-	for( i = 0; i < MAX_PICKUPS; i++ )
-		pickupMap[i] = NULL;
-
-	for( i = 0; i < MAX_OBJECTS; i++ )
-		objectMap[i] = NULL;
-}
-
 void CCore::CleanWorld()
 {
 	unsigned int i;
 	for( i = 0; i < MAX_VEHICLES; i++ )
 	{
-		if( vehicleMap[i] != NULL )
+		if( vehicleMap[i] != NULL && vehicleMap[i]->isOurs )
+		{
 			vehicleMap[i]->Delete();
+			vehicleMap[i] = NULL;
+		}
 	}
 
 	for( i = 0; i < MAX_PICKUPS; i++ )
 	{
-		if( pickupMap[i] != NULL )
+		if( pickupMap[i] != NULL && vehicleMap[i]->isOurs )
+		{
 			pickupMap[i]->Delete();
+			vehicleMap[i] = NULL;
+		}
 	}
 
 	for( i = 0; i < MAX_OBJECTS; i++ )
 	{
-		if( objectMap[i] != NULL )
+		if( objectMap[i] != NULL && vehicleMap[i]->isOurs )
+		{
 			objectMap[i]->Delete();
+			objectMap[i] = NULL;
+		}
 	}
-
-	this->CleanGarbageMaps();
 }
 
 // Register *everything*
