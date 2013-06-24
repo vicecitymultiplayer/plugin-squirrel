@@ -169,9 +169,10 @@ CVehicle * CreateVehicle( int model, int world, Vector pos, float angle, int col
 		return NULL;
 	else
 	{
-		CVehicle * v = new CVehicle( vId );
-		pCore->vehicleMap[vId] = v;
+		CVehicle * v = new CVehicle;
+		v->Init( vId );
 
+		pCore->vehicleMap[vId] = v;
 		return v;
 	}
 }
@@ -183,9 +184,10 @@ CPickup * CreatePickup( int model, int world, int quantity, Vector pos, int alph
 		return NULL;
 	else
 	{
-		CPickup * p = new CPickup( pId );
-		pCore->pickupMap[pId] = p;
+		CPickup * p = new CPickup;
+		p->Init( pId );
 
+		pCore->pickupMap[pId] = p;
 		return p;
 	}
 }
@@ -197,9 +199,10 @@ CObject * CreateObject( int model, int world, Vector pos, int alpha )
 		return NULL;
 	else
 	{
-		CObject * o = new CObject( oId );
-		pCore->objectMap[oId] = o;
+		CObject * o = new CObject;
+		o->Init( oId );
 
+		pCore->objectMap[oId] = o;
 		return o;
 	}
 }

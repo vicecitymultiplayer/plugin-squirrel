@@ -4,7 +4,7 @@
 class CObject
 {
 	public:
-		CObject( int lnObjectId, bool lIsOurs = true ) { this->isOurs = lIsOurs; this->nObjectId = lnObjectId; }
+		void Init( int lnObjectId, bool lIsOurs = true ) { this->isOurs = lIsOurs; this->nObjectId = lnObjectId; }
 
 	public:
 		void SetWorld( int world );

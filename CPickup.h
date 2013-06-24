@@ -5,7 +5,7 @@
 class CPickup
 {
 	public:
-		CPickup( int lnPickupId, bool lIsOurs = true ) { this->isOurs = lIsOurs; this->nPickupId = lnPickupId; }
+		void Init( int lnPickupId, bool lIsOurs = true ) { this->isOurs = lIsOurs; this->nPickupId = lnPickupId; }
 
 	public:
 		void SetWorld( int world );

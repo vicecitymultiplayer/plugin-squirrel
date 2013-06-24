@@ -4,7 +4,7 @@
 class CVehicle
 {
 	public:
-		CVehicle( int lnVehicleId, bool lIsOurs = true ) { this->isOurs = lIsOurs; this->nVehicleId = lnVehicleId; }
+		void Init( int lnVehicleId, bool lIsOurs = true ) { this->isOurs = lIsOurs; this->nVehicleId = lnVehicleId; }
 
 	public:
 		void SetWorld( int world );
