@@ -22,8 +22,18 @@ CCore::CCore()
 	for( int i = 0; i < this->maxTimers; i++ )
 		pTimerArray[i] = NULL;
 
-	// Clean up all the maps
-	this->CleanGarbageMaps();
+	// Clean our entity maps of any garbage and filth
+	for( int i = 0; i < MAX_PLAYERS; i++ )
+		playerMap[i] = NULL;
+
+	for( int i = 0; i < MAX_VEHICLES; i++ )
+		vehicleMap[i] = NULL;
+
+	for( int i = 0; i < MAX_PICKUPS; i++ )
+		pickupMap[i] = NULL;
+
+	for( int i = 0; i < MAX_OBJECTS; i++ )
+		objectMap[i] = NULL;
 	
 	// Set up the canReload variable
 	canReload = false;
