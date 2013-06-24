@@ -1239,6 +1239,7 @@ SQChar * GetFullTime( void )
 
 // This function is so convoluted, we have to tiptoe around Sqrat.
 // This had better work.
+SQInteger release_hook( SQUserPointer p, SQInteger size ) { return 1; }
 SQInteger NewTimer( HSQUIRRELVM v )
 {
 	// char * pFuncName, float interval, int maxPulses
@@ -1354,13 +1355,26 @@ SQInteger NewTimer( HSQUIRRELVM v )
 			pTimer->intervalInTicks   = fInterval;
 			pTimer->maxNumberOfPulses = maxPulses;
 
-			pCore->AddTimer(pTimer);
+			// Go through hell and back to push a CTimer instance
+			SQInteger stack = sq_gettop( v );
+			sq_pushroottable( v );
+			sq_pushstring( v, "CTimer", -1 );
+			sq_rawget( v, -2 );
 
-			// Even after having to go through hell to implement something as simple as this
-			// with exception handling, Sqrat lures me back in with nice object binding.
-			//
-			// Simply push the CTimer pointer and it'll be recognized by the scripts.
-			sq_pushuserpointer( v, pTimer );
+			sq_createinstance( v, -1 );
+			sq_remove( v, -3 );
+			sq_remove( v, -2 );
+
+			if( SQ_FAILED( sq_setinstanceup( v, -1, pTimer ) ) )
+			{
+				// Well, shit.
+				sq_settop( v, stack );
+				return sq_throwerror( v, "Failed to push instance of CTimer" );
+			}
+			
+			sq_setreleasehook( v, -1, release_hook );
+
+			pCore->AddTimer(pTimer);
 			return 1;
 		}
 	}
