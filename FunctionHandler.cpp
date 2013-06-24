@@ -1057,8 +1057,8 @@ void ReloadScripts( void )
 		// Release the old root table to free old binds
 		Sqrat::RootTable(v).Release();
 
-		// Push this new root table
-		sq_setroottable(v);
+		// Push a new root table
+		sq_pushroottable(v);
 
 		// Set the default internal error handlers up
 		sqstd_seterrorhandlers( v );
