@@ -497,7 +497,7 @@ void OnEntityPoolChange (int nEntityType, int nEntityId, unsigned int bDeleted) 
 	if(nEntityType == 1) {
 		if(!bDeleted) {
 			pCore->vehicleMap[nEntityId] = new CVehicle;
-			pCore->vehicleMap[nEntityId]->nVehicleId = nEntityId;
+			pCore->vehicleMap[nEntityId]->Init( nEntityId, false );
 		}
 		else {
 			if(pCore->vehicleMap[nEntityId] != NULL) {
@@ -510,7 +510,7 @@ void OnEntityPoolChange (int nEntityType, int nEntityId, unsigned int bDeleted) 
 	else if(nEntityType == 2) {
 		if(!bDeleted) {
 			pCore->objectMap[nEntityId] = new CObject;
-			pCore->objectMap[nEntityId]->nObjectId = nEntityId;
+			pCore->objectMap[nEntityId]->Init( nEntityId, false );
 		}
 		else {
 			if(pCore->objectMap[nEntityId] != NULL) {
@@ -523,7 +523,7 @@ void OnEntityPoolChange (int nEntityType, int nEntityId, unsigned int bDeleted) 
 	else if(nEntityType == 3) {
 		if(!bDeleted) {
 			pCore->pickupMap[nEntityId] = new CPickup;
-			pCore->pickupMap[nEntityId]->nPickupId = nEntityId;
+			pCore->pickupMap[nEntityId]->Init( nEntityId, false );
 		}
 		else {
 			if(pCore->pickupMap[nEntityId] != NULL) {
