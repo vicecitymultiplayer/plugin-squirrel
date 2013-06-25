@@ -354,6 +354,128 @@ public:
         PushVar(vm, ret);
         return 1;
     }
+	
+	// Arg Count 15
+    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, SQInteger startIdx>
+    static SQInteger Func14(HSQUIRRELVM vm) {
+        typedef R (*M)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15);
+        M* method;
+        sq_getuserdata(vm, -1, (SQUserPointer*)&method, NULL);
+
+        R ret = (*method)(
+                    Var<A1>(vm, startIdx).value,
+                    Var<A2>(vm, startIdx + 1).value,
+                    Var<A3>(vm, startIdx + 2).value,
+                    Var<A4>(vm, startIdx + 3).value,
+                    Var<A5>(vm, startIdx + 4).value,
+                    Var<A6>(vm, startIdx + 5).value,
+                    Var<A7>(vm, startIdx + 6).value,
+                    Var<A8>(vm, startIdx + 7).value,
+                    Var<A9>(vm, startIdx + 8).value,
+                    Var<A10>(vm, startIdx + 9).value,
+                    Var<A11>(vm, startIdx + 10).value,
+                    Var<A12>(vm, startIdx + 11).value,
+                    Var<A13>(vm, startIdx + 12).value,
+                    Var<A14>(vm, startIdx + 13).value
+					Var<A15>(vm, startIdx + 14).value
+                );
+
+        PushVar(vm, ret);
+        return 1;
+    }
+	
+	// Arg Count 16
+    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, SQInteger startIdx>
+    static SQInteger Func14(HSQUIRRELVM vm) {
+        typedef R (*M)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16);
+        M* method;
+        sq_getuserdata(vm, -1, (SQUserPointer*)&method, NULL);
+
+        R ret = (*method)(
+                    Var<A1>(vm, startIdx).value,
+                    Var<A2>(vm, startIdx + 1).value,
+                    Var<A3>(vm, startIdx + 2).value,
+                    Var<A4>(vm, startIdx + 3).value,
+                    Var<A5>(vm, startIdx + 4).value,
+                    Var<A6>(vm, startIdx + 5).value,
+                    Var<A7>(vm, startIdx + 6).value,
+                    Var<A8>(vm, startIdx + 7).value,
+                    Var<A9>(vm, startIdx + 8).value,
+                    Var<A10>(vm, startIdx + 9).value,
+                    Var<A11>(vm, startIdx + 10).value,
+                    Var<A12>(vm, startIdx + 11).value,
+                    Var<A13>(vm, startIdx + 12).value,
+                    Var<A14>(vm, startIdx + 13).value
+					Var<A15>(vm, startIdx + 14).value
+					Var<A16>(vm, startIdx + 15).value
+                );
+
+        PushVar(vm, ret);
+        return 1;
+    }
+	
+	// Arg Count 17
+    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, SQInteger startIdx>
+    static SQInteger Func14(HSQUIRRELVM vm) {
+        typedef R (*M)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17);
+        M* method;
+        sq_getuserdata(vm, -1, (SQUserPointer*)&method, NULL);
+
+        R ret = (*method)(
+                    Var<A1>(vm, startIdx).value,
+                    Var<A2>(vm, startIdx + 1).value,
+                    Var<A3>(vm, startIdx + 2).value,
+                    Var<A4>(vm, startIdx + 3).value,
+                    Var<A5>(vm, startIdx + 4).value,
+                    Var<A6>(vm, startIdx + 5).value,
+                    Var<A7>(vm, startIdx + 6).value,
+                    Var<A8>(vm, startIdx + 7).value,
+                    Var<A9>(vm, startIdx + 8).value,
+                    Var<A10>(vm, startIdx + 9).value,
+                    Var<A11>(vm, startIdx + 10).value,
+                    Var<A12>(vm, startIdx + 11).value,
+                    Var<A13>(vm, startIdx + 12).value,
+                    Var<A14>(vm, startIdx + 13).value
+					Var<A15>(vm, startIdx + 14).value
+					Var<A16>(vm, startIdx + 15).value
+					Var<A17>(vm, startIdx + 16).value
+                );
+
+        PushVar(vm, ret);
+        return 1;
+    }
+	
+	// Arg Count 18
+    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, SQInteger startIdx>
+    static SQInteger Func14(HSQUIRRELVM vm) {
+        typedef R (*M)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18);
+        M* method;
+        sq_getuserdata(vm, -1, (SQUserPointer*)&method, NULL);
+
+        R ret = (*method)(
+                    Var<A1>(vm, startIdx).value,
+                    Var<A2>(vm, startIdx + 1).value,
+                    Var<A3>(vm, startIdx + 2).value,
+                    Var<A4>(vm, startIdx + 3).value,
+                    Var<A5>(vm, startIdx + 4).value,
+                    Var<A6>(vm, startIdx + 5).value,
+                    Var<A7>(vm, startIdx + 6).value,
+                    Var<A8>(vm, startIdx + 7).value,
+                    Var<A9>(vm, startIdx + 8).value,
+                    Var<A10>(vm, startIdx + 9).value,
+                    Var<A11>(vm, startIdx + 10).value,
+                    Var<A12>(vm, startIdx + 11).value,
+                    Var<A13>(vm, startIdx + 12).value,
+                    Var<A14>(vm, startIdx + 13).value
+					Var<A15>(vm, startIdx + 14).value
+					Var<A16>(vm, startIdx + 15).value
+					Var<A17>(vm, startIdx + 16).value
+					Var<A18>(vm, startIdx + 17).value
+                );
+
+        PushVar(vm, ret);
+        return 1;
+    }
 };
 
 //
@@ -644,6 +766,120 @@ public:
         );
         return 0;
     }
+	
+	// Arg Count 15
+    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, SQInteger startIdx>
+    static SQInteger Func15(HSQUIRRELVM vm) {
+        typedef void (*M)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15);
+        M* method;
+        sq_getuserdata(vm, -1, (SQUserPointer*)&method, NULL);
+
+        (*method)(
+            Var<A1>(vm, startIdx).value,
+            Var<A2>(vm, startIdx + 1).value,
+            Var<A3>(vm, startIdx + 2).value,
+            Var<A4>(vm, startIdx + 3).value,
+            Var<A5>(vm, startIdx + 4).value,
+            Var<A6>(vm, startIdx + 5).value,
+            Var<A7>(vm, startIdx + 6).value,
+            Var<A8>(vm, startIdx + 7).value,
+            Var<A9>(vm, startIdx + 8).value,
+            Var<A10>(vm, startIdx + 9).value,
+            Var<A11>(vm, startIdx + 10).value,
+            Var<A12>(vm, startIdx + 11).value,
+            Var<A13>(vm, startIdx + 12).value,
+            Var<A14>(vm, startIdx + 13).value,
+			Var<A15>(vm, startIdx + 14).value
+        );
+        return 0;
+    }
+	
+	// Arg Count 16
+    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, SQInteger startIdx>
+    static SQInteger Func16(HSQUIRRELVM vm) {
+        typedef void (*M)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16);
+        M* method;
+        sq_getuserdata(vm, -1, (SQUserPointer*)&method, NULL);
+
+        (*method)(
+            Var<A1>(vm, startIdx).value,
+            Var<A2>(vm, startIdx + 1).value,
+            Var<A3>(vm, startIdx + 2).value,
+            Var<A4>(vm, startIdx + 3).value,
+            Var<A5>(vm, startIdx + 4).value,
+            Var<A6>(vm, startIdx + 5).value,
+            Var<A7>(vm, startIdx + 6).value,
+            Var<A8>(vm, startIdx + 7).value,
+            Var<A9>(vm, startIdx + 8).value,
+            Var<A10>(vm, startIdx + 9).value,
+            Var<A11>(vm, startIdx + 10).value,
+            Var<A12>(vm, startIdx + 11).value,
+            Var<A13>(vm, startIdx + 12).value,
+            Var<A14>(vm, startIdx + 13).value,
+			Var<A15>(vm, startIdx + 14).value,
+			Var<A16>(vm, startIdx + 15).value
+        );
+        return 0;
+    }
+	
+	// Arg Count 17
+    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, SQInteger startIdx>
+    static SQInteger Func17(HSQUIRRELVM vm) {
+        typedef void (*M)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17);
+        M* method;
+        sq_getuserdata(vm, -1, (SQUserPointer*)&method, NULL);
+
+        (*method)(
+            Var<A1>(vm, startIdx).value,
+            Var<A2>(vm, startIdx + 1).value,
+            Var<A3>(vm, startIdx + 2).value,
+            Var<A4>(vm, startIdx + 3).value,
+            Var<A5>(vm, startIdx + 4).value,
+            Var<A6>(vm, startIdx + 5).value,
+            Var<A7>(vm, startIdx + 6).value,
+            Var<A8>(vm, startIdx + 7).value,
+            Var<A9>(vm, startIdx + 8).value,
+            Var<A10>(vm, startIdx + 9).value,
+            Var<A11>(vm, startIdx + 10).value,
+            Var<A12>(vm, startIdx + 11).value,
+            Var<A13>(vm, startIdx + 12).value,
+            Var<A14>(vm, startIdx + 13).value,
+			Var<A15>(vm, startIdx + 14).value,
+			Var<A16>(vm, startIdx + 15).value,
+			Var<A17>(vm, startIdx + 16).value
+        );
+        return 0;
+    }
+	
+	// Arg Count 18
+    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, SQInteger startIdx>
+    static SQInteger Func18(HSQUIRRELVM vm) {
+        typedef void (*M)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18);
+        M* method;
+        sq_getuserdata(vm, -1, (SQUserPointer*)&method, NULL);
+
+        (*method)(
+            Var<A1>(vm, startIdx).value,
+            Var<A2>(vm, startIdx + 1).value,
+            Var<A3>(vm, startIdx + 2).value,
+            Var<A4>(vm, startIdx + 3).value,
+            Var<A5>(vm, startIdx + 4).value,
+            Var<A6>(vm, startIdx + 5).value,
+            Var<A7>(vm, startIdx + 6).value,
+            Var<A8>(vm, startIdx + 7).value,
+            Var<A9>(vm, startIdx + 8).value,
+            Var<A10>(vm, startIdx + 9).value,
+            Var<A11>(vm, startIdx + 10).value,
+            Var<A12>(vm, startIdx + 11).value,
+            Var<A13>(vm, startIdx + 12).value,
+            Var<A14>(vm, startIdx + 13).value,
+			Var<A15>(vm, startIdx + 14).value,
+			Var<A16>(vm, startIdx + 15).value,
+			Var<A17>(vm, startIdx + 16).value,
+			Var<A18>(vm, startIdx + 17).value
+        );
+        return 0;
+    }
 };
 
 
@@ -741,6 +977,30 @@ SQFUNCTION SqGlobalFunc(R (*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11
     return &SqGlobal<R>::template Func14<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, 2>;
 }
 
+// Arg Count 15
+template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
+SQFUNCTION SqGlobalFunc(R (*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)) {
+    return &SqGlobal<R>::template Func15<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, 2>;
+}
+
+// Arg Count 16
+template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16>
+SQFUNCTION SqGlobalFunc(R (*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16)) {
+    return &SqGlobal<R>::template Func16<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, 2>;
+}
+
+// Arg Count 17
+template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17>
+SQFUNCTION SqGlobalFunc(R (*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17)) {
+    return &SqGlobal<R>::template Func17<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, 2>;
+}
+
+// Arg Count 18
+template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18>
+SQFUNCTION SqGlobalFunc(R (*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18)) {
+    return &SqGlobal<R>::template Func18<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, 2>;
+}
+
 //
 // Member Global Function Resolvers
 //
@@ -829,6 +1089,29 @@ SQFUNCTION SqMemberGlobalFunc(R (*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A1
     return &SqGlobal<R>::template Func14<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, 1>;
 }
 
+// Arg Count 15
+template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
+SQFUNCTION SqMemberGlobalFunc(R (*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)) {
+    return &SqGlobal<R>::template Func15<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, 1>;
+}
+
+// Arg Count 16
+template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16>
+SQFUNCTION SqMemberGlobalFunc(R (*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16)) {
+    return &SqGlobal<R>::template Func16<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, 1>;
+}
+
+// Arg Count 17
+template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17>
+SQFUNCTION SqMemberGlobalFunc(R (*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17)) {
+    return &SqGlobal<R>::template Func17<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, 1>;
+}
+
+// Arg Count 18
+template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18>
+SQFUNCTION SqMemberGlobalFunc(R (*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18)) {
+    return &SqGlobal<R>::template Func18<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, 1>;
+}
 
 }
 

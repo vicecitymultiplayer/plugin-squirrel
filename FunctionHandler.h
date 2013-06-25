@@ -79,15 +79,18 @@ bool EnabledShowNametags     ( void );
 bool EnabledJoinMessages     ( void );
 bool EnabledDeathMessages    ( void );
 
-void CreateExplosion ( int world, int type, Vector pos, int playerCaused, bool onGround );
-void PlayGameSound   ( int player, int sound, Vector pos );
+void CreateExplosion ( int world, int type, Vector * pos, int playerCaused, bool onGround );
+void CreateExplosionExpanded( int world, int type, float x, float y, float z, int playerCaused, bool onGround );
+
+void PlayGameSound   ( int player, int sound, Vector * pos );
+void PlayGameSoundExpanded( int player, int sound, float x, float y, float z );
 
 void SetUseClasses ( bool toUse );
 bool UsingClasses  ( void );
 void AddClass      ( int team,
-                     cRGB colour,
+                     cRGB * colour,
                      int skin,
-                     Vector spawnPos,
+                     Vector * spawnPos,
                      float spawnAngle,
                      int wep1,
                      int ammo1,
@@ -96,9 +99,29 @@ void AddClass      ( int team,
                      int wep3,
                      int ammo3 );
 
-void SetSpawnPlayerPos  ( Vector pos );
-void SetSpawnCameraPos  ( Vector pos );
-void SetSpawnCameraLook ( Vector pos );
+void AddClassExpanded ( int team,
+					 int r,
+					 int g,
+					 int b,
+					 int skin,
+					 float x,
+					 float y,
+					 float z,
+					 float spawnAngle,
+					 int wep1,
+					 int ammo1,
+					 int wep2,
+					 int ammo2,
+					 int wep3,
+					 int ammo3 );
+
+void SetSpawnPlayerPos  ( Vector * pos );
+void SetSpawnCameraPos  ( Vector * pos );
+void SetSpawnCameraLook ( Vector * pos );
+
+void SetSpawnPlayerPosExpanded  ( float x, float y, float z );
+void SetSpawnCameraPosExpanded  ( float x, float y, float z );
+void SetSpawnCameraLookExpanded ( float x, float y, float z );
 
 void BanIP      ( const SQChar* ip );
 void UnbanIP    ( const SQChar* ip );
@@ -107,9 +130,13 @@ bool IsIPBanned ( const SQChar* ip );
 int GetPlayerIDFromName          ( const SQChar* name );
 bool IsWorldCompatibleWithPlayer ( CPlayer * player, int world );
 
-CVehicle * CreateVehicle ( int model, int world, Vector pos, float angle, int col1, int col2 );
-CPickup * CreatePickup   ( int model, int world, int quantity, Vector pos, int alpha, bool isAuto );
-CObject * CreateObject   ( int model, int world, Vector pos, int alpha );
+CVehicle * CreateVehicle ( int model, int world, Vector * pos, float angle, int col1, int col2 );
+CPickup * CreatePickup   ( int model, int world, int quantity, Vector * pos, int alpha, bool isAuto );
+CObject * CreateObject   ( int model, int world, Vector * pos, int alpha );
+
+CVehicle * CreateVehicleExpanded ( int model, int world, float x, float y, float z, float angle, int col1, int col2 );
+CPickup * CreatePickupExpanded   ( int model, int world, int quantity, float x, float y, float z, int alpha, bool isAuto );
+CObject * CreateObjectExpanded   ( int model, int world, float x, float y, float z, int alpha );
 
 CPickup * FindPickup   ( int id );
 CPlayer * FindPlayer   ( int id );

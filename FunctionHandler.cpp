@@ -126,27 +126,46 @@ bool EnabledShowNametags()     { return ( functions->EnabledShowNametags() != 0 
 bool EnabledJoinMessages()     { return ( functions->EnabledJoinMessages() != 0 );     }
 bool EnabledDeathMessages()    { return ( functions->EnabledDeathMessages() != 0 );    }
 
-void CreateExplosion( int world, int type, Vector pos, int playerCaused, bool onGround )
+void CreateExplosion( int world, int type, Vector * pos, int playerCaused, bool onGround )
 {
-	functions->CreateExplosion( world, type, pos.x, pos.y, pos.z, playerCaused, onGround );
+	functions->CreateExplosion( world, type, pos->x, pos->y, pos->z, playerCaused, onGround );
 }
 
-void PlayGameSound ( int nPlayer, int sound, Vector pos ) { functions->PlaySound( nPlayer, sound, pos.x, pos.y, pos.z ); }
+void CreateExplosionExpanded( int world, int type, float x, float y, float z, int playerCaused, bool onGround )
+{
+	CreateExplosion( world, type, &Vector( x, y, z ), playerCaused, onGround );
+}
+
+void PlayGameSound ( int nPlayer, int sound, Vector * pos ) { functions->PlaySound( nPlayer, sound, pos->x, pos->y, pos->z ); }
+void PlayGameSoundExpanded( int player, int sound, float x, float y, float z )
+{
+	PlayGameSound( player, sound, &Vector( x, y, z ) );
+}
+
 void SetUseClasses ( bool toUse )                         { functions->SetUseClasses( toUse ); }
 bool UsingClasses  ()                                     { return ( functions->GetUseClasses() != 0 ); }
 
-void AddClass( int team, cRGB colour, int skin, Vector spawnPos, float spawnAngle, int wep1, int ammo1, int wep2, int ammo2, int wep3, int ammo3 )
+void AddClass( int team, cRGB * colour, int skin, Vector * spawnPos, float spawnAngle, int wep1, int ammo1, int wep2, int ammo2, int wep3, int ammo3 )
 {
-	unsigned int dwColour = colour.r;
-	dwColour = (dwColour << 8) + colour.g;
-	dwColour = (dwColour << 8) + colour.b;
+	unsigned int dwColour = colour->r;
+	dwColour = (dwColour << 8) + colour->g;
+	dwColour = (dwColour << 8) + colour->b;
 
-	functions->AddPlayerClass( team, dwColour, skin, spawnPos.x, spawnPos.y, spawnPos.z, spawnAngle, wep1, ammo1, wep2, ammo2, wep3, ammo3 );
+	functions->AddPlayerClass( team, dwColour, skin, spawnPos->x, spawnPos->y, spawnPos->z, spawnAngle, wep1, ammo1, wep2, ammo2, wep3, ammo3 );
 }
 
-void SetSpawnPlayerPos( Vector pos )  { functions->SetSpawnPlayerPos( pos.x, pos.y, pos.z ); }
-void SetSpawnCameraPos( Vector pos )  { functions->SetSpawnCameraPos( pos.x, pos.y, pos.z ); }
-void SetSpawnCameraLook( Vector pos ) { functions->SetSpawnCameraLookAt( pos.x, pos.y, pos.z ); }
+void AddClassExpanded ( int team, int r, int g, int b, int skin, float x, float y, float z, float spawnAngle, int wep1, int ammo1, int wep2, int ammo2, int wep3, int ammo3 )
+{
+	AddClass( team, &cRGB( r, g, b ), skin, &Vector( x, y, z ), spawnAngle, wep1, ammo1, wep2, ammo2, wep3, ammo3 );
+}
+
+void SetSpawnPlayerPos( Vector * pos )  { functions->SetSpawnPlayerPos( pos->x, pos->y, pos->z ); }
+void SetSpawnCameraPos( Vector * pos )  { functions->SetSpawnCameraPos( pos->x, pos->y, pos->z ); }
+void SetSpawnCameraLook( Vector * pos ) { functions->SetSpawnCameraLookAt( pos->x, pos->y, pos->z ); }
+
+void SetSpawnPlayerPosExpanded  ( float x, float y, float z ) { SetSpawnPlayerPos( &Vector( x, y, z ) ); }
+void SetSpawnCameraPosExpanded  ( float x, float y, float z ) { SetSpawnCameraPos( &Vector( x, y, z ) ); }
+void SetSpawnCameraLookExpanded ( float x, float y, float z ) { SetSpawnCameraLook( &Vector( x, y, z ) ); }
 
 void BanIP( const SQChar* ip )      { functions->BanIP( const_cast<char *>( ip ) ); }
 void UnbanIP( const SQChar* ip )    { functions->UnbanIP( const_cast<char *>( ip ) ); }
@@ -162,9 +181,9 @@ bool IsWorldCompatibleWithPlayer( CPlayer * cPlayer, int world )
 
 int  GetPlayerIDFromName( const SQChar* name ) { return functions->GetPlayerIDFromName( const_cast<char *>( name ) ); }
 
-CVehicle * CreateVehicle( int model, int world, Vector pos, float angle, int col1, int col2 )
+CVehicle * CreateVehicle( int model, int world, Vector * pos, float angle, int col1, int col2 )
 {
-	int vId = functions->CreateVehicle( model, world, pos.x, pos.y, pos.z, angle, col1, col2 );
+	int vId = functions->CreateVehicle( model, world, pos->x, pos->y, pos->z, angle, col1, col2 );
 	if( vId < 1 )
 		return NULL;
 	else
@@ -177,9 +196,9 @@ CVehicle * CreateVehicle( int model, int world, Vector pos, float angle, int col
 	}
 }
 
-CPickup * CreatePickup( int model, int world, int quantity, Vector pos, int alpha, bool isAuto )
+CPickup * CreatePickup( int model, int world, int quantity, Vector * pos, int alpha, bool isAuto )
 {
-	int pId = functions->CreatePickup( model, world, quantity, pos.x, pos.y, pos.z, alpha, isAuto );
+	int pId = functions->CreatePickup( model, world, quantity, pos->x, pos->y, pos->z, alpha, isAuto );
 	if( pId < 0 )
 		return NULL;
 	else
@@ -192,9 +211,9 @@ CPickup * CreatePickup( int model, int world, int quantity, Vector pos, int alph
 	}
 }
 
-CObject * CreateObject( int model, int world, Vector pos, int alpha )
+CObject * CreateObject( int model, int world, Vector * pos, int alpha )
 {
-	int oId = functions->CreateObject( model, world, pos.x, pos.y, pos.z, alpha );
+	int oId = functions->CreateObject( model, world, pos->x, pos->y, pos->z, alpha );
 	if( oId < 0 )
 		return NULL;
 	else
@@ -205,6 +224,21 @@ CObject * CreateObject( int model, int world, Vector pos, int alpha )
 		pCore->objectMap[oId] = o;
 		return o;
 	}
+}
+
+CVehicle * CreateVehicleExpanded( int model, int world, float x, float y, float z, float angle, int col1, int col2 )
+{
+	return CreateVehicle( model, world, &Vector( x, y, z ), angle, col1, col2 );
+}
+
+CPickup * CreatePickupExpanded( int model, int world, int quantity, float x, float y, float z, int alpha, bool isAuto )
+{
+	return CreatePickup( model, world, quantity, &Vector( x, y, z ), alpha, isAuto );
+}
+
+CObject * CreateObjectExpanded( int model, int world, float x, float y, float z, int alpha )
+{
+	return CreateObject( model, world, &Vector( x, y, z ), alpha );
 }
 
 CPickup * FindPickup( int id )

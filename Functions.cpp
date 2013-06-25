@@ -69,16 +69,25 @@ void RegisterGlobals()
 		.Func( _SC("GetJoinMessages"), EnabledJoinMessages )
 		.Func( _SC("GetDeathMessages"), EnabledDeathMessages )
 
-		.Func( _SC("CreateExplosion"), CreateExplosion )
-		.Func( _SC("PlaySound"), PlayGameSound )
+		.Overload<void (*)(int, int, Vector *, int, bool)>( _SC("CreateExplosion"), CreateExplosion )
+		.Overload<void (*)(int, int, float, float, float, int, bool)>( _SC("CreateExplosion"), CreateExplosionExpanded )
+
+		.Overload<void (*)(int, int, Vector *)>( _SC("PlaySound"), PlayGameSound )
+		.Overload<void (*)(int, int, float, float, float)>( _SC("PlaySound"), PlayGameSoundExpanded )
 
 		.Func( _SC("SetUseClasses"), SetUseClasses )
 		.Func( _SC("UsingClasses"), UsingClasses )
-		.Func( _SC("AddClass"), AddClass )
 
-		.Func( _SC("SetSpawnPlayerPos"), SetSpawnPlayerPos )
-		.Func( _SC("SetSpawnCameraPos"), SetSpawnCameraPos )
-		.Func( _SC("SetSpawnCameraLook"), SetSpawnCameraLook )
+		.Overload<void (*)(int, cRGB *, int, Vector *, float, int, int, int, int, int, int)>( _SC("AddClass"), AddClass )
+		.Overload<void (*)(int, int, int, int, int, float, float, float, float, int, int, int, int, int, int)>( _SC("AddClass"), AddClassExpanded )
+
+		.Overload<void (*)(Vector *)>( _SC("SetSpawnPlayerPos"), SetSpawnPlayerPos )
+		.Overload<void (*)(Vector *)>( _SC("SetSpawnCameraPos"), SetSpawnCameraPos )
+		.Overload<void (*)(Vector *)>( _SC("SetSpawnCameraLook"), SetSpawnCameraLook )
+
+		.Overload<void (*)(float, float, float)>( _SC("SetSpawnPlayerPos"), SetSpawnPlayerPosExpanded )
+		.Overload<void (*)(float, float, float)>( _SC("SetSpawnCameraPos"), SetSpawnCameraPosExpanded )
+		.Overload<void (*)(float, float, float)>( _SC("SetSpawnCameraLook"), SetSpawnCameraLookExpanded )
 
 		.Func( _SC("BanIP"), BanIP )
 		.Func( _SC("UnbanIP"), UnbanIP )
@@ -87,9 +96,14 @@ void RegisterGlobals()
 		.Func( _SC("GetPlayerIDFromName"), GetPlayerIDFromName )
 		.Func( _SC("IsWorldCompatibleWithPlayer"), IsWorldCompatibleWithPlayer )
 
-		.Func( _SC("CreateVehicle"), CreateVehicle )
-		.Func( _SC("CreatePickup"), CreatePickup )
-		.Func( _SC("CreateObject"), CreateObject )
+		.Overload<CVehicle * (*)(int, int, Vector *, float, int, int)>( _SC("CreateVehicle"), CreateVehicle )
+		.Overload<CVehicle * (*)(int, int, float, float, float, float, int, int)>( _SC("CreateVehicle"), CreateVehicleExpanded )
+
+		.Overload<CPickup * (*)(int, int, int, Vector *, int, bool)>( _SC("CreatePickup"), CreatePickup )
+		.Overload<CPickup * (*)(int, int, int, float, float, float, int, bool)>( _SC("CreatePickup"), CreatePickupExpanded )
+
+		.Overload<CObject * (*)(int, int, Vector *, int)>( _SC("CreateObject"), CreateObject )
+		.Overload<CObject * (*)(int, int, float, float, float, int)>( _SC("CreateObject"), CreateObjectExpanded )
 
 		.Func( _SC("FindPickup"), FindPickup )
 		.Func( _SC("FindObject"), FindObject )
