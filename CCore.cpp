@@ -34,9 +34,6 @@ CCore::CCore()
 
 	for( int i = 0; i < MAX_OBJECTS; i++ )
 		objectMap[i] = NULL;
-
-	// Scan for entities that were already created
-	this->ScanForEntities();
 	
 	// Set up the canReload variable
 	canReload = false;
@@ -238,42 +235,137 @@ void CCore::RegisterEntities()
 	sqstd_seterrorhandlers( v );
 }
 
-// Load the script
+// Load the scripts
+inline void ZeroBuffer( char * buffer, int size )
+{
+	for( int i = 0; i < size; i++ )
+		buffer[i] = '\0';
+}
+
 void CCore::LoadScript()
 {
-	// Create a new script instance
-	script = new Script();
+	// Scan for entities that were already created
+	this->ScanForEntities();
 
-	// Get the gamemode name
-	char gamemode[64] = "SqVCMP_Entry.nut";
+	// No reloading at this point
+	this->canReload = false;
 
-	// Load the gamemode if and only if we have a name
-	if( strlen( gamemode ) > 0 )
+	bool scriptFound = false;
+	FILE * file;
+
+	file = fopen( "server.cfg", "r" );
+	if( file == NULL )
+		OutputError( "SqVCMP could not read server.cfg" );
+	else
 	{
-		// Hit it!
+		// Is this clean?
+		int lineSize = 128;
+		int elapsedLineSize = 0;
+		char * lineBuffer = (char *)malloc( sizeof(char) * lineSize );
+
+		// Did we do it?
+		if( lineBuffer == NULL )
+			OutputError( "SqVCMP could not allocate memory to read server.cfg" );
+		else
+		{
+			ZeroBuffer(lineBuffer, lineSize);
+			char ch = getc( file );
+
+			while( ch != EOF )
+			{
+				if( ch == '\n' )
+				{
+					// End of the line. Parse it.
+					if( this->ParseConfigLine( lineBuffer ) )
+					{
+						scriptFound = true;
+						break;
+					}
+
+					ZeroBuffer(lineBuffer, lineSize);
+					elapsedLineSize = 0;
+				}
+				else
+				{
+					lineBuffer[elapsedLineSize++] = ch;
+
+					// If we've hit our limit on line size, stop reading the line.
+					if( elapsedLineSize + 1 == lineSize )
+					{
+						// Parse it.
+						if( this->ParseConfigLine( lineBuffer ) )
+						{
+							scriptFound = true;
+							break;
+						}
+
+						// Go straight to the next one instead.
+						while( ch != '\n' )
+							ch = getc( file );
+
+						ZeroBuffer(lineBuffer, lineSize);
+						elapsedLineSize = 0;
+					}
+				}
+
+				// Get the next character in the file.
+				ch = getc( file );
+			}
+			
+			if( this->ParseConfigLine( lineBuffer ) )
+				scriptFound = true;
+		}
+
+		// Clean up our shit
+		free( lineBuffer );
+	}
+	
+	// More cleaning
+	fclose( file );
+
+	// You are now free to move about the cabin.
+	this->canReload = true;
+
+	if( !scriptFound )
+		OutputError( "No Squirrel gamemode was specified." );
+}
+
+bool CCore::ParseConfigLine( char * lineBuffer )
+{
+	char * gamemodeSearch = NULL;
+	if( ( gamemodeSearch = strstr( lineBuffer, "sqgamemode " ) ) == NULL )
+		return false;
+	else if( strlen( gamemodeSearch ) < 1 )
+		return false;
+	else
+	{
+		// Ew.
+		gamemodeSearch += sizeof("sqgamemode");
+		this->script = new Script();
+
 		try
 		{
-			script->CompileFile( gamemode );
-			script->Run();
+			this->script->CompileFile( gamemodeSearch );
+			this->script->Run();
 		}
 		catch( Sqrat::Exception e )
 		{
-			OutputError( "The given gamemode could not be loaded." );
-			OutputError( e.Message().c_str() );
-		}
+			char buf[145];
+			sprintf( buf, "Could not load script '%s'", gamemodeSearch );
 
-		// No reloading at this point.
-		this->canReload = false;
+			OutputWarning( buf );
+			OutputWarning( e.Message().c_str() );
+
+			return false;
+		}
 
 		Function callback = RootTable( v ).GetFunction( _SC( "onScriptLoad" ) );
 		if( !callback.IsNull() )
 			callback();
 
-		// You are now free to move about the cabin.
-		this->canReload = true;
+		callback.Release();
+		return true;
 	}
-	else
-		OutputError( "No Squirrel gamemode was specified." );
 }
 
 // Release a core instance

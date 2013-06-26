@@ -37,13 +37,15 @@ class CCore
 		~CCore();
 		void AddTimer( CTimer * pTimer );
 		void CleanWorld();
-		void LoadScript();
 		void DropAllTimers();
 		void LoadVM();
 		void ProcessTimers( float elapsedTime );
 		void RegisterEntities();
 		void Release();
 		void ScanForEntities();
+
+		void LoadScript();
+		bool ParseConfigLine( char * lineBuffer );
 
 		// Class maps
 		CPlayer  * playerMap[MAX_PLAYERS];
