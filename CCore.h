@@ -43,6 +43,7 @@ class CCore
 		void ProcessTimers( float elapsedTime );
 		void RegisterEntities();
 		void Release();
+		void ScanForEntities();
 
 		// Class maps
 		CPlayer  * playerMap[MAX_PLAYERS];

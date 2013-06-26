@@ -34,6 +34,9 @@ CCore::CCore()
 
 	for( int i = 0; i < MAX_OBJECTS; i++ )
 		objectMap[i] = NULL;
+
+	// Scan for entities that were already created
+	this->ScanForEntities();
 	
 	// Set up the canReload variable
 	canReload = false;
@@ -85,6 +88,50 @@ void CCore::LoadVM()
 
 	// Register our entities so they're accessible by scripts
 	this->RegisterEntities();
+}
+
+// Look for entities such as vehicles and objects that were created by other plugins
+void CCore::ScanForEntities()
+{
+	// Scan for vehicles
+	for( int i = 0; i < MAX_VEHICLES; i++ )
+	{
+		if( functions->GetVehicleModel( i ) > 0 )
+		{
+			this->vehicleMap[i] = new CVehicle;
+			this->vehicleMap[i]->Init( i, false );
+		}
+	}
+
+	// Scan for pickups
+	for( int i = 0; i < MAX_PICKUPS; i++ )
+	{
+		if( functions->PickupGetModel( i ) > 0 )
+		{
+			this->pickupMap[i] = new CPickup;
+			this->pickupMap[i]->Init( i, false );
+		}
+	}
+
+	// Scan for objects
+	for( int i = 0; i < MAX_OBJECTS; i++ )
+	{
+		if( functions->GetObjectModel( i ) > 0 )
+		{
+			this->objectMap[i] = new CObject;
+			this->objectMap[i]->Init( i, false );
+		}
+	}
+
+	// Scan for players
+	for( int i = 0; i < MAX_PLAYERS; i++ )
+	{
+		if( functions->IsPlayerConnected( i ) )
+		{
+			this->playerMap[i] = new CPlayer;
+			this->playerMap[i]->nPlayerId = i;
+		}
+	}
 }
 
 // Process any timers
