@@ -132,7 +132,7 @@ extern "C" EXPORT unsigned int VcmpPluginInit( PluginFuncs* givenPluginFuncs, Pl
 	information = givenPluginInfo;
 
 	// Set our plugin information
-	information->uPluginVer = BUILD_VER;
+	information->uPluginVer = 0x092;
 	strcpy( information->szName, "SQHost1" );
 
 	// Define our exports
@@ -145,7 +145,6 @@ extern "C" EXPORT unsigned int VcmpPluginInit( PluginFuncs* givenPluginFuncs, Pl
 
 	// Get a core instance
 	pCore = CCore::GetInstance();
-	pCore->pSrvPlayerDisconnect = callbacks->OnPlayerDisconnect;
 
 	// Server events
 	callbacks->OnInitServer         = OnInitServer;

@@ -160,6 +160,7 @@ void RegisterGlobals()
 
 		.Func( _SC( "GetTime" ), GetTime )
 		.Func( _SC( "GetFullTime" ), GetFullTime )
+		.Func( _SC( "LoadModule" ), LoadVCMPModule )
 
 		.SquirrelFunc( _SC( "NewTimer" ), NewTimer );
 }

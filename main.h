@@ -5,6 +5,7 @@
 	#define EXPORT __declspec(dllexport)
 #else
 	#define EXPORT
+	typedef unsigned int DWORD;
 #endif
 
 #include "Constants.h"
@@ -16,7 +17,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
-#include <wchar.h>
+#include <time.h>
 
 #include <iostream>
 #include <map>

@@ -22,11 +22,6 @@ int OnInitServer()
 	char initMsg[64];
 	sprintf( initMsg, "Loaded SqVCMP 0.4 frontend by Stormeus. (v0.9)" );
 
-	// Check if this is a debug mode. If it is, append the build number.
-	#ifdef _DEBUG
-		sprintf( initMsg, "%s (vn%d)", initMsg, BUILD_VER );
-	#endif
-
 	// Print the initialization message.
 	printf( "\n" );
 	OutputMessage( initMsg );

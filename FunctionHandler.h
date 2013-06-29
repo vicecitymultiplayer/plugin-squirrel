@@ -31,10 +31,10 @@ void SetGamespeed       ( float speed );
 void SetWaterLevel      ( float waterLevel );
 void SetMaxHeight       ( float maxHeight );
 
-SQChar * GetServerName     ( void );
+const SQChar * GetServerName     ( void );
 int      GetMaxPlayers     ( void );
-SQChar * GetServerPassword ( void );
-SQChar * GetGameModeText   ( void );
+const SQChar * GetServerPassword ( void );
+const SQChar * GetGameModeText   ( void );
 unsigned int GetTimeRate   ( void );
 
 int   GetHour       ( void );
@@ -177,9 +177,9 @@ void PrivMessage        ( CPlayer * player, const SQChar * message );
 void PrivMessageAll     ( const SQChar * message );
 void SendPlayerMessage  ( CPlayer * playerToFake, CPlayer * playerTo, const SQChar * message );
 
-SQChar * GetWeaponName   ( int weaponID );
-SQChar * GetDistrictName ( float x, float y );
-SQChar * GetSkinName     ( int skinID );
+const SQChar * GetWeaponName   ( int weaponID );
+const SQChar * GetDistrictName ( float x, float y );
+const SQChar * GetSkinName     ( int skinID );
 char     GetWeaponID     ( const SQChar * name );
 DWORD    SQGetTickCount  ( void );
 
@@ -188,10 +188,11 @@ float DistanceFromPoint ( float x1, float y1, float x2, float y2 );
 void ReloadScripts      ( void );
 
 int GetVehicleModelFromName ( SQChar * name );
-SQChar *      GetVehicleNameFromModel ( int model );
+const SQChar * GetVehicleNameFromModel ( int model );
+void LoadVCMPModule( const SQChar * name );
 
 SQInteger NewTimer( HSQUIRRELVM v );
 
 // These functions are for compatibility, but will be deprecated
 DWORD    GetTime         ( void );
-SQChar * GetFullTime     ( void );
+const SQChar * GetFullTime     ( void );

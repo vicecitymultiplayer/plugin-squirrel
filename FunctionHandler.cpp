@@ -57,7 +57,7 @@ void SetGamespeed( float speed )          { functions->SetGamespeed( speed ); }
 void SetWaterLevel( float waterLevel )    { functions->SetWaterLevel( waterLevel ); }
 void SetMaxHeight( float maxHeight )      { functions->SetMaxHeight( maxHeight ); }
 
-SQChar * GetServerName()
+const SQChar * GetServerName()
 {
 	char * serverName = new char[128];
 	functions->GetServerName( serverName, 128 );
@@ -67,7 +67,7 @@ SQChar * GetServerName()
 
 int GetMaxPlayers() { return functions->GetMaxPlayers(); }
 
-SQChar * GetServerPassword()
+const SQChar * GetServerPassword()
 {
 	char * password = new char[128];
 	functions->GetServerPassword( password, 128 );
@@ -75,7 +75,7 @@ SQChar * GetServerPassword()
 	return password;
 }
 
-SQChar * GetGameModeText()
+const SQChar * GetGameModeText()
 {
 	char * gamemode = new char[96];
 	functions->GetGameModeText( gamemode, 96 );
@@ -133,13 +133,15 @@ void CreateExplosion( int world, int type, Vector * pos, int playerCaused, bool 
 
 void CreateExplosionExpanded( int world, int type, float x, float y, float z, int playerCaused, bool onGround )
 {
-	CreateExplosion( world, type, &Vector( x, y, z ), playerCaused, onGround );
+	Vector pos = Vector( x, y, z );
+	CreateExplosion( world, type, &pos, playerCaused, onGround );
 }
 
 void PlayGameSound ( int nPlayer, int sound, Vector * pos ) { functions->PlaySound( nPlayer, sound, pos->x, pos->y, pos->z ); }
 void PlayGameSoundExpanded( int player, int sound, float x, float y, float z )
 {
-	PlayGameSound( player, sound, &Vector( x, y, z ) );
+	Vector pos = Vector( x, y, z );
+	PlayGameSound( player, sound, &pos );
 }
 
 void SetUseClasses ( bool toUse )                         { functions->SetUseClasses( toUse ); }
@@ -156,16 +158,19 @@ void AddClass( int team, cRGB * colour, int skin, Vector * spawnPos, float spawn
 
 void AddClassExpanded ( int team, int r, int g, int b, int skin, float x, float y, float z, float spawnAngle, int wep1, int ammo1, int wep2, int ammo2, int wep3, int ammo3 )
 {
-	AddClass( team, &cRGB( r, g, b ), skin, &Vector( x, y, z ), spawnAngle, wep1, ammo1, wep2, ammo2, wep3, ammo3 );
+	cRGB col = cRGB( r, g, b );
+	Vector spawn = Vector( x, y, z );
+
+	AddClass( team, &col, skin, &spawn, spawnAngle, wep1, ammo1, wep2, ammo2, wep3, ammo3 );
 }
 
 void SetSpawnPlayerPos( Vector * pos )  { functions->SetSpawnPlayerPos( pos->x, pos->y, pos->z ); }
 void SetSpawnCameraPos( Vector * pos )  { functions->SetSpawnCameraPos( pos->x, pos->y, pos->z ); }
 void SetSpawnCameraLook( Vector * pos ) { functions->SetSpawnCameraLookAt( pos->x, pos->y, pos->z ); }
 
-void SetSpawnPlayerPosExpanded  ( float x, float y, float z ) { SetSpawnPlayerPos( &Vector( x, y, z ) ); }
-void SetSpawnCameraPosExpanded  ( float x, float y, float z ) { SetSpawnCameraPos( &Vector( x, y, z ) ); }
-void SetSpawnCameraLookExpanded ( float x, float y, float z ) { SetSpawnCameraLook( &Vector( x, y, z ) ); }
+void SetSpawnPlayerPosExpanded  ( float x, float y, float z ) { Vector p = Vector( x, y, z ); SetSpawnPlayerPos( &p ); }
+void SetSpawnCameraPosExpanded  ( float x, float y, float z ) { Vector p = Vector( x, y, z ); SetSpawnCameraPos( &p ); }
+void SetSpawnCameraLookExpanded ( float x, float y, float z ) { Vector p = Vector( x, y, z ); SetSpawnCameraLook( &p ); }
 
 void BanIP( const SQChar* ip )      { functions->BanIP( const_cast<char *>( ip ) ); }
 void UnbanIP( const SQChar* ip )    { functions->UnbanIP( const_cast<char *>( ip ) ); }
@@ -228,17 +233,20 @@ CObject * CreateObject( int model, int world, Vector * pos, int alpha )
 
 CVehicle * CreateVehicleExpanded( int model, int world, float x, float y, float z, float angle, int col1, int col2 )
 {
-	return CreateVehicle( model, world, &Vector( x, y, z ), angle, col1, col2 );
+	Vector pos = Vector( x, y, z );
+	return CreateVehicle( model, world, &pos, angle, col1, col2 );
 }
 
 CPickup * CreatePickupExpanded( int model, int world, int quantity, float x, float y, float z, int alpha, bool isAuto )
 {
-	return CreatePickup( model, world, quantity, &Vector( x, y, z ), alpha, isAuto );
+	Vector pos = Vector( x, y, z );
+	return CreatePickup( model, world, quantity, &pos, alpha, isAuto );
 }
 
 CObject * CreateObjectExpanded( int model, int world, float x, float y, float z, int alpha )
 {
-	return CreateObject( model, world, &Vector( x, y, z ), alpha );
+	Vector pos = Vector( x, y, z );
+	return CreateObject( model, world, &pos, alpha );
 }
 
 CPickup * FindPickup( int id )
@@ -474,7 +482,7 @@ void SendPlayerMessage  ( CPlayer * playerToFake, CPlayer * playerTo, const SQCh
 		functions->SendClientMessage( playerTo->nPlayerId, 0x007f16ff, "** pm from %s >> %s", playerToFake->GetName(), message );
 }
 
-SQChar * GetWeaponName   ( int weaponID )
+const SQChar * GetWeaponName   ( int weaponID )
 {
 	switch( weaponID )
 	{
@@ -551,7 +559,7 @@ SQChar * GetWeaponName   ( int weaponID )
 	}
 }
 
-SQChar * GetDistrictName ( float x, float y )
+const SQChar * GetDistrictName ( float x, float y )
 {
 	if( x > -1613.03f && y > 413.218f && x < -213.73f && y < 1677.32f )
 		return "Downtown Vice City";
@@ -581,7 +589,7 @@ SQChar * GetDistrictName ( float x, float y )
 		return "Vice City";
 }
 
-SQChar * GetSkinName     ( int skinID )
+const SQChar * GetSkinName     ( int skinID )
 {
 	switch( skinID )
 	{
@@ -749,13 +757,22 @@ SQChar * GetSkinName     ( int skinID )
 	}
 }
 
+void LoadVCMPModule( const SQChar * name )
+{
+	OutputWarning( "LoadModule() cannot be used by scripts. Specify plugins in server.cfg" );
+}
+
 char GetWeaponID( const SQChar * name )
 {
-	// Get characters we might need
-	int char1, char2, char3;
 	if( name == NULL || strlen(name) < 1 )
 		return 0;
 	
+	// Get characters we might need
+	char char1, char2, char3;
+	char1 = 0;
+	char2 = 0;
+	char3 = 0;
+
 	char1 = tolower(name[0]);
 	if( strlen(name) >= 3 )
 	{
@@ -991,7 +1008,18 @@ char GetWeaponID( const SQChar * name )
 	}
 }
 
-DWORD SQGetTickCount( void ) { return GetTickCount(); }
+DWORD SQGetTickCount( void )
+{
+	#ifdef WIN32
+		return GetTickCount();
+	#else
+		struct timespec ts;
+		if( clock_gettime( CLOCK_MONOTONIC, &ts ) != 0 )
+			return 0;
+		else
+			return ts.tv_nsec;
+	#endif
+}
 
 bool InPoly( float x, float y, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4 )
 {
@@ -1065,7 +1093,7 @@ bool InPoly( float x, float y, float x1, float y1, float x2, float y2, float x3,
 
 	// http://en.wikipedia.org/wiki/Even-odd_rule
 	bool isInPath = false;
-	for( char i = 0, j = 2; i < 3; i++ )
+	for( int i = 0, j = 2; i < 3; i++ )
 	{
 		if( ( polyY[i] > y ) != ( polyY[j] > y ) && ( x < ( polyX[j] - polyX[i] ) * ( y - polyY[i] ) / ( polyY[j] - polyY[i] + polyX[i] ) ) )
 			isInPath = !( isInPath );
@@ -1139,7 +1167,7 @@ int GetVehicleModelFromName( SQChar * name )
 	return -1;
 }
 
-SQChar * GetVehicleNameFromModel ( int model )
+const SQChar * GetVehicleNameFromModel ( int model )
 {
 	switch( model )
 	{
@@ -1263,7 +1291,7 @@ DWORD GetTime( void )
 	return static_cast<DWORD>( time( NULL ) );
 }
 
-SQChar * GetFullTime( void )
+const SQChar * GetFullTime( void )
 {
 	OutputWarning( "GetFullTime is deprecated and may be removed in the future.\n"
 		"          Please use Squirrel's date() function instead." );
@@ -1329,9 +1357,7 @@ SQInteger NewTimer( HSQUIRRELVM v )
 			return sq_throwerror( v, "The timer's maximum number of pulses must be >= 0" );
 		else
 		{
-			CTimer     * pTimer  = new CTimer;
-			TimerParam * pParams = NULL;
-
+			CTimer * pTimer  = new CTimer;
 			if( sq_gettop( v ) > 4 )
 			{
 				pTimer->paramCount = sq_gettop(v) - 4;

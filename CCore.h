@@ -59,9 +59,6 @@ class CCore
 		// Can we reload the scripts?
 		bool canReload;
 
-		// Storage for the old OnPlayerDisconnect pointer
-		void * pSrvPlayerDisconnect;
-
 	private:
 		// Constructor
 		CCore();
