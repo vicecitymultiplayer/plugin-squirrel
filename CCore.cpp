@@ -249,7 +249,6 @@ void CCore::LoadScript()
 
 	// No reloading at this point
 	this->canReload = false;
-
 	bool scriptFound = false;
 	FILE * file;
 
@@ -312,7 +311,7 @@ void CCore::LoadScript()
 				ch = getc( file );
 			}
 			
-			if( this->ParseConfigLine( lineBuffer ) )
+			if( !scriptFound && this->ParseConfigLine( lineBuffer ) )
 				scriptFound = true;
 		}
 

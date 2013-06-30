@@ -70,7 +70,6 @@ bool CTimer::Pulse( float elapsedTime )
 								assert( sizeof( HSQOBJECT ) == sizeof( itr->pData ) );
 								memcpy( &oTmp, &itr->pData, sizeof( float ) );
 
-								printf( "Pushed object, pointer %p\n", itr->pData );
 								sq_pushobject( v, oTmp );
 								break;
 								
@@ -81,7 +80,6 @@ bool CTimer::Pulse( float elapsedTime )
 
 							case OT_USERDATA:
 							case OT_USERPOINTER:
-								printf( "Pushed pointer, pointer %p\n", itr->pData );
 								sq_pushuserpointer( v, (SQUserPointer)itr->pData );
 								break;
 
@@ -90,14 +88,12 @@ bool CTimer::Pulse( float elapsedTime )
 								break;
 
 							default:
-								printf( "UNKNOWN PUSH TYPE\n" );
 								break;
 						}
 					}
 				}
 				
 				// Call the function
-				printf( "Arg count: %d\n", nArgs );
 				sq_call( v, nArgs, 0, 1 );
 			}
 			else
