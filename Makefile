@@ -4,11 +4,11 @@ CC = g++
 CFLAGS = -Wall -O2 -DNDEBUG -fPIC -I. -I./sqrat -I./squirrel -I./sqrat/sqrat
 SQLIB = squirrelsrc/lib/
 
-all: vcmp_squirrel.so
+all: squirrel04.so
 
 default: all
 
-vcmp_squirrel.so: $(Module_objs)
+squirrel04.so: $(Module_objs)
 	$(CC) -o $@ $(Module_objs) $(SQLIB)libsqstdlib.a $(SQLIB)libsquirrel.a -shared -s
 
 CallbackHandler.o: CallbackHandler.cpp CallbackHandler.h
@@ -48,4 +48,4 @@ main.o: main.cpp main.h
 	$(CC) $(CFLAGS) -c main.cpp -o $@
 
 clean:
-	rm -f $(Module_objs) vcmp_squirrel.so
+	rm -f $(Module_objs) squirrel04.so

@@ -12,10 +12,11 @@ void ClientMessage( const SQChar * message, CPlayer * player, int r, int g, int 
 	if( player != NULL )
 	{
 		unsigned int dwColour;
-		dwColour  = ( a << 24 );
-		dwColour += ( ( r & 0xFF ) << 16 );
-		dwColour += ( ( g & 0xFF ) << 8 );
-		dwColour += ( b & 0xFF );
+
+		dwColour  = ( r << 24 );
+		dwColour += ( ( g & 0xFF ) << 16 );
+		dwColour += ( ( b & 0xFF ) << 8 );
+		dwColour += ( a & 0xFF );
 
 		functions->SendClientMessage( player->nPlayerId, dwColour, const_cast<char *>( message ) );
 	}
