@@ -181,6 +181,9 @@ extern "C" EXPORT unsigned int VcmpPluginInit( PluginFuncs* givenPluginFuncs, Pl
 	callbacks->OnCommandMessage     = OnCommandMessage;
 	callbacks->OnPrivateMessage     = OnPrivateMessage;
 	callbacks->OnInternalCommand    = OnInternalCommand;
+	
+	callbacks->OnObjectShot         = OnObjectShot;
+	callbacks->OnObjectBump         = OnObjectBump;
 
 	callbacks->OnEntityPoolChange	= OnEntityPoolChange;
 

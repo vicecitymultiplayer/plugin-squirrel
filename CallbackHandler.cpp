@@ -482,6 +482,24 @@ void OnPlayerUpdate( int nPlayerId, int nUpdateType )
 	lastPlrInfo[nPlayerId] = plrInfo;
 }
 
+void OnObjectShot( int nObjectId, int nPlayerId, int nWeapon )
+{
+	Function callback = RootTable().GetFunction( _SC("onObjectShot") );
+	if( !callback.IsNull() )
+		callback.Execute<CObject *, CPlayer *, int>( pCore->objectMap[nObjectId], pCore->playerMap[nPlayerId], nWeapon );
+		
+	callback.Release();
+}
+
+void OnObjectBump( int nObjectId, int nPlayerId )
+{
+	Function callback = RootTable().GetFunction( _SC("onObjectBump") );
+	if( !callback.IsNull() )
+		callback.Execute<CObject *, CPlayer *>( pCore->objectMap[nObjectId], pCore->playerMap[nPlayerId] );
+		
+	callback.Release();
+}
+
 // We don't handle this one because we don't take internal commands from other modules.
 int OnInternalCommand( unsigned int uCmdType, const char* pszText )
 {

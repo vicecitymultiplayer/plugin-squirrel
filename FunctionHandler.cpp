@@ -138,11 +138,11 @@ void CreateExplosionExpanded( int world, int type, float x, float y, float z, in
 	CreateExplosion( world, type, &pos, playerCaused, onGround );
 }
 
-void PlayGameSound ( int nPlayer, int sound, Vector * pos ) { functions->PlaySound( nPlayer, sound, pos->x, pos->y, pos->z ); }
-void PlayGameSoundExpanded( int player, int sound, float x, float y, float z )
+void PlayGameSound ( int world, int sound, Vector * pos ) { functions->PlaySound( world, sound, pos->x, pos->y, pos->z ); }
+void PlayGameSoundExpanded( int world, int sound, float x, float y, float z )
 {
 	Vector pos = Vector( x, y, z );
-	PlayGameSound( player, sound, &pos );
+	PlayGameSound( world, sound, &pos );
 }
 
 void SetUseClasses ( bool toUse )                         { functions->SetUseClasses( toUse ); }
