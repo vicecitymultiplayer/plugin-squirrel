@@ -149,7 +149,7 @@ void OnPlayerDeath( int nPlayerId, int nKillerId, int nReason, int nBodyPart )
 {
 	CPlayer * playerInstance = pCore->playerMap[ nPlayerId ];
 
-	if( nKillerId == -1 )
+	if( !functions->IsPlayerConnected( nKillerId ) )
 	{
 		Function callback = RootTable().GetFunction( _SC("onPlayerDeath") );
 		if( !callback.IsNull() )
