@@ -18,7 +18,7 @@ void ClientMessage( const SQChar * message, CPlayer * player, int r, int g, int 
 		dwColour += ( ( b & 0xFF ) << 8 );
 		dwColour += ( a & 0xFF );
 
-		functions->SendClientMessage( player->nPlayerId, dwColour, const_cast<char *>( message ) );
+		functions->SendClientMessage( player->nPlayerId, dwColour, "%s", message );
 	}
 }
 
