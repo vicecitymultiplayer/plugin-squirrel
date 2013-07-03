@@ -110,6 +110,25 @@
     <ClInclude Include="FunctionHandler.h" />
     <ClInclude Include="Functions.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="sqrat\sqmodule.h" />
+    <ClInclude Include="sqrat\sqrat.h" />
+    <ClInclude Include="sqrat\sqratimport.h" />
+    <ClInclude Include="sqrat\sqrat\sqratAllocator.h" />
+    <ClInclude Include="sqrat\sqrat\sqratArray.h" />
+    <ClInclude Include="sqrat\sqrat\sqratClass.h" />
+    <ClInclude Include="sqrat\sqrat\sqratClassType.h" />
+    <ClInclude Include="sqrat\sqrat\sqratConst.h" />
+    <ClInclude Include="sqrat\sqrat\sqratFunction.h" />
+    <ClInclude Include="sqrat\sqrat\sqratGlobalMethods.h" />
+    <ClInclude Include="sqrat\sqrat\sqratImpClass.h" />
+    <ClInclude Include="sqrat\sqrat\sqratMemberMethods.h" />
+    <ClInclude Include="sqrat\sqrat\sqratObject.h" />
+    <ClInclude Include="sqrat\sqrat\sqratOverloadMethods.h" />
+    <ClInclude Include="sqrat\sqrat\sqratScript.h" />
+    <ClInclude Include="sqrat\sqrat\sqratTable.h" />
+    <ClInclude Include="sqrat\sqrat\sqratTypes.h" />
+    <ClInclude Include="sqrat\sqrat\sqratUtil.h" />
+    <ClInclude Include="sqrat\sqrat\sqratVM.h" />
     <ClInclude Include="VCMP.h" />
   </ItemGroup>
   <ItemGroup>

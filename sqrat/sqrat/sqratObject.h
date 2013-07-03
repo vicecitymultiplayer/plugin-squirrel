@@ -250,28 +250,6 @@ protected:
         sq_pop(vm,1); // pop table
     }
 
-    inline void BindOverload(const SQChar* name, void* method, size_t methodSize, SQFUNCTION func, SQFUNCTION overload, int argCount, SQInteger checkParamCount, const SQChar * params, bool staticVar = false) {
-        string overloadName = SqOverloadName::Get(name, argCount);
-
-        sq_pushobject(vm, GetObject());
-
-        // Bind overload handler
-        sq_pushstring(vm, name, -1);
-        sq_pushstring(vm, name, -1); // function name is passed as a free variable
-        sq_newclosure(vm, overload, 1);
-        sq_newslot(vm, -3, staticVar);
-
-        // Bind overloaded function
-        sq_pushstring(vm, overloadName.c_str(), -1);
-        SQUserPointer methodPtr = sq_newuserdata(vm, static_cast<SQUnsignedInteger>(methodSize));
-        memcpy(methodPtr, method, methodSize);
-        sq_newclosure(vm, func, 1);
-		sq_setparamscheck(vm, checkParamCount, params); // Add 1 to account for root table argument
-        sq_newslot(vm, -3, staticVar);
-
-        sq_pop(vm,1); // pop table
-    }
-
     // Set the value of a variable on the object. Changes to values set this way are not reciprocated
     template<class V>
     inline void BindValue(const SQChar* name, const V& val, bool staticVar = false) {

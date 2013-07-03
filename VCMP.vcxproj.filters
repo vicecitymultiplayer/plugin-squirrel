@@ -31,6 +31,9 @@
     <Filter Include="Source Files\Utils">
       <UniqueIdentifier>{793ea985-5ce9-439e-a7fe-1620031b6120}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Sqrat">
+      <UniqueIdentifier>{35aec0a9-3d68-42d0-ad20-78fa44edcf00}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="VCMP.h">
@@ -74,6 +77,63 @@
     </ClInclude>
     <ClInclude Include="CTimer.h">
       <Filter>Header Files\Handlers\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="sqrat\sqmodule.h">
+      <Filter>Header Files\Sqrat</Filter>
+    </ClInclude>
+    <ClInclude Include="sqrat\sqrat.h">
+      <Filter>Header Files\Sqrat</Filter>
+    </ClInclude>
+    <ClInclude Include="sqrat\sqratimport.h">
+      <Filter>Header Files\Sqrat</Filter>
+    </ClInclude>
+    <ClInclude Include="sqrat\sqrat\sqratAllocator.h">
+      <Filter>Header Files\Sqrat</Filter>
+    </ClInclude>
+    <ClInclude Include="sqrat\sqrat\sqratArray.h">
+      <Filter>Header Files\Sqrat</Filter>
+    </ClInclude>
+    <ClInclude Include="sqrat\sqrat\sqratClass.h">
+      <Filter>Header Files\Sqrat</Filter>
+    </ClInclude>
+    <ClInclude Include="sqrat\sqrat\sqratClassType.h">
+      <Filter>Header Files\Sqrat</Filter>
+    </ClInclude>
+    <ClInclude Include="sqrat\sqrat\sqratConst.h">
+      <Filter>Header Files\Sqrat</Filter>
+    </ClInclude>
+    <ClInclude Include="sqrat\sqrat\sqratFunction.h">
+      <Filter>Header Files\Sqrat</Filter>
+    </ClInclude>
+    <ClInclude Include="sqrat\sqrat\sqratGlobalMethods.h">
+      <Filter>Header Files\Sqrat</Filter>
+    </ClInclude>
+    <ClInclude Include="sqrat\sqrat\sqratImpClass.h">
+      <Filter>Header Files\Sqrat</Filter>
+    </ClInclude>
+    <ClInclude Include="sqrat\sqrat\sqratMemberMethods.h">
+      <Filter>Header Files\Sqrat</Filter>
+    </ClInclude>
+    <ClInclude Include="sqrat\sqrat\sqratObject.h">
+      <Filter>Header Files\Sqrat</Filter>
+    </ClInclude>
+    <ClInclude Include="sqrat\sqrat\sqratOverloadMethods.h">
+      <Filter>Header Files\Sqrat</Filter>
+    </ClInclude>
+    <ClInclude Include="sqrat\sqrat\sqratScript.h">
+      <Filter>Header Files\Sqrat</Filter>
+    </ClInclude>
+    <ClInclude Include="sqrat\sqrat\sqratTable.h">
+      <Filter>Header Files\Sqrat</Filter>
+    </ClInclude>
+    <ClInclude Include="sqrat\sqrat\sqratTypes.h">
+      <Filter>Header Files\Sqrat</Filter>
+    </ClInclude>
+    <ClInclude Include="sqrat\sqrat\sqratUtil.h">
+      <Filter>Header Files\Sqrat</Filter>
+    </ClInclude>
+    <ClInclude Include="sqrat\sqrat\sqratVM.h">
+      <Filter>Header Files\Sqrat</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
