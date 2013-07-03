@@ -41,11 +41,11 @@ void RegisterPickup()
 
 	// Read-write properties
 	c
-		.Prop( _SC("World"), &CPickup::GetWorld, &CPickup::SetWorld )
-		.Prop( _SC("Alpha"), &CPickup::GetAlpha, &CPickup::SetAlpha )
-		.Prop( _SC("Automatic"), &CPickup::GetAuto, &CPickup::SetAuto )
-		.Prop( _SC("Timer"), &CPickup::GetAutoTimer, &CPickup::SetAutoTimer )
-		.Prop( _SC("Pos"), &CPickup::GetPos, &CPickup::SetPos );
+		.Prop( _SC("World"), &CPickup::GetWorld, &CPickup::SetWorld, "i" )
+		.Prop( _SC("Alpha"), &CPickup::GetAlpha, &CPickup::SetAlpha, "i" )
+		.Prop( _SC("Automatic"), &CPickup::GetAuto, &CPickup::SetAuto, "b" )
+		.Prop( _SC("Timer"), &CPickup::GetAutoTimer, &CPickup::SetAutoTimer, "i" )
+		.Prop( _SC("Pos"), &CPickup::GetPos, &CPickup::SetPos, "u|p|x" );
 
 	// Read-only properties
 	c
@@ -55,8 +55,8 @@ void RegisterPickup()
 
 	// Functions
 	c
-		.Func( _SC("Remove"), &CPickup::Delete )
-		.Func( _SC("StreamedToPlayer"), &CPickup::StreamedToPlayer );
+		.Func( _SC("Remove"), &CPickup::Delete, 1, "t" )
+		.Func( _SC("StreamedToPlayer"), &CPickup::StreamedToPlayer, 2, "tu|p|x" );
 
 	RootTable(v).Bind( _SC("CPickup"), c );
 }

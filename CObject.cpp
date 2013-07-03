@@ -90,10 +90,10 @@ void RegisterObject()
 
 	// Read-write properties
 	c
-		.Prop( _SC("World"), &CObject::GetWorld, &CObject::SetWorld )
-		.Prop( _SC("Pos"), &CObject::GetPos, &CObject::SetPos )
-		.Prop( _SC("TrackingShots"), &CObject::GetReportingShots, &CObject::SetReportingShots )
-		.Prop( _SC("TrackingBumps"), &CObject::GetReportingBumps, &CObject::SetReportingBumps );
+		.Prop( _SC("World"), &CObject::GetWorld, &CObject::SetWorld, "i" )
+		.Prop( _SC("Pos"), &CObject::GetPos, &CObject::SetPos, "u|p|x" )
+		.Prop( _SC("TrackingShots"), &CObject::GetReportingShots, &CObject::SetReportingShots, "b" )
+		.Prop( _SC("TrackingBumps"), &CObject::GetReportingBumps, &CObject::SetReportingBumps, "b" );
 
 	// Read-only properties
 	c
@@ -105,14 +105,14 @@ void RegisterObject()
 
 	// Functions
 	c
-		.Func( _SC("Delete"), &CObject::Delete )
-		.Func( _SC("MoveTo"), &CObject::MoveTo )
-		.Func( _SC("MoveBy"), &CObject::MoveBy )
-		.Func( _SC("RotateTo"), &CObject::RotateTo )
-		.Func( _SC("RotateBy"), &CObject::RotateBy )
-		.Func( _SC("RotateToEuler"), &CObject::RotateToEuler )
-		.Func( _SC("RotateByEuler"), &CObject::RotateByEuler )
-		.Func( _SC("SetAlpha"), &CObject::SetAlpha );
+		.Func( _SC("Delete"), &CObject::Delete, 1, "t" )
+		.Func( _SC("MoveTo"), &CObject::MoveTo, 2, "tu|p|x" )
+		.Func( _SC("MoveBy"), &CObject::MoveBy, 2, "tu|p|x" )
+		.Func( _SC("RotateTo"), &CObject::RotateTo, 2, "tu|p|x" )
+		.Func( _SC("RotateBy"), &CObject::RotateBy, 2, "tu|p|x" )
+		.Func( _SC("RotateToEuler"), &CObject::RotateToEuler, 2, "tu|p|x" )
+		.Func( _SC("RotateByEuler"), &CObject::RotateByEuler, 2, "tu|p|x" )
+		.Func( _SC("SetAlpha"), &CObject::SetAlpha, 3, "tii" );
 
 	RootTable(v).Bind( _SC("CObject"), c );
 }

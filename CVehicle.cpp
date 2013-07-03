@@ -213,25 +213,25 @@ void RegisterVehicle()
 
 	// Read-write properties
 	c
-		.Prop( _SC("World"), &CVehicle::GetWorld, &CVehicle::SetWorld )
-		.Prop( _SC("Immunity"), &CVehicle::GetImmunity, &CVehicle::SetImmunity )
-		.Prop( _SC("Pos"), &CVehicle::GetPosition, &CVehicle::SetPosition )
-		.Prop( _SC("SpawnPos"), &CVehicle::GetSpawnPos, &CVehicle::SetSpawnPos )
-		.Prop( _SC("SpawnAngle"), &CVehicle::GetSpawnAngle, &CVehicle::SetSpawnAngle )
-		.Prop( _SC("RespawnTimer"), &CVehicle::GetIdleRespawnTimer, &CVehicle::SetIdleRespawnTimer )
-		.Prop( _SC("Health"), &CVehicle::GetHealth, &CVehicle::SetHealth )
-		.Prop( _SC("Colour1"), &CVehicle::GetColour1, &CVehicle::SetColour1 )
-		.Prop( _SC("Colour2"), &CVehicle::GetColour2, &CVehicle::SetColour2 )
-		.Prop( _SC("Locked"), &CVehicle::GetLocked, &CVehicle::SetLocked )
-		.Prop( _SC("Damage"), &CVehicle::GetDamage, &CVehicle::SetDamage )
-		.Prop( _SC("Alarm"), &CVehicle::GetAlarm, &CVehicle::SetAlarm )
-		.Prop( _SC("Lights"), &CVehicle::GetLights, &CVehicle::SetLights )
-		.Prop( _SC("Angle"), &CVehicle::GetRotation, &CVehicle::SetRotation )
-		.Prop( _SC("Rotation"), &CVehicle::GetRotation, &CVehicle::SetRotation )
-		.Prop( _SC("Speed"), &CVehicle::GetSpeed, &CVehicle::SetSpeed )
-		.Prop( _SC("RelativeSpeed"), &CVehicle::GetRelativeSpeed, &CVehicle::SetRelativeSpeed )
-		.Prop( _SC("TurnSpeed"), &CVehicle::GetTurnSpeed, &CVehicle::SetTurnSpeed )
-		.Prop( _SC("RelativeTurnSpeed"), &CVehicle::GetRelativeTurnSpeed, &CVehicle::SetRelativeTurnSpeed );
+		.Prop( _SC("World"), &CVehicle::GetWorld, &CVehicle::SetWorld, "i" )
+		.Prop( _SC("Immunity"), &CVehicle::GetImmunity, &CVehicle::SetImmunity, "i" )
+		.Prop( _SC("Pos"), &CVehicle::GetPosition, &CVehicle::SetPosition, "u|p|x" )
+		.Prop( _SC("SpawnPos"), &CVehicle::GetSpawnPos, &CVehicle::SetSpawnPos, "u|p|x" )
+		.Prop( _SC("SpawnAngle"), &CVehicle::GetSpawnAngle, &CVehicle::SetSpawnAngle, "f" )
+		.Prop( _SC("RespawnTimer"), &CVehicle::GetIdleRespawnTimer, &CVehicle::SetIdleRespawnTimer, "i" )
+		.Prop( _SC("Health"), &CVehicle::GetHealth, &CVehicle::SetHealth, "f" )
+		.Prop( _SC("Colour1"), &CVehicle::GetColour1, &CVehicle::SetColour1, "i" )
+		.Prop( _SC("Colour2"), &CVehicle::GetColour2, &CVehicle::SetColour2, "i" )
+		.Prop( _SC("Locked"), &CVehicle::GetLocked, &CVehicle::SetLocked, "b" )
+		.Prop( _SC("Damage"), &CVehicle::GetDamage, &CVehicle::SetDamage, "n" )
+		.Prop( _SC("Alarm"), &CVehicle::GetAlarm, &CVehicle::SetAlarm, "b" )
+		.Prop( _SC("Lights"), &CVehicle::GetLights, &CVehicle::SetLights, "b" )
+		.Prop( _SC("Angle"), &CVehicle::GetRotation, &CVehicle::SetRotation, "u|p|x" )
+		.Prop( _SC("Rotation"), &CVehicle::GetRotation, &CVehicle::SetRotation, "u|p|x" )
+		.Prop( _SC("Speed"), &CVehicle::GetSpeed, &CVehicle::SetSpeed, "u|p|x" )
+		.Prop( _SC("RelativeSpeed"), &CVehicle::GetRelativeSpeed, &CVehicle::SetRelativeSpeed, "u|p|x" )
+		.Prop( _SC("TurnSpeed"), &CVehicle::GetTurnSpeed, &CVehicle::SetTurnSpeed, "u|p|x" )
+		.Prop( _SC("RelativeTurnSpeed"), &CVehicle::GetRelativeTurnSpeed, &CVehicle::SetRelativeTurnSpeed, "u|p|x" );
 	
 	// Read-only properties
 	c
@@ -244,22 +244,22 @@ void RegisterVehicle()
 
 	// Functions
 	c
-		.Func( _SC("Delete"), &CVehicle::Delete )
-		.Func( _SC("Respawn"), &CVehicle::Respawn )
-		.Func( _SC("Kill"), &CVehicle::Kill )
-		.Func( _SC("GetPart"), &CVehicle::GetPartStatus )
-		.Func( _SC("SetPart"), &CVehicle::SetPartStatus )
-		.Func( _SC("GetTyre"), &CVehicle::GetTyreStatus )
-		.Func( _SC("SetTyre"), &CVehicle::SetTyreStatus )
-		.Func( _SC("GetTire"), &CVehicle::GetTyreStatus )
-		.Func( _SC("SetTire"), &CVehicle::SetTyreStatus )
-		.Func( _SC("StreamedForPlayer"), &CVehicle::GetStreamedForPlayer )
-		.Func( _SC("GetOccupant"), &CVehicle::GetOccupant )
-		.Func( _SC("SetHandlingData"), &CVehicle::SetHandlingData )
-		.Func( _SC("GetHandlingData"), &CVehicle::GetHandlingData )
-		.Func( _SC("ResetHandlingData"), &CVehicle::ResetHandlingData )
-		.Func( _SC("ResetAllHandling"), &CVehicle::ResetAllHandling )
-		.Func( _SC("IsHandlingSet"), &CVehicle::IsHandlingSet );
+		.Func( _SC("Delete"), &CVehicle::Delete, 1, "t" )
+		.Func( _SC("Respawn"), &CVehicle::Respawn, 1, "t" )
+		.Func( _SC("Kill"), &CVehicle::Kill, 1, "t" )
+		.Func( _SC("GetPart"), &CVehicle::GetPartStatus, 2, "ti" )
+		.Func( _SC("SetPart"), &CVehicle::SetPartStatus, 3, "tii" )
+		.Func( _SC("GetTyre"), &CVehicle::GetTyreStatus, 2, "ti" )
+		.Func( _SC("SetTyre"), &CVehicle::SetTyreStatus, 3, "tii" )
+		.Func( _SC("GetTire"), &CVehicle::GetTyreStatus, 2, "ti" )
+		.Func( _SC("SetTire"), &CVehicle::SetTyreStatus, 3, "tii" )
+		.Func( _SC("StreamedForPlayer"), &CVehicle::GetStreamedForPlayer, 2, "tu|p|x" )
+		.Func( _SC("GetOccupant"), &CVehicle::GetOccupant, 2, "ti" )
+		.Func( _SC("SetHandlingData"), &CVehicle::SetHandlingData, 3, "tif" )
+		.Func( _SC("GetHandlingData"), &CVehicle::GetHandlingData, 2, "ti" )
+		.Func( _SC("ResetHandlingData"), &CVehicle::ResetHandlingData, 2, "ti" )
+		.Func( _SC("ResetAllHandling"), &CVehicle::ResetAllHandling, 1, "t" )
+		.Func( _SC("IsHandlingSet"), &CVehicle::IsHandlingSet, 2, "ti" );
 
 	RootTable(v).Bind( _SC("CVehicle"), c );
 }

@@ -93,9 +93,21 @@ public:
         return *this;
     }
 
+	template<class F>
+	TableBase& Func(const SQChar* name, F method, SQInteger paramCount, const SQChar * params) {
+		BindFunc(name, &method, sizeof(method), SqGlobalFunc(method), paramCount, params);
+		return *this;
+	}
+
     template<class F>
     TableBase& Overload(const SQChar* name, F method) {
         BindOverload(name, &method, sizeof(method), SqGlobalFunc(method), SqOverloadFunc(method), SqGetArgCount(method));
+        return *this;
+    }
+
+    template<class F>
+    TableBase& Overload(const SQChar* name, F method, SQInteger checkParamCount, const char * params) {
+        BindOverload(name, &method, sizeof(method), SqGlobalFunc(method), SqOverloadFunc(method), SqGetArgCount(method), checkParamCount, params);
         return *this;
     }
 

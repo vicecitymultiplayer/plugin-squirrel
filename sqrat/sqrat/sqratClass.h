@@ -149,6 +149,21 @@ public:
         return *this;
     }
 
+    template<class V>
+    Class& Prop(const SQChar* name, V (C::*getMethod)() const, void (C::*setMethod)(const V&), const SQChar * returnType) {
+        if(getMethod != NULL) {
+            // Add the getter
+            BindAccessor(name, &getMethod, sizeof(getMethod), SqMemberFunc(getMethod), ClassType<C>::GetTable(vm));
+        }
+
+        if(setMethod != NULL) {
+            // Add the setter
+            BindAccessor(name, &setMethod, sizeof(setMethod), SqMemberFunc(setMethod), ClassType<C>::SetTable(vm), returnType);
+        }
+
+        return *this;
+    }
+
     /// Bind a class property (variable accessed via a setter and getter)
     template<class V>
     Class& Prop(const SQChar* name, V (C::*getMethod)(), void (C::*setMethod)(V)) {
@@ -160,6 +175,21 @@ public:
         if(setMethod != NULL) {
             // Add the setter
             BindAccessor(name, &setMethod, sizeof(setMethod), SqMemberFunc(setMethod), ClassType<C>::SetTable(vm));
+        }
+
+        return *this;
+    }
+
+    template<class V>
+    Class& Prop(const SQChar* name, V (C::*getMethod)(), void (C::*setMethod)(V), const SQChar * returnType) {
+        if(getMethod != NULL) {
+            // Add the getter
+            BindAccessor(name, &getMethod, sizeof(getMethod), SqMemberFunc(getMethod), ClassType<C>::GetTable(vm));
+        }
+
+        if(setMethod != NULL) {
+            // Add the setter
+            BindAccessor(name, &setMethod, sizeof(setMethod), SqMemberFunc(setMethod), ClassType<C>::SetTable(vm), returnType);
         }
 
         return *this;
@@ -195,9 +225,21 @@ public:
         return *this;
     }
 
+	template<class F>
+    Class& Func(const SQChar* name, F method, SQInteger argCount, const SQChar * arguments) {
+        BindFunc(name, &method, sizeof(method), SqMemberFunc(method), argCount, arguments);
+        return *this;
+    }
+
     template<class F>
     Class& Overload(const SQChar* name, F method) {
         BindOverload(name, &method, sizeof(method), SqMemberFunc(method), SqOverloadFunc(method), SqGetArgCount(method));
+        return *this;
+    }
+
+	template<class F>
+    Class& Overload(const SQChar* name, F method, SQInteger checkParamCount, const SQChar * arguments) {
+        BindOverload(name, &method, sizeof(method), SqMemberFunc(method), SqOverloadFunc(method), SqGetArgCount(method), checkParamCount, arguments);
         return *this;
     }
 
@@ -310,6 +352,29 @@ protected:
 
         // Create the accessor function
         sq_newclosure(vm, func, 1);
+
+        // Add the accessor to the table
+        sq_newslot(vm, -3, false);
+
+        // Pop get/set table
+        sq_pop(vm, 1);
+    }
+
+    inline void BindAccessor(const SQChar* name, void* var, size_t varSize, SQFUNCTION func, HSQOBJECT table, const SQChar * params) {
+        // Push the get or set table
+        sq_pushobject(vm, table);
+        sq_pushstring(vm, name, -1);
+
+        // Push the variable offset as a free variable
+        SQUserPointer varPtr = sq_newuserdata(vm, static_cast<SQUnsignedInteger>(varSize));
+        memcpy(varPtr, var, varSize);
+
+		char szNewParams[32];
+		sprintf( szNewParams, "t%s", params );
+
+        // Create the accessor function
+        sq_newclosure(vm, func, 1);
+		sq_setparamscheck(vm, 2, szNewParams); // Add 1 to account for root table argument
 
         // Add the accessor to the table
         sq_newslot(vm, -3, false);

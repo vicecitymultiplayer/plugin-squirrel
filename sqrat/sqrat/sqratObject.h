@@ -189,6 +189,19 @@ protected:
         sq_pop(vm,1); // pop table
     }
 
+    inline void BindFunc(const SQChar* name, void* method, size_t methodSize, SQFUNCTION func, SQInteger paramCount, const SQChar * params, bool staticVar = false) {
+        sq_pushobject(vm, GetObject());
+        sq_pushstring(vm, name, -1);
+
+        SQUserPointer methodPtr = sq_newuserdata(vm, static_cast<SQUnsignedInteger>(methodSize));
+        memcpy(methodPtr, method, methodSize);
+
+        sq_newclosure(vm, func, 1);
+		sq_setparamscheck(vm, paramCount, params); // Add 1 to account for root table argument
+        sq_newslot(vm, -3, staticVar);
+        sq_pop(vm,1); // pop table
+    }
+
     inline void BindFunc(const SQInteger index, void* method, size_t methodSize, SQFUNCTION func, bool staticVar = false) {
         sq_pushobject(vm, GetObject());
         sq_pushinteger(vm, index);
@@ -197,6 +210,19 @@ protected:
         memcpy(methodPtr, method, methodSize);
 
         sq_newclosure(vm, func, 1);
+        sq_newslot(vm, -3, staticVar);
+        sq_pop(vm,1); // pop table
+    }
+
+    inline void BindFunc(const SQInteger index, void* method, size_t methodSize, SQFUNCTION func, SQInteger paramCount, const SQChar * params, bool staticVar = false) {
+        sq_pushobject(vm, GetObject());
+        sq_pushinteger(vm, index);
+
+        SQUserPointer methodPtr = sq_newuserdata(vm, static_cast<SQUnsignedInteger>(methodSize));
+        memcpy(methodPtr, method, methodSize);
+
+        sq_newclosure(vm, func, 1);
+		sq_setparamscheck(vm, paramCount, params); // Add 1 to account for root table argument
         sq_newslot(vm, -3, staticVar);
         sq_pop(vm,1); // pop table
     }
@@ -219,6 +245,28 @@ protected:
         SQUserPointer methodPtr = sq_newuserdata(vm, static_cast<SQUnsignedInteger>(methodSize));
         memcpy(methodPtr, method, methodSize);
         sq_newclosure(vm, func, 1);
+        sq_newslot(vm, -3, staticVar);
+
+        sq_pop(vm,1); // pop table
+    }
+
+    inline void BindOverload(const SQChar* name, void* method, size_t methodSize, SQFUNCTION func, SQFUNCTION overload, int argCount, SQInteger checkParamCount, const SQChar * params, bool staticVar = false) {
+        string overloadName = SqOverloadName::Get(name, argCount);
+
+        sq_pushobject(vm, GetObject());
+
+        // Bind overload handler
+        sq_pushstring(vm, name, -1);
+        sq_pushstring(vm, name, -1); // function name is passed as a free variable
+        sq_newclosure(vm, overload, 1);
+        sq_newslot(vm, -3, staticVar);
+
+        // Bind overloaded function
+        sq_pushstring(vm, overloadName.c_str(), -1);
+        SQUserPointer methodPtr = sq_newuserdata(vm, static_cast<SQUnsignedInteger>(methodSize));
+        memcpy(methodPtr, method, methodSize);
+        sq_newclosure(vm, func, 1);
+		sq_setparamscheck(vm, checkParamCount, params); // Add 1 to account for root table argument
         sq_newslot(vm, -3, staticVar);
 
         sq_pop(vm,1); // pop table
