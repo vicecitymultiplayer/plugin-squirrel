@@ -244,22 +244,22 @@ void RegisterVehicle()
 
 	// Functions
 	c
-		.Func( _SC("Delete"), &CVehicle::Delete, 0, "" )
-		.Func( _SC("Respawn"), &CVehicle::Respawn, 0, "" )
-		.Func( _SC("Kill"), &CVehicle::Kill, 0, "" )
-		.Func( _SC("GetPart"), &CVehicle::GetPartStatus, 1, "i" )
-		.Func( _SC("SetPart"), &CVehicle::SetPartStatus, 2, "ii" )
-		.Func( _SC("GetTyre"), &CVehicle::GetTyreStatus, 1, "i" )
-		.Func( _SC("SetTyre"), &CVehicle::SetTyreStatus, 2, "ii" )
-		.Func( _SC("GetTire"), &CVehicle::GetTyreStatus, 1, "i" )
-		.Func( _SC("SetTire"), &CVehicle::SetTyreStatus, 2, "ii" )
-		.Func( _SC("StreamedForPlayer"), &CVehicle::GetStreamedForPlayer, 1, "x" )
-		.Func( _SC("GetOccupant"), &CVehicle::GetOccupant, 1, "i" )
-		.Func( _SC("SetHandlingData"), &CVehicle::SetHandlingData, 2, "if" )
-		.Func( _SC("GetHandlingData"), &CVehicle::GetHandlingData, 1, "i" )
-		.Func( _SC("ResetHandlingData"), &CVehicle::ResetHandlingData, 1, "i" )
-		.Func( _SC("ResetAllHandling"), &CVehicle::ResetAllHandling, 0, "" )
-		.Func( _SC("IsHandlingSet"), &CVehicle::IsHandlingSet, 1, "i" );
+		.Func( _SC("Delete"), &CVehicle::Delete, 1, "x" )
+		.Func( _SC("Respawn"), &CVehicle::Respawn, 1, "x" )
+		.Func( _SC("Kill"), &CVehicle::Kill, 1, "x" )
+		.Func( _SC("GetPart"), &CVehicle::GetPartStatus, 2, "xi" )
+		.Func( _SC("SetPart"), &CVehicle::SetPartStatus, 3, "xii" )
+		.Func( _SC("GetTyre"), &CVehicle::GetTyreStatus, 2, "xi" )
+		.Func( _SC("SetTyre"), &CVehicle::SetTyreStatus, 3, "xii" )
+		.Func( _SC("GetTire"), &CVehicle::GetTyreStatus, 2, "xi" )
+		.Func( _SC("SetTire"), &CVehicle::SetTyreStatus, 3, "xii" )
+		.Func( _SC("StreamedForPlayer"), &CVehicle::GetStreamedForPlayer, 2, "xx" )
+		.Func( _SC("GetOccupant"), &CVehicle::GetOccupant, 2, "xi" )
+		.Func( _SC("SetHandlingData"), &CVehicle::SetHandlingData, 3, "xif" )
+		.Func( _SC("GetHandlingData"), &CVehicle::GetHandlingData, 2, "xi" )
+		.Func( _SC("ResetHandlingData"), &CVehicle::ResetHandlingData, 2, "xi" )
+		.Func( _SC("ResetAllHandling"), &CVehicle::ResetAllHandling, 1, "x" )
+		.Func( _SC("IsHandlingSet"), &CVehicle::IsHandlingSet, 2, "xi" );
 
 	RootTable(v).Bind( _SC("CVehicle"), c );
 }
