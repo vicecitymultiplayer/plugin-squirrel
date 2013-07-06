@@ -206,6 +206,23 @@ void CVehicle::SetSpeed( Vector speed ) { functions->SetVehicleSpeed( this->nVeh
 void CVehicle::SetRelativeSpeed( Vector speed ) { functions->SetVehicleRelSpeed( this->nVehicleId, speed.x, speed.y, speed.z ); }
 void CVehicle::SetTurnSpeed( Vector speed ) { functions->SetVehicleTurnSpeed( this->nVehicleId, speed.x, speed.y, speed.z ); }
 void CVehicle::SetRelativeTurnSpeed( Vector speed ) { functions->SetVehicleRelTurnSpeed( this->nVehicleId, speed.x, speed.y, speed.z ); }
+void CVehicle::SetFlatTyres( bool isFlat )
+{
+	if( isFlat )
+	{
+		functions->SetVehicleTyreStatus( this->nVehicleId, 0, 0 );
+		functions->SetVehicleTyreStatus( this->nVehicleId, 1, 0 );
+		functions->SetVehicleTyreStatus( this->nVehicleId, 2, 0 );
+		functions->SetVehicleTyreStatus( this->nVehicleId, 3, 0 );
+	}
+	else
+	{
+		functions->SetVehicleTyreStatus( this->nVehicleId, 0, 1 );
+		functions->SetVehicleTyreStatus( this->nVehicleId, 1, 1 );
+		functions->SetVehicleTyreStatus( this->nVehicleId, 2, 1 );
+		functions->SetVehicleTyreStatus( this->nVehicleId, 3, 1 );
+	}
+}
 
 void RegisterVehicle()
 {
@@ -245,14 +262,17 @@ void RegisterVehicle()
 	// Functions
 	c
 		.Func( _SC("Delete"), &CVehicle::Delete, 1, "x" )
+		.Func( _SC("Remove"), &CVehicle::Delete, 1, "x" )
 		.Func( _SC("Respawn"), &CVehicle::Respawn, 1, "x" )
 		.Func( _SC("Kill"), &CVehicle::Kill, 1, "x" )
+		.Func( _SC("KillEngine"), &CVehicle::Kill, 1, "x" )
 		.Func( _SC("GetPart"), &CVehicle::GetPartStatus, 2, "xi" )
 		.Func( _SC("SetPart"), &CVehicle::SetPartStatus, 3, "xii" )
 		.Func( _SC("GetTyre"), &CVehicle::GetTyreStatus, 2, "xi" )
 		.Func( _SC("SetTyre"), &CVehicle::SetTyreStatus, 3, "xii" )
 		.Func( _SC("GetTire"), &CVehicle::GetTyreStatus, 2, "xi" )
 		.Func( _SC("SetTire"), &CVehicle::SetTyreStatus, 3, "xii" )
+		.Func( _SC("SetFlatTyres"), &CVehicle::SetFlatTyres, 2, "xb" )
 		.Func( _SC("StreamedForPlayer"), &CVehicle::GetStreamedForPlayer, 2, "xx" )
 		.Func( _SC("GetOccupant"), &CVehicle::GetOccupant, 2, "xi" )
 		.Func( _SC("SetHandlingData"), &CVehicle::SetHandlingData, 3, "xif" )

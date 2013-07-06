@@ -57,6 +57,7 @@ class CVehicle
 		void Delete();
 		void Respawn();
 		void Kill();
+		void SetFlatTyres( bool isFlat );
 		int GetPartStatus( int part );
 		void SetPartStatus( int part, int status );
 		int GetTyreStatus( int tyre );

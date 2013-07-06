@@ -1283,30 +1283,6 @@ const SQChar * GetVehicleNameFromModel ( int model )
 	}
 }
 
-// These functions are for compatibility, but will be deprecated
-DWORD GetTime( void )
-{
-	OutputWarning( "GetTime is deprecated and may be removed in the future.\n"
-		"          Please use Squirrel's time() function instead." );
-
-	return static_cast<DWORD>( time( NULL ) );
-}
-
-const SQChar * GetFullTime( void )
-{
-	OutputWarning( "GetFullTime is deprecated and may be removed in the future.\n"
-		"          Please use Squirrel's date() function instead." );
-	
-	char * date = new char[96];
-	time_t rawtime;
-	time( &rawtime );
-
-	struct tm * timeinfo = localtime( &rawtime );
-	strftime( date, 96, "%A, %B %d, %Y, %H:%M:%S %Z", timeinfo );
-
-	return date;
-}
-
 // This function is so convoluted, we have to tiptoe around Sqrat.
 // This had better work.
 SQInteger release_hook( SQUserPointer p, SQInteger size ) { return 1; }
@@ -1447,3 +1423,36 @@ SQInteger NewTimer( HSQUIRRELVM v )
 		}
 	}
 }
+
+// These functions are for compatibility, but will be deprecated
+DWORD GetTime( void )
+{
+	OutputWarning( "GetTime is deprecated and may be removed in the future.\n"
+		"          Please use Squirrel's time() function instead." );
+
+	return static_cast<DWORD>( time( NULL ) );
+}
+
+const SQChar * GetFullTime( void )
+{
+	OutputWarning( "GetFullTime is deprecated and may be removed in the future.\n"
+		"          Please use Squirrel's date() function instead." );
+	
+	char * date = new char[96];
+	time_t rawtime;
+	time( &rawtime );
+
+	struct tm * timeinfo = localtime( &rawtime );
+	strftime( date, 96, "%A, %B %d, %Y, %H:%M:%S %Z", timeinfo );
+
+	return date;
+}
+
+// These functions do nothing and exist for the sole purpose of avoiding compiler errors
+SQInteger SetAmmuWeapon( HSQUIRRELVM v ) { OutputWarning( "SetAmmuWeapon does not exist in 0.4. Ammunations must be scripted." ); return 0; }
+SQInteger IsAmmuWeaponEnabled( HSQUIRRELVM v ) { OutputWarning( "IsAmmuWeaponEnabled does not exist in 0.4. Ammunations must be scripted." ); return 0; }
+SQInteger SetAmmuWeaponEnabled( HSQUIRRELVM v ) { OutputWarning( "SetAmmuWeaponEnabled does not exist in 0.4. Ammunations must be scripted." ); return 0; }
+SQInteger GetWeaponSync( HSQUIRRELVM v ) { OutputWarning( "GetWeaponSync does not exist in 0.4. Rely on the server's anti-hack system instead." ); return 0; }
+SQInteger SetWeaponSync( HSQUIRRELVM v ) { OutputWarning( "SetWeaponSync does not exist in 0.4. Rely on the server's anti-hack system instead." ); return 0; }
+SQInteger GetFallEnabled( HSQUIRRELVM v ) { OutputWarning( "GetFallEnabled has no effect." ); return 0; }
+SQInteger SetFallEnabled( HSQUIRRELVM v ) { OutputWarning( "SetFallEnabled has no effect." ); return 0; }
