@@ -14,7 +14,8 @@ Vector CObject::GetPos()
 	float x, y, z;
 	functions->GetObjectPos( this->nObjectId, &x, &y, &z );
 
-	return Vector( x, y, z );
+	Vector p(x, y, z);
+	return p;
 }
 
 Quaternion CObject::GetRotation()
@@ -22,7 +23,8 @@ Quaternion CObject::GetRotation()
 	float w, x, y, z;
 	functions->GetObjectRot( this->nObjectId, &x, &y, &z, &w );
 
-	return Quaternion( w, x, y, z );
+	Quaternion q( w, x, y, z );
+	return q;
 }
 
 Vector CObject::GetRotationEuler()
@@ -30,12 +32,13 @@ Vector CObject::GetRotationEuler()
 	float x, y, z;
 	functions->GetObjectRotEuler( this->nObjectId, &x, &y, &z );
 
-	return Vector( x, y, z );
+	Vector e( x, y, z );
+	return e;
 }
 
 void CObject::Delete()
 {
-	//PS! this instance will be deleted due to a callback!!!
+	// PS! this instance will be deleted due to a callback!!!
 	functions->DeleteObject( this->nObjectId );
 }
 
