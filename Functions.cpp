@@ -113,10 +113,10 @@ void RegisterGlobals()
 		.Func( _SC("FindVehicle"), FindVehicle, 2, _SC("ti" ) )
 		.Func( _SC("FindPlayer"), FindPlayer, 2, _SC("ti|s" ) )
 
-		.Func( _SC("SetWorldBounds"), SetWorldBounds, 5, _SC("tffff" ) )
+		.Func( _SC("SetWorldBounds"), SetWorldBounds, 5, _SC("tnnnn" ) )
 		.Func( _SC("GetWorldBounds"), GetWorldBounds, 1, _SC("t" ) )
 
-		.Func( _SC("SetWastedSettings"), SetWastedSettings, 8, _SC("tiiffxii" ) )
+		.Func( _SC("SetWastedSettings"), SetWastedSettings, 8, _SC("tnnnnxnn" ) )
 		.Func( _SC("GetWastedSettings"), GetWastedSettings, 1, _SC("t" ) )
 
 		.Func( _SC("HideMapObject"), HideMapObject, 5, _SC("tifff" ) )
