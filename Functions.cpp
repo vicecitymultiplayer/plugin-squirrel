@@ -111,7 +111,9 @@ void RegisterGlobals()
 		.Func( _SC("FindPickup"), FindPickup, 2, _SC("ti" ) )
 		.Func( _SC("FindObject"), FindObject, 2, _SC("ti" ) )
 		.Func( _SC("FindVehicle"), FindVehicle, 2, _SC("ti" ) )
-		.Func( _SC("FindPlayer"), FindPlayer, 2, _SC("ti|s" ) )
+
+		.Overload<CPlayer * (*)(int)>( _SC("FindPlayer"), iFindPlayer )
+		.Overload<CPlayer * (*)(const char *)>( _SC("FindPlayer"), szFindPlayer )
 
 		.Func( _SC("SetWorldBounds"), SetWorldBounds, 5, _SC("tnnnn" ) )
 		.Func( _SC("GetWorldBounds"), GetWorldBounds, 1, _SC("t" ) )
@@ -154,7 +156,6 @@ void RegisterGlobals()
 		.Func( _SC( "GetWeaponID" ), GetWeaponID, 2, _SC("ts" ) )
 		.Func( _SC( "GetTickCount" ), SQGetTickCount, 1, _SC("t" ) )
 
-		.Func( _SC( "InPoly" ), InPoly, 11, _SC("tffffffffff" ) )
 		.Func( _SC( "DistanceFromPoint" ), DistanceFromPoint, 5, _SC("tffff" ) )
 		.Func( _SC( "ReloadScripts" ), ReloadScripts, 1, _SC("t" ) )
 
@@ -164,8 +165,9 @@ void RegisterGlobals()
 		.Func( _SC( "GetTime" ), GetTime, 1, _SC("t" ) )
 		.Func( _SC( "GetFullTime" ), GetFullTime, 1, _SC("t" ) )
 		.Func( _SC( "LoadModule" ), LoadVCMPModule, 2, _SC("ts" ) )
-
-		.SquirrelFunc( _SC( "NewTimer" ), NewTimer );
+		
+		.SquirrelFunc( _SC( "NewTimer" ), NewTimer )
+		.SquirrelFunc( _SC( "InPoly" ), InPoly );
 }
 
 void RegisterConstants()

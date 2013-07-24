@@ -258,12 +258,43 @@ CPickup * FindPickup( int id )
 	return NULL;
 }
 
-CPlayer * FindPlayer( int id )
+CPlayer * iFindPlayer( int id )
 {
 	if( id < MAX_PLAYERS )
 		return pCore->playerMap[id];
 
 	return NULL;
+}
+
+CPlayer * szFindPlayer( const char * name )
+{
+	int pID = 255;
+	char * nameBuf = new char[64];
+	char * lowerName = strdup( name );
+	for( ; *lowerName; ++lowerName ) *lowerName = tolower( *lowerName );
+
+	for( int i = 0; i < functions->GetMaxPlayers(); i++ )
+	{
+		if( functions->IsPlayerConnected( i ) )
+		{
+			functions->GetPlayerName( i, nameBuf, 64 );
+			for( ; *nameBuf; ++nameBuf ) *nameBuf = tolower( *nameBuf );
+
+			if( strstr( nameBuf, lowerName ) )
+			{
+				pID = i;
+				break;
+			}
+		}
+	}
+
+	delete [] nameBuf;
+	free( lowerName );
+
+	if( pID != 255 )
+		return pCore->playerMap[pID];
+	else
+		return NULL;
 }
 
 CObject * FindObject( int id )
@@ -1022,89 +1053,6 @@ DWORD SQGetTickCount( void )
 	#endif
 }
 
-bool InPoly( float x, float y, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4 )
-{
-	float minX = x1;
-	{
-		if( x2 < minX )
-			minX = x2;
-
-		if(	x3 < minX )
-			minX = x3;
-
-		if( x4 < minX )
-			minX = x4;
-	}
-
-	float minY = y1;
-	{
-		if( y2 < minY )
-			minY = y2;
-
-		if( y3 < minY )
-			minY = y3;
-
-		if( y4 < minY )
-			minY = y4;
-	}
-
-	if( x < minX || y < minY )
-		return false;
-
-	// ---------------------------------
-
-	float maxX = x1;
-	{
-		if( x2 > maxX )
-			maxX = x2;
-
-		if( x3 > maxX )
-			maxX = x3;
-
-		if( x4 > maxX )
-			maxX = x4;
-	}
-
-	float maxY = y1;
-	{
-		if( y2 > maxY )
-			maxY = y2;
-
-		if( y3 > maxY )
-			maxY = y3;
-
-		if( y4 > maxY )
-			maxY = y4;
-	}
-
-	if( x > maxX || y > maxY )
-		return false;
-
-	// ---------------------------------
-	float polyX[4], polyY[4];
-	polyX[0] = x1;
-	polyX[1] = x2;
-	polyX[2] = x3;
-	polyX[3] = x4;
-
-	polyY[0] = y1;
-	polyY[1] = y2;
-	polyY[2] = y3;
-	polyY[3] = y4;
-
-	// http://en.wikipedia.org/wiki/Even-odd_rule
-	bool isInPath = false;
-	for( int i = 0, j = 2; i < 3; i++ )
-	{
-		if( ( polyY[i] > y ) != ( polyY[j] > y ) && ( x < ( polyX[j] - polyX[i] ) * ( y - polyY[i] ) / ( polyY[j] - polyY[i] + polyX[i] ) ) )
-			isInPath = !( isInPath );
-
-		j = i;
-	}
-
-	return isInPath;
-}
-
 float DistanceFromPoint( float x1, float y1, float x2, float y2 )
 {
 	float matrixX = pow( (x2 - x1), 2 );
@@ -1168,7 +1116,7 @@ int GetVehicleModelFromName( SQChar * name )
 	char * lowername = strdup( name );
 	for( ; *lowername; ++lowername )
 		*lowername = tolower( *lowername );
-	
+
 	if( lowername )
 	{
 		switch( lowername[0] )
@@ -1564,9 +1512,11 @@ int GetVehicleModelFromName( SQChar * name )
 				break;
 			}
 		}
+
+		free( lowername );
 	}
-	else
-		return -1;
+	
+	return -1;
 }
 
 const SQChar * GetVehicleNameFromModel ( int model )
@@ -1682,6 +1632,55 @@ const SQChar * GetVehicleNameFromModel ( int model )
 		case 236: return "Vice Squad Cheetah";
 		default:  return NULL;
 	}
+}
+
+SQInteger InPoly( HSQUIRRELVM v )
+{
+	if( sq_gettop( v ) >= 9 )
+	{
+		if( sq_gettop( v ) % 2 == 1 )
+		{
+			int paramCount = sq_gettop( v );
+			int i;
+			for( i = 2; i < paramCount; i++ )
+			{
+				if( sq_gettype( v, i ) != OT_FLOAT )
+					return sq_throwerror( v, "Unexpected non-float in InPoly: ALL arguments must be floats" );
+			}
+
+			int vertexCount = ( paramCount - 3 ) / 2;
+			float * xVertices = new float[vertexCount];
+			float * yVertices = new float[vertexCount];
+			for( i = 4; i < paramCount; i += 2 )
+			{
+				sq_getfloat( v, i, &xVertices[i] );
+				sq_getfloat( v, i + 1, &yVertices[i] );
+			}
+
+			float x, y;
+			sq_getfloat( v, 2, &x );
+			sq_getfloat( v, 3, &y );
+
+			// http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
+			// (adapted)
+			bool isInPath = false;
+			int j;
+
+			for( i = 0, j = vertexCount - 1; i < vertexCount; j = i++ )
+			{
+				if( ( ( yVertices[i] > y ) != ( yVertices[j] > y ) )
+					&& ( x < xVertices[j] - xVertices[i] ) * ( y - yVertices[i] ) / ( yVertices[j] - yVertices[i] + xVertices[i] ) )
+					isInPath = !isInPath;
+			}
+
+			sq_pushbool( v, isInPath );
+			return 1;
+			}
+		else
+			return sq_throwerror( v, "Unexpected number of parameters for InPoly: all X vertices must be accompanied by a Y vertex" );
+	}
+	else
+		return sq_throwerror( v, "Unexpected number of parameters for InPoly [float, float, float, float, float, float, float, float, [...]]" );
 }
 
 // This function is so convoluted, we have to tiptoe around Sqrat.
