@@ -48,7 +48,7 @@ bool CTimer::Pulse( float elapsedTime )
 
 							case OT_FLOAT:
 								float fTmp;
-								assert( sizeof( float ) == sizeof( itr->pData ) );
+								assert( sizeof( float ) <= sizeof( itr->pData ) );
 								memcpy( &fTmp, &itr->pData, sizeof( float ) );
 
 								sq_pushfloat( v, fTmp );
@@ -67,8 +67,8 @@ bool CTimer::Pulse( float elapsedTime )
 							case OT_CLOSURE:
 							case OT_NATIVECLOSURE:
 								HSQOBJECT oTmp;
-								assert( sizeof( HSQOBJECT ) == sizeof( itr->pData ) );
-								memcpy( &oTmp, &itr->pData, sizeof( float ) );
+								assert( sizeof( HSQOBJECT ) <= sizeof( itr->pData ) );
+								memcpy( &oTmp, &itr->pData, sizeof( HSQOBJECT ) );
 
 								sq_pushobject( v, oTmp );
 								break;

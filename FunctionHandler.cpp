@@ -4,6 +4,13 @@
 #include "CCore.h"
 #include "main.h"
 
+inline void szlower( char * string )
+{
+	int i;
+	for( i = 0; string[i]; i++ )
+		string[i] = tolower( string[i] );
+}
+
 // Tha core
 extern CCore * pCore;
 
@@ -271,14 +278,14 @@ CPlayer * szFindPlayer( const char * name )
 	int pID = 255;
 	char * nameBuf = new char[64];
 	char * lowerName = strdup( name );
-	for( ; *lowerName; ++lowerName ) *lowerName = tolower( *lowerName );
+	szlower( lowerName );
 
 	for( int i = 0; i < functions->GetMaxPlayers(); i++ )
 	{
 		if( functions->IsPlayerConnected( i ) )
 		{
 			functions->GetPlayerName( i, nameBuf, 64 );
-			for( ; *nameBuf; ++nameBuf ) *nameBuf = tolower( *nameBuf );
+			szlower( nameBuf );
 
 			if( strstr( nameBuf, lowerName ) )
 			{
@@ -1114,8 +1121,7 @@ void ReloadScripts( void )
 int GetVehicleModelFromName( SQChar * name )
 {
 	char * lowername = strdup( name );
-	for( ; *lowername; ++lowername )
-		*lowername = tolower( *lowername );
+	szlower( lowername );
 
 	if( lowername )
 	{
