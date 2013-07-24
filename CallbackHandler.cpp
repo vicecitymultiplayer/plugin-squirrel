@@ -168,7 +168,7 @@ void OnPlayerDeath( int nPlayerId, int nKillerId, int nReason, int nBodyPart )
 			callback = RootTable().GetFunction( _SC("onPlayerKill") );
 
 		if( !callback.IsNull() )
-			callback.Execute<CPlayer *, CPlayer *, int, int>( playerInstance, killerInstance, nReason, nBodyPart );
+			callback.Execute<CPlayer *, CPlayer *, int, int>( killerInstance, playerInstance, nReason, nBodyPart );
 
 		callback.Release();
 	}
