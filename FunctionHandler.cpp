@@ -565,11 +565,11 @@ const SQChar * GetDistrictName ( float x, float y )
 	if( x > -1613.03f && y > 413.218f && x < -213.73f && y < 1677.32f )
 		return "Downtown Vice City";
 	else if( x > 163.656f && y > -351.153f && x < 1246.03f && y < 1398.85f )
-		return "BEACH3";
+		return "Vice Point";
 	else if( x > -103.97f && y > -930.526f && x < 1246.03f && y < -351.153f )
-		return "BEACH2";
+		return "Washington Beach";
 	else if( x > -253.206f && y > -1805.37f && x < 1254.9f && y < -930.526f )
-		return "BEACH1";
+		return "Ocean Beach";
 	else if( x > -1888.21f && y > -1779.61f && x < -1208.21f && y < 230.39f )
 		return "Escobar International Airport";
 	else if( x > -748.206f && y > -818.266f && x < -104.505f && y < -241.467f )
@@ -1165,7 +1165,408 @@ void ReloadScripts( void )
 // <TODO>
 int GetVehicleModelFromName( SQChar * name )
 {
-	return -1;
+	char * lowername = strdup( name );
+	for( ; *lowername; ++lowername )
+		*lowername = tolower( *lowername );
+	
+	if( lowername )
+	{
+		switch( lowername[0] )
+		{
+			case 'l':
+			{
+				if( strlen( lowername ) >= 2 )
+				{
+					if( lowername[1] == 'a' )
+						return 130; // landstalker
+					else if( lowername[1] == 'i' )
+						return 133; // linerunner
+					else if( lowername[1] == 'o' )
+						return 201; // love fist
+				}
+
+				break;
+			}
+
+			case 'i':
+				return 131; // idaho
+
+			case 's':
+			{
+				if( strlen( lowername ) >= 3 )
+				{
+					if( lowername[1] == 't' )
+					{
+						if( lowername[2] == 'i' )
+							return 132; // stinger
+						else if( lowername[2] == 'r' )
+							return 139; // stretch
+						else if( lowername[2] == 'a' )
+							return 169; // stallion
+					}
+					else if( lowername[1] == 'e' )
+					{
+						if( lowername[2] == 'c' )
+							return 158; // securicar
+						else if( lowername[2] == 'a' )
+							return 177; // sea sparrow
+						else if( strlen( lowername ) > 8 )
+							return 174; // sentinel xs
+						else
+							return 135; // sentinel
+					}
+					else if( lowername[1] == 'q' )
+						return 176; // squalo
+					else if( lowername[1] == 'p' )
+					{
+						if( lowername[2] == 'e' )
+							return 182; // speeder
+						else if( lowername[2] == 'a' )
+						{
+							if( strlen( lowername ) >= 4 )
+							{
+								if( lowername[3] == 'r' )
+									return 199; // sparrow
+								else if( lowername[3] == 'n' )
+									return 213; // spand express
+							}
+						}
+					}
+					else if( lowername[1] == 'k' )
+						return 190; // skimmer
+					else if( lowername[1] == 'a' )
+					{
+						if( lowername[2] == 'n' )
+						{
+							if( strlen( lowername ) >= 4 )
+							{
+								if( lowername[3] == 'c' )
+									return 198; // sanchez
+								else if( lowername[3] == 'd' )
+									return 225; // sandking
+							}
+						}
+						else if( lowername[2] == 'b' && strlen(lowername) > 5 )
+							return 206; // sabre turbo
+						else if( lowername[2] == 'b' )
+							return 205; // sabre
+					}
+				}
+
+				break;
+			}
+
+			case 'p':
+			{
+				if( lowername[1] == 'e' )
+					return 134; // perennial
+				else if( lowername[1] == 'o' )
+				{
+					if( strlen( lowername ) > 6 )
+						return 227; // police maverick
+					else
+						return 156; // police
+				}
+				else if( lowername[1] == 'r' )
+					return 160; // predator
+				else if( lowername[1] == 'a' )
+				{
+					if( strlen( lowername ) >= 3 )
+					{
+						if( lowername[2] == 'c' )
+							return 173; // packer
+						else if( lowername[2] == 't' )
+							return 200; // patriot
+					}
+				}
+				else if( lowername[1] == 'i' )
+					return 178; // pizza boy
+				else if( lowername[1] == 'c' )
+					return 191; // pcj-600
+
+				break;
+			}
+
+			case 'r':
+			{
+				if( lowername[1] == 'i' )
+					return 136; // rio
+				else if( lowername[1] == 'h' )
+					return 162; // rhino
+				else if( lowername[1] == 'u' )
+					return 170; // rumpo
+				else if( lowername[1] == 'c' )
+				{
+					if( lowername[2] == 'b' )
+					{
+						if( strlen( lowername ) >= 5 )
+						{
+							if( lowername[4] == 'n' )
+								return 171; // rcbandit
+							else if( lowername[4] == 'r' )
+								return 194; // rcbaron
+						}
+					}
+					else if( lowername[2] == 'r' )
+						return 195; // rcraider
+					else if( lowername[2] == 'g' )
+						return 231;
+				}
+				else if( lowername[1] == 'o' )
+					return 172; // romero's hearse
+				else if( lowername[1] == 'e' )
+				{
+					if( strlen( lowername ) >= 3 )
+					{
+						if( lowername[2] == 'e' )
+							return 183; // reefer
+						else if( lowername[2] == 'g' )
+							return 209; // regina
+					}
+				}
+				else if( lowername[1] == 'a' )
+					return 219;
+
+				break;
+			}
+
+			case 'f':
+			{
+				if( lowername[1] == 'i' )
+					return 137; // firetruck
+				else if( lowername[1] == 'b' )
+				{
+					if( strlen( lowername ) >= 5 )
+					{
+						if( lowername[4] == 'w' )
+							return 147; // fbi washington
+						else if( lowername[4] == 'r' )
+							return 220; // fbi rancher
+					}
+				}
+				else if( lowername[1] == 'l' )
+					return 185; // flatbed
+				else if( lowername[1] == 'a' )
+					return 192; // faggio
+				else if( lowername[1] == 'r' )
+					return 193; // freeway
+
+				break;
+			}
+
+			case 't':
+			{
+				if( lowername[1] == 'r' )
+				{
+					if( strlen( lowername ) >= 3 )
+					{
+						if( lowername[2] == 'a' )
+							return 138; // trashmaster
+						else if( lowername[2] == 'o' )
+							return 184; // tropic
+					}
+				}
+				else if( lowername[1] == 'o' )
+					return 189; // top fun
+
+				break;
+			}
+
+			case 'm':
+			{
+				if( lowername[1] == 'a' )
+				{
+					if( strlen( lowername ) >= 3 )
+					{
+						if( lowername[2] == 'n' )
+							return 140; // manana
+						else if( lowername[2] == 'r' )
+							return 214; // marquis
+						else if( lowername[2] == 'v' )
+							return 217; // maverick
+					}
+				}
+				else if( lowername[1] == 'u' )
+					return 144; // mule
+				else if( lowername[1] == 'r' )
+					return 153; // mr. whoopee
+				else if( lowername[1] == 'e' )
+					return 230; // mesa grande
+
+				break;
+			}
+
+			case 'c':
+			{
+				if( lowername[1] == 'h' )
+					return 145; // cheetah
+				else if( lowername[1] == 'u' )
+				{
+					if( strlen( lowername ) >= 7 )
+					{
+						if( lowername[6] == 'h' )
+							return 164; // cuban hermes
+						else if( lowername[6] == 'j' )
+							return 223; // cuban jetmax
+					}
+				}
+				else if( lowername[1] == 'o' )
+				{
+					if( strlen( lowername ) >= 4 )
+					{
+						if( lowername[3] == 'c' )
+							return 167; // coach
+						else if( lowername[3] == 's' )
+							return 202; // coast guard
+					}
+					else if( strlen( lowername ) >= 3 && lowername[2] == 'm' )
+						return 210; // comet
+				}
+				else if( lowername[1] == 'a' )
+				{
+					if( strlen( lowername ) >= 3 )
+					{
+						if( lowername[2] == 'b' )
+							return 168; // cabbie
+						else if( lowername[2] == 'd' )
+							return 187; // caddy
+					}
+				}
+
+				break;
+			}
+
+			case 'a':
+			{
+				if( lowername[1] == 'm' )
+					return 146; // ambulance
+				else if( lowername[1] == 'n' )
+					return 166; // angel
+				else if( lowername[1] == 'd' )
+					return 175; // admiral
+				else if( lowername[1] == 'i' )
+					return 180; // airtrain
+
+				break;
+			}
+
+			case 'e':
+			{
+				if( lowername[1] == 's' )
+					return 149; // esperanto
+				else if( lowername[1] == 'n' )
+					return 157; // enforcer
+
+				break;
+			}
+
+			case 'w':
+			{
+				if( strlen( lowername ) >= 3 )
+				{
+					if( lowername[2] == 's' )
+						return 151; // washington
+					else if( lowername[2] == 'l' )
+						return 208; // walton
+				}
+
+				break;
+			}
+
+			case 'b':
+			{
+				if( lowername[1] == 'o' )
+				{
+					if( strlen( lowername ) >= 3 )
+					{
+						if( lowername[2] == 'b' )
+							return 152; // bobcat
+						else if( lowername[2] == 'x' )
+							return 228; // boxville
+					}
+				}
+				else if( lowername[1] == 'a' )
+				{
+					if( strlen( lowername ) >= 3 )
+					{
+						if( lowername[2] == 'r' )
+							return 163; // barracks ol
+						else if( lowername[2] == 'g' )
+							return 215; // baggage handler
+					}
+				}
+				else if( lowername[1] == 'l' )
+					return 226; // blista compact
+				else if( lowername[1] == 'e' )
+					return 229; // benson
+
+				break;
+			}
+
+			case 'h':
+			{
+				if( lowername[1] == 'u' )
+					return 155; // hunter
+				else if( lowername[1] == 'e' )
+					return 165; // helicopter
+				else if( lowername[1] == 'o' )
+					return 224; // hotring racer
+
+				break;
+			}
+
+			case 'g':
+			{
+				if( lowername[1] == 'a' )
+					return 179; // gang burrito
+				else if( lowername[1] == 'l' )
+					return 196; // glendale
+				else if( lowername[1] == 'r' )
+					return 222; // greenwood
+
+				break;
+			}
+
+			case 'd':
+			{
+				if( lowername[1] == 'e' )
+					return 211; // deluxo
+				else if( lowername[1] == 'i' )
+					return 203; // dinghy
+
+				break;
+			}
+
+			case 'y':
+				return 186; // yankee
+
+			case 'z':
+				return 188; // zebra cab
+
+			case 'k':
+				return 216; // kaufman cab
+
+			case 'v':
+			{
+				if( lowername[1] == 'c' )
+					return 218; // vcn maverick
+				else if( lowername[1] == 'i' )
+				{
+					if( strlen( lowername ) >= 3 )
+					{
+						if( lowername[2] == 'r' )
+							return 221; // virgo
+						else if( lowername[2] == 'c' )
+							return 236; // vicechee
+					}
+				}
+
+				break;
+			}
+		}
+	}
+	else
+		return -1;
 }
 
 const SQChar * GetVehicleNameFromModel ( int model )
