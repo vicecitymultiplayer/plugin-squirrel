@@ -265,49 +265,6 @@ CPickup * FindPickup( int id )
 	return NULL;
 }
 
-SQInteger FindPlayer( HSQUIRRELVM v )
-{
-}
-
-CPlayer * iFindPlayer( int id )
-{
-	if( id < MAX_PLAYERS )
-		return pCore->playerMap[id];
-
-	return NULL;
-}
-
-CPlayer * szFindPlayer( const char * name )
-{
-	int pID = 255;
-	char * nameBuf = new char[64];
-	char * lowerName = strdup( name );
-	szlower( lowerName );
-
-	for( int i = 0; i < functions->GetMaxPlayers(); i++ )
-	{
-		if( functions->IsPlayerConnected( i ) )
-		{
-			functions->GetPlayerName( i, nameBuf, 64 );
-			szlower( nameBuf );
-
-			if( strstr( nameBuf, lowerName ) )
-			{
-				pID = i;
-				break;
-			}
-		}
-	}
-
-	delete [] nameBuf;
-	free( lowerName );
-
-	if( pID != 255 )
-		return pCore->playerMap[pID];
-	else
-		return NULL;
-}
-
 CObject * FindObject( int id )
 {
 	if( id < MAX_OBJECTS )
@@ -1644,6 +1601,99 @@ const SQChar * GetVehicleNameFromModel ( int model )
 	}
 }
 
+SQInteger release_hook( SQUserPointer p, SQInteger size ) { return 1; }
+SQInteger FindPlayer( HSQUIRRELVM v )
+{
+	if( sq_gettop( v ) >= 2 )
+	{
+		CPlayer * pPlayer = NULL;
+		if( sq_gettype( v, 2 ) == OT_INTEGER )
+		{
+			SQInteger playerID;
+			sq_getinteger( v, 2, &playerID );
+
+			if( playerID < MAX_PLAYERS )
+				pPlayer = pCore->playerMap[playerID];
+			else
+			{
+				sq_pushnull( v );
+				return 1;
+			}
+		}
+		else if( sq_gettype( v, 2 ) == OT_STRING )
+		{
+			const char * pName;
+			sq_getstring( v, 2, &pName );
+
+			int pID = 255;
+			int i;
+
+			char * lowerName = strdup( pName );
+			szlower( lowerName );
+			
+			char * nameBuf = new char[64];
+			for( i = 0; i < functions->GetMaxPlayers(); i++ )
+			{
+				if( functions->IsPlayerConnected( i ) )
+				{
+					functions->GetPlayerName( i, nameBuf, 64 );
+					szlower( nameBuf );
+
+					if( strstr( nameBuf, lowerName ) )
+					{
+						pID = i;
+						break;
+					}
+				}
+			}
+
+			delete [] nameBuf;
+			nameBuf = NULL;
+			free( lowerName );
+
+			if( pID == 255 )
+			{
+				sq_pushnull( v );
+				return 1;
+			}
+			else
+				pPlayer = pCore->playerMap[pID];
+		}
+		else
+			return sq_throwerror( v, "Unexpected argument in FindPlayer: must be integer or string" );
+
+		if( pPlayer == NULL )
+		{
+			sq_pushnull( v );
+			return 1;
+		}
+		else
+		{
+			// Push a CPlayer instance
+			SQInteger stack = sq_gettop( v );
+			sq_pushroottable( v );
+			sq_pushstring( v, "CPlayer", -1 );
+			sq_rawget( v, -2 );
+
+			sq_createinstance( v, -1 );
+			sq_remove( v, -3 );
+			sq_remove( v, -2 );
+
+			if( SQ_FAILED( sq_setinstanceup( v, -1, pPlayer ) ) )
+			{
+				// Well, shit.
+				sq_settop( v, stack );
+				return sq_throwerror( v, "Failed to push instance of CPlayer" );
+			}
+			
+			sq_setreleasehook( v, -1, release_hook );
+			return 1;
+		}
+	}
+	else
+		return sq_throwerror( v, "Unexpected number of parameters for FindPlayer [integer or string]" );
+}
+
 SQInteger InPoly( HSQUIRRELVM v )
 {
 	if( sq_gettop( v ) >= 9 )
@@ -1695,7 +1745,6 @@ SQInteger InPoly( HSQUIRRELVM v )
 
 // This function is so convoluted, we have to tiptoe around Sqrat.
 // This had better work.
-SQInteger release_hook( SQUserPointer p, SQInteger size ) { return 1; }
 SQInteger NewTimer( HSQUIRRELVM v )
 {
 	// char * pFuncName, float interval, int maxPulses
