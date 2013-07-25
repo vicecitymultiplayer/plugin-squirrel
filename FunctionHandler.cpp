@@ -265,6 +265,10 @@ CPickup * FindPickup( int id )
 	return NULL;
 }
 
+SQInteger FindPlayer( HSQUIRRELVM v )
+{
+}
+
 CPlayer * iFindPlayer( int id )
 {
 	if( id < MAX_PLAYERS )

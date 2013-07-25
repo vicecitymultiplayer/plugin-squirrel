@@ -139,8 +139,6 @@ CPickup * CreatePickupExpanded   ( int model, int world, int quantity, float x, 
 CObject * CreateObjectExpanded   ( int model, int world, float x, float y, float z, int alpha );
 
 CPickup * FindPickup   ( int id );
-CPlayer * iFindPlayer  ( int id );
-CPlayer * szFindPlayer ( const char * name );
 CObject * FindObject   ( int id );
 CVehicle * FindVehicle ( int id );
 
@@ -191,6 +189,7 @@ int GetVehicleModelFromName ( SQChar * name );
 const SQChar * GetVehicleNameFromModel ( int model );
 void LoadVCMPModule( const SQChar * name );
 
+SQInteger FindPlayer( HSQUIRRELVM v );
 SQInteger InPoly( HSQUIRRELVM v );
 SQInteger NewTimer( HSQUIRRELVM v );
 
