@@ -29,15 +29,15 @@ void CVehicle::SetHealth( float health ) { functions->SetVehicleHealth( this->nV
 
 void CVehicle::SetColour1( int colour1 )
 {
-	int col2;
-	functions->GetVehicleColour( this->nVehicleId, NULL, &col2 );
+	int oldCol1, col2;
+	functions->GetVehicleColour( this->nVehicleId, &oldCol1, &col2 );
 	functions->SetVehicleColour( this->nVehicleId, colour1, col2 );
 }
 
 void CVehicle::SetColour2( int colour2 )
 {
-	int col1;
-	functions->GetVehicleColour( this->nVehicleId, &col1, NULL );
+	int col1, oldCol2;
+	functions->GetVehicleColour( this->nVehicleId, &col1, &oldCol2 );
 	functions->SetVehicleColour( this->nVehicleId, col1, colour2 );
 }
 
@@ -79,16 +79,16 @@ float CVehicle::GetHealth() { return functions->GetVehicleHealth( this->nVehicle
 
 int CVehicle::GetColour1()
 {
-	int col1;
-	functions->GetVehicleColour( this->nVehicleId, &col1, NULL );
+	int col1, col2;
+	functions->GetVehicleColour( this->nVehicleId, &col1, &col2 );
 
 	return col1;
 }
 
 int CVehicle::GetColour2()
 {
-	int col2;
-	functions->GetVehicleColour( this->nVehicleId, NULL, &col2 );
+	int col1, col2;
+	functions->GetVehicleColour( this->nVehicleId, &col1, &col2 );
 
 	return col2;
 }
