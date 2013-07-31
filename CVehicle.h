@@ -70,6 +70,10 @@ class CVehicle
 		void ResetAllHandling();
 		bool IsHandlingSet( int rule );
 
+		void AddVehicleSpeed( Vector speed );
+		void AddVehicleTurnSpeed( Vector speed );
+		void AddVehicleRelTurnSpeed( Vector speed );
+
 	public:
 		bool isOurs;
 		int nVehicleId;

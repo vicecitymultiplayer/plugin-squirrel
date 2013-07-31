@@ -186,6 +186,7 @@ extern "C" EXPORT unsigned int VcmpPluginInit( PluginFuncs* givenPluginFuncs, Pl
 	callbacks->OnObjectBump         = OnObjectBump;
 
 	callbacks->OnEntityPoolChange	= OnEntityPoolChange;
+	callbacks->OnKeyBindDown        = OnKeyBindDown;
 
 	// Done!
 	return 1;

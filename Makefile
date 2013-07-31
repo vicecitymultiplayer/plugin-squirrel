@@ -1,15 +1,16 @@
 Module_objs = CallbackHandler.o CCore.o CObject.o ConsoleUtils.o CPickup.o CPlayer.o CTimer.o CVehicle.o Exports.o FunctionHandler.o Functions.o main.o
 
 CC = g++
-CFLAGS = -Wall -O2 -DNDEBUG -fPIC -I. -I./sqrat -I./squirrel -I./sqrat/sqrat
+CFLAGS = -fpermissive -Wall -O2 -DNDEBUG -fPIC -I. -I./sqrat -I./squirrel -I./sqrat/sqrat
 SQLIB = squirrelsrc/lib/
+LDFLAGS = -Wl,-Bsymbolic
 
 all: squirrel04.so
 
 default: all
 
 squirrel04.so: $(Module_objs)
-	$(CC) -o $@ $(Module_objs) $(SQLIB)libsqstdlib.a $(SQLIB)libsquirrel.a -shared -s
+	$(CC) -o $@ $(Module_objs) $(SQLIB)libsqstdlib.a $(SQLIB)libsquirrel.a -shared -s $(LDFLAGS)
 
 CallbackHandler.o: CallbackHandler.cpp CallbackHandler.h
 	$(CC) $(CFLAGS) -c CallbackHandler.cpp -o $@

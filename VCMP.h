@@ -124,6 +124,13 @@ typedef int (*PFunc_HideMapObject) (int nModelId, int nTenthX, int nTenthY, int 
 typedef int (*PFunc_ShowMapObject) (int nModelId, int nTenthX, int nTenthY, int nTenthZ);
 typedef int (*PFunc_ShowAllMapObjects) (void);
 
+//KEYBINDS
+typedef int (*PFunc_GetKeyBindUnusedSlot) (void);
+typedef unsigned int (*PFunc_GetKeyBindData) (int nBindId, unsigned int* pbOnRelease, int* nKeyOne, int* pnKeyTwo, int* pnKeyThree);
+typedef unsigned int (*PFunc_RegisterKeyBind) (int nBindId, unsigned int bOnRelease, int nKeyOne, int nKeyTwo, int nKeyThree);
+typedef unsigned int (*PFunc_RemoveKeyBind) (int nBindId);
+typedef void (*PFunc_RemoveAllKeyBinds) (void);
+
 //CLASSES
 typedef int (*PFunc_SetUseClasses) (unsigned int bToggle);
 typedef unsigned int (*PFunc_GetUseClasses) (void);
@@ -190,7 +197,6 @@ typedef int (*PFunc_GetPlayerSpeed) (int nPlayerId, float* pfSpeedX, float* pfSp
 typedef int (*PFunc_AddPlayerSpeed) (int nPlayerId, float fSpeedX, float fSpeedY, float fSpeedZ);
 typedef int (*PFunc_SetPlayerHeading) (int nPlayerId, float fAngleZ);
 typedef float (*PFunc_GetPlayerHeading) (int nPlayerId);
-typedef int (*PFunc_SetPlayerInterior) (int nPlayerId, int nInterior);
 typedef int (*PFunc_SetPlayerAlpha) (int nPlayerId, int nAlpha, int nFadeTime);
 typedef int (*PFunc_GetPlayerAlpha) (int nPlayerId);
 
@@ -441,6 +447,12 @@ struct PluginFuncs {
 	PFunc_ShowMapObject					ShowMapObject;
 	PFunc_ShowAllMapObjects				ShowAllMapObjects;
 
+	PFunc_GetKeyBindUnusedSlot			GetKeyBindUnusedSlot;
+	PFunc_GetKeyBindData				GetKeyBindData;
+	PFunc_RegisterKeyBind				RegisterKeyBind;
+	PFunc_RemoveKeyBind					RemoveKeyBind;
+	PFunc_RemoveAllKeyBinds				RemoveAllKeyBinds;
+
 	PFunc_SetUseClasses					SetUseClasses;
 	PFunc_GetUseClasses					GetUseClasses;
 	PFunc_GetPlayerClass				GetPlayerClass;
@@ -502,7 +514,6 @@ struct PluginFuncs {
 	PFunc_AddPlayerSpeed				AddPlayerSpeed;
 	PFunc_SetPlayerHeading				SetPlayerHeading;
 	PFunc_GetPlayerHeading				GetPlayerHeading;
-	PFunc_SetPlayerInterior				SetPlayerInterior;
 	PFunc_GetPlayerAlpha				GetPlayerAlpha;
 	PFunc_SetPlayerAlpha				SetPlayerAlpha;
 
@@ -688,6 +699,8 @@ typedef int (*PCback_OnPrivateMessage) (int nPlayerId, int nTargetId, const char
 typedef int (*PCback_OnInternalCommand) (unsigned int uCmdType, const char* pszText);
 typedef int (*PCback_OnLoginAttempt) (char* pszPlayerName, const char* pszUserPassword, const char* pszIpAddress);
 typedef void (*PCback_OnEntityPoolChange) (int nEntityType, int nEntityId, unsigned int bDeleted);
+typedef void (*PCback_OnKeyBindDown) (int nPlayerId, int nBindId);
+typedef void (*PCback_OnKeyBindUp) (int nPlayerId, int nBindId);
 
 struct PluginCallbacks {
 	unsigned int				uStructSize;
@@ -721,4 +734,7 @@ struct PluginCallbacks {
 	PCback_OnInternalCommand	OnInternalCommand;
 	PCback_OnLoginAttempt		OnLoginAttempt;
 	PCback_OnEntityPoolChange	OnEntityPoolChange;
+	PCback_OnKeyBindDown		OnKeyBindDown;
+	PCback_OnKeyBindUp			OnKeyBindUp;
+
 };

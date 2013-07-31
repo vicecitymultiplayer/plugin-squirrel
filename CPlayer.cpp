@@ -172,7 +172,7 @@ void CPlayer::AddSpeed( Vector speed )
 	functions->AddPlayerSpeed( this->nPlayerId, x, y, z );
 }
 
-void CPlayer::SetInterior( int interior ) { functions->SetPlayerInterior( this->nPlayerId, interior ); }
+void CPlayer::SetInterior( int interior ) { OutputWarning( "Player.SetInterior is deprecated. Teleport them to the interior loc instead." ); }
 void CPlayer::Eject() { functions->RemovePlayerFromVehicle( this->nPlayerId ); }
 void CPlayer::SetWantedLevel( int wantedLevel ) { functions->SetPlayerWantedLevel( this->nPlayerId, wantedLevel ); }
 

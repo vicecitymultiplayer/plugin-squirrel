@@ -442,11 +442,11 @@ void BanPlayer          ( CPlayer * player )
 		functions->BanPlayer( player->nPlayerId );
 }
 
-void Message            ( const SQChar * message ) { functions->SendClientMessage( -1, 0x0b5fa5ff, message ); }
+void Message            ( const SQChar * message ) { functions->SendClientMessage( -1, 0x0b5fa5ff, "%s", message ); }
 void MessagePlayer      ( const SQChar * message, CPlayer * player )
 {
 	if( player != NULL )
-		functions->SendClientMessage( player->nPlayerId, 0x0b5fa5ff, message );
+		functions->SendClientMessage( player->nPlayerId, 0x0b5fa5ff, "%s", message );
 }
 
 void MessageAllExcept   ( const SQChar * message, CPlayer * player )
@@ -456,7 +456,7 @@ void MessageAllExcept   ( const SQChar * message, CPlayer * player )
 		for( int i = 0; i < MAX_PLAYERS; i++ )
 		{
 			if( functions->IsPlayerConnected( i ) )
-				functions->SendClientMessage( i, 0x0b5fa5ff, message );
+				functions->SendClientMessage( i, 0x0b5fa5ff, "%s", message );
 		}
 	}
 }
@@ -762,7 +762,7 @@ void LoadVCMPModule( const SQChar * name )
 	OutputWarning( "LoadModule() cannot be used by scripts. Specify plugins in server.cfg" );
 }
 
-char GetWeaponID( const SQChar * name )
+int GetWeaponID( const SQChar * name )
 {
 	if( name == NULL || strlen(name) < 1 )
 		return 0;
@@ -1004,7 +1004,7 @@ char GetWeaponID( const SQChar * name )
 
 		// Default to fists
 		default:
-			return 0;
+			return 255;
 	}
 }
 
@@ -1027,6 +1027,16 @@ float DistanceFromPoint( float x1, float y1, float x2, float y2 )
 	float matrixY = pow( (y2 - y1), 2 );
 	float matrixF = sqrt( matrixX + matrixY );
 	return matrixF;
+}
+
+// <TODO>
+// This is a crude implementation to be replaced later.
+int BindKey( int key )
+{
+	int keyslot = functions->GetKeyBindUnusedSlot();
+	functions->RegisterKeyBind( keyslot, 0, key, 0, 0 );
+
+	return keyslot;
 }
 
 void ReloadScripts( void )
@@ -1078,7 +1088,6 @@ void ReloadScripts( void )
 		OutputError( "The server refused to reload. Is this an infinite loop?" );
 }
 
-// <TODO>
 int GetVehicleModelFromName( SQChar * name )
 {
 	char * lowername = strdup( name );
@@ -1670,23 +1679,7 @@ SQInteger FindPlayer( HSQUIRRELVM v )
 		else
 		{
 			// Push a CPlayer instance
-			SQInteger stack = sq_gettop( v );
-			sq_pushroottable( v );
-			sq_pushstring( v, "CPlayer", -1 );
-			sq_rawget( v, -2 );
-
-			sq_createinstance( v, -1 );
-			sq_remove( v, -3 );
-			sq_remove( v, -2 );
-
-			if( SQ_FAILED( sq_setinstanceup( v, -1, pPlayer ) ) )
-			{
-				// Well, shit.
-				sq_settop( v, stack );
-				return sq_throwerror( v, "Failed to push instance of CPlayer" );
-			}
-			
-			sq_setreleasehook( v, -1, release_hook );
+			Sqrat::ClassType<CPlayer>().PushInstance( v, pPlayer );
 			return 1;
 		}
 	}
@@ -1859,23 +1852,8 @@ SQInteger NewTimer( HSQUIRRELVM v )
 			pTimer->maxNumberOfPulses = maxPulses;
 
 			// Go through hell and back to push a CTimer instance
-			SQInteger stack = sq_gettop( v );
-			sq_pushroottable( v );
-			sq_pushstring( v, "CTimer", -1 );
-			sq_rawget( v, -2 );
-
-			sq_createinstance( v, -1 );
-			sq_remove( v, -3 );
-			sq_remove( v, -2 );
-
-			if( SQ_FAILED( sq_setinstanceup( v, -1, pTimer ) ) )
-			{
-				// Well, shit.
-				sq_settop( v, stack );
-				return sq_throwerror( v, "Failed to push instance of CTimer" );
-			}
-			
-			sq_setreleasehook( v, -1, release_hook );
+			// LOL JK
+			Sqrat::ClassType<CTimer>().PushInstance( v, pTimer );
 
 			pCore->AddTimer(pTimer);
 			return 1;

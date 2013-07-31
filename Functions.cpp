@@ -165,7 +165,9 @@ void RegisterGlobals()
 		
 		.SquirrelFunc( _SC( "FindPlayer" ), FindPlayer )
 		.SquirrelFunc( _SC( "NewTimer" ), NewTimer )
-		.SquirrelFunc( _SC( "InPoly" ), InPoly );
+		.SquirrelFunc( _SC( "InPoly" ), InPoly )
+		
+		.Func( _SC( "BindKey" ), BindKey );
 }
 
 void RegisterConstants()

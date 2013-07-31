@@ -28,11 +28,11 @@
     <Filter Include="Header Files\Utils">
       <UniqueIdentifier>{c8fcafe8-890f-4736-9afd-5ad601ea4b4a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Utils">
-      <UniqueIdentifier>{793ea985-5ce9-439e-a7fe-1620031b6120}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Sqrat">
       <UniqueIdentifier>{35aec0a9-3d68-42d0-ad20-78fa44edcf00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Handlers\Utils">
+      <UniqueIdentifier>{793ea985-5ce9-439e-a7fe-1620031b6120}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -159,16 +159,16 @@
       <Filter>Source Files\Handlers\Classes</Filter>
     </ClCompile>
     <ClCompile Include="CCore.cpp">
-      <Filter>Source Files\Utils</Filter>
+      <Filter>Source Files\Handlers\Utils</Filter>
     </ClCompile>
     <ClCompile Include="ConsoleUtils.cpp">
-      <Filter>Source Files\Utils</Filter>
+      <Filter>Source Files\Handlers\Utils</Filter>
     </ClCompile>
     <ClCompile Include="Functions.cpp">
-      <Filter>Source Files\Utils</Filter>
+      <Filter>Source Files\Handlers\Utils</Filter>
     </ClCompile>
     <ClCompile Include="Exports.cpp">
-      <Filter>Source Files\Utils</Filter>
+      <Filter>Source Files\Handlers\Utils</Filter>
     </ClCompile>
     <ClCompile Include="CTimer.cpp">
       <Filter>Source Files\Handlers\Classes</Filter>

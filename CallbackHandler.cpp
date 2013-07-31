@@ -546,3 +546,12 @@ void OnEntityPoolChange (int nEntityType, int nEntityId, unsigned int bDeleted) 
 		}
 	}
 }
+
+void OnKeyBindDown(int nPlayerId, int nBindId)
+{
+	Function callback = RootTable().GetFunction( _SC("onKeyDown") );
+	if( !callback.IsNull() )
+		callback.Execute<CPlayer *, int>( pCore->playerMap[nPlayerId], nBindId );
+		
+	callback.Release();
+}

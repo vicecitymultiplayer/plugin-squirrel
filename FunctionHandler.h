@@ -179,7 +179,7 @@ void SendPlayerMessage  ( CPlayer * playerToFake, CPlayer * playerTo, const SQCh
 const SQChar * GetWeaponName   ( int weaponID );
 const SQChar * GetDistrictName ( float x, float y );
 const SQChar * GetSkinName     ( int skinID );
-char     GetWeaponID     ( const SQChar * name );
+int      GetWeaponID     ( const SQChar * name );
 DWORD    SQGetTickCount  ( void );
 
 float DistanceFromPoint ( float x1, float y1, float x2, float y2 );
@@ -196,3 +196,6 @@ SQInteger NewTimer( HSQUIRRELVM v );
 // These functions are for compatibility, but will be deprecated
 DWORD    GetTime         ( void );
 const SQChar * GetFullTime     ( void );
+
+// <TODO>
+int BindKey( int key );

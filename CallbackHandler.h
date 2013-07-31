@@ -37,12 +37,13 @@ void OnPlayerEndTyping     ( int nPlayerId );
 int  OnLoginAttempt        ( char* playerName, const char* password, const char* pszIpAddress );
 void OnNameChangeable      ( char * playerName, char ** namePtr );
 
-void OnObjectShot( int nObjectId, int nPlayerId, int nWeapon );
-void OnObjectBump( int nObjectId, int nPlayerId );
+void OnObjectShot          ( int nObjectId, int nPlayerId, int nWeapon );
+void OnObjectBump          ( int nObjectId, int nPlayerId );
 
 int  OnInternalCommand     ( unsigned int uCmdType, const char* pszText );
 
-void OnEntityPoolChange      (int nEntityType, int nEntityId, unsigned int bDeleted);
+void OnEntityPoolChange    ( int nEntityType, int nEntityId, unsigned int bDeleted );
+void OnKeyBindDown         ( int nPlayerId, int nBindId );
 
 // Define some structures for tracking player data
 struct savedPlayerData

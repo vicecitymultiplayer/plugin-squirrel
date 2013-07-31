@@ -224,6 +224,21 @@ void CVehicle::SetFlatTyres( bool isFlat )
 	}
 }
 
+void CVehicle::AddVehicleSpeed( Vector speed )
+{
+	functions->AddVehicleSpeed( this->nVehicleId, speed.x, speed.y, speed.z );
+}
+
+void CVehicle::AddVehicleTurnSpeed( Vector speed )
+{
+	functions->AddVehicleTurnSpeed( this->nVehicleId, speed.x, speed.y, speed.z );
+}
+
+void CVehicle::AddVehicleRelTurnSpeed( Vector speed )
+{
+	functions->AddVehicleRelTurnSpeed( this->nVehicleId, speed.x, speed.y, speed.z );
+}
+
 void RegisterVehicle()
 {
 	Class <CVehicle> c(v);
@@ -279,7 +294,10 @@ void RegisterVehicle()
 		.Func( _SC("GetHandlingData"), &CVehicle::GetHandlingData, 2, "xi" )
 		.Func( _SC("ResetHandlingData"), &CVehicle::ResetHandlingData, 2, "xi" )
 		.Func( _SC("ResetAllHandling"), &CVehicle::ResetAllHandling, 1, "x" )
-		.Func( _SC("IsHandlingSet"), &CVehicle::IsHandlingSet, 2, "xi" );
+		.Func( _SC("IsHandlingSet"), &CVehicle::IsHandlingSet, 2, "xi" )
+		.Func( _SC("AddSpeed"), &CVehicle::AddVehicleSpeed, 2, "xx" )
+		.Func( _SC("AddTurnSpeed"), &CVehicle::AddVehicleTurnSpeed, 2, "xx" )
+		.Func( _SC("AddRelTurnSpeed"), &CVehicle::AddVehicleRelTurnSpeed, 2, "xx" );
 
 	RootTable(v).Bind( _SC("CVehicle"), c );
 }
