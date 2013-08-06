@@ -110,7 +110,13 @@ public:
         sq_pushobject(vm, obj);
         sq_pushobject(vm, env);
 
-        sq_call(vm, 1, true, ErrorHandling::IsEnabled());
+        SQRESULT result = sq_call(vm, 1, true, ErrorHandling::IsEnabled());
+		if( SQ_FAILED( result ) )
+		{
+			sq_pop( vm, 1 );
+			throw Exception( LastErrorString( vm ) );
+		}
+
         R ret = Var<R>(vm, -1).value;
         sq_pop(vm, 2);
         return ret;
@@ -398,8 +404,13 @@ public:
         sq_pushobject(vm, obj);
         sq_pushobject(vm, env);
 
-        sq_call(vm, 1, false, ErrorHandling::IsEnabled());
+        SQRESULT result = sq_call(vm, 1, false, ErrorHandling::IsEnabled());
         sq_pop(vm, 1);
+
+		if( SQ_FAILED( result ) )
+		{
+			throw Exception( LastErrorString( vm ) );
+		}
     }
 
     template <class A1>
