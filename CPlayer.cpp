@@ -61,11 +61,17 @@ void CPlayer::SetHeading( float heading ) { functions->SetPlayerHeading( this->n
 void CPlayer::SetAlpha( int alpha, int fadeTime ) { functions->SetPlayerAlpha( this->nPlayerId, alpha, fadeTime ); }
 void CPlayer::SetVehicle( CVehicle * vehiclePointer )
 {
-	Function callback = RootTable().GetFunction( _SC("onPlayerEnterVehicle") );
-	if( !callback.IsNull() )
-		callback( pCore->playerMap[nPlayerId], vehiclePointer );
+	// <TODO
+	// Need to get this and other classes to derive from a base class so I can
+	// check the entity type properly.
+	if( vehiclePointer != NULL )
+	{
+		Function callback = RootTable().GetFunction( _SC("onPlayerEnterVehicle") );
+		if( !callback.IsNull() )
+			callback( pCore->playerMap[nPlayerId], vehiclePointer );
 
-	functions->PutPlayerInVehicle( this->nPlayerId, vehiclePointer->nVehicleId, 0, 1, 1 );
+		functions->PutPlayerInVehicle( this->nPlayerId, vehiclePointer->nVehicleId, 0, 1, 1 );
+	}
 }
 
 void CPlayer::SetFrozen( bool toFreeze ) { functions->TogglePlayerControllable( this->nPlayerId, !toFreeze ); }
