@@ -230,6 +230,9 @@ void CCore::RegisterEntities()
 	
 	if( SQ_FAILED( sqstd_register_stringlib( v ) ) )
 		OutputWarning( "sqstd_stringlib failed to load." );
+	
+	if( SQ_FAILED( sqstd_register_systemlib( v ) ) )
+		OutputWarning( "sqstd_systemlib failed to load." );
 
 	// Set the default internal error handlers up
 	sqstd_seterrorhandlers( v );

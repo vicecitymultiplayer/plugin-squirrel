@@ -359,6 +359,11 @@ WastedSettings GetWastedSettings()
 	);
 }
 
+void RawHideMapObject( int nModelId, int x, int y, int z )
+{
+	functions->HideMapObject( nModelId, x, y, z );
+}
+
 void HideMapObject( int nModelId, float x, float y, float z )
 {
 	int x2 = static_cast<int>(floor( ( x * 10.0f ) + 0.5f ));
@@ -1031,10 +1036,10 @@ float DistanceFromPoint( float x1, float y1, float x2, float y2 )
 
 // <TODO>
 // This is a crude implementation to be replaced later.
-int BindKey( int key )
+int BindKey( int key, int key2 )
 {
 	int keyslot = functions->GetKeyBindUnusedSlot();
-	functions->RegisterKeyBind( keyslot, 0, key, 0, 0 );
+	functions->RegisterKeyBind( keyslot, 0, key, key2, 0 );
 
 	return keyslot;
 }
@@ -1794,8 +1799,8 @@ SQInteger NewTimer( HSQUIRRELVM v )
 				for( int i = 5; i <= sq_gettop( v ); i++ )
 				{
 					TimerParam pTempParam;
-					pTempParam.datatype = sq_gettype( v, i );
-
+					sq_getstackobj( v, i, &pTempParam.pData );
+					/*pTempParam.datatype = sq_gettype( v, i );
 					switch( pTempParam.datatype )
 					{
 						case OT_INTEGER:
@@ -1814,6 +1819,12 @@ SQInteger NewTimer( HSQUIRRELVM v )
 							sq_getstring( v, i, reinterpret_cast<const SQChar **>(const_cast<const void **>(&pTempParam.pData)) );
 							break;
 
+						case OT_USERDATA:
+						case OT_USERPOINTER:
+							sq_getuserpointer( v, i, (SQUserPointer *)&pTempParam.pData );
+							break;
+
+						// <TODO>
 						case OT_TABLE:
 						case OT_ARRAY:
 						case OT_CLASS:
@@ -1828,12 +1839,8 @@ SQInteger NewTimer( HSQUIRRELVM v )
 							break;
 
 						case OT_INSTANCE:
+							SQObject * obj;
 							sq_getinstanceup( v, i, (SQUserPointer *)&pTempParam.pData, NULL );
-							break;
-
-						case OT_USERDATA:
-						case OT_USERPOINTER:
-							sq_getuserpointer( v, i, (SQUserPointer *)&pTempParam.pData );
 							break;
 
 						case OT_NULL:
@@ -1841,7 +1848,7 @@ SQInteger NewTimer( HSQUIRRELVM v )
 
 						default:
 							break;
-					}
+					}*/
 
 					pTimer->params.push_back(pTempParam);
 				}

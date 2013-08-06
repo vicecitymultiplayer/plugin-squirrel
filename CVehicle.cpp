@@ -169,6 +169,14 @@ Quaternion CVehicle::GetRotation()
 	return Quaternion(w, x, y, z);
 }
 
+Vector CVehicle::GetEulerRotation()
+{
+	float x, y, z;
+	functions->GetVehicleRotEuler( this->nVehicleId, &x, &y, &z );
+
+	return Vector( x, y, z );
+}
+
 Vector CVehicle::GetSpeed()
 {
 	float x, y, z;
@@ -202,6 +210,7 @@ Vector CVehicle::GetRelativeTurnSpeed()
 }
 
 void CVehicle::SetRotation( Quaternion rotation ) { functions->SetVehicleRot( this->nVehicleId, rotation.x, rotation.y, rotation.z, rotation.w ); }
+void CVehicle::SetEulerRotation( Vector rotation ) { functions->SetVehicleRotEuler( this->nVehicleId, rotation.x, rotation.y, rotation.z ); }
 void CVehicle::SetSpeed( Vector speed ) { functions->SetVehicleSpeed( this->nVehicleId, speed.x, speed.y, speed.z ); }
 void CVehicle::SetRelativeSpeed( Vector speed ) { functions->SetVehicleRelSpeed( this->nVehicleId, speed.x, speed.y, speed.z ); }
 void CVehicle::SetTurnSpeed( Vector speed ) { functions->SetVehicleTurnSpeed( this->nVehicleId, speed.x, speed.y, speed.z ); }
@@ -260,6 +269,8 @@ void RegisterVehicle()
 		.Prop( _SC("Lights"), &CVehicle::GetLights, &CVehicle::SetLights )
 		.Prop( _SC("Angle"), &CVehicle::GetRotation, &CVehicle::SetRotation )
 		.Prop( _SC("Rotation"), &CVehicle::GetRotation, &CVehicle::SetRotation )
+		.Prop( _SC("EulerAngle"), &CVehicle::GetEulerRotation, &CVehicle::SetEulerRotation )
+		.Prop( _SC("EulerRotation"), &CVehicle::GetEulerRotation, &CVehicle::SetEulerRotation )
 		.Prop( _SC("Speed"), &CVehicle::GetSpeed, &CVehicle::SetSpeed )
 		.Prop( _SC("RelativeSpeed"), &CVehicle::GetRelativeSpeed, &CVehicle::SetRelativeSpeed )
 		.Prop( _SC("TurnSpeed"), &CVehicle::GetTurnSpeed, &CVehicle::SetTurnSpeed )

@@ -118,6 +118,7 @@ void RegisterGlobals()
 		.Func( _SC("SetWastedSettings"), SetWastedSettings, 8, _SC("tnnnnxnn" ) )
 		.Func( _SC("GetWastedSettings"), GetWastedSettings, 1, _SC("t" ) )
 
+		.Func( _SC("RawHideMapObject"), RawHideMapObject, 5, _SC("tiiii") )
 		.Func( _SC("HideMapObject"), HideMapObject, 5, _SC("tifff" ) )
 		.Func( _SC("ShowMapObject"), ShowMapObject, 5, _SC("tifff" ) )
 		.Func( _SC("ShowAllMapObjects"), ShowAllMapObjects, 1, _SC("t" ) )

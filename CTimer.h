@@ -6,7 +6,8 @@
 // Define structures for timer maps
 typedef struct
 {
-	void * pData;
+	//void * pData;
+	HSQOBJECT pData;
 	SQObjectType datatype; // This is some shitty programming yo
 } TimerParam;
 

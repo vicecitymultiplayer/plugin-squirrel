@@ -40,7 +40,8 @@ bool CTimer::Pulse( float elapsedTime )
 					// Iterate through the vector of parameters
 					for( itr = this->params.begin(); itr < this->params.end(); ++itr )
 					{
-						switch( itr->datatype )
+						sq_pushobject( v, itr->pData );
+						/*switch( itr->datatype )
 						{
 							case OT_INTEGER:
 								sq_pushinteger( v, (SQInteger)itr->pData );
@@ -62,6 +63,16 @@ bool CTimer::Pulse( float elapsedTime )
 								sq_pushstring( v, reinterpret_cast<const SQChar *>(itr->pData), -1 );
 								break;
 
+							case OT_USERDATA:
+							case OT_USERPOINTER:
+								sq_pushuserpointer( v, (SQUserPointer)itr->pData );
+								break;
+
+							case OT_NULL:
+								sq_pushnull( v );
+								break;
+
+							// <TODO>
 							case OT_TABLE:
 							case OT_ARRAY:
 							case OT_CLOSURE:
@@ -78,18 +89,9 @@ bool CTimer::Pulse( float elapsedTime )
 								sq_setinstanceup( v, -1, itr->pData );
 								break;
 
-							case OT_USERDATA:
-							case OT_USERPOINTER:
-								sq_pushuserpointer( v, (SQUserPointer)itr->pData );
-								break;
-
-							case OT_NULL:
-								sq_pushnull( v );
-								break;
-
 							default:
 								break;
-						}
+						}*/
 					}
 				}
 				

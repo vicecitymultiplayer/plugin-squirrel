@@ -22,6 +22,7 @@ class CVehicle
 		void SetAlarm( bool isAlarmOn );
 		void SetLights( bool lightsOn );
 		void SetRotation( Quaternion rotation );
+		void SetEulerRotation( Vector angle );
 		void SetSpeed( Vector speed );
 		void SetRelativeSpeed( Vector speed );
 		void SetTurnSpeed( Vector speed );
@@ -48,6 +49,7 @@ class CVehicle
 		int GetSyncType();
 		bool GetWrecked();
 		Quaternion GetRotation();
+		Vector GetEulerRotation();
 		Vector GetSpeed();
 		Vector GetRelativeSpeed();
 		Vector GetTurnSpeed();

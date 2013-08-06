@@ -11,6 +11,7 @@
 #include <sqstdstring.h>
 #include <sqstdaux.h>
 #include <sqstdblob.h>
+#include <sqstdsystem.h>
 
 // Include this header only once
 #pragma once

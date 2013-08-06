@@ -148,6 +148,7 @@ Bounds GetWorldBounds ( void );
 void SetWastedSettings           ( int deathTime, int fadeTime, float fadeInSpeed, float fadeOutSpeed, cRGB colour, int corpseFadeDelay, int corpseFadeTime );
 WastedSettings GetWastedSettings ( void );
 
+void RawHideMapObject  ( int nModelId, int x, int y, int z );
 void HideMapObject     ( int nModelId, float x, float y, float z );
 void ShowMapObject     ( int nModelId, float x, float y, float z );
 void ShowAllMapObjects ( void );
@@ -198,4 +199,4 @@ DWORD    GetTime         ( void );
 const SQChar * GetFullTime     ( void );
 
 // <TODO>
-int BindKey( int key );
+int BindKey( int key, int key2 );
