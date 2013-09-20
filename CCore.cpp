@@ -248,7 +248,7 @@ inline void ZeroBuffer( char * buffer, int size )
 void CCore::LoadScript()
 {
 	// Scan for entities that were already created
-	this->ScanForEntities();
+	//this->ScanForEntities();
 
 	// No reloading at this point
 	this->canReload = false;
