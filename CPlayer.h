@@ -26,7 +26,11 @@ class CPlayer
 		void SetOnRadar( bool showOnRadar );
 		void SetCanAttack( bool canAttack );
 		void SetWeaponSlot( int slot );
-		void ShowMarkers( bool setMarkers );
+		void ShowMarkers( bool setMarkers ); // <TODO>
+		void SetSpectateTarget( CPlayer * pPlayer ); // <TODO>
+		void SetMarkerVisible( bool isMarkerVisible ); // <TODO>
+		void SetCanUseColors( bool canUseColors ); // <TODO>
+		void SetDrunkStatus( bool isDrunk ); // <TODO>
 
 	public:
 		Vector GetPosition();
@@ -66,6 +70,11 @@ class CPlayer
 		bool ShowingMarkers();
 		bool GetCameraLocked();
 		int GetKey();
+		bool GetAwayStatus(); // <TODO>
+		CPlayer * GetSpectateTarget(); // <TODO>
+		bool GetCanUseColors(); // <TODO>
+		bool GetMarkerVisible(); // <TODO>
+		bool GetDrunkStatus(); // <TODO>
 
 	public:
 		void Kick();
@@ -93,6 +102,8 @@ class CPlayer
 		bool StreamedToPlayer( CPlayer * player );
 		void Select();
 		void RestoreCamera();
+		void ResetSpectate(); // <TODO>
+		void RemoveMarker(); // <TODO>
 
 	public:
 		int nPlayerId;

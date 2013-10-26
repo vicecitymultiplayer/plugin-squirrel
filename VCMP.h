@@ -348,8 +348,6 @@ typedef int (*SDK_SetObjectShotReport) (int nObjectId, unsigned int bToggle);
 typedef unsigned int (*SDK_IsObjectShotReport) (int nObjectId);
 typedef int (*SDK_SetObjectBumpReport) (int nObjectId, unsigned int bToggle);
 typedef unsigned int (*SDK_IsObjectBumpReport) (int nObjectId);
-typedef void (*SDK_LaunchProjectile) (int nProjectileType, float fPosX, float fPosY, float fPosZ, float fSpeedX, float fSpeedY, float fSpeedZ, float fRotX, float fRotY, float fRotZ, float fRotW);
-typedef unsigned int (*SDK_LaunchProjectileByPlayer) (int nPlayerId, int nProjectileType, float fPosX, float fPosY, float fPosZ, float fSpeedX, float fSpeedY, float fSpeedZ, float fRotX, float fRotY, float fRotZ, float fRotW);
 typedef int (*SDK_OnInitServer) (void);
 typedef void (*SDK_OnShutdownServer) (void);
 typedef void (*SDK_OnFrame) (float fElapsedTime);
@@ -746,10 +744,6 @@ struct PluginFuncs {
 	SDK_IsObjectShotReport IsObjectShotReport;
 	SDK_SetObjectBumpReport SetObjectBumpReport;
 	SDK_IsObjectBumpReport IsObjectBumpReport;
-
-	// MISC
-	SDK_LaunchProjectile LaunchProjectile;
-	SDK_LaunchProjectileByPlayer LaunchProjectileByPlayer;
 };
 
 struct PluginCallbacks {

@@ -161,6 +161,9 @@ extern "C" EXPORT unsigned int VcmpPluginInit( PluginFuncs* givenPluginFuncs, Pl
 
 	callbacks->OnPlayerDeath        = OnPlayerDeath;
 	callbacks->OnPlayerUpdate       = OnPlayerUpdate;
+	callbacks->OnPlayerAwayChange   = OnPlayerAwayChange;
+	callbacks->OnPlayerSpectate     = OnPlayerSpectate;
+	callbacks->OnPlayerCrashReport  = OnPlayerCrashDump;
 
 	callbacks->OnPlayerBeginTyping  = OnPlayerBeginTyping;
 	callbacks->OnPlayerEndTyping    = OnPlayerEndTyping;
@@ -187,6 +190,7 @@ extern "C" EXPORT unsigned int VcmpPluginInit( PluginFuncs* givenPluginFuncs, Pl
 
 	callbacks->OnEntityPoolChange	= OnEntityPoolChange;
 	callbacks->OnKeyBindDown        = OnKeyBindDown;
+	callbacks->OnKeyBindUp          = OnKeyBindUp;
 
 	// Done!
 	return 1;

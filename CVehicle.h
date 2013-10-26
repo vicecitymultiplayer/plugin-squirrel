@@ -27,6 +27,8 @@ class CVehicle
 		void SetRelativeSpeed( Vector speed );
 		void SetTurnSpeed( Vector speed );
 		void SetRelativeTurnSpeed( Vector speed );
+		void SetRadio( int nRadioId ); // <TODO>
+		void SetRadioLocked( bool isRadioLocked ); // <TODO>
 
 	public:
 		int GetWorld();
@@ -54,6 +56,8 @@ class CVehicle
 		Vector GetRelativeSpeed();
 		Vector GetTurnSpeed();
 		Vector GetRelativeTurnSpeed();
+		int GetRadio(); // <TODO>
+		bool GetRadioLockStatus(); // <TODO>
 
 	public:
 		void Delete();

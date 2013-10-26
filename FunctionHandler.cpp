@@ -116,23 +116,25 @@ void ToggleShootInAir       ( bool toggle ) { functions->ToggleShootInAir( ( tog
 void ToggleShowNametags     ( bool toggle ) { functions->ToggleShowNametags( ( toggle ? 1 : 0 ) );     }
 void ToggleJoinMessages     ( bool toggle ) { functions->ToggleJoinMessages( ( toggle ? 1 : 0 ) );     }
 void ToggleDeathMessages    ( bool toggle ) { functions->ToggleDeathMessages( ( toggle ? 1 : 0 ) );    }
+void ToggleChatTagDefault   ( bool toggle ) { functions->ToggleChatTagsByDefaultEnabled( ( toggle ? 1 : 0 ) ); }
 
-bool EnabledSyncFrameLimiter() { return ( functions->EnabledSyncFrameLimiter() != 0 ); }
-bool EnabledFrameLimiter()     { return ( functions->EnabledFrameLimiter() != 0 );     }
-bool EnabledTaxiBoostJump()    { return ( functions->EnabledTaxiBoostJump() != 0 );    }
-bool EnabledDriveOnWater()     { return ( functions->EnabledDriveOnWater() != 0 );     }
-bool EnabledFastSwitch()       { return ( functions->EnabledFastSwitch() != 0 );       }
-bool EnabledFriendlyFire()     { return ( functions->EnabledFriendlyFire() != 0 );     }
-bool EnabledDisableDriveby()   { return ( functions->EnabledDisableDriveby() != 0 );   }
-bool EnabledPerfectHandling()  { return ( functions->EnabledPerfectHandling() != 0 );  }
-bool EnabledFlyingCars()       { return ( functions->EnabledFlyingCars() != 0 );       }
-bool EnabledJumpSwitch()       { return ( functions->EnabledJumpSwitch() != 0 );       }
-bool EnabledShowOnRadar()      { return ( functions->EnabledShowMarkers() != 0 );      }
-bool EnabledStuntBike()        { return ( functions->EnabledStuntBike() != 0 );        }
-bool EnabledShootInAir()       { return ( functions->EnabledShootInAir() != 0 );       }
-bool EnabledShowNametags()     { return ( functions->EnabledShowNametags() != 0 );     }
-bool EnabledJoinMessages()     { return ( functions->EnabledJoinMessages() != 0 );     }
-bool EnabledDeathMessages()    { return ( functions->EnabledDeathMessages() != 0 );    }
+bool EnabledSyncFrameLimiter() { return ( functions->EnabledSyncFrameLimiter() != 0 );  }
+bool EnabledFrameLimiter()     { return ( functions->EnabledFrameLimiter() != 0 );      }
+bool EnabledTaxiBoostJump()    { return ( functions->EnabledTaxiBoostJump() != 0 );     }
+bool EnabledDriveOnWater()     { return ( functions->EnabledDriveOnWater() != 0 );      }
+bool EnabledFastSwitch()       { return ( functions->EnabledFastSwitch() != 0 );        }
+bool EnabledFriendlyFire()     { return ( functions->EnabledFriendlyFire() != 0 );      }
+bool EnabledDisableDriveby()   { return ( functions->EnabledDisableDriveby() != 0 );    }
+bool EnabledPerfectHandling()  { return ( functions->EnabledPerfectHandling() != 0 );   }
+bool EnabledFlyingCars()       { return ( functions->EnabledFlyingCars() != 0 );        }
+bool EnabledJumpSwitch()       { return ( functions->EnabledJumpSwitch() != 0 );        }
+bool EnabledShowOnRadar()      { return ( functions->EnabledShowMarkers() != 0 );       }
+bool EnabledStuntBike()        { return ( functions->EnabledStuntBike() != 0 );         }
+bool EnabledShootInAir()       { return ( functions->EnabledShootInAir() != 0 );        }
+bool EnabledShowNametags()     { return ( functions->EnabledShowNametags() != 0 );      }
+bool EnabledJoinMessages()     { return ( functions->EnabledJoinMessages() != 0 );      }
+bool EnabledDeathMessages()    { return ( functions->EnabledDeathMessages() != 0 );     }
+bool EnabledChatTagDefault()   { return ( functions->EnabledChatTagsByDefault() != 0 ); }
 
 void CreateExplosion( int world, int type, Vector * pos, int playerCaused, bool onGround )
 {
@@ -1034,15 +1036,17 @@ float DistanceFromPoint( float x1, float y1, float x2, float y2 )
 	return matrixF;
 }
 
-// <TODO>
 // This is a crude implementation to be replaced later.
-int BindKey( int key, int key2 )
+int BindKey( bool onKeyDown, int key, int key2, int key3 )
 {
 	int keyslot = functions->GetKeyBindUnusedSlot();
-	functions->RegisterKeyBind( keyslot, 0, key, key2, 0 );
+	functions->RegisterKeyBind( keyslot, onKeyDown, key, key2, key3 );
 
 	return keyslot;
 }
+
+bool RemoveKeybind( int nKeybindId ) { return functions->RemoveKeyBind( nKeybindId ); }
+void RemoveAllKeybinds( void ) { functions->RemoveAllKeyBinds(); }
 
 void ReloadScripts( void )
 {
@@ -1614,6 +1618,28 @@ const SQChar * GetVehicleNameFromModel ( int model )
 		default:  return NULL;
 	}
 }
+
+void SetKillDelay( int delay ) { functions->SetKillCmdDelay( delay ); }
+int GetKillDelay( void ) { return functions->GetKillCmdDelay(); }
+
+void DestroyBlip( int blipID ) { functions->DestroyCoordBlip( blipID ); }
+int CreateBlip( int world, Vector * pos, int scale, RGBa color, int nSpriteId )
+{
+	return functions->CreateCoordBlip( -1, world, pos->x, pos->y, pos->z, scale, 0, nSpriteId );
+}
+
+void DestroyRadioStream( int radioID ) { functions->RemoveRadioStream( radioID ); }
+int CreateRadioStream( const char * radioName, const char * radioURL, unsigned int bCanSelect )
+{
+	return functions->AddRadioStream( -1, radioName, radioURL, bCanSelect );
+}
+
+bool SetWeaponDataValue   ( int weaponID, int fieldID, double value ) { return functions->SetWeaponDataValue( weaponID, fieldID, value ); }
+double GetWeaponDataValue ( int weaponID, int fieldID ) { return functions->GetWeaponDataValue( weaponID, fieldID ); }
+bool ResetWeaponDataValue ( int weaponID, int fieldID ) { return functions->ResetWeaponDataValue( weaponID, fieldID ); }
+bool IsWeaponDataModified ( int weaponID, int fieldID ) { return functions->IsWeaponDataValueModified( weaponID, fieldID ); }
+bool ResetWeaponData      ( int weaponID ) { return functions->ResetWeaponData( weaponID ); }
+bool ResetAllWeaponData   () { functions->ResetAllWeaponData(); }
 
 SQInteger release_hook( SQUserPointer p, SQInteger size ) { return 1; }
 SQInteger FindPlayer( HSQUIRRELVM v )

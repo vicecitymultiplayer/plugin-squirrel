@@ -30,6 +30,7 @@ void SetGravity         ( float gravity );
 void SetGamespeed       ( float speed );
 void SetWaterLevel      ( float waterLevel );
 void SetMaxHeight       ( float maxHeight );
+void SetKillDelay       ( int delay );
 
 const SQChar * GetServerName     ( void );
 int      GetMaxPlayers     ( void );
@@ -44,6 +45,7 @@ float GetGravity    ( void );
 float GetGamespeed  ( void );
 float GetWaterLevel ( void );
 float GetMaxHeight  ( void );
+int   GetKillDelay  ( void );
 
 void ToggleSyncFrameLimiter ( bool toggle );
 void ToggleFrameLimiter     ( bool toggle );
@@ -61,6 +63,7 @@ void ToggleShootInAir       ( bool toggle );
 void ToggleShowNametags     ( bool toggle );
 void ToggleJoinMessages     ( bool toggle );
 void ToggleDeathMessages    ( bool toggle );
+void ToggleChatTagDefault   ( bool toggle );
 
 bool EnabledSyncFrameLimiter ( void );
 bool EnabledFrameLimiter     ( void );
@@ -78,6 +81,13 @@ bool EnabledShootInAir       ( void );
 bool EnabledShowNametags     ( void );
 bool EnabledJoinMessages     ( void );
 bool EnabledDeathMessages    ( void );
+bool EnabledChatTagDefault   ( void );
+
+int CreateBlip( int world, Vector * pos, int scale, RGBa color, int nSpriteId );
+void DestroyBlip( int blipID );
+
+int CreateRadioStream( const char * radioName, const char * radioURL, unsigned int bCanSelect );
+void DestroyRadioStream( int radioID );
 
 void CreateExplosion ( int world, int type, Vector * pos, int playerCaused, bool onGround );
 void CreateExplosionExpanded( int world, int type, float x, float y, float z, int playerCaused, bool onGround );
@@ -161,6 +171,17 @@ double GetHandlingRule       ( int model, int rule );
 void ResetHandlingRule       ( int model, int rule );
 void ResetVehicleHandling    ( int model );
 
+bool SetWeaponDataValue   ( int weaponID, int fieldID, double value );
+double GetWeaponDataValue ( int weaponID, int fieldID );
+bool ResetWeaponDataValue ( int weaponID, int fieldID );
+bool IsWeaponDataModified ( int weaponID, int fieldID );
+bool ResetWeaponData      ( int weaponID );
+bool ResetAllWeaponData   ( void );
+
+int BindKey( bool onKeyDown, int key1, int key2 = 0, int key3 = 0 );
+bool RemoveKeybind( int nKeybindId );
+void RemoveAllKeybinds( void );
+
 // All of these functions exist for compatibility
 bool GetCinematicBorder ( CPlayer * player );
 bool GetGreenScanLines  ( CPlayer * player );
@@ -197,6 +218,3 @@ SQInteger NewTimer( HSQUIRRELVM v );
 // These functions are for compatibility, but will be deprecated
 DWORD    GetTime         ( void );
 const SQChar * GetFullTime     ( void );
-
-// <TODO>
-int BindKey( int key, int key2 );

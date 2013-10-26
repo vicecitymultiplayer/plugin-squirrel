@@ -361,11 +361,18 @@ bool CCore::ParseConfigLine( char * lineBuffer )
 			return false;
 		}
 
-		Function callback = RootTable( v ).GetFunction( _SC( "onScriptLoad" ) );
-		if( !callback.IsNull() )
-			callback();
+		try
+		{
+			Function callback = RootTable(v).GetFunction(_SC("onScriptLoad"));
+			if (!callback.IsNull())
+				callback();
 
-		callback.Release();
+			callback.Release();
+		}
+		catch (Sqrat::Exception e)
+		{
+			OutputWarning("onScriptLoad failed to execute -- check the console for more details.");
+		}
 		return true;
 	}
 }
