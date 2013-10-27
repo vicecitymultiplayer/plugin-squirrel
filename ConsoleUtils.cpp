@@ -42,7 +42,8 @@ void OutputMessage( const char * msg )
 		SetConsoleTextAttribute( hstdout, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY );
 		pCore->printf("%s", msg);
 
-		SetConsoleTextAttribute( hstdout, csbBefore.wAttributes );
+		SetConsoleTextAttribute(hstdout, csbBefore.wAttributes);
+		pCore->printf("\n");
 	#else
 		pCore->printf( "%c[0;32m[MODULE]%c[0;37m %s\n", 27, 27, msg );
 	#endif
@@ -62,6 +63,7 @@ void OutputWarning( const char * msg )
 		pCore->printf("%s", msg);
 
 		SetConsoleTextAttribute( hstdout, csbBefore.wAttributes );
+		pCore->printf("\n");
 	#else
 		pCore->printf( "%c[0;30m[WARNING]%c[0;37m %s\n", 27, 27, msg );
 	#endif
@@ -84,4 +86,4 @@ void OutputError( const char * msg )
 	#else
 		pCore->printf( "%c[0;30m[ERROR]%c[0;37m %s\n", 27, 27, msg );
 	#endif
-}	
+}
