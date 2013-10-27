@@ -48,6 +48,8 @@ class CCore
 		void LoadScript();
 		bool ParseConfigLine( char * lineBuffer );
 
+		void printf( char* pszFormat, ... );
+
 		// Class maps
 		CPlayer  * playerMap[MAX_PLAYERS];
 		CPickup  * pickupMap[MAX_PICKUPS];
@@ -79,4 +81,7 @@ class CCore
 
 		// Reference count
 		static unsigned short refCount;
+
+		// VC:MP log file
+		FILE * pLogFile;
 };

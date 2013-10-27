@@ -17,6 +17,7 @@ CCore::CCore()
 	// Reset this stuff
 	v           = NULL;
 	script      = NULL;
+	pLogFile    = NULL;
 
 	// Construct all timer arrays
 	for( int i = 0; i < this->maxTimers; i++ )
@@ -37,6 +38,9 @@ CCore::CCore()
 	
 	// Set up the canReload variable
 	canReload = false;
+
+	// Open up the logs
+	pLogFile = fopen("server_log.txt", "a");
 
 	// Load the VM
 	this->LoadVM();
@@ -373,8 +377,25 @@ bool CCore::ParseConfigLine( char * lineBuffer )
 		{
 			OutputWarning("onScriptLoad failed to execute -- check the console for more details.");
 		}
+
 		return true;
 	}
+}
+
+void CCore::printf( char* pszFormat, ... )
+{
+	char szBuffer[512];
+
+	va_list va;
+	va_start(va, pszFormat);
+	vsnprintf(szBuffer, 512, pszFormat, va);
+	va_end(va);
+
+	puts(szBuffer);
+	if (this->pLogFile != NULL)
+		fprintf(this->pLogFile, "%s", szBuffer);
+	else
+		puts("Cannot write to logfile\n");
 }
 
 // Release a core instance
@@ -390,6 +411,4 @@ void CCore::Release()
 		// Delete the core instance
 		delete pCoreInstance;
 	}
-
-	// Done.
 }
