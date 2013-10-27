@@ -20,7 +20,7 @@ int OnInitServer()
 {
 	// Print the initialization message.
 	printf("\n");
-	OutputMessage("Loaded SqVCMP 0.4 frontend by Stormeus. (v0.9)");
+	OutputMessage("Loaded SqVCMP 0.4 frontend by Stormeus. (v1.0b1)");
 
 	// Signal outside plugins to register whatever the hell they want
 	functions->SendCustomCommand(0x7D6E22D8, "");

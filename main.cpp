@@ -136,7 +136,7 @@ extern "C" EXPORT unsigned int VcmpPluginInit( PluginFuncs* givenPluginFuncs, Pl
 	information = givenPluginInfo;
 
 	// Set our plugin information
-	information->uPluginVer = 0x092;
+	information->uPluginVer = 0x100;
 	strcpy( information->szName, "SQHost1" );
 
 	// Define our exports
