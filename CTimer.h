@@ -23,7 +23,7 @@ class CTimer
 
 			this->maxNumberOfPulses = 0;
 			this->intervalInTicks = 0.0f;
-			this->pFunc = NULL;
+			this->pFunc = nullptr;
 			this->paramCount = 0;
 
 			this->params.clear();

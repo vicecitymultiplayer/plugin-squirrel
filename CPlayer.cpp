@@ -40,7 +40,7 @@ void CPlayer::SetMoney( int money )
 
 	Function callback = RootTable().GetFunction( _SC("onPlayerCashChange") );
 	if( !callback.IsNull() )
-		callback( pCore->playerMap[nPlayerId], oldCash, money );
+		callback( pCore->FindPlayer(this->nPlayerId), oldCash, money );
 
 	functions->SetPlayerMoney( this->nPlayerId, money );
 }
@@ -51,7 +51,7 @@ void CPlayer::SetScore( int score )
 
 	Function callback = RootTable().GetFunction( _SC("onPlayerScoreChange") );
 	if( !callback.IsNull() )
-		callback( pCore->playerMap[nPlayerId], oldScore, score );
+		callback( pCore->FindPlayer(this->nPlayerId), oldScore, score );
 
 	functions->SetPlayerScore( this->nPlayerId, score );
 }
@@ -61,14 +61,14 @@ void CPlayer::SetHeading( float heading ) { functions->SetPlayerHeading( this->n
 void CPlayer::SetAlpha( int alpha, int fadeTime ) { functions->SetPlayerAlpha( this->nPlayerId, alpha, fadeTime ); }
 void CPlayer::SetVehicle( CVehicle * vehiclePointer )
 {
-	// <TODO
+	// <TODO>
 	// Need to get this and other classes to derive from a base class so I can
 	// check the entity type properly.
 	if( vehiclePointer != NULL )
 	{
 		Function callback = RootTable().GetFunction( _SC("onPlayerEnterVehicle") );
 		if( !callback.IsNull() )
-			callback( pCore->playerMap[nPlayerId], vehiclePointer );
+			callback( pCore->FindPlayer(this->nPlayerId), vehiclePointer );
 
 		functions->PutPlayerInVehicle( this->nPlayerId, vehiclePointer->nVehicleId, 0, 1, 1 );
 	}
@@ -147,7 +147,7 @@ CVehicle * CPlayer::GetVehicle()
 	if( vehicleId < 1 )
 		return NULL;
 	else
-		return pCore->vehicleMap[vehicleId];
+		return pCore->FindVehicle(vehicleId);
 }
 
 bool CPlayer::GetFrozen() { return !functions->EnabledPlayerControllable( this->nPlayerId ); }
@@ -202,10 +202,10 @@ void CPlayer::Animation( int group, int anim ) { functions->SetPlayerAnimation( 
 CVehicle * CPlayer::StandingOnVehicle()
 {
 	int veh = functions->GetPlayerStandingOnVehicle( this->nPlayerId );
-	if( veh < 1 )
+	if (veh < 1)
 		return NULL;
 	else
-		return pCore->vehicleMap[veh];
+		return pCore->FindVehicle(veh);
 }
 
 CObject * CPlayer::StandingOnObject()

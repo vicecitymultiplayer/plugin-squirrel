@@ -21,6 +21,15 @@
 #include "Exports.h"
 SquirrelExports * pExp;
 
+// Definitions
+PluginFuncs		*	functions;
+PluginInfo		* 	information;
+PluginCallbacks *	callbacks;
+CCore           *   pCore;
+
+// See CCore.cpp for original definition
+extern HSQUIRRELVM  v;
+
 // Squirrel's print function
 void printfunc(HSQUIRRELVM v, const SQChar *s, ...) 
 { 
@@ -39,18 +48,13 @@ void errorfunc(HSQUIRRELVM v, const SQChar *s, ...)
 {
 	va_list arglist; 
 	va_start(arglist, s); 
-	scvprintf(s, arglist);
+	
+	vfprintf(stdout, s, arglist);
+	if( pCore->GetLogInstance() != nullptr )
+		vfprintf(pCore->GetLogInstance(), s, arglist);
+
 	va_end(arglist);
 }
-
-// Definitions
-PluginFuncs		*	functions;
-PluginInfo		* 	information;
-PluginCallbacks *	callbacks;
-CCore           *   pCore;
-
-// See CCore.cpp for original definition
-extern HSQUIRRELVM  v;
 
 void RegisterStructures()
 {

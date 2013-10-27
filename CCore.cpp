@@ -15,26 +15,26 @@ HSQUIRRELVM v;
 CCore::CCore()
 {
 	// Reset this stuff
-	v           = NULL;
-	script      = NULL;
-	pLogFile    = NULL;
+	v           = nullptr;
+	script      = nullptr;
+	pLogFile    = nullptr;
 
 	// Construct all timer arrays
 	for( int i = 0; i < this->maxTimers; i++ )
-		pTimerArray[i] = NULL;
+		pTimerArray[i] = nullptr;
 
 	// Clean our entity maps of any garbage and filth
 	for( int i = 0; i < MAX_PLAYERS; i++ )
-		playerMap[i] = NULL;
+		playerMap[i] = nullptr;
 
 	for( int i = 0; i < MAX_VEHICLES; i++ )
-		vehicleMap[i] = NULL;
+		vehicleMap[i] = nullptr;
 
 	for( int i = 0; i < MAX_PICKUPS; i++ )
-		pickupMap[i] = NULL;
+		pickupMap[i] = nullptr;
 
 	for( int i = 0; i < MAX_OBJECTS; i++ )
-		objectMap[i] = NULL;
+		objectMap[i] = nullptr;
 	
 	// Set up the canReload variable
 	canReload = false;
@@ -392,10 +392,10 @@ void CCore::printf( char* pszFormat, ... )
 	va_end(va);
 
 	fputs(szBuffer, stdout);
-	if (this->pLogFile != NULL)
+	if( this->pLogFile != nullptr )
 		fprintf(this->pLogFile, "%s", szBuffer);
 	else
-		puts("Cannot write to logfile\n");
+		puts("Cannot write to logfile");
 }
 
 // Release a core instance
@@ -410,5 +410,129 @@ void CCore::Release()
 	{
 		// Delete the core instance
 		delete pCoreInstance;
+	}
+}
+
+CObject * CCore::FindObject(int nObjectId)
+{
+	if (nObjectId < 0 || nObjectId > MAX_OBJECTS - 1)
+		return nullptr;
+
+	return this->objectMap[nObjectId];
+}
+
+CPickup * CCore::FindPickup(int nPickupId)
+{
+	if (nPickupId < 0 || nPickupId > MAX_PICKUPS - 1)
+		return nullptr;
+
+	return this->pickupMap[nPickupId];
+}
+
+CPlayer * CCore::FindPlayer(int nPlayerId)
+{
+	if (nPlayerId < 0 || nPlayerId > MAX_PLAYERS - 1)
+		return nullptr;
+
+	return this->playerMap[nPlayerId];
+}
+
+CVehicle * CCore::FindVehicle(int nVehicleId)
+{
+	if (nVehicleId < 0 || nVehicleId > MAX_VEHICLES - 1)
+		return nullptr;
+
+	return this->vehicleMap[nVehicleId];
+}
+
+FILE * CCore::GetLogInstance()
+{
+	if (this->pLogFile == NULL)
+		return nullptr;
+
+	return this->pLogFile;
+}
+
+bool CCore::AssignObject(int nObjectId, CObject * pObject)
+{
+	if (nObjectId < 0 || nObjectId > MAX_OBJECTS - 1)
+		return false;
+
+	this->objectMap[nObjectId] = pObject;
+	return true;
+}
+
+bool CCore::AssignPickup(int nPickupId, CPickup * pPickup)
+{
+	if (nPickupId < 0 || nPickupId > MAX_PICKUPS - 1)
+		return false;
+
+	this->pickupMap[nPickupId] = pPickup;
+	return true;
+}
+
+bool CCore::AssignPlayer(int nPlayerId, CPlayer * pPlayer)
+{
+	if (nPlayerId < 0 || nPlayerId > MAX_PLAYERS - 1)
+		return false;
+
+	this->playerMap[nPlayerId] = pPlayer;
+	return true;
+}
+
+bool CCore::AssignVehicle(int nVehicleId, CVehicle * pVehicle)
+{
+	if (nVehicleId < 0 || nVehicleId > MAX_VEHICLES - 1)
+		return false;
+
+	this->vehicleMap[nVehicleId] = pVehicle;
+	return true;
+}
+
+void CCore::ClearObject(int nObjectId)
+{
+	if (nObjectId < 0 || nObjectId > MAX_OBJECTS - 1)
+		return;
+
+	if (this->objectMap[nObjectId] != nullptr)
+	{
+		delete this->objectMap[nObjectId];
+		this->objectMap[nObjectId] = nullptr;
+	}
+}
+
+void CCore::ClearPickup(int nPickupId)
+{
+	if (nPickupId < 0 || nPickupId > MAX_PICKUPS - 1)
+		return;
+
+	if (this->pickupMap[nPickupId] != nullptr)
+	{
+		delete this->pickupMap[nPickupId];
+		this->pickupMap[nPickupId] = nullptr;
+	}
+}
+
+void CCore::ClearPlayer(int nPlayerId)
+{
+	if (nPlayerId < 0 || nPlayerId > MAX_PLAYERS - 1)
+		return;
+
+	if (this->playerMap[nPlayerId] != nullptr)
+	{
+		delete this->playerMap[nPlayerId];
+		this->playerMap[nPlayerId] = nullptr;
+	}
+}
+
+void CCore::ClearVehicle(int nVehicleId)
+{
+	if (nVehicleId < 0 || nVehicleId > MAX_VEHICLES - 1)
+		return;
+
+	if (this->vehicleMap[nVehicleId] != nullptr)
+	{
+		delete this->vehicleMap[nVehicleId];
+		this->vehicleMap[nVehicleId] = nullptr;
 	}
 }

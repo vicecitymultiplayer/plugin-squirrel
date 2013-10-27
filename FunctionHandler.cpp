@@ -16,7 +16,7 @@ extern CCore * pCore;
 
 void ClientMessage( const SQChar * message, CPlayer * player, int r, int g, int b, int a )
 {
-	if( player != NULL )
+	if( player != nullptr )
 	{
 		unsigned int dwColour;
 
@@ -34,13 +34,13 @@ void ClientMessageToAll ( const SQChar* message, int r, int g, int b, int a )
 	for( int i = 0; i < functions->GetMaxPlayers(); i++ )
 	{
 		if( functions->IsPlayerConnected( i ) )
-			ClientMessage( message, pCore->playerMap[i], r, g, b, a );
+			ClientMessage( message, pCore->FindPlayer(i), r, g, b, a );
 	}
 }
 
 void GameMessage   ( CPlayer * player, const SQChar* message, int type )
 {
-	if( player != NULL )
+	if( player != nullptr )
 		functions->SendGameMessage( player->nPlayerId, type, const_cast<char *>( message ) );
 }
 
@@ -188,7 +188,7 @@ bool IsIPBanned( const SQChar* ip ) { return ( functions->IsIPBanned( const_cast
 
 bool IsWorldCompatibleWithPlayer( CPlayer * cPlayer, int world )
 {
-	if( cPlayer != NULL )
+	if( cPlayer != nullptr )
 		return ( functions->IsPlayerWorldCompatible( cPlayer->nPlayerId, world ) != 0 );
 
 	return false;
@@ -200,13 +200,13 @@ CVehicle * CreateVehicle( int model, int world, Vector * pos, float angle, int c
 {
 	int vId = functions->CreateVehicle( model, world, pos->x, pos->y, pos->z, angle, col1, col2 );
 	if( vId < 1 )
-		return NULL;
+		return nullptr;
 	else
 	{
 		CVehicle * v = new CVehicle;
 		v->Init( vId );
 
-		pCore->vehicleMap[vId] = v;
+		pCore->AssignVehicle(vId, v);
 		return v;
 	}
 }
@@ -215,13 +215,13 @@ CPickup * CreatePickup( int model, int world, int quantity, Vector * pos, int al
 {
 	int pId = functions->CreatePickup( model, world, quantity, pos->x, pos->y, pos->z, alpha, isAuto );
 	if( pId < 0 )
-		return NULL;
+		return nullptr;
 	else
 	{
 		CPickup * p = new CPickup;
 		p->Init( pId );
 
-		pCore->pickupMap[pId] = p;
+		pCore->AssignPickup(pId, p);
 		return p;
 	}
 }
@@ -230,13 +230,13 @@ CObject * CreateObject( int model, int world, Vector * pos, int alpha )
 {
 	int oId = functions->CreateObject( model, world, pos->x, pos->y, pos->z, alpha );
 	if( oId < 0 )
-		return NULL;
+		return nullptr;
 	else
 	{
 		CObject * o = new CObject;
 		o->Init( oId );
 
-		pCore->objectMap[oId] = o;
+		pCore->AssignObject(oId, o);
 		return o;
 	}
 }
@@ -261,26 +261,17 @@ CObject * CreateObjectExpanded( int model, int world, float x, float y, float z,
 
 CPickup * FindPickup( int id )
 {
-	if( id < MAX_PICKUPS )
-		return pCore->pickupMap[id];
-
-	return NULL;
+	return pCore->FindPickup(id);
 }
 
 CObject * FindObject( int id )
 {
-	if( id < MAX_OBJECTS )
-		return pCore->objectMap[id];
-
-	return NULL;
+	return pCore->FindObject(id);
 }
 
 CVehicle * FindVehicle( int id )
 {
-	if( id < MAX_VEHICLES )
-		return pCore->vehicleMap[id];
-
-	return NULL;
+	return pCore->FindVehicle(id);
 }
 
 void SetWorldBounds( float maxX, float minX, float maxY, float minY )
@@ -397,7 +388,7 @@ void ResetVehicleHandling( int model ) { functions->ResetHandling( model ); }
 // All of these functions exist for compatibility
 bool GetCinematicBorder ( CPlayer * player )
 { 
-	if( player != NULL )
+	if( player != nullptr )
 		return ( functions->EnabledPlayerWidescreen( player->nPlayerId ) != 0 );
 	
 	return false;
@@ -405,7 +396,7 @@ bool GetCinematicBorder ( CPlayer * player )
 
 bool GetGreenScanLines  ( CPlayer * player )
 {
-	if( player != NULL )
+	if( player != nullptr )
 		return ( functions->EnabledPlayerGreenScanlines( player->nPlayerId ) != 0 );
 
 	return false;
@@ -413,7 +404,7 @@ bool GetGreenScanLines  ( CPlayer * player )
 
 bool GetWhiteScanLines  ( CPlayer * player )
 {
-	if( player != NULL )
+	if( player != nullptr )
 		return ( functions->EnabledPlayerWhiteScanlines( player->nPlayerId ) != 0 );
 
 	return false;
@@ -421,44 +412,44 @@ bool GetWhiteScanLines  ( CPlayer * player )
 
 void SetCinematicBorder ( CPlayer * player, bool toEnable )
 {
-	if( player != NULL )
+	if( player != nullptr )
 		functions->TogglePlayerWidescreen( player->nPlayerId, toEnable );
 }
 
 void SetGreenScanLines  ( CPlayer * player, bool toEnable )
 {
-	if( player != NULL )
+	if( player != nullptr )
 		functions->TogglePlayerGreenScanlines( player->nPlayerId, toEnable );
 }
 
 void SetWhiteScanLines  ( CPlayer * player, bool toEnable )
 {
-	if( player != NULL )
+	if( player != nullptr )
 		functions->TogglePlayerWhiteScanlines( player->nPlayerId, toEnable );
 }
 
 void KickPlayer         ( CPlayer * player )
 {
-	if( player != NULL )
+	if( player != nullptr )
 		functions->KickPlayer( player->nPlayerId );
 }
 
 void BanPlayer          ( CPlayer * player )
 {
-	if( player != NULL )
+	if( player != nullptr )
 		functions->BanPlayer( player->nPlayerId );
 }
 
 void Message            ( const SQChar * message ) { functions->SendClientMessage( -1, 0x0b5fa5ff, "%s", message ); }
 void MessagePlayer      ( const SQChar * message, CPlayer * player )
 {
-	if( player != NULL )
+	if( player != nullptr )
 		functions->SendClientMessage( player->nPlayerId, 0x0b5fa5ff, "%s", message );
 }
 
 void MessageAllExcept   ( const SQChar * message, CPlayer * player )
 {
-	if( player != NULL )
+	if( player != nullptr )
 	{
 		for( int i = 0; i < MAX_PLAYERS; i++ )
 		{
@@ -470,7 +461,7 @@ void MessageAllExcept   ( const SQChar * message, CPlayer * player )
 
 void PrivMessage        ( CPlayer * player, const SQChar * message )
 {
-	if( player != NULL )
+	if( player != nullptr )
 		functions->SendClientMessage( player->nPlayerId, 0x007f16ff, "** pm >> %s", message );
 }
 
@@ -485,7 +476,7 @@ void PrivMessageAll     ( const SQChar * message )
 
 void SendPlayerMessage  ( CPlayer * playerToFake, CPlayer * playerTo, const SQChar * message )
 {
-	if( playerToFake != NULL && playerTo != NULL )
+	if( playerToFake != nullptr && playerTo != nullptr )
 		functions->SendClientMessage( playerTo->nPlayerId, 0x007f16ff, "** pm from %s >> %s", playerToFake->GetName(), message );
 }
 
@@ -608,7 +599,7 @@ const SQChar * GetSkinName     ( int skinID )
 		case 5:   return "Paramedic";
 		case 6:   return "Firefighter";
 		case 7:   return "Golf Guy #1";
-		case 8:   return NULL;
+		case 8:   return nullptr;
 		case 9:   return "Bum Lady #1";
 		case 10:  return "Bum Lady #2";
 		case 11:  return "Punk #1";
@@ -760,7 +751,7 @@ const SQChar * GetSkinName     ( int skinID )
 		case 157: return "Stripper #2";
 		case 158: return "Stripper #3";
 		case 159: return "Store Clerk";
-		default:  return NULL;
+		default:  return nullptr;
 	}
 }
 
@@ -771,7 +762,7 @@ void LoadVCMPModule( const SQChar * name )
 
 int GetWeaponID( const SQChar * name )
 {
-	if( name == NULL || strlen(name) < 1 )
+	if( name == nullptr || strlen(name) < 1 )
 		return 0;
 	
 	// Get characters we might need
@@ -1051,10 +1042,10 @@ void RemoveAllKeybinds( void ) { functions->RemoveAllKeyBinds(); }
 void ReloadScripts( void )
 {
 	// Are we allowed to reload?
-	if( pCore->canReload )
+	if( pCore->IsReloadingAllowed() )
 	{
 		// Let's not reload the scripts for now
-		pCore->canReload = false;
+		pCore->ChangeReloadPermission(false);
 
 		// Get rid of ALL declared timers
 		pCore->DropAllTimers();
@@ -1078,7 +1069,7 @@ void ReloadScripts( void )
 		pCore->RegisterEntities();
 
 		// Re-run the script
-		pCore->script->Run();
+		pCore->GetScript()->Run();
 
 		// Trigger the onScriptLoad event
 		Function callback = RootTable( v ).GetFunction( _SC( "onScriptLoad" ) );
@@ -1088,7 +1079,7 @@ void ReloadScripts( void )
 		callback.Release();
 
 		// You are now free to move about the cabin
-		pCore->canReload = true;
+		pCore->ChangeReloadPermission(true);
 
 		// And now we dance
 		OutputMessage( "Scripts reloaded." );
@@ -1615,7 +1606,7 @@ const SQChar * GetVehicleNameFromModel ( int model )
 		case 234: return "Bloodring Banger #1";
 		case 235: return "Bloodring Banger #2";
 		case 236: return "Vice Squad Cheetah";
-		default:  return NULL;
+		default:  return nullptr;
 	}
 }
 
@@ -1646,14 +1637,14 @@ SQInteger FindPlayer( HSQUIRRELVM v )
 {
 	if( sq_gettop( v ) >= 2 )
 	{
-		CPlayer * pPlayer = NULL;
+		CPlayer * pPlayer = nullptr;
 		if( sq_gettype( v, 2 ) == OT_INTEGER )
 		{
 			SQInteger playerID;
 			sq_getinteger( v, 2, &playerID );
 
 			if( playerID < MAX_PLAYERS )
-				pPlayer = pCore->playerMap[playerID];
+				pPlayer = pCore->FindPlayer(playerID);
 			else
 			{
 				sq_pushnull( v );
@@ -1688,21 +1679,21 @@ SQInteger FindPlayer( HSQUIRRELVM v )
 			}
 
 			delete [] nameBuf;
-			nameBuf = NULL;
+			nameBuf = nullptr;
 			free( lowerName );
 
-			if( pID == 255 )
+			if (pID == 255)
 			{
-				sq_pushnull( v );
+				sq_pushnull(v);
 				return 1;
 			}
 			else
-				pPlayer = pCore->playerMap[pID];
+				pPlayer = pCore->FindPlayer(pID);
 		}
 		else
 			return sq_throwerror( v, "Unexpected argument in FindPlayer: must be integer or string" );
 
-		if( pPlayer == NULL )
+		if( pPlayer == nullptr )
 		{
 			sq_pushnull( v );
 			return 1;

@@ -22,7 +22,7 @@ class CCore
 	public:
 		static CCore * GetInstance()
 		{
-			if( pCoreInstance == NULL )
+			if( pCoreInstance == nullptr )
 			{
 				// Create a new instance
 				pCoreInstance = new CCore();
@@ -50,17 +50,26 @@ class CCore
 
 		void printf( char* pszFormat, ... );
 
-		// Class maps
-		CPlayer  * playerMap[MAX_PLAYERS];
-		CPickup  * pickupMap[MAX_PICKUPS];
-		CVehicle * vehicleMap[MAX_VEHICLES];
-		CObject  * objectMap[MAX_OBJECTS];
+	public:
+		CObject  * FindObject(int nObjectId);
+		CPickup  * FindPickup(int nPickupId);
+		CPlayer  * FindPlayer(int nPlayerId);
+		CVehicle * FindVehicle(int nVehicleId);
+		FILE     * GetLogInstance();
+		Script   * GetScript() { return this->script; }
 
-		// Sqrat's script
-		Script * script;
+		bool AssignObject(int nObjectId, CObject * pObject);
+		bool AssignPickup(int nPickupId, CPickup * pPickup);
+		bool AssignPlayer(int nPlayerId, CPlayer * pPlayer);
+		bool AssignVehicle(int nVehicleId, CVehicle * pVehicle);
 
-		// Can we reload the scripts?
-		bool canReload;
+		void ClearObject(int nObjectId);
+		void ClearPickup(int nPickupId);
+		void ClearPlayer(int nPlayerId);
+		void ClearVehicle(int nVehicleId);
+
+		bool IsReloadingAllowed() { return this->canReload; }
+		void ChangeReloadPermission(bool bCanReload) { this->canReload = bCanReload; }
 
 	private:
 		// Constructor
@@ -81,6 +90,18 @@ class CCore
 
 		// Reference count
 		static unsigned short refCount;
+
+		// Class maps
+		CPlayer  * playerMap[MAX_PLAYERS];
+		CPickup  * pickupMap[MAX_PICKUPS];
+		CVehicle * vehicleMap[MAX_VEHICLES];
+		CObject  * objectMap[MAX_OBJECTS];
+
+		// Sqrat's script
+		Script * script;
+
+		// Can we reload the scripts?
+		bool canReload;
 
 		// VC:MP log file
 		FILE * pLogFile;

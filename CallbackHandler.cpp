@@ -29,7 +29,7 @@ int OnInitServer()
 	pCore->LoadScript();
 
 	// Prohibit reloading at this time.
-	pCore->canReload = false;
+	pCore->ChangeReloadPermission(false);
 
 	Function callback = RootTable(v).GetFunction(_SC("onServerStart"));
 	try
@@ -45,7 +45,7 @@ int OnInitServer()
 	callback.Release();
 
 	// Reallow reloading.
-	pCore->canReload = true;
+	pCore->ChangeReloadPermission(true);
 
 	return 1;
 }
@@ -93,7 +93,8 @@ void OnPlayerConnect( int nPlayerId )
 	CPlayer * newPlayer = new CPlayer;
 
 	newPlayer->nPlayerId = nPlayerId;
-	pCore->playerMap[nPlayerId] = newPlayer;
+	if (!pCore->AssignPlayer(nPlayerId, newPlayer))
+		OutputWarning("Disaster inbound: failed to assign player to map");
 
 	Function callback = RootTable().GetFunction(_SC("onPlayerJoin"));
 	try
@@ -113,7 +114,7 @@ void OnPlayerDisconnect( int nPlayerId, int nReason )
 {
 	if( pCore )
 	{
-		CPlayer * playerInstance = pCore->playerMap[nPlayerId];
+		CPlayer * playerInstance = pCore->FindPlayer(nPlayerId);
 		Function callback = RootTable().GetFunction(_SC("onPlayerPart"));
 
 		try
@@ -132,17 +133,17 @@ void OnPlayerDisconnect( int nPlayerId, int nReason )
 		delete playerInstance;
 
 		// Destroy all references
-		playerInstance              = NULL;
-		pCore->playerMap[nPlayerId] = NULL;
+		playerInstance = nullptr;
+		pCore->ClearPlayer(nPlayerId);
 	}
 }
 
 int OnPlayerRequestClass( int nPlayerId, int nOffset )
 {
-	CPlayer * playerInstance = pCore->playerMap[ nPlayerId ];
-
+	CPlayer * playerInstance = pCore->FindPlayer(nPlayerId);
 	Function callback = RootTable().GetFunction(_SC("onPlayerRequestClass"));
 	int returnValue = 1;
+
 	try
 	{
 		if (!callback.IsNull())
@@ -159,7 +160,7 @@ int OnPlayerRequestClass( int nPlayerId, int nOffset )
 
 int OnPlayerRequestSpawn( int nPlayerId )
 {
-	CPlayer * playerInstance = pCore->playerMap[nPlayerId];
+	CPlayer * playerInstance = pCore->FindPlayer(nPlayerId);
 	Function callback = RootTable().GetFunction(_SC("onPlayerRequestSpawn"));
 	int returnValue = 1;
 
@@ -179,7 +180,7 @@ int OnPlayerRequestSpawn( int nPlayerId )
 
 void OnPlayerSpawn( int nPlayerId )
 {
-	CPlayer * playerInstance = pCore->playerMap[nPlayerId];
+	CPlayer * playerInstance = pCore->FindPlayer(nPlayerId);
 	Function callback = RootTable().GetFunction(_SC("onPlayerSpawn"));
 
 	try
@@ -197,7 +198,7 @@ void OnPlayerSpawn( int nPlayerId )
 
 void OnPlayerDeath( int nPlayerId, int nKillerId, int nReason, int nBodyPart )
 {
-	CPlayer * playerInstance = pCore->playerMap[nPlayerId];
+	CPlayer * playerInstance = pCore->FindPlayer(nPlayerId);
 	if (nReason == 70 || !functions->IsPlayerConnected(nKillerId))
 	{
 		Function callback = RootTable().GetFunction(_SC("onPlayerDeath"));
@@ -215,7 +216,7 @@ void OnPlayerDeath( int nPlayerId, int nKillerId, int nReason, int nBodyPart )
 	}
 	else
 	{
-		CPlayer * killerInstance = pCore->playerMap[nKillerId];
+		CPlayer * killerInstance = pCore->FindPlayer(nKillerId);
 		Function callback;
 		if (functions->GetPlayerTeam(nPlayerId) == functions->GetPlayerTeam(nKillerId))
 			callback = RootTable().GetFunction(_SC("onPlayerTeamKill"));
@@ -238,14 +239,14 @@ void OnPlayerDeath( int nPlayerId, int nKillerId, int nReason, int nBodyPart )
 
 int OnPlayerRequestEnter( int nPlayerId, int nVehicleId, int nSlotId )
 {
-	CPlayer  * playerInstance = pCore->playerMap[nPlayerId];
-	CVehicle * vehicleInstance = pCore->vehicleMap[nVehicleId];
+	CPlayer  * playerInstance = pCore->FindPlayer(nPlayerId);
+	CVehicle * vehicleInstance = pCore->FindVehicle(nVehicleId);
 
 	Function callback = RootTable().GetFunction(_SC("onPlayerEnteringVehicle"));
 	int returnValue = 1;
 	try
 	{
-		if (!callback.IsNull() && playerInstance != NULL && vehicleInstance != NULL)
+		if (!callback.IsNull() && playerInstance != nullptr && vehicleInstance != nullptr)
 			returnValue = callback.Evaluate<int, CPlayer *, CVehicle *, int>(playerInstance, vehicleInstance, nSlotId);
 	}
 	catch (Sqrat::Error e)
@@ -259,13 +260,13 @@ int OnPlayerRequestEnter( int nPlayerId, int nVehicleId, int nSlotId )
 
 void OnPlayerEnterVehicle( int nPlayerId, int nVehicleId, int nSlotId )
 {
-	CPlayer  * playerInstance = pCore->playerMap[nPlayerId];
-	CVehicle * vehicleInstance = pCore->vehicleMap[nVehicleId];
+	CPlayer  * playerInstance = pCore->FindPlayer(nPlayerId);
+	CVehicle * vehicleInstance = pCore->FindVehicle(nVehicleId);
 
 	Function callback = RootTable().GetFunction(_SC("onPlayerEnterVehicle"));
 	try
 	{
-		if (!callback.IsNull() && playerInstance != NULL && vehicleInstance != NULL)
+		if (!callback.IsNull() && playerInstance != nullptr && vehicleInstance != nullptr)
 			callback.Execute<CPlayer *, CVehicle *, int>(playerInstance, vehicleInstance, nSlotId);
 	}
 	catch (Sqrat::Error e)
@@ -278,8 +279,8 @@ void OnPlayerEnterVehicle( int nPlayerId, int nVehicleId, int nSlotId )
 
 void OnPlayerExitVehicle( int nPlayerId, int nVehicleId )
 {
-	CPlayer  * playerInstance  = pCore->playerMap[ nPlayerId ];
-	CVehicle * vehicleInstance = pCore->vehicleMap[nVehicleId];
+	CPlayer  * playerInstance = pCore->FindPlayer(nPlayerId);
+	CVehicle * vehicleInstance = pCore->FindVehicle(nVehicleId);
 	Function callback = RootTable().GetFunction(_SC("onPlayerExitVehicle"));
 
 	try
@@ -297,8 +298,8 @@ void OnPlayerExitVehicle( int nPlayerId, int nVehicleId )
 
 int OnPickupClaimPicked( int nPickupId, int nPlayerId )
 {
-	CPlayer * playerInstance = pCore->playerMap[ nPlayerId ];
-	CPickup * pickupInstance = pCore->pickupMap[nPickupId];
+	CPlayer * playerInstance = pCore->FindPlayer(nPlayerId);
+	CPickup * pickupInstance = pCore->FindPickup(nPickupId);
 
 	Function callback = RootTable().GetFunction(_SC("onPickupClaimPicked"));
 	int returnValue = 1;
@@ -318,8 +319,8 @@ int OnPickupClaimPicked( int nPickupId, int nPlayerId )
 
 void OnPickupPickedUp( int nPickupId, int nPlayerId )
 {
-	CPlayer * playerInstance = pCore->playerMap[ nPlayerId ];
-	CPickup * pickupInstance = pCore->pickupMap[nPickupId];
+	CPlayer * playerInstance = pCore->FindPlayer(nPlayerId);
+	CPickup * pickupInstance = pCore->FindPickup(nPickupId);
 	Function callback = RootTable().GetFunction(_SC("onPickupPickedUp"));
 
 	try
@@ -337,7 +338,7 @@ void OnPickupPickedUp( int nPickupId, int nPlayerId )
 
 void OnPickupRespawn( int nPickupId )
 {
-	CPickup * pickupInstance = pCore->pickupMap[nPickupId];
+	CPickup * pickupInstance = pCore->FindPickup(nPickupId);
 	Function callback = RootTable().GetFunction(_SC("onPickupRespawn"));
 
 	try
@@ -355,7 +356,7 @@ void OnPickupRespawn( int nPickupId )
 
 void OnVehicleExplode( int nVehicleId )
 {
-	CVehicle * vehicleInstance = pCore->vehicleMap[nVehicleId];
+	CVehicle * vehicleInstance = pCore->FindVehicle(nVehicleId);
 	Function callback = RootTable().GetFunction(_SC("onVehicleExplode"));
 
 	try
@@ -373,7 +374,7 @@ void OnVehicleExplode( int nVehicleId )
 
 void OnVehicleRespawn( int nVehicleId )
 {
-	CVehicle * vehicleInstance = pCore->vehicleMap[nVehicleId];
+	CVehicle * vehicleInstance = pCore->FindVehicle(nVehicleId);
 	Function callback = RootTable().GetFunction(_SC("onVehicleRespawn"));
 
 	try
@@ -391,7 +392,7 @@ void OnVehicleRespawn( int nVehicleId )
 
 int OnPublicMessage( int nPlayerId, const char* pszText )
 {
-	CPlayer * playerInstance = pCore->playerMap[nPlayerId];
+	CPlayer * playerInstance = pCore->FindPlayer(nPlayerId);
 	Function callback = RootTable().GetFunction(_SC("onPlayerChat"));
 	int returnValue = 1;
 
@@ -411,7 +412,7 @@ int OnPublicMessage( int nPlayerId, const char* pszText )
 
 int OnCommandMessage( int nPlayerId, const char* pszText )
 {
-	CPlayer * playerInstance = pCore->playerMap[ nPlayerId ];
+	CPlayer * playerInstance = pCore->FindPlayer(nPlayerId);
 	Function callback        = RootTable().GetFunction( _SC("onPlayerCommand") );
 	int returnValue          = 1;
 
@@ -444,8 +445,8 @@ int OnCommandMessage( int nPlayerId, const char* pszText )
 
 int OnPrivateMessage( int nPlayerId, int nTargetId, const char* pszText )
 {
-	CPlayer * playerInstance = pCore->playerMap[ nPlayerId ];
-	CPlayer * targetInstance = pCore->playerMap[nTargetId];
+	CPlayer * playerInstance = pCore->FindPlayer(nPlayerId);
+	CPlayer * targetInstance = pCore->FindPlayer(nTargetId);
 
 	Function callback = RootTable().GetFunction(_SC("onPlayerPM"));
 	int returnValue = 1;
@@ -465,7 +466,7 @@ int OnPrivateMessage( int nPlayerId, int nTargetId, const char* pszText )
 
 void OnPlayerBeginTyping( int nPlayerId )
 {
-	CPlayer * playerInstance = pCore->playerMap[nPlayerId];
+	CPlayer * playerInstance = pCore->FindPlayer(nPlayerId);
 	Function callback = RootTable().GetFunction(_SC("onPlayerBeginTyping"));
 	try
 	{
@@ -482,7 +483,7 @@ void OnPlayerBeginTyping( int nPlayerId )
 
 void OnPlayerEndTyping( int nPlayerId )
 {
-	CPlayer * playerInstance = pCore->playerMap[nPlayerId];
+	CPlayer * playerInstance = pCore->FindPlayer(nPlayerId);
 	Function callback = RootTable().GetFunction(_SC("onPlayerEndTyping"));
 	try
 	{
@@ -555,7 +556,7 @@ void OnVehicleUpdate( int nVehicleId, int nUpdateType )
 		{
 			if (!callback.IsNull())
 			{
-				CVehicle * vehInst = pCore->vehicleMap[nVehicleId];
+				CVehicle * vehInst = pCore->FindVehicle(nVehicleId);
 				callback.Execute<CVehicle *, float, float>(vehInst, lastHP, hp);
 			}
 		}
@@ -576,7 +577,7 @@ void OnVehicleUpdate( int nVehicleId, int nUpdateType )
 		{
 			if (!callback.IsNull())
 			{
-				CVehicle * vehInst = pCore->vehicleMap[nVehicleId];
+				CVehicle * vehInst = pCore->FindVehicle(nVehicleId);
 				callback.Execute<CVehicle *, float, float, float, float, float, float>(vehInst, lastPos.x, lastPos.y, lastPos.z, x, y, z);
 			}
 		}
@@ -616,7 +617,7 @@ void OnPlayerUpdate( int nPlayerId, int nUpdateType )
 		try
 		{
 			if (!callback.IsNull())
-				callback(pCore->playerMap[nPlayerId], lastPos.x, lastPos.y, lastPos.z, x, y, z);
+				callback(pCore->FindPlayer(nPlayerId), lastPos.x, lastPos.y, lastPos.z, x, y, z);
 		}
 		catch (Sqrat::Error e)
 		{
@@ -636,7 +637,7 @@ void OnPlayerUpdate( int nPlayerId, int nUpdateType )
 		try
 		{
 			if (!callback.IsNull())
-				callback(pCore->playerMap[nPlayerId], lastHP, hp);
+				callback(pCore->FindPlayer(nPlayerId), lastHP, hp);
 		}
 		catch (Sqrat::Error e)
 		{
@@ -654,7 +655,7 @@ void OnPlayerUpdate( int nPlayerId, int nUpdateType )
 		try
 		{
 			if (!callback.IsNull())
-				callback(pCore->playerMap[nPlayerId], lastArmour, armour);
+				callback(pCore->FindPlayer(nPlayerId), lastArmour, armour);
 		}
 		catch (Sqrat::Error e)
 		{
@@ -672,7 +673,7 @@ void OnPlayerUpdate( int nPlayerId, int nUpdateType )
 		try
 		{
 			if (!callback.IsNull())
-				callback(pCore->playerMap[nPlayerId], lastWep, wep);
+				callback(pCore->FindPlayer(nPlayerId), lastWep, wep);
 		}
 		catch (Sqrat::Error e)
 		{
@@ -692,7 +693,7 @@ void OnObjectShot( int nObjectId, int nPlayerId, int nWeapon )
 	try
 	{
 		if (!callback.IsNull())
-			callback.Execute<CObject *, CPlayer *, int>(pCore->objectMap[nObjectId], pCore->playerMap[nPlayerId], nWeapon);
+			callback.Execute<CObject *, CPlayer *, int>(pCore->FindObject(nObjectId), pCore->FindPlayer(nPlayerId), nWeapon);
 	}
 	catch (Sqrat::Error e)
 	{
@@ -708,7 +709,7 @@ void OnObjectBump( int nObjectId, int nPlayerId )
 	try
 	{
 		if (!callback.IsNull())
-			callback.Execute<CObject *, CPlayer *>(pCore->objectMap[nObjectId], pCore->playerMap[nPlayerId]);
+			callback.Execute<CObject *, CPlayer *>(pCore->FindObject(nObjectId), pCore->FindPlayer(nPlayerId));
 	}
 	catch (Sqrat::Error e)
 	{
@@ -727,41 +728,29 @@ int OnInternalCommand( unsigned int uCmdType, const char* pszText )
 void OnEntityPoolChange (int nEntityType, int nEntityId, unsigned int bDeleted) {
 	if(nEntityType == 1) {
 		if(!bDeleted) {
-			pCore->vehicleMap[nEntityId] = new CVehicle;
-			pCore->vehicleMap[nEntityId]->Init( nEntityId, false );
+			pCore->AssignVehicle(nEntityId, new CVehicle);
+			pCore->FindVehicle(nEntityId)->Init( nEntityId, false );
 		}
 		else {
-			if(pCore->vehicleMap[nEntityId] != NULL) {
-				delete pCore->vehicleMap[nEntityId];
-			}
-
-			pCore->vehicleMap[nEntityId] = NULL;
+			pCore->ClearVehicle(nEntityId);
 		}
 	}
 	else if(nEntityType == 2) {
 		if(!bDeleted) {
-			pCore->objectMap[nEntityId] = new CObject;
-			pCore->objectMap[nEntityId]->Init( nEntityId, false );
+			pCore->AssignObject(nEntityId, new CObject);
+			pCore->FindObject(nEntityId)->Init( nEntityId, false );
 		}
 		else {
-			if(pCore->objectMap[nEntityId] != NULL) {
-				delete pCore->objectMap[nEntityId];
-			}
-
-			pCore->objectMap[nEntityId] = NULL;
+			pCore->ClearObject(nEntityId);
 		}
 	}
 	else if(nEntityType == 3) {
 		if(!bDeleted) {
-			pCore->pickupMap[nEntityId] = new CPickup;
-			pCore->pickupMap[nEntityId]->Init( nEntityId, false );
+			pCore->AssignPickup(nEntityId, new CPickup);
+			pCore->FindPickup(nEntityId)->Init( nEntityId, false );
 		}
 		else {
-			if(pCore->pickupMap[nEntityId] != NULL) {
-				delete pCore->pickupMap[nEntityId];
-			}
-
-			pCore->pickupMap[nEntityId] = NULL;
+			pCore->ClearPickup(nEntityId);
 		}
 	}
 }
@@ -772,7 +761,7 @@ void OnKeyBindDown(int nPlayerId, int nBindId)
 	try
 	{
 		if (!callback.IsNull())
-			callback.Execute<CPlayer *, int>(pCore->playerMap[nPlayerId], nBindId);
+			callback.Execute<CPlayer *, int>(pCore->FindPlayer(nPlayerId), nBindId);
 	}
 	catch (Sqrat::Error e)
 	{
@@ -788,7 +777,7 @@ void OnKeyBindUp(int nPlayerId, int nBindId)
 	try
 	{
 		if (!callback.IsNull())
-			callback.Execute<CPlayer *, int>(pCore->playerMap[nPlayerId], nBindId);
+			callback.Execute<CPlayer *, int>(pCore->FindPlayer(nPlayerId), nBindId);
 	}
 	catch (Sqrat::Error e)
 	{
@@ -804,7 +793,7 @@ void OnPlayerAwayChange(int nPlayerId, unsigned int bNewStatus)
 	try
 	{
 		if (!callback.IsNull())
-			callback.Execute<CPlayer *, bool>(pCore->playerMap[nPlayerId], bNewStatus == 1);
+			callback.Execute<CPlayer *, bool>(pCore->FindPlayer(nPlayerId), bNewStatus == 1);
 	}
 	catch (Sqrat::Error e)
 	{
@@ -820,7 +809,7 @@ void OnPlayerSpectate(int nPlayerId, int nTargetId)
 	try
 	{
 		if (!callback.IsNull())
-			callback.Execute<CPlayer *, CPlayer *>(pCore->playerMap[nPlayerId], pCore->playerMap[nTargetId]);
+			callback.Execute<CPlayer *, CPlayer *>(pCore->FindPlayer(nPlayerId), pCore->FindPlayer(nTargetId));
 	}
 	catch (Sqrat::Error e)
 	{
@@ -836,7 +825,7 @@ void OnPlayerCrashDump(int nPlayerId, const char * szCrashReport)
 	try
 	{
 		if (!callback.IsNull())
-			callback.Execute<CPlayer *, const SQChar *>(pCore->playerMap[nPlayerId], szCrashReport);
+			callback.Execute<CPlayer *, const SQChar *>(pCore->FindPlayer(nPlayerId), szCrashReport);
 	}
 	catch (Sqrat::Error e)
 	{
