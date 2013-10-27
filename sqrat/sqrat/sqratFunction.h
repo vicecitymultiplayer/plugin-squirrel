@@ -43,11 +43,6 @@ private:
     HSQUIRRELVM vm;
     HSQOBJECT env, obj;
 
-    Function(HSQUIRRELVM v, HSQOBJECT e, HSQOBJECT o) : vm(v), env(e), obj(o) {
-        sq_addref(vm, &env);
-        sq_addref(vm, &obj);
-    }
-
 public:
     Function() {
         sq_resetobject(&env);
@@ -63,6 +58,11 @@ public:
         sq_addref(vm, &env);
         Object so = e.GetSlot(slot);
         obj = so.GetObject();
+        sq_addref(vm, &obj);
+    }
+
+    Function(HSQUIRRELVM v, HSQOBJECT e, HSQOBJECT o) : vm(v), env(e), obj(o) {
+        sq_addref(vm, &env);
         sq_addref(vm, &obj);
     }
 
@@ -110,12 +110,24 @@ public:
         sq_pushobject(vm, obj);
         sq_pushobject(vm, env);
 
+        SQUnsignedInteger nparams;
+        SQUnsignedInteger nfreevars;
+        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 1)) {
+            sq_pop(vm, 2);
+            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+            R value;
+            return value;
+        }
+
         SQRESULT result = sq_call(vm, 1, true, ErrorHandling::IsEnabled());
-		if( SQ_FAILED( result ) )
-		{
-			sq_pop( vm, 1 );
-			throw Exception( LastErrorString( vm ) );
-		}
+
+        //handle an error: only pop a single element and throw the exception
+        if(SQ_FAILED(result)) {
+            sq_pop(vm, 1);
+            Error::Instance().Throw(vm, LastErrorString(vm));
+            R value;
+            return value;
+        }
 
         R ret = Var<R>(vm, -1).value;
         sq_pop(vm, 2);
@@ -127,9 +139,27 @@ public:
         sq_pushobject(vm, obj);
         sq_pushobject(vm, env);
 
+        SQUnsignedInteger nparams;
+        SQUnsignedInteger nfreevars;
+        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 2)) {
+            sq_pop(vm, 2);
+            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+            R value;
+            return value;
+        }
+
         PushVar(vm, a1);
 
-        sq_call(vm, 2, true, ErrorHandling::IsEnabled());
+        SQRESULT result = sq_call(vm, 2, true, ErrorHandling::IsEnabled());
+
+        //handle an error: only pop a single element and throw the exception
+        if(SQ_FAILED(result)) {
+            sq_pop(vm, 1);
+            Error::Instance().Throw(vm, LastErrorString(vm));
+            R value;
+            return value;
+        }
+
         Var<R> ret(vm, -1);
         sq_pop(vm, 2);
         return ret.value;
@@ -140,10 +170,28 @@ public:
         sq_pushobject(vm, obj);
         sq_pushobject(vm, env);
 
+        SQUnsignedInteger nparams;
+        SQUnsignedInteger nfreevars;
+        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 3)) {
+            sq_pop(vm, 2);
+            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+            R value;
+            return value;
+        }
+
         PushVar(vm, a1);
         PushVar(vm, a2);
 
-        sq_call(vm, 3, true, ErrorHandling::IsEnabled());
+        SQRESULT result = sq_call(vm, 3, true, ErrorHandling::IsEnabled());
+
+        //handle an error: only pop a single element and throw the exception
+        if(SQ_FAILED(result)) {
+            sq_pop(vm, 1);
+            Error::Instance().Throw(vm, LastErrorString(vm));
+            R value;
+            return value;
+        }
+
         R ret = Var<R>(vm, -1).value;
         sq_pop(vm, 2);
         return ret;
@@ -154,11 +202,29 @@ public:
         sq_pushobject(vm, obj);
         sq_pushobject(vm, env);
 
+        SQUnsignedInteger nparams;
+        SQUnsignedInteger nfreevars;
+        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 4)) {
+            sq_pop(vm, 2);
+            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+            R value;
+            return value;
+        }
+
         PushVar(vm, a1);
         PushVar(vm, a2);
         PushVar(vm, a3);
 
-        sq_call(vm, 4, true, ErrorHandling::IsEnabled());
+        SQRESULT result = sq_call(vm, 4, true, ErrorHandling::IsEnabled());
+
+        //handle an error: only pop a single element and throw the exception
+        if(SQ_FAILED(result)) {
+            sq_pop(vm, 1);
+            Error::Instance().Throw(vm, LastErrorString(vm));
+            R value;
+            return value;
+        }
+
         R ret = Var<R>(vm, -1).value;
         sq_pop(vm, 2);
         return ret;
@@ -169,12 +235,30 @@ public:
         sq_pushobject(vm, obj);
         sq_pushobject(vm, env);
 
+        SQUnsignedInteger nparams;
+        SQUnsignedInteger nfreevars;
+        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 5)) {
+            sq_pop(vm, 2);
+            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+            R value;
+            return value;
+        }
+
         PushVar(vm, a1);
         PushVar(vm, a2);
         PushVar(vm, a3);
         PushVar(vm, a4);
 
-        sq_call(vm, 5, true, ErrorHandling::IsEnabled());
+        SQRESULT result = sq_call(vm, 5, true, ErrorHandling::IsEnabled());
+
+        //handle an error: only pop a single element and throw the exception
+        if(SQ_FAILED(result)) {
+            sq_pop(vm, 1);
+            Error::Instance().Throw(vm, LastErrorString(vm));
+            R value;
+            return value;
+        }
+
         R ret = Var<R>(vm, -1).value;
         sq_pop(vm, 2);
         return ret;
@@ -186,13 +270,31 @@ public:
         sq_pushobject(vm, obj);
         sq_pushobject(vm, env);
 
+        SQUnsignedInteger nparams;
+        SQUnsignedInteger nfreevars;
+        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 6)) {
+            sq_pop(vm, 2);
+            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+            R value;
+            return value;
+        }
+
         PushVar(vm, a1);
         PushVar(vm, a2);
         PushVar(vm, a3);
         PushVar(vm, a4);
         PushVar(vm, a5);
 
-        sq_call(vm, 6, true, ErrorHandling::IsEnabled());
+        SQRESULT result = sq_call(vm, 6, true, ErrorHandling::IsEnabled());
+
+        //handle an error: only pop a single element and throw the exception
+        if(SQ_FAILED(result)) {
+            sq_pop(vm, 1);
+            Error::Instance().Throw(vm, LastErrorString(vm));
+            R value;
+            return value;
+        }
+
         R ret = Var<R>(vm, -1).value;
         sq_pop(vm, 2);
         return ret;
@@ -203,6 +305,15 @@ public:
         sq_pushobject(vm, obj);
         sq_pushobject(vm, env);
 
+        SQUnsignedInteger nparams;
+        SQUnsignedInteger nfreevars;
+        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 7)) {
+            sq_pop(vm, 2);
+            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+            R value;
+            return value;
+        }
+
         PushVar(vm, a1);
         PushVar(vm, a2);
         PushVar(vm, a3);
@@ -210,7 +321,16 @@ public:
         PushVar(vm, a5);
         PushVar(vm, a6);
 
-        sq_call(vm, 7, true, ErrorHandling::IsEnabled());
+        SQRESULT result = sq_call(vm, 7, true, ErrorHandling::IsEnabled());
+
+        //handle an error: only pop a single element and throw the exception
+        if(SQ_FAILED(result)) {
+            sq_pop(vm, 1);
+            Error::Instance().Throw(vm, LastErrorString(vm));
+            R value;
+            return value;
+        }
+
         R ret = Var<R>(vm, -1).value;
         sq_pop(vm, 2);
         return ret;
@@ -221,6 +341,15 @@ public:
         sq_pushobject(vm, obj);
         sq_pushobject(vm, env);
 
+        SQUnsignedInteger nparams;
+        SQUnsignedInteger nfreevars;
+        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 8)) {
+            sq_pop(vm, 2);
+            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+            R value;
+            return value;
+        }
+
         PushVar(vm, a1);
         PushVar(vm, a2);
         PushVar(vm, a3);
@@ -229,7 +358,16 @@ public:
         PushVar(vm, a6);
         PushVar(vm, a7);
 
-        sq_call(vm, 8, true, ErrorHandling::IsEnabled());
+        SQRESULT result = sq_call(vm, 8, true, ErrorHandling::IsEnabled());
+
+        //handle an error: only pop a single element and throw the exception
+        if(SQ_FAILED(result)) {
+            sq_pop(vm, 1);
+            Error::Instance().Throw(vm, LastErrorString(vm));
+            R value;
+            return value;
+        }
+
         R ret = Var<R>(vm, -1).value;
         sq_pop(vm, 2);
         return ret;
@@ -240,6 +378,15 @@ public:
         sq_pushobject(vm, obj);
         sq_pushobject(vm, env);
 
+        SQUnsignedInteger nparams;
+        SQUnsignedInteger nfreevars;
+        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 9)) {
+            sq_pop(vm, 2);
+            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+            R value;
+            return value;
+        }
+
         PushVar(vm, a1);
         PushVar(vm, a2);
         PushVar(vm, a3);
@@ -249,7 +396,16 @@ public:
         PushVar(vm, a7);
         PushVar(vm, a8);
 
-        sq_call(vm, 9, true, ErrorHandling::IsEnabled());
+        SQRESULT result = sq_call(vm, 9, true, ErrorHandling::IsEnabled());
+
+        //handle an error: only pop a single element and throw the exception
+        if(SQ_FAILED(result)) {
+            sq_pop(vm, 1);
+            Error::Instance().Throw(vm, LastErrorString(vm));
+            R value;
+            return value;
+        }
+
         R ret = Var<R>(vm, -1).value;
         sq_pop(vm, 2);
         return ret;
@@ -259,6 +415,15 @@ public:
     R Evaluate(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9) {
         sq_pushobject(vm, obj);
         sq_pushobject(vm, env);
+
+        SQUnsignedInteger nparams;
+        SQUnsignedInteger nfreevars;
+        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 10)) {
+            sq_pop(vm, 2);
+            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+            R value;
+            return value;
+        }
 
         PushVar(vm, a1);
         PushVar(vm, a2);
@@ -270,7 +435,16 @@ public:
         PushVar(vm, a8);
         PushVar(vm, a9);
 
-        sq_call(vm, 10, true, ErrorHandling::IsEnabled());
+        SQRESULT result = sq_call(vm, 10, true, ErrorHandling::IsEnabled());
+
+        //handle an error: only pop a single element and throw the exception
+        if(SQ_FAILED(result)) {
+            sq_pop(vm, 1);
+            Error::Instance().Throw(vm, LastErrorString(vm));
+            R value;
+            return value;
+        }
+
         R ret = Var<R>(vm, -1).value;
         sq_pop(vm, 2);
         return ret;
@@ -280,6 +454,15 @@ public:
     R Evaluate(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10) {
         sq_pushobject(vm, obj);
         sq_pushobject(vm, env);
+
+        SQUnsignedInteger nparams;
+        SQUnsignedInteger nfreevars;
+        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 11)) {
+            sq_pop(vm, 2);
+            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+            R value;
+            return value;
+        }
 
         PushVar(vm, a1);
         PushVar(vm, a2);
@@ -292,7 +475,16 @@ public:
         PushVar(vm, a9);
         PushVar(vm, a10);
 
-        sq_call(vm, 11, true, ErrorHandling::IsEnabled());
+        SQRESULT result = sq_call(vm, 11, true, ErrorHandling::IsEnabled());
+
+        //handle an error: only pop a single element and throw the exception
+        if(SQ_FAILED(result)) {
+            sq_pop(vm, 1);
+            Error::Instance().Throw(vm, LastErrorString(vm));
+            R value;
+            return value;
+        }
+
         R ret = Var<R>(vm, -1).value;
         sq_pop(vm, 2);
         return ret;
@@ -302,6 +494,15 @@ public:
     R Evaluate(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11) {
         sq_pushobject(vm, obj);
         sq_pushobject(vm, env);
+
+        SQUnsignedInteger nparams;
+        SQUnsignedInteger nfreevars;
+        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 12)) {
+            sq_pop(vm, 2);
+            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+            R value;
+            return value;
+        }
 
         PushVar(vm, a1);
         PushVar(vm, a2);
@@ -315,7 +516,16 @@ public:
         PushVar(vm, a10);
         PushVar(vm, a11);
 
-        sq_call(vm, 12, true, ErrorHandling::IsEnabled());
+        SQRESULT result = sq_call(vm, 12, true, ErrorHandling::IsEnabled());
+
+        //handle an error: only pop a single element and throw the exception
+        if(SQ_FAILED(result)) {
+            sq_pop(vm, 1);
+            Error::Instance().Throw(vm, LastErrorString(vm));
+            R value;
+            return value;
+        }
+
         R ret = Var<R>(vm, -1).value;
         sq_pop(vm, 2);
         return ret;
@@ -325,6 +535,15 @@ public:
     R Evaluate(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12) {
         sq_pushobject(vm, obj);
         sq_pushobject(vm, env);
+
+        SQUnsignedInteger nparams;
+        SQUnsignedInteger nfreevars;
+        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 13)) {
+            sq_pop(vm, 2);
+            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+            R value;
+            return value;
+        }
 
         PushVar(vm, a1);
         PushVar(vm, a2);
@@ -339,7 +558,16 @@ public:
         PushVar(vm, a11);
         PushVar(vm, a12);
 
-        sq_call(vm, 13, true, ErrorHandling::IsEnabled());
+        SQRESULT result = sq_call(vm, 13, true, ErrorHandling::IsEnabled());
+
+        //handle an error: only pop a single element and throw the exception
+        if(SQ_FAILED(result)) {
+            sq_pop(vm, 1);
+            Error::Instance().Throw(vm, LastErrorString(vm));
+            R value;
+            return value;
+        }
+
         R ret = Var<R>(vm, -1).value;
         sq_pop(vm, 2);
         return ret;
@@ -349,6 +577,15 @@ public:
     R Evaluate(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13) {
         sq_pushobject(vm, obj);
         sq_pushobject(vm, env);
+
+        SQUnsignedInteger nparams;
+        SQUnsignedInteger nfreevars;
+        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 14)) {
+            sq_pop(vm, 2);
+            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+            R value;
+            return value;
+        }
 
         PushVar(vm, a1);
         PushVar(vm, a2);
@@ -364,7 +601,16 @@ public:
         PushVar(vm, a12);
         PushVar(vm, a13);
 
-        sq_call(vm, 14, true, ErrorHandling::IsEnabled());
+        SQRESULT result = sq_call(vm, 14, true, ErrorHandling::IsEnabled());
+
+        //handle an error: only pop a single element and throw the exception
+        if(SQ_FAILED(result)) {
+            sq_pop(vm, 1);
+            Error::Instance().Throw(vm, LastErrorString(vm));
+            R value;
+            return value;
+        }
+
         R ret = Var<R>(vm, -1).value;
         sq_pop(vm, 2);
         return ret;
@@ -374,6 +620,15 @@ public:
     R Evaluate(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13, A14 a14) {
         sq_pushobject(vm, obj);
         sq_pushobject(vm, env);
+
+        SQUnsignedInteger nparams;
+        SQUnsignedInteger nfreevars;
+        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 15)) {
+            sq_pop(vm, 2);
+            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+            R value;
+            return value;
+        }
 
         PushVar(vm, a1);
         PushVar(vm, a2);
@@ -390,7 +645,16 @@ public:
         PushVar(vm, a13);
         PushVar(vm, a14);
 
-        sq_call(vm, 15, true, ErrorHandling::IsEnabled());
+        SQRESULT result = sq_call(vm, 15, true, ErrorHandling::IsEnabled());
+
+        //handle an error: only pop a single element and throw the exception
+        if(SQ_FAILED(result)) {
+            sq_pop(vm, 1);
+            Error::Instance().Throw(vm, LastErrorString(vm));
+            R value;
+            return value;
+        }
+
         R ret = Var<R>(vm, -1).value;
         sq_pop(vm, 2);
         return ret;
@@ -404,13 +668,22 @@ public:
         sq_pushobject(vm, obj);
         sq_pushobject(vm, env);
 
+        SQUnsignedInteger nparams;
+        SQUnsignedInteger nfreevars;
+        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 1)) {
+            sq_pop(vm, 2);
+            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+            return;
+        }
+
         SQRESULT result = sq_call(vm, 1, false, ErrorHandling::IsEnabled());
         sq_pop(vm, 1);
 
-		if( SQ_FAILED( result ) )
-		{
-			throw Exception( LastErrorString( vm ) );
-		}
+        //handle an error: throw the exception
+        if(SQ_FAILED(result)) {
+            Error::Instance().Throw(vm, LastErrorString(vm));
+            return;
+        }
     }
 
     template <class A1>
@@ -418,10 +691,24 @@ public:
         sq_pushobject(vm, obj);
         sq_pushobject(vm, env);
 
+        SQUnsignedInteger nparams;
+        SQUnsignedInteger nfreevars;
+        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 2)) {
+            sq_pop(vm, 2);
+            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+            return;
+        }
+
         PushVar(vm, a1);
 
-        sq_call(vm, 2, false, ErrorHandling::IsEnabled());
+        SQRESULT result = sq_call(vm, 2, false, ErrorHandling::IsEnabled());
         sq_pop(vm, 1);
+
+        //handle an error: throw the exception
+        if(SQ_FAILED(result)) {
+            Error::Instance().Throw(vm, LastErrorString(vm));
+            return;
+        }
     }
 
     template <class A1, class A2>
@@ -429,11 +716,25 @@ public:
         sq_pushobject(vm, obj);
         sq_pushobject(vm, env);
 
+        SQUnsignedInteger nparams;
+        SQUnsignedInteger nfreevars;
+        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 3)) {
+            sq_pop(vm, 2);
+            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+            return;
+        }
+
         PushVar(vm, a1);
         PushVar(vm, a2);
 
-        sq_call(vm, 3, false, ErrorHandling::IsEnabled());
+        SQRESULT result = sq_call(vm, 3, false, ErrorHandling::IsEnabled());
         sq_pop(vm, 1);
+
+        //handle an error: throw the exception
+        if(SQ_FAILED(result)) {
+            Error::Instance().Throw(vm, LastErrorString(vm));
+            return;
+        }
     }
 
     template <class A1, class A2, class A3>
@@ -441,12 +742,26 @@ public:
         sq_pushobject(vm, obj);
         sq_pushobject(vm, env);
 
+        SQUnsignedInteger nparams;
+        SQUnsignedInteger nfreevars;
+        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 4)) {
+            sq_pop(vm, 2);
+            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+            return;
+        }
+
         PushVar(vm, a1);
         PushVar(vm, a2);
         PushVar(vm, a3);
 
-        sq_call(vm, 4, false, ErrorHandling::IsEnabled());
+        SQRESULT result = sq_call(vm, 4, false, ErrorHandling::IsEnabled());
         sq_pop(vm, 1);
+
+        //handle an error: throw the exception
+        if(SQ_FAILED(result)) {
+            Error::Instance().Throw(vm, LastErrorString(vm));
+            return;
+        }
     }
 
     template <class A1, class A2, class A3, class A4>
@@ -454,13 +769,27 @@ public:
         sq_pushobject(vm, obj);
         sq_pushobject(vm, env);
 
+        SQUnsignedInteger nparams;
+        SQUnsignedInteger nfreevars;
+        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 5)) {
+            sq_pop(vm, 2);
+            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+            return;
+        }
+
         PushVar(vm, a1);
         PushVar(vm, a2);
         PushVar(vm, a3);
         PushVar(vm, a4);
 
-        sq_call(vm, 5, false, ErrorHandling::IsEnabled());
+        SQRESULT result = sq_call(vm, 5, false, ErrorHandling::IsEnabled());
         sq_pop(vm, 1);
+
+        //handle an error: throw the exception
+        if(SQ_FAILED(result)) {
+            Error::Instance().Throw(vm, LastErrorString(vm));
+            return;
+        }
     }
 
 
@@ -469,20 +798,42 @@ public:
         sq_pushobject(vm, obj);
         sq_pushobject(vm, env);
 
+        SQUnsignedInteger nparams;
+        SQUnsignedInteger nfreevars;
+        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 6)) {
+            sq_pop(vm, 2);
+            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+            return;
+        }
+
         PushVar(vm, a1);
         PushVar(vm, a2);
         PushVar(vm, a3);
         PushVar(vm, a4);
         PushVar(vm, a5);
 
-        sq_call(vm, 6, false, ErrorHandling::IsEnabled());
+        SQRESULT result = sq_call(vm, 6, false, ErrorHandling::IsEnabled());
         sq_pop(vm, 1);
+
+        //handle an error: throw the exception
+        if(SQ_FAILED(result)) {
+            Error::Instance().Throw(vm, LastErrorString(vm));
+            return;
+        }
     }
 
     template <class A1, class A2, class A3, class A4, class A5, class A6>
     void Execute(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6) {
         sq_pushobject(vm, obj);
         sq_pushobject(vm, env);
+
+        SQUnsignedInteger nparams;
+        SQUnsignedInteger nfreevars;
+        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 7)) {
+            sq_pop(vm, 2);
+            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+            return;
+        }
 
         PushVar(vm, a1);
         PushVar(vm, a2);
@@ -491,14 +842,28 @@ public:
         PushVar(vm, a5);
         PushVar(vm, a6);
 
-        sq_call(vm, 7, false, ErrorHandling::IsEnabled());
+        SQRESULT result = sq_call(vm, 7, false, ErrorHandling::IsEnabled());
         sq_pop(vm, 1);
+
+        //handle an error: throw the exception
+        if(SQ_FAILED(result)) {
+            Error::Instance().Throw(vm, LastErrorString(vm));
+            return;
+        }
     }
 
     template <class A1, class A2, class A3, class A4, class A5, class A6, class A7>
     void Execute(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7) {
         sq_pushobject(vm, obj);
         sq_pushobject(vm, env);
+
+        SQUnsignedInteger nparams;
+        SQUnsignedInteger nfreevars;
+        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 8)) {
+            sq_pop(vm, 2);
+            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+            return;
+        }
 
         PushVar(vm, a1);
         PushVar(vm, a2);
@@ -508,14 +873,28 @@ public:
         PushVar(vm, a6);
         PushVar(vm, a7);
 
-        sq_call(vm, 8, false, ErrorHandling::IsEnabled());
+        SQRESULT result = sq_call(vm, 8, false, ErrorHandling::IsEnabled());
         sq_pop(vm, 1);
+
+        //handle an error: throw the exception
+        if(SQ_FAILED(result)) {
+            Error::Instance().Throw(vm, LastErrorString(vm));
+            return;
+        }
     }
 
     template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
     void Execute(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8) {
         sq_pushobject(vm, obj);
         sq_pushobject(vm, env);
+
+        SQUnsignedInteger nparams;
+        SQUnsignedInteger nfreevars;
+        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 9)) {
+            sq_pop(vm, 2);
+            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+            return;
+        }
 
         PushVar(vm, a1);
         PushVar(vm, a2);
@@ -526,14 +905,28 @@ public:
         PushVar(vm, a7);
         PushVar(vm, a8);
 
-        sq_call(vm, 9, false, ErrorHandling::IsEnabled());
+        SQRESULT result = sq_call(vm, 9, false, ErrorHandling::IsEnabled());
         sq_pop(vm, 1);
+
+        //handle an error: throw the exception
+        if(SQ_FAILED(result)) {
+            Error::Instance().Throw(vm, LastErrorString(vm));
+            return;
+        }
     }
 
     template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
     void Execute(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9) {
         sq_pushobject(vm, obj);
         sq_pushobject(vm, env);
+
+        SQUnsignedInteger nparams;
+        SQUnsignedInteger nfreevars;
+        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 10)) {
+            sq_pop(vm, 2);
+            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+            return;
+        }
 
         PushVar(vm, a1);
         PushVar(vm, a2);
@@ -545,14 +938,28 @@ public:
         PushVar(vm, a8);
         PushVar(vm, a9);
 
-        sq_call(vm, 10, false, ErrorHandling::IsEnabled());
+        SQRESULT result = sq_call(vm, 10, false, ErrorHandling::IsEnabled());
         sq_pop(vm, 1);
+
+        //handle an error: throw the exception
+        if(SQ_FAILED(result)) {
+            Error::Instance().Throw(vm, LastErrorString(vm));
+            return;
+        }
     }
 
     template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
     void Execute(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10) {
         sq_pushobject(vm, obj);
         sq_pushobject(vm, env);
+
+        SQUnsignedInteger nparams;
+        SQUnsignedInteger nfreevars;
+        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 11)) {
+            sq_pop(vm, 2);
+            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+            return;
+        }
 
         PushVar(vm, a1);
         PushVar(vm, a2);
@@ -565,14 +972,28 @@ public:
         PushVar(vm, a9);
         PushVar(vm, a10);
 
-        sq_call(vm, 11, false, ErrorHandling::IsEnabled());
+        SQRESULT result = sq_call(vm, 11, false, ErrorHandling::IsEnabled());
         sq_pop(vm, 1);
+
+        //handle an error: throw the exception
+        if(SQ_FAILED(result)) {
+            Error::Instance().Throw(vm, LastErrorString(vm));
+            return;
+        }
     }
 
     template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
     void Execute(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11) {
         sq_pushobject(vm, obj);
         sq_pushobject(vm, env);
+
+        SQUnsignedInteger nparams;
+        SQUnsignedInteger nfreevars;
+        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 12)) {
+            sq_pop(vm, 2);
+            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+            return;
+        }
 
         PushVar(vm, a1);
         PushVar(vm, a2);
@@ -586,14 +1007,28 @@ public:
         PushVar(vm, a10);
         PushVar(vm, a11);
 
-        sq_call(vm, 12, false, ErrorHandling::IsEnabled());
+        SQRESULT result = sq_call(vm, 12, false, ErrorHandling::IsEnabled());
         sq_pop(vm, 1);
+
+        //handle an error: throw the exception
+        if(SQ_FAILED(result)) {
+            Error::Instance().Throw(vm, LastErrorString(vm));
+            return;
+        }
     }
 
     template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
     void Execute(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12) {
         sq_pushobject(vm, obj);
         sq_pushobject(vm, env);
+
+        SQUnsignedInteger nparams;
+        SQUnsignedInteger nfreevars;
+        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 13)) {
+            sq_pop(vm, 2);
+            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+            return;
+        }
 
         PushVar(vm, a1);
         PushVar(vm, a2);
@@ -608,14 +1043,28 @@ public:
         PushVar(vm, a11);
         PushVar(vm, a12);
 
-        sq_call(vm, 13, false, ErrorHandling::IsEnabled());
+        SQRESULT result = sq_call(vm, 13, false, ErrorHandling::IsEnabled());
         sq_pop(vm, 1);
+
+        //handle an error: throw the exception
+        if(SQ_FAILED(result)) {
+            Error::Instance().Throw(vm, LastErrorString(vm));
+            return;
+        }
     }
 
     template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
     void Execute(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13) {
         sq_pushobject(vm, obj);
         sq_pushobject(vm, env);
+
+        SQUnsignedInteger nparams;
+        SQUnsignedInteger nfreevars;
+        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 14)) {
+            sq_pop(vm, 2);
+            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+            return;
+        }
 
         PushVar(vm, a1);
         PushVar(vm, a2);
@@ -631,14 +1080,28 @@ public:
         PushVar(vm, a12);
         PushVar(vm, a13);
 
-        sq_call(vm, 14, false, ErrorHandling::IsEnabled());
+        SQRESULT result = sq_call(vm, 14, false, ErrorHandling::IsEnabled());
         sq_pop(vm, 1);
+
+        //handle an error: throw the exception
+        if(SQ_FAILED(result)) {
+            Error::Instance().Throw(vm, LastErrorString(vm));
+            return;
+        }
     }
 
     template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
     void Execute(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13, A14 a14) {
         sq_pushobject(vm, obj);
         sq_pushobject(vm, env);
+
+        SQUnsignedInteger nparams;
+        SQUnsignedInteger nfreevars;
+        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 15)) {
+            sq_pop(vm, 2);
+            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+            return;
+        }
 
         PushVar(vm, a1);
         PushVar(vm, a2);
@@ -655,8 +1118,14 @@ public:
         PushVar(vm, a13);
         PushVar(vm, a14);
 
-        sq_call(vm, 15, false, ErrorHandling::IsEnabled());
+        SQRESULT result = sq_call(vm, 15, false, ErrorHandling::IsEnabled());
         sq_pop(vm, 1);
+
+        //handle an error: throw the exception
+        if(SQ_FAILED(result)) {
+            Error::Instance().Throw(vm, LastErrorString(vm));
+            return;
+        }
     }
 
     //
@@ -752,6 +1221,10 @@ struct Var<Function> {
         sq_getstackobj(vm, 1, &sqEnv);
         sq_getstackobj(vm, idx, &sqValue);
         value = Function(vm, sqEnv, sqValue);
+        SQObjectType value_type = sq_gettype(vm, idx);
+        if (value_type != OT_CLOSURE && value_type != OT_NATIVECLOSURE) {
+            Error::Instance().Throw(vm, Sqrat::Error::FormatTypeError(vm, idx, _SC("closure")));
+        }
     }
     static void push(HSQUIRRELVM vm, Function& value) {
         sq_pushobject(vm, value.GetFunc());

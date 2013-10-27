@@ -47,6 +47,8 @@ namespace Sqrat {
         ArrayBase(const Object& obj) : Object(obj) {
         }
 
+        ArrayBase(HSQOBJECT o, HSQUIRRELVM v = DefaultVM::Get()) : Object(o, v) {
+        }
         // Bind a Table or Class to the Array (Can be used to facilitate Namespaces)
         // Note: Bind cannot be called "inline" like other functions because it introduces order-of-initialization bugs.
         void Bind(const SQInteger index, Object& obj) {
@@ -56,7 +58,7 @@ namespace Sqrat {
             sq_set(vm, -3);
             sq_pop(vm,1); // pop array
         }
-        
+
         // Bind a raw Squirrel closure to the Array
         ArrayBase& SquirrelFunc(const SQInteger index, SQFUNCTION func) {
             sq_pushobject(vm, GetObject());
@@ -70,7 +72,7 @@ namespace Sqrat {
         //
         // Variable Binding
         //
-        
+
         template<class V>
         ArrayBase& SetValue(const SQInteger index, const V& val) {
             sq_pushobject(vm, GetObject());
@@ -191,11 +193,79 @@ namespace Sqrat {
             sq_pop(vm,1); // pop array
             return *this;
         }
+
+
+        SQInteger Length() const
+        {
+            HSQOBJECT value = GetObject();
+            sq_pushobject(vm, value);
+            SQInteger r = sq_getsize(vm, -1);
+            sq_pop(vm, 1);
+            return r;
+        }
+
+        template <typename T>
+        SQInteger GetElement(int index, T& out_element)
+        {
+            HSQOBJECT value = GetObject();
+            sq_pushobject(vm, value);
+            if (index > sq_getsize(vm, -1))
+            {
+                return sq_throwerror(vm, _SC("index out of bound"));
+            }
+            if (index < 0)
+            {
+                return sq_throwerror(vm, _SC("illegal index"));
+            }
+            sq_pushinteger(vm, index);
+            if (SQ_FAILED(sq_get(vm, -2)))
+            {
+                sq_pop(vm, 1);
+                return sq_throwerror(vm, _SC("illegal index"));
+            }
+
+            Var<T> element(vm, -1);
+            if (Sqrat::Error::Instance().Occurred(vm)) {
+                return sq_throwerror(vm, Sqrat::Error::Instance().Message(vm).c_str());
+            }
+            sq_pop(vm, 2);
+            out_element = element.value;
+            return 1;
+        }
+
+
+        template <typename T>
+        SQInteger GetArray(T* array, int size)
+        {
+            HSQOBJECT value = GetObject();
+            sq_pushobject(vm, value);
+            if (size != sq_getsize(vm, -1))
+            {
+                return sq_throwerror(vm, _SC("array buffer size too big"));
+            }
+            sq_pushnull(vm);
+            SQInteger i;
+            while (SQ_SUCCEEDED(sq_next(vm, -2)))
+            {
+                sq_getinteger(vm, -2, &i);
+                if (i >= size) break;
+                Var<T> element(vm, -1);
+                if (Sqrat::Error::Instance().Occurred(vm)) {
+                    return sq_throwerror(vm, Sqrat::Error::Instance().Message(vm).c_str());
+                }
+                sq_pop(vm, 2);
+                array[i] = element.value;
+            }
+            return  1;
+        }
     };
 
     class Array : public ArrayBase {
     public:
-        Array(HSQUIRRELVM v = DefaultVM::Get(), const SQInteger size = 0) : ArrayBase(v) {
+        Array() {
+        }
+
+        Array(HSQUIRRELVM v, const SQInteger size = 0) : ArrayBase(v) {
             sq_newarray(vm, size);
             sq_getstackobj(vm,-1,&obj);
             sq_addref(vm, &obj);
@@ -203,6 +273,31 @@ namespace Sqrat {
         }
 
         Array(const Object& obj) : ArrayBase(obj) {
+        }
+
+        Array(HSQOBJECT o, HSQUIRRELVM v = DefaultVM::Get()) : ArrayBase(o, v) {
+        }
+
+    };
+
+    template<>
+    struct Var<Array> {
+        Array value;
+        Var(HSQUIRRELVM vm, SQInteger idx) {
+            HSQOBJECT obj;
+            sq_resetobject(&obj);
+            sq_getstackobj(vm,idx,&obj);
+            value = Array(obj, vm);
+            SQObjectType value_type = sq_gettype(vm, idx);
+            if (value_type != OT_ARRAY) {
+                Error::Instance().Throw(vm, Sqrat::Error::FormatTypeError(vm, idx, _SC("array")));
+            }
+        }
+        static void push(HSQUIRRELVM vm, Array value) {
+            HSQOBJECT obj;
+            sq_resetobject(&obj);
+            obj = value.GetObject();
+            sq_pushobject(vm,obj);
         }
     };
 }

@@ -132,7 +132,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;VCMP_EXPORTS;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;./squirrel;./sqrat</AdditionalIncludeDirectories>
-      <TreatWarningAsError>true</TreatWarningAsError>
+      <TreatWarningAsError>false</TreatWarningAsError>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -205,9 +205,9 @@
     <ClInclude Include="sqrat\sqrat\sqratClass.h" />
     <ClInclude Include="sqrat\sqrat\sqratClassType.h" />
     <ClInclude Include="sqrat\sqrat\sqratConst.h" />
+    <ClInclude Include="sqrat\sqrat\sqratext_Ref.h" />
     <ClInclude Include="sqrat\sqrat\sqratFunction.h" />
     <ClInclude Include="sqrat\sqrat\sqratGlobalMethods.h" />
-    <ClInclude Include="sqrat\sqrat\sqratImpClass.h" />
     <ClInclude Include="sqrat\sqrat\sqratMemberMethods.h" />
     <ClInclude Include="sqrat\sqrat\sqratObject.h" />
     <ClInclude Include="sqrat\sqrat\sqratOverloadMethods.h" />

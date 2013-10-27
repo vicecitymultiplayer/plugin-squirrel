@@ -30,6 +30,8 @@
 
 #include <squirrel.h>
 #include <string.h>
+
+#include "sqratAllocator.h"
 #include "sqratTypes.h"
 #include "sqratOverloadMethods.h"
 #include "sqratUtil.h"
@@ -69,7 +71,9 @@ public:
     virtual ~Object() {
         if(release) {
             Release();
+            release = false;
         }
+
     }
 
     Object& operator=(const Object& so) {
@@ -113,6 +117,7 @@ public:
 
     void Release() {
         sq_release(vm, &obj);
+        sq_resetobject(&obj);
     }
 
     SQUserPointer GetInstanceUP(SQUserPointer tag = NULL) const {
@@ -175,57 +180,104 @@ public:
         return ret;
     }
 
+    template <class C>
+    Object& SetReleaseHook(){
+        sq_pushobject(vm, GetObject());
+        sq_setreleasehook(vm, -1, &DefaultAllocator<C>::Delete);
+        sq_pop(vm, 1);
+        return *this;
+    }
+
+    struct iterator
+    {
+        friend class Object;
+        iterator()
+        {
+            Index = 0;
+            sq_resetobject(&Key);
+            sq_resetobject(&Value);
+            Key._type = OT_NULL;
+            Value._type = OT_NULL;
+        }
+        HSQOBJECT getKey() { return Key; }
+        HSQOBJECT getValue() { return Value; }
+    private:
+
+        HSQOBJECT Key;
+        HSQOBJECT Value;
+        SQInteger Index;
+    };
+
+    bool Next(iterator& iter) const
+    {
+        sq_pushobject(vm,obj);
+        sq_pushinteger(vm,iter.Index);
+        if(SQ_SUCCEEDED(sq_next(vm,-2)))
+        {
+            sq_getstackobj(vm,-1,&iter.Value);
+            sq_getstackobj(vm,-2,&iter.Key);
+            sq_getinteger(vm,-3,&iter.Index);
+            sq_pop(vm,4);
+            return true;
+        }
+        else
+        {
+            sq_pop(vm,2);
+            return false;
+        }
+    }
+
 protected:
     // Bind a function and it's associated Squirrel closure to the object
-    inline void BindFunc(const SQChar* name, void* method, size_t methodSize, SQFUNCTION func, bool staticVar = false) {
-        sq_pushobject(vm, GetObject());
-        sq_pushstring(vm, name, -1);
+	inline void BindFunc(const SQChar* name, void* method, size_t methodSize, SQFUNCTION func, bool staticVar = false) {
+		sq_pushobject(vm, GetObject());
+		sq_pushstring(vm, name, -1);
 
-        SQUserPointer methodPtr = sq_newuserdata(vm, static_cast<SQUnsignedInteger>(methodSize));
-        memcpy(methodPtr, method, methodSize);
+		SQUserPointer methodPtr = sq_newuserdata(vm, static_cast<SQUnsignedInteger>(methodSize));
+		memcpy(methodPtr, method, methodSize);
 
-        sq_newclosure(vm, func, 1);
-        sq_newslot(vm, -3, staticVar);
-        sq_pop(vm,1); // pop table
-    }
+		sq_newclosure(vm, func, 1);
+		sq_newslot(vm, -3, staticVar);
+		sq_pop(vm, 1); // pop table
+	}
 
-    inline void BindFunc(const SQChar* name, void* method, size_t methodSize, SQFUNCTION func, SQInteger paramCount, const SQChar * params, bool staticVar = false) {
-        sq_pushobject(vm, GetObject());
-        sq_pushstring(vm, name, -1);
+	inline void BindFunc(const SQChar* name, void* method, size_t methodSize, SQFUNCTION func, SQInteger paramCount, const SQChar * params, bool staticVar = false) {
+		sq_pushobject(vm, GetObject());
+		sq_pushstring(vm, name, -1);
 
-        SQUserPointer methodPtr = sq_newuserdata(vm, static_cast<SQUnsignedInteger>(methodSize));
-        memcpy(methodPtr, method, methodSize);
+		SQUserPointer methodPtr = sq_newuserdata(vm, static_cast<SQUnsignedInteger>(methodSize));
+		memcpy(methodPtr, method, methodSize);
 
-        sq_newclosure(vm, func, 1);
-		sq_setparamscheck(vm, paramCount, params); // Add 1 to account for root table argument
-        sq_newslot(vm, -3, staticVar);
-        sq_pop(vm,1); // pop table
-    }
+		sq_newclosure(vm, func, 1);
+		sq_setparamscheck(vm, paramCount, params);
+		sq_newslot(vm, -3, staticVar);
+		sq_pop(vm, 1); // pop table
+	}
 
-    inline void BindFunc(const SQInteger index, void* method, size_t methodSize, SQFUNCTION func, bool staticVar = false) {
-        sq_pushobject(vm, GetObject());
-        sq_pushinteger(vm, index);
+	inline void BindFunc(const SQInteger index, void* method, size_t methodSize, SQFUNCTION func, bool staticVar = false) {
+		sq_pushobject(vm, GetObject());
+		sq_pushinteger(vm, index);
 
-        SQUserPointer methodPtr = sq_newuserdata(vm, static_cast<SQUnsignedInteger>(methodSize));
-        memcpy(methodPtr, method, methodSize);
+		SQUserPointer methodPtr = sq_newuserdata(vm, static_cast<SQUnsignedInteger>(methodSize));
+		memcpy(methodPtr, method, methodSize);
 
-        sq_newclosure(vm, func, 1);
-        sq_newslot(vm, -3, staticVar);
-        sq_pop(vm,1); // pop table
-    }
+		sq_newclosure(vm, func, 1);
+		sq_newslot(vm, -3, staticVar);
+		sq_pop(vm, 1); // pop table
+	}
 
-    inline void BindFunc(const SQInteger index, void* method, size_t methodSize, SQFUNCTION func, SQInteger paramCount, const SQChar * params, bool staticVar = false) {
-        sq_pushobject(vm, GetObject());
-        sq_pushinteger(vm, index);
+	inline void BindFunc(const SQInteger index, void* method, size_t methodSize, SQFUNCTION func, SQInteger paramCount, const SQChar * params, bool staticVar = false) {
+		sq_pushobject(vm, GetObject());
+		sq_pushinteger(vm, index);
 
-        SQUserPointer methodPtr = sq_newuserdata(vm, static_cast<SQUnsignedInteger>(methodSize));
-        memcpy(methodPtr, method, methodSize);
+		SQUserPointer methodPtr = sq_newuserdata(vm, static_cast<SQUnsignedInteger>(methodSize));
+		memcpy(methodPtr, method, methodSize);
 
-        sq_newclosure(vm, func, 1);
-		sq_setparamscheck(vm, paramCount, params); // Add 1 to account for root table argument
-        sq_newslot(vm, -3, staticVar);
-        sq_pop(vm,1); // pop table
-    }
+		sq_newclosure(vm, func, 1);
+		sq_setparamscheck(vm, paramCount, params);
+		sq_newslot(vm, -3, staticVar);
+		sq_pop(vm, 1); // pop table
+	}
 
 
     // Bind a function and it's associated Squirrel closure to the object
@@ -288,6 +340,15 @@ protected:
 };
 
 
+template<>
+inline void Object::BindValue<int>(const SQChar* name, const int & val, bool staticVar /* = false */) {
+    sq_pushobject(vm, GetObject());
+    sq_pushstring(vm, name, -1);
+    PushVar<int>(vm, val);
+    sq_newslot(vm, -3, staticVar);
+    sq_pop(vm,1); // pop table
+}
+
 //
 // Overridden Getter/Setter
 //
@@ -330,6 +391,7 @@ struct Var<const Object&> {
         sq_pushobject(vm, value.GetObject());
     }
 };
+
 
 }
 

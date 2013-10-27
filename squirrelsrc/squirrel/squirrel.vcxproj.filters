@@ -11,60 +11,25 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="sqapi.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sqbaselib.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sqcompiler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sqdebug.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sqfuncstate.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sqlexer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sqmem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sqobject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sqstate.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sqtable.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sqclass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sqvm.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="sqarray.h">
+    <ClInclude Include="..\..\squirrel\sqstdaux.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sqclosure.h">
+    <ClInclude Include="..\..\squirrel\sqstdblob.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sqcompiler.h">
+    <ClInclude Include="..\..\squirrel\sqstdio.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sqfuncproto.h">
+    <ClInclude Include="..\..\squirrel\sqstdmath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sqfuncstate.h">
+    <ClInclude Include="..\..\squirrel\sqstdstring.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sqlexer.h">
+    <ClInclude Include="..\..\squirrel\sqstdsystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\squirrel\squirrel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sqobject.h">
@@ -91,11 +56,67 @@
     <ClInclude Include="squtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sqclass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="sqvm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="sqarray.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sqclass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sqclosure.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sqcompiler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sqfuncproto.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sqfuncstate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sqlexer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="sqmem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sqobject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sqstate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sqtable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sqvm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sqapi.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sqbaselib.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sqclass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sqcompiler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sqdebug.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sqfuncstate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sqlexer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

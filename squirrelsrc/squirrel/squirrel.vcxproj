@@ -226,21 +226,15 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="sqapi.cpp" />
-    <ClCompile Include="sqbaselib.cpp" />
-    <ClCompile Include="sqcompiler.cpp" />
-    <ClCompile Include="sqdebug.cpp" />
-    <ClCompile Include="sqfuncstate.cpp" />
-    <ClCompile Include="sqlexer.cpp" />
-    <ClCompile Include="sqmem.cpp" />
-    <ClCompile Include="sqobject.cpp" />
-    <ClCompile Include="sqstate.cpp" />
-    <ClCompile Include="sqtable.cpp" />
-    <ClCompile Include="sqclass.cpp" />
-    <ClCompile Include="sqvm.cpp" />
-  </ItemGroup>
-  <ItemGroup>
+    <ClInclude Include="..\..\squirrel\sqstdaux.h" />
+    <ClInclude Include="..\..\squirrel\sqstdblob.h" />
+    <ClInclude Include="..\..\squirrel\sqstdio.h" />
+    <ClInclude Include="..\..\squirrel\sqstdmath.h" />
+    <ClInclude Include="..\..\squirrel\sqstdstring.h" />
+    <ClInclude Include="..\..\squirrel\sqstdsystem.h" />
+    <ClInclude Include="..\..\squirrel\squirrel.h" />
     <ClInclude Include="sqarray.h" />
+    <ClInclude Include="sqclass.h" />
     <ClInclude Include="sqclosure.h" />
     <ClInclude Include="sqcompiler.h" />
     <ClInclude Include="sqfuncproto.h" />
@@ -254,8 +248,21 @@
     <ClInclude Include="sqtable.h" />
     <ClInclude Include="squserdata.h" />
     <ClInclude Include="squtils.h" />
-    <ClInclude Include="sqclass.h" />
     <ClInclude Include="sqvm.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="sqapi.cpp" />
+    <ClCompile Include="sqbaselib.cpp" />
+    <ClCompile Include="sqclass.cpp" />
+    <ClCompile Include="sqcompiler.cpp" />
+    <ClCompile Include="sqdebug.cpp" />
+    <ClCompile Include="sqfuncstate.cpp" />
+    <ClCompile Include="sqlexer.cpp" />
+    <ClCompile Include="sqmem.cpp" />
+    <ClCompile Include="sqobject.cpp" />
+    <ClCompile Include="sqstate.cpp" />
+    <ClCompile Include="sqtable.cpp" />
+    <ClCompile Include="sqvm.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

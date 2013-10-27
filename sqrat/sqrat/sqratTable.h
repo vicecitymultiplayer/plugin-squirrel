@@ -45,6 +45,8 @@ public:
     TableBase(const Object& obj) : Object(obj) {
     }
 
+    TableBase(HSQOBJECT o, HSQUIRRELVM v = DefaultVM::Get()) : Object(o, v) {
+    }
     // Bind a Table or Class to the Table (Can be used to facilitate Namespaces)
     // Note: Bind cannot be called "inline" like other functions because it introduces order-of-initialization bugs.
     void Bind(const SQChar* name, Object& obj) {
@@ -85,25 +87,70 @@ public:
     TableBase& SetInstance(const SQChar* name, V* val) {
         BindInstance<V>(name, val, false);
         return *this;
-    }
-
-    template<class F>
-    TableBase& Func(const SQChar* name, F method) {
-        BindFunc(name, &method, sizeof(method), SqGlobalFunc(method));
-        return *this;
-    }
+	}
 
 	template<class F>
-	TableBase& Func(const SQChar* name, F method, SQInteger paramCount, const SQChar * params) {
+	TableBase& Func(const SQChar* name, F method) {
+		BindFunc(name, &method, sizeof(method), SqGlobalFunc(method));
+		return *this;
+	}
+
+	template<class F>
+	TableBase& Func(const SQChar* name, F method, SQInteger paramCount, const char * params) {
 		BindFunc(name, &method, sizeof(method), SqGlobalFunc(method), paramCount, params);
 		return *this;
 	}
 
     template<class F>
     TableBase& Overload(const SQChar* name, F method) {
-        BindOverload(name, &method, sizeof(method), SqGlobalFunc(method), SqOverloadFunc(method), SqGetArgCount(method));
+        BindOverload(name, &method, sizeof(method), SqGlobalOverloadedFunc(method), SqOverloadFunc(method), SqGetArgCount(method));
         return *this;
     }
+
+    // get functions
+
+    template <typename T>
+    SQInteger GetValue(const SQChar* name, T& out_entry)
+    {
+        HSQOBJECT value = GetObject();
+        sq_pushobject(vm, value);
+        sq_pushstring(vm, name, -1);
+        if (SQ_FAILED(sq_get(vm, -2)))
+        {
+            sq_pop(vm, 1);
+            return sq_throwerror(vm, _SC("illegal index"));
+        }
+
+        Var<T> entry(vm, -1);
+        if (Sqrat::Error::Instance().Occurred(vm)) {
+            return sq_throwerror(vm, Sqrat::Error::Instance().Message(vm).c_str());
+        }
+        sq_pop(vm, 2);
+        out_entry = entry.value;
+        return 1;
+    }
+
+    template <typename T>
+    SQInteger GetValue(int index, T& out_entry)
+    {
+        HSQOBJECT value = GetObject();
+        sq_pushobject(vm, value);
+        sq_pushinteger(vm, index);
+        if (SQ_FAILED(sq_get(vm, -2)))
+        {
+            sq_pop(vm, 1);
+            return sq_throwerror(vm, _SC("illegal index"));
+        }
+
+        Var<T> entry(vm, -1);
+        if (Sqrat::Error::Instance().Occurred(vm)) {
+            return sq_throwerror(vm, Sqrat::Error::Instance().Message(vm).c_str());
+        }
+        sq_pop(vm, 2);
+        out_entry = entry.value;
+        return 1;
+    }
+
 
     //
     // Function Calls
@@ -148,6 +195,8 @@ public:
     }
     Table(const Object& obj) : TableBase(obj) {
     }
+    Table(HSQOBJECT o, HSQUIRRELVM v = DefaultVM::Get()) : TableBase(o, v) {
+    }
 };
 
 //
@@ -162,7 +211,40 @@ public:
         sq_addref(vm, &obj);
         sq_pop(v,1); // pop root table
     }
+
 };
+
+class RegistryTable : public TableBase {
+public:
+    RegistryTable(HSQUIRRELVM v = DefaultVM::Get()) : TableBase(v) {
+        sq_pushregistrytable(v);
+        sq_getstackobj(vm,-1,&obj);
+        sq_addref(vm, &obj);
+        sq_pop(v,1); // pop the registry table
+    }
+};
+
+template<>
+struct Var<Table> {
+    Table value;
+    Var(HSQUIRRELVM vm, SQInteger idx) {
+        HSQOBJECT obj;
+        sq_resetobject(&obj);
+        sq_getstackobj(vm,idx,&obj);
+        value = Table(obj, vm);
+        SQObjectType value_type = sq_gettype(vm, idx);
+        if (value_type != OT_TABLE) {
+            Error::Instance().Throw(vm, Sqrat::Error::FormatTypeError(vm, idx, _SC("table")));
+        }
+    }
+    static void push(HSQUIRRELVM vm, Table value) {
+        HSQOBJECT obj;
+        sq_resetobject(&obj);
+        obj = value.GetObject();
+        sq_pushobject(vm,obj);
+    }
+};
+
 }
 
 #endif

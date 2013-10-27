@@ -54,13 +54,13 @@ extern HSQUIRRELVM  v;
 
 void RegisterStructures()
 {
-	ImprovedClass<Vector> a(v);
-	ImprovedClass<Quaternion> b(v);
-	ImprovedClass<RGBa> c(v);
-	ImprovedClass<cRGB> d(v);
-	ImprovedClass<Bounds> e(v);
-	ImprovedClass<WastedSettings> f(v);
-	ImprovedClass<ARGB> g(v);
+	Class<Vector> a(v);
+	Class<Quaternion> b(v);
+	Class<RGBa> c(v);
+	Class<cRGB> d(v);
+	Class<Bounds> e(v);
+	Class<WastedSettings> f(v);
+	Class<ARGB> g(v);
 
 	a.Ctor<float, float, float>();
 	b.Ctor<float, float, float, float>();
