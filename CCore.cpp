@@ -391,7 +391,7 @@ void CCore::printf( char* pszFormat, ... )
 	vsnprintf(szBuffer, 512, pszFormat, va);
 	va_end(va);
 
-	puts(szBuffer);
+	fputs(szBuffer, stdout);
 	if (this->pLogFile != NULL)
 		fprintf(this->pLogFile, "%s", szBuffer);
 	else
