@@ -220,10 +220,10 @@ void CCore::RegisterEntities()
 
 	// Register all necessary core libraries
 	if( SQ_FAILED( sqstd_register_iolib( v ) ) )
-		OutputWarning( "sqstd_iolib failed to load." );
+		OutputWarning("sqstd_iolib failed to load.");
 
-	if( SQ_FAILED( sqstd_register_bloblib( v ) ) )
-		OutputWarning( "sqstd_bloblib failed to load." );
+	if (SQ_FAILED(sqstd_register_bloblib(v)))
+		OutputWarning("sqstd_bloblib failed to load.");
 
 	if( SQ_FAILED( sqstd_register_mathlib( v ) ) )
 		OutputWarning( "sqstd_mathlib failed to load." );
@@ -232,7 +232,7 @@ void CCore::RegisterEntities()
 		OutputWarning( "sqstd_stringlib failed to load." );
 	
 	if( SQ_FAILED( sqstd_register_systemlib( v ) ) )
-		OutputWarning( "sqstd_systemlib failed to load." );
+		OutputWarning("sqstd_systemlib failed to load.");
 
 	// Set the default internal error handlers up
 	sqstd_seterrorhandlers( v );
