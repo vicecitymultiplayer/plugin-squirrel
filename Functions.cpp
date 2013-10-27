@@ -168,7 +168,7 @@ void RegisterGlobals()
 		.SquirrelFunc( _SC( "NewTimer" ), NewTimer )
 		.SquirrelFunc( _SC( "InPoly" ), InPoly )
 		
-		.Func( _SC( "BindKey" ), BindKey );
+		.Func( _SC( "BindKey" ), BindKey, -3, _SC("tbi") );
 }
 
 void RegisterConstants()
