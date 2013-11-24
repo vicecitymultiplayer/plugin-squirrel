@@ -24,8 +24,8 @@ void OnPlayerExitVehicle   ( int nPlayerId, int nVehicleId );
 
 void OnPlayerBeginTyping   ( int nPlayerId );
 void OnPlayerEndTyping     ( int nPlayerId );
-void OnPlayerAwayChange    ( int nPlayerId, unsigned int bNewAwayStatus ); // <TODO>
-void OnPlayerSpectate      ( int nPlayerId, int nTargetId ); // <TODO>
+void OnPlayerAwayChange    ( int nPlayerId, unsigned int bNewAwayStatus );
+void OnPlayerSpectate      ( int nPlayerId, int nTargetId );
 
 int  OnLoginAttempt        ( char* playerName, const char* password, const char* pszIpAddress );
 void OnNameChangeable      ( char * playerName, char ** namePtr );
