@@ -265,17 +265,18 @@ public:
     //
     // Function Binding
     //
+
+	template<class F>
+	Class& Func(const SQChar* name, F method) {
+		BindFunc(name, &method, sizeof(method), SqMemberFunc(method));
+		return *this;
+	}
+
 	template<class F>
 	Class& Func(const SQChar* name, F method, SQInteger argCount, const SQChar * arguments) {
 		BindFunc(name, &method, sizeof(method), SqMemberFunc(method), argCount, arguments);
 		return *this;
 	}
-
-    template<class F>
-    Class& Func(const SQChar* name, F method) {
-        BindFunc(name, &method, sizeof(method), SqMemberFunc(method));
-        return *this;
-    }
 
     template<class F>
     Class& Overload(const SQChar* name, F method) {

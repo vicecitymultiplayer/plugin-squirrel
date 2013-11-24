@@ -87,6 +87,12 @@ public:
     TableBase& SetInstance(const SQChar* name, V* val) {
         BindInstance<V>(name, val, false);
         return *this;
+    }
+
+    template<class V>
+    TableBase& SetInstance(const SQInteger index, V* val) {
+        BindInstance<V>(index, val, false);
+        return *this;
 	}
 
 	template<class F>
@@ -96,8 +102,8 @@ public:
 	}
 
 	template<class F>
-	TableBase& Func(const SQChar* name, F method, SQInteger paramCount, const char * params) {
-		BindFunc(name, &method, sizeof(method), SqGlobalFunc(method), paramCount, params);
+	TableBase& Func(const SQChar* name, F method, SQInteger argCount, const SQChar * arguments) {
+		BindFunc(name, &method, sizeof(method), SqGlobalFunc(method), argCount, arguments);
 		return *this;
 	}
 
@@ -111,9 +117,8 @@ public:
 
     template <typename T>
     SQInteger GetValue(const SQChar* name, T& out_entry)
-    {
-        HSQOBJECT value = GetObject();
-        sq_pushobject(vm, value);
+    {   
+        sq_pushobject(vm, obj);
         sq_pushstring(vm, name, -1);
         if (SQ_FAILED(sq_get(vm, -2)))
         {
@@ -132,9 +137,8 @@ public:
 
     template <typename T>
     SQInteger GetValue(int index, T& out_entry)
-    {
-        HSQOBJECT value = GetObject();
-        sq_pushobject(vm, value);
+    {   
+        sq_pushobject(vm, obj);
         sq_pushinteger(vm, index);
         if (SQ_FAILED(sq_get(vm, -2)))
         {
@@ -226,6 +230,27 @@ public:
 
 template<>
 struct Var<Table> {
+    Table value;
+    Var(HSQUIRRELVM vm, SQInteger idx) {
+        HSQOBJECT obj;
+        sq_resetobject(&obj);
+        sq_getstackobj(vm,idx,&obj);
+        value = Table(obj, vm);
+        SQObjectType value_type = sq_gettype(vm, idx);
+        if (value_type != OT_TABLE) {
+            Error::Instance().Throw(vm, Sqrat::Error::FormatTypeError(vm, idx, _SC("table")));
+        }
+    }
+    static void push(HSQUIRRELVM vm, Table value) {
+        HSQOBJECT obj;
+        sq_resetobject(&obj);
+        obj = value.GetObject();
+        sq_pushobject(vm,obj);
+    }
+};
+
+template<>
+struct Var<Table&> {
     Table value;
     Var(HSQUIRRELVM vm, SQInteger idx) {
         HSQOBJECT obj;
