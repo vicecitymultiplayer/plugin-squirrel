@@ -23,14 +23,8 @@ void ClientMessageWithAlpha(const SQChar * message, CPlayer * player, int r, int
 {
 	if (player != nullptr)
 	{
-		unsigned int dwColour;
-
-		dwColour = (r << 24);
-		dwColour += ((g & 0xFF) << 16);
-		dwColour += ((b & 0xFF) << 8);
-		dwColour += (a & 0xFF);
-
-		functions->SendClientMessage(player->nPlayerId, dwColour, "%s", message);
+		RGBa colour(r, g, b, a);
+		functions->SendClientMessage(player->nPlayerId, colour.toUInt(), "%s", message);
 	}
 }
 
@@ -169,11 +163,7 @@ bool UsingClasses  ()                                     { return ( functions->
 
 void AddClass( int team, cRGB * colour, int skin, Vector * spawnPos, float spawnAngle, int wep1, int ammo1, int wep2, int ammo2, int wep3, int ammo3 )
 {
-	unsigned int dwColour = colour->r;
-	dwColour = (dwColour << 8) + colour->g;
-	dwColour = (dwColour << 8) + colour->b;
-
-	functions->AddPlayerClass( team, dwColour, skin, spawnPos->x, spawnPos->y, spawnPos->z, spawnAngle, wep1, ammo1, wep2, ammo2, wep3, ammo3 );
+	functions->AddPlayerClass( team, colour->toUInt(), skin, spawnPos->x, spawnPos->y, spawnPos->z, spawnAngle, wep1, ammo1, wep2, ammo2, wep3, ammo3 );
 }
 
 void AddClassExpanded ( int team, int r, int g, int b, int skin, float x, float y, float z, float spawnAngle, int wep1, int ammo1, int wep2, int ammo2, int wep3, int ammo3 )
@@ -308,16 +298,12 @@ Bounds GetWorldBounds()
 
 void SetWastedSettings( int deathTime, int fadeTime, float fadeInSpeed, float fadeOutSpeed, cRGB colour, int corpseFadeDelay, int corpseFadeTime )
 {
-	unsigned int rDeathTime, rFadeTime, rCorpseFadeDelay, rCorpseFadeTime, dwColour;
+	unsigned int rDeathTime, rFadeTime, rCorpseFadeDelay, rCorpseFadeTime;
 
 	rDeathTime       = static_cast<unsigned int>(deathTime);
 	rFadeTime        = static_cast<unsigned int>(fadeTime);
 	rCorpseFadeDelay = static_cast<unsigned int>(corpseFadeDelay);
 	rCorpseFadeTime  = static_cast<unsigned int>(corpseFadeTime);
-	
-	dwColour = colour.r;
-	dwColour = (dwColour << 8) + colour.g;
-	dwColour = (dwColour << 16) + colour.b;
 
 	functions->SetWastedSettings
 	(
@@ -325,7 +311,7 @@ void SetWastedSettings( int deathTime, int fadeTime, float fadeInSpeed, float fa
 		rFadeTime,
 		fadeInSpeed,
 		fadeOutSpeed,
-		dwColour,
+		colour.toUInt(),
 		corpseFadeDelay,
 		corpseFadeTime
 	);
@@ -1635,7 +1621,7 @@ int GetKillDelay( void ) { return functions->GetKillCmdDelay(); }
 void DestroyBlip( int blipID ) { functions->DestroyCoordBlip( blipID ); }
 int CreateBlip( int world, Vector * pos, int scale, RGBa color, int nSpriteId )
 {
-	return functions->CreateCoordBlip( -1, world, pos->x, pos->y, pos->z, scale, 0, nSpriteId );
+	return functions->CreateCoordBlip( -1, world, pos->x, pos->y, pos->z, scale, color.toUInt(), nSpriteId );
 }
 
 void DestroyRadioStream( int radioID ) { functions->RemoveRadioStream( radioID ); }

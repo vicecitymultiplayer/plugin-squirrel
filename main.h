@@ -86,6 +86,8 @@ class CVehicle;
 			int g;
 			int b;
 			int a;
+
+			unsigned int toUInt() { return this->r << 24 | this->g << 16 | this->b << 8 | this->a; }
 	};
 
 	class cRGB
@@ -97,6 +99,8 @@ class CVehicle;
 			int r;
 			int g;
 			int b;
+
+			unsigned int toUInt() { return this->r << 16 | this->g << 8 | this->b; }
 	};
 	
 	class ARGB
@@ -109,6 +113,8 @@ class CVehicle;
 			int r;
 			int g;
 			int b;
+
+			unsigned int toUInt() { return this->a << 24 | this->r << 16 | this->g << 8 | this->b; }
 	};
 
 	class Bounds
