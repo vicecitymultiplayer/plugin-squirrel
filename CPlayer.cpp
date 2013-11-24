@@ -13,7 +13,7 @@ void CPlayer::SetPosition( Vector pos ) { functions->SetPlayerPos( this->nPlayer
 void CPlayer::SetHealth( float health ) { functions->SetPlayerHealth( this->nPlayerId, health ); }
 void CPlayer::SetArmour( float armour ) { functions->SetPlayerArmour( this->nPlayerId, armour ); }
 
-bool CPlayer::StreamedToPlayer( CPlayer * player )
+bool CPlayer::StreamedToPlayer( CPlayer * player ) const
 {
 	if( player != NULL )
 		return Boolify( functions->IsPlayerStreamedForPlayer( player->nPlayerId, this->nPlayerId ) );
@@ -58,7 +58,7 @@ void CPlayer::SetScore( int score )
 
 void CPlayer::SetImmunity( unsigned int immunity ) { functions->SetPlayerImmunityFlags( this->nPlayerId, immunity ); }
 void CPlayer::SetHeading( float heading ) { functions->SetPlayerHeading( this->nPlayerId, heading ); }
-void CPlayer::SetAlpha( int alpha, int fadeTime ) { functions->SetPlayerAlpha( this->nPlayerId, alpha, fadeTime ); }
+void CPlayer::SetAlpha( int alpha, int fadeTime ) const { functions->SetPlayerAlpha( this->nPlayerId, alpha, fadeTime ); }
 void CPlayer::SetVehicle( CVehicle * vehiclePointer )
 {
 	// <TODO>
@@ -83,7 +83,7 @@ void CPlayer::SetOnRadar( bool showOnRadar ) { functions->TogglePlayerHasMarker(
 void CPlayer::SetCanAttack( bool canAttack ) { functions->TogglePlayerAttackPriv( this->nPlayerId, canAttack ); }
 void CPlayer::SetWeaponSlot( int slot ) { functions->SetPlayerWeaponSlot( this->nPlayerId, slot ); }
 
-Vector CPlayer::GetPosition()
+Vector CPlayer::GetPosition() const
 {
 	float x, y, z;
 	functions->GetPlayerPos( this->nPlayerId, &x, &y, &z );
@@ -92,11 +92,11 @@ Vector CPlayer::GetPosition()
 	return pos;
 }
 
-int CPlayer::GetClass() { return functions->GetPlayerClass( this->nPlayerId ); }
-bool CPlayer::GetAdmin() { return Boolify( functions->IsPlayerAdmin( this->nPlayerId ) == 1 ); }
-bool CPlayer::Typing() { return Boolify( functions->IsPlayerTyping( this->nPlayerId ) ); }
+int CPlayer::GetClass() const { return functions->GetPlayerClass(this->nPlayerId); }
+bool CPlayer::GetAdmin() const { return Boolify(functions->IsPlayerAdmin(this->nPlayerId) == 1); }
+bool CPlayer::Typing() const { return Boolify(functions->IsPlayerTyping(this->nPlayerId)); }
 
-SQChar * CPlayer::GetIP()
+SQChar * CPlayer::GetIP() const
 {
 	char * ip = new char[16];
 	functions->GetPlayerIP( this->nPlayerId, ip, 16 );
@@ -104,13 +104,13 @@ SQChar * CPlayer::GetIP()
 	return ip;
 }
 
-bool CPlayer::GetSpawned() { return Boolify( functions->IsPlayerSpawned( this->nPlayerId ) == 1 ); }
-int CPlayer::GetWorld() { return functions->GetPlayerWorld( this->nPlayerId ); }
-int CPlayer::GetSecWorld() { return functions->GetPlayerSecWorld( this->nPlayerId ); }
-int CPlayer::GetUniqueWorld() { return functions->GetPlayerUniqueWorld( this->nPlayerId ); }
-int CPlayer::GetState() { return functions->GetPlayerState( this->nPlayerId ); }
+bool CPlayer::GetSpawned() const { return Boolify(functions->IsPlayerSpawned(this->nPlayerId) == 1); }
+int CPlayer::GetWorld() const { return functions->GetPlayerWorld(this->nPlayerId); }
+int CPlayer::GetSecWorld() const { return functions->GetPlayerSecWorld(this->nPlayerId); }
+int CPlayer::GetUniqueWorld() const { return functions->GetPlayerUniqueWorld(this->nPlayerId); }
+int CPlayer::GetState() const { return functions->GetPlayerState(this->nPlayerId); }
 
-SQChar * CPlayer::GetName()
+SQChar * CPlayer::GetName() const
 {
 	char * name = new char[64];
 	functions->GetPlayerName( this->nPlayerId, name, 64 );
@@ -118,10 +118,10 @@ SQChar * CPlayer::GetName()
 	return name;
 }
 
-int CPlayer::GetTeam() { return functions->GetPlayerTeam( this->nPlayerId ); }
-int CPlayer::GetSkin() { return functions->GetPlayerSkin( this->nPlayerId ); }
+int CPlayer::GetTeam() const { return functions->GetPlayerTeam(this->nPlayerId); }
+int CPlayer::GetSkin() const { return functions->GetPlayerSkin(this->nPlayerId); }
 
-cRGB CPlayer::GetColour()
+cRGB CPlayer::GetColour() const
 {
 	unsigned int colour = functions->GetPlayerColour( this->nPlayerId );
 	unsigned char r     = (colour >> 16) & 0xff;
@@ -132,16 +132,16 @@ cRGB CPlayer::GetColour()
 	return rgb;
 }
 
-int CPlayer::GetMoney() { return functions->GetPlayerMoney( this->nPlayerId ); }
-int CPlayer::GetScore() { return functions->GetPlayerScore( this->nPlayerId ); }
-int CPlayer::GetPing() { return functions->GetPlayerPing( this->nPlayerId ); }
-float CPlayer::GetHealth() { return functions->GetPlayerHealth( this->nPlayerId ); }
-float CPlayer::GetArmour() { return functions->GetPlayerArmour( this->nPlayerId ); }
-unsigned int CPlayer::GetImmunity() { return functions->GetPlayerImmunityFlags( this->nPlayerId ); }
-float CPlayer::GetHeading() { return functions->GetPlayerHeading( this->nPlayerId ); }
-int CPlayer::GetAlpha() { return functions->GetPlayerAlpha( this->nPlayerId ); }
+int CPlayer::GetMoney() const { return functions->GetPlayerMoney(this->nPlayerId); }
+int CPlayer::GetScore() const { return functions->GetPlayerScore(this->nPlayerId); }
+int CPlayer::GetPing() const { return functions->GetPlayerPing(this->nPlayerId); }
+float CPlayer::GetHealth() const { return functions->GetPlayerHealth(this->nPlayerId); }
+float CPlayer::GetArmour() const { return functions->GetPlayerArmour(this->nPlayerId); }
+unsigned int CPlayer::GetImmunity() const { return functions->GetPlayerImmunityFlags(this->nPlayerId); }
+float CPlayer::GetHeading() const { return functions->GetPlayerHeading(this->nPlayerId); }
+int CPlayer::GetAlpha() const { return functions->GetPlayerAlpha(this->nPlayerId); }
 
-CVehicle * CPlayer::GetVehicle()
+CVehicle * CPlayer::GetVehicle() const
 {
 	int vehicleId = functions->GetPlayerVehicleID( this->nPlayerId );
 	if( vehicleId < 1 )
@@ -150,24 +150,24 @@ CVehicle * CPlayer::GetVehicle()
 		return pCore->vehicleMap[vehicleId];
 }
 
-bool CPlayer::GetFrozen() { return !functions->EnabledPlayerControllable( this->nPlayerId ); }
-bool CPlayer::GetDrivebyEnabled() { return Boolify( functions->EnabledPlayerDriveby( this->nPlayerId ) ); }
-bool CPlayer::GetWhiteScanlines() { return Boolify( functions->EnabledPlayerWhiteScanlines( this->nPlayerId ) ); }
-bool CPlayer::GetGreenScanlines() { return Boolify( functions->EnabledPlayerGreenScanlines( this->nPlayerId ) ); }
-bool CPlayer::GetWidescreen() { return Boolify( functions->EnabledPlayerWidescreen( this->nPlayerId ) ); }
-bool CPlayer::GetOnRadar() { return Boolify( functions->EnabledPlayerHasMarker( this->nPlayerId ) ); }
-bool CPlayer::GetCanAttack() { return Boolify( functions->EnabledPlayerAttackPriv( this->nPlayerId ) ); }
-int CPlayer::GetWeaponSlot() { return functions->GetPlayerWeaponSlot( this->nPlayerId ); }
-int CPlayer::GetWeapon() { return functions->GetPlayerWeapon( this->nPlayerId ); }
-int CPlayer::GetWeaponAmmo() { return functions->GetPlayerWeaponAmmo( this->nPlayerId ); }
+bool CPlayer::GetFrozen() const { return !functions->EnabledPlayerControllable(this->nPlayerId); }
+bool CPlayer::GetDrivebyEnabled() const { return Boolify(functions->EnabledPlayerDriveby(this->nPlayerId)); }
+bool CPlayer::GetWhiteScanlines() const { return Boolify(functions->EnabledPlayerWhiteScanlines(this->nPlayerId)); }
+bool CPlayer::GetGreenScanlines() const { return Boolify(functions->EnabledPlayerGreenScanlines(this->nPlayerId)); }
+bool CPlayer::GetWidescreen() const { return Boolify(functions->EnabledPlayerWidescreen(this->nPlayerId)); }
+bool CPlayer::GetOnRadar() const { return Boolify(functions->EnabledPlayerHasMarker(this->nPlayerId)); }
+bool CPlayer::GetCanAttack() const { return Boolify(functions->EnabledPlayerAttackPriv(this->nPlayerId)); }
+int CPlayer::GetWeaponSlot() const { return functions->GetPlayerWeaponSlot(this->nPlayerId); }
+int CPlayer::GetWeapon() const { return functions->GetPlayerWeapon(this->nPlayerId); }
+int CPlayer::GetWeaponAmmo() const { return functions->GetPlayerWeaponAmmo(this->nPlayerId); }
 
 void CPlayer::Kick() { functions->KickPlayer( this->nPlayerId ); }
 void CPlayer::Ban() { functions->BanPlayer( this->nPlayerId ); }
-void CPlayer::Spawn() { functions->ForcePlayerSpawn( this->nPlayerId ); }
-void CPlayer::GiveMoney( int money ) { functions->GivePlayerMoney( this->nPlayerId, money ); }
+void CPlayer::Spawn() const { functions->ForcePlayerSpawn(this->nPlayerId); }
+void CPlayer::GiveMoney( int money ) const { functions->GivePlayerMoney( this->nPlayerId, money ); }
 
 void CPlayer::ShowMarkers( bool setMarkers ) { functions->TogglePlayerShowMarkers( this->nPlayerId, setMarkers ); }
-bool CPlayer::ShowingMarkers() { return Boolify( functions->EnabledPlayerShowMarkers( this->nPlayerId ) ); }
+bool CPlayer::ShowingMarkers() const { return Boolify(functions->EnabledPlayerShowMarkers(this->nPlayerId)); }
 
 void CPlayer::SetSpectateTarget(CPlayer * pTarget)
 {
@@ -177,13 +177,13 @@ void CPlayer::SetSpectateTarget(CPlayer * pTarget)
 		functions->SetPlayerSpectateTarget(this->nPlayerId, pTarget->nPlayerId);
 }
 
-CPlayer * CPlayer::GetSpectateTarget()
+CPlayer * CPlayer::GetSpectateTarget() const
 {
 	int target = functions->GetPlayerSpectateTarget(this->nPlayerId);
 	return (target == -1 ? nullptr : pCore->playerMap[target]);
 }
 
-void CPlayer::AddSpeed( Vector speed )
+void CPlayer::AddSpeed( Vector speed ) const
 {
 	float x = speed.x;
 	float y = speed.y;
@@ -192,11 +192,11 @@ void CPlayer::AddSpeed( Vector speed )
 	functions->AddPlayerSpeed( this->nPlayerId, x, y, z );
 }
 
-void CPlayer::SetInterior( int interior ) { OutputWarning( "Player.SetInterior is deprecated. Teleport them to the interior loc instead." ); }
-void CPlayer::Eject() { functions->RemovePlayerFromVehicle( this->nPlayerId ); }
-void CPlayer::SetWantedLevel( int wantedLevel ) { functions->SetPlayerWantedLevel( this->nPlayerId, wantedLevel ); }
+void CPlayer::SetInterior( int interior ) const { OutputWarning( "Player.SetInterior is deprecated. Teleport them to the interior loc instead." ); }
+void CPlayer::Eject() const { functions->RemovePlayerFromVehicle(this->nPlayerId); }
+void CPlayer::SetWantedLevel( int wantedLevel ) const { functions->SetPlayerWantedLevel( this->nPlayerId, wantedLevel ); }
 
-void CPlayer::SetCameraPos( Vector pos, Vector look )
+void CPlayer::SetCameraPos( Vector pos, Vector look ) const
 {
 	float cX = pos.x;
 	float cY = pos.y;
@@ -209,11 +209,11 @@ void CPlayer::SetCameraPos( Vector pos, Vector look )
 	functions->SetCameraPosition( this->nPlayerId, cX, cY, cZ, lX, lY, lZ );
 }
 
-void CPlayer::Disarm() { functions->RemoveAllWeapons( this->nPlayerId ); }
-void CPlayer::CompatAnimation( int anim ) { functions->SetPlayerAnimation( this->nPlayerId, 0, anim ); }
-void CPlayer::Animation( int group, int anim ) { functions->SetPlayerAnimation( this->nPlayerId, group, anim ); }
+void CPlayer::Disarm() const { functions->RemoveAllWeapons(this->nPlayerId); }
+void CPlayer::CompatAnimation( int anim ) const { functions->SetPlayerAnimation( this->nPlayerId, 0, anim ); }
+void CPlayer::Animation( int group, int anim ) const { functions->SetPlayerAnimation( this->nPlayerId, group, anim ); }
 
-CVehicle * CPlayer::StandingOnVehicle()
+CVehicle * CPlayer::StandingOnVehicle() const
 {
 	int veh = functions->GetPlayerStandingOnVehicle( this->nPlayerId );
 	if (veh < 1)
@@ -222,7 +222,7 @@ CVehicle * CPlayer::StandingOnVehicle()
 		return pCore->vehicleMap[veh];
 }
 
-CObject * CPlayer::StandingOnObject()
+CObject * CPlayer::StandingOnObject() const
 {
 	int obj = functions->GetPlayerStandingOnObject( this->nPlayerId );
 	if( obj < 1 )
@@ -236,29 +236,29 @@ CObject * CPlayer::StandingOnObject()
 	}
 }
 
-void CPlayer::GiveWeapon( int weapon, int ammo ) { functions->GivePlayerWeapon( this->nPlayerId, weapon, ammo ); }
-void CPlayer::SetWeapon( int weapon, int ammo ) { functions->SetPlayerWeapon( this->nPlayerId, weapon, ammo ); }
-void CPlayer::RemoveWeapon( int weapon ) { functions->RemovePlayerWeapon( this->nPlayerId, weapon ); }
-int CPlayer::GetWeaponAtSlot( int slot ) { return functions->GetPlayerWeaponAtSlot( this->nPlayerId, slot ); }
-int CPlayer::GetAmmoAtSlot( int slot ) { return functions->GetPlayerAmmoAtSlot( this->nPlayerId, slot ); }
-int CPlayer::GetID() { return this->nPlayerId; }
-void CPlayer::Select() { functions->ForcePlayerSelect( this->nPlayerId ); }
-bool CPlayer::GetCameraLocked() { return Boolify( functions->IsCameraLocked( this->nPlayerId ) ); }
-void CPlayer::RestoreCamera() { functions->RestoreCamera( this->nPlayerId ); }
-int CPlayer::GetKey() { return functions->GetPlayerKey( this->nPlayerId ); }
+void CPlayer::GiveWeapon( int weapon, int ammo ) const { functions->GivePlayerWeapon( this->nPlayerId, weapon, ammo ); }
+void CPlayer::SetWeapon( int weapon, int ammo ) const { functions->SetPlayerWeapon( this->nPlayerId, weapon, ammo ); }
+void CPlayer::RemoveWeapon( int weapon ) const { functions->RemovePlayerWeapon( this->nPlayerId, weapon ); }
+int CPlayer::GetWeaponAtSlot( int slot ) const { return functions->GetPlayerWeaponAtSlot( this->nPlayerId, slot ); }
+int CPlayer::GetAmmoAtSlot( int slot ) const { return functions->GetPlayerAmmoAtSlot( this->nPlayerId, slot ); }
+int CPlayer::GetID() const { return this->nPlayerId; }
+void CPlayer::Select() const { functions->ForcePlayerSelect(this->nPlayerId); }
+bool CPlayer::GetCameraLocked() const { return Boolify(functions->IsCameraLocked(this->nPlayerId)); }
+void CPlayer::RestoreCamera() const { functions->RestoreCamera(this->nPlayerId); }
+int CPlayer::GetKey() const { return functions->GetPlayerKey(this->nPlayerId); }
 
-void CPlayer::SetMarker(int nDummy) { functions->TogglePlayerHasMarker(this->nPlayerId, 1); }
-void CPlayer::RemoveMarker() { functions->TogglePlayerHasMarker(this->nPlayerId, 0); }
-bool CPlayer::GetMarkerVisible() { return functions->EnabledPlayerHasMarker(this->nPlayerId) == 1; }
+void CPlayer::SetMarker(int nDummy) const { functions->TogglePlayerHasMarker(this->nPlayerId, 1); }
+void CPlayer::RemoveMarker() const { functions->TogglePlayerHasMarker(this->nPlayerId, 0); }
+bool CPlayer::GetMarkerVisible() const { return functions->EnabledPlayerHasMarker(this->nPlayerId) == 1; }
 void CPlayer::SetMarkerVisible(bool isVisible) { functions->TogglePlayerHasMarker(this->nPlayerId, isVisible); }
 
-bool CPlayer::GetAwayStatus() { return functions->IsPlayerAway(this->nPlayerId) == 1; }
-bool CPlayer::GetCanUseColors() { return functions->EnabledPlayerChatTags(this->nPlayerId) == 1; }
+bool CPlayer::GetAwayStatus() const { return functions->IsPlayerAway(this->nPlayerId) == 1; }
+bool CPlayer::GetCanUseColors() const { return functions->EnabledPlayerChatTags(this->nPlayerId) == 1; }
 void CPlayer::SetCanUseColors(bool canUse) { functions->TogglePlayerChatTagsEnabled(this->nPlayerId, canUse); }
 
-bool CPlayer::GetDrunkStatus() { return functions->EnabledPlayerDrunkEffects(this->nPlayerId) == 1; }
+bool CPlayer::GetDrunkStatus() const { return functions->EnabledPlayerDrunkEffects(this->nPlayerId) == 1; }
 void CPlayer::SetDrunkStatus(bool isDrunk) { functions->TogglePlayerDrunkEffects(this->nPlayerId, isDrunk); }
-void CPlayer::SetDrunkLevel(int visuals, int handling)
+void CPlayer::SetDrunkLevel(int visuals, int handling) const
 {
 	if (visuals <= 0 && handling <= 0)
 		functions->TogglePlayerDrunkEffects(this->nPlayerId, 0);
@@ -272,87 +272,88 @@ void RegisterPlayer()
 
 	// Read-write properties
 	c
-		.Prop( _SC("Admin"), &CPlayer::GetAdmin, &CPlayer::SetAdmin )
-		.Prop( _SC("Angle"), &CPlayer::GetHeading, &CPlayer::SetHeading )
-		.Prop( _SC("Armor"), &CPlayer::GetArmour, &CPlayer::SetArmour )
-		.Prop( _SC("Armour"), &CPlayer::GetArmour, &CPlayer::SetArmour )
-		.Prop( _SC("CanAttack"), &CPlayer::GetCanAttack, &CPlayer::SetCanAttack )
-		.Prop( _SC("CanDriveby"), &CPlayer::GetDrivebyEnabled, &CPlayer::SetDrivebyEnabled )
-		.Prop( _SC("Cash"), &CPlayer::GetMoney, &CPlayer::SetMoney )
-		.Prop( _SC("Color"), &CPlayer::GetColour, &CPlayer::SetColour )
-		.Prop( _SC("Colour"), &CPlayer::GetColour, &CPlayer::SetColour )
-		.Prop( _SC("DrivebyAbility"), &CPlayer::GetDrivebyEnabled, &CPlayer::SetDrivebyEnabled )
-		.Prop( _SC("Frozen"), &CPlayer::GetFrozen, &CPlayer::SetFrozen )
-		.Prop( _SC("GreenScanlines"), &CPlayer::GetGreenScanlines, &CPlayer::SetGreenScanlines )
-		.Prop( _SC("HasChatTags"), &CPlayer::GetCanUseColors, &CPlayer::SetCanUseColors )
-		.Prop( _SC("HasMarker"), &CPlayer::GetMarkerVisible, &CPlayer::SetMarkerVisible )
-		.Prop( _SC("Heading"), &CPlayer::GetHeading, &CPlayer::SetHeading )
-		.Prop( _SC("Health"), &CPlayer::GetHealth, &CPlayer::SetHealth )
-		.Prop( _SC("Immunity"), &CPlayer::GetImmunity, &CPlayer::SetImmunity )
-		.Prop( _SC("IsAdmin"), &CPlayer::GetAdmin, &CPlayer::SetAdmin )
-		.Prop( _SC("IsDrunk"), &CPlayer::GetDrunkStatus, &CPlayer::SetDrunkStatus )
-		.Prop( _SC("IsFrozen"), &CPlayer::GetFrozen, &CPlayer::SetFrozen )
-		.Prop( _SC("IsOnRadar"), &CPlayer::GetOnRadar, &CPlayer::SetOnRadar )
-		.Prop( _SC("IsWeaponSyncBlocked"), &CPlayer::GetCanAttack, &CPlayer::SetCanAttack )
-		.Prop( _SC("Money"), &CPlayer::GetMoney, &CPlayer::SetMoney )
-		.Prop( _SC("Pos"), &CPlayer::GetPosition, &CPlayer::SetPosition )
-		.Prop( _SC("Score"), &CPlayer::GetScore, &CPlayer::SetScore )
-		.Prop( _SC("SecWorld"), &CPlayer::GetSecWorld, &CPlayer::SetSecWorld )
-		.Prop( _SC("ShowMarkers"), &CPlayer::ShowingMarkers, &CPlayer::ShowMarkers )
-		.Prop( _SC("Slot"), &CPlayer::GetWeaponSlot, &CPlayer::SetWeaponSlot )
-		.Prop( _SC("Skin"), &CPlayer::GetSkin, &CPlayer::SetSkin )
-		.Prop( _SC("SpectateTarget"), &CPlayer::GetSpectateTarget, &CPlayer::SetSpectateTarget )
-		.Prop( _SC("Team"), &CPlayer::GetTeam, &CPlayer::SetTeam )
-		.Prop( _SC("Vehicle"), &CPlayer::GetVehicle, &CPlayer::SetVehicle )
-		.Prop( _SC("WhiteScanlines"), &CPlayer::GetWhiteScanlines, &CPlayer::SetWhiteScanlines )
-		.Prop( _SC("Widescreen"), &CPlayer::GetWidescreen, &CPlayer::SetWidescreen )
-		.Prop( _SC("World"), &CPlayer::GetWorld, &CPlayer::SetWorld )
+		.Prop(_SC("Admin"), &CPlayer::GetAdmin, &CPlayer::SetAdmin)
+		.Prop(_SC("Angle"), &CPlayer::GetHeading, &CPlayer::SetHeading)
+		.Prop(_SC("Armor"), &CPlayer::GetArmour, &CPlayer::SetArmour)
+		.Prop(_SC("Armour"), &CPlayer::GetArmour, &CPlayer::SetArmour)
+		.Prop(_SC("CanAttack"), &CPlayer::GetCanAttack, &CPlayer::SetCanAttack)
+		.Prop(_SC("CanDriveby"), &CPlayer::GetDrivebyEnabled, &CPlayer::SetDrivebyEnabled)
+		.Prop(_SC("Cash"), &CPlayer::GetMoney, &CPlayer::SetMoney)
+		.Prop(_SC("Color"), &CPlayer::GetColour, &CPlayer::SetColour)
+		.Prop(_SC("Colour"), &CPlayer::GetColour, &CPlayer::SetColour)
+		.Prop(_SC("DrivebyAbility"), &CPlayer::GetDrivebyEnabled, &CPlayer::SetDrivebyEnabled)
+		.Prop(_SC("Frozen"), &CPlayer::GetFrozen, &CPlayer::SetFrozen)
+		.Prop(_SC("GreenScanlines"), &CPlayer::GetGreenScanlines, &CPlayer::SetGreenScanlines)
+		.Prop(_SC("HasChatTags"), &CPlayer::GetCanUseColors, &CPlayer::SetCanUseColors)
+		.Prop(_SC("HasMarker"), &CPlayer::GetMarkerVisible, &CPlayer::SetMarkerVisible)
+		.Prop(_SC("Heading"), &CPlayer::GetHeading, &CPlayer::SetHeading)
+		.Prop(_SC("Health"), &CPlayer::GetHealth, &CPlayer::SetHealth)
+		.Prop(_SC("Immunity"), &CPlayer::GetImmunity, &CPlayer::SetImmunity)
+		.Prop(_SC("IsAdmin"), &CPlayer::GetAdmin, &CPlayer::SetAdmin)
+		.Prop(_SC("IsDrunk"), &CPlayer::GetDrunkStatus, &CPlayer::SetDrunkStatus)
+		.Prop(_SC("IsFrozen"), &CPlayer::GetFrozen, &CPlayer::SetFrozen)
+		.Prop(_SC("IsOnRadar"), &CPlayer::GetOnRadar, &CPlayer::SetOnRadar)
+		.Prop(_SC("IsWeaponSyncBlocked"), &CPlayer::GetCanAttack, &CPlayer::SetCanAttack)
+		.Prop(_SC("Money"), &CPlayer::GetMoney, &CPlayer::SetMoney)
+		.Prop(_SC("Pos"), &CPlayer::GetPosition, &CPlayer::SetPosition)
+		.Prop(_SC("Score"), &CPlayer::GetScore, &CPlayer::SetScore)
+		.Prop(_SC("SecWorld"), &CPlayer::GetSecWorld, &CPlayer::SetSecWorld)
+		.Prop(_SC("ShowMarkers"), &CPlayer::ShowingMarkers, &CPlayer::ShowMarkers)
+		.Prop(_SC("Slot"), &CPlayer::GetWeaponSlot, &CPlayer::SetWeaponSlot)
+		.Prop(_SC("Skin"), &CPlayer::GetSkin, &CPlayer::SetSkin)
+		.Prop(_SC("SpectateTarget"), &CPlayer::GetSpectateTarget, &CPlayer::SetSpectateTarget)
+		.Prop(_SC("Team"), &CPlayer::GetTeam, &CPlayer::SetTeam)
+		.Prop(_SC("Vehicle"), &CPlayer::GetVehicle, &CPlayer::SetVehicle)
+		.Prop(_SC("WhiteScanlines"), &CPlayer::GetWhiteScanlines, &CPlayer::SetWhiteScanlines)
+		.Prop(_SC("Widescreen"), &CPlayer::GetWidescreen, &CPlayer::SetWidescreen)
+		.Prop(_SC("World"), &CPlayer::GetWorld, &CPlayer::SetWorld);
 
-		// Read-only properties
-		.Prop( _SC("Alpha"), &CPlayer::GetAlpha )
-		.Prop( _SC("Ammo"), &CPlayer::GetWeaponAmmo )
-		.Prop( _SC("Away"), &CPlayer::GetAwayStatus )
-		.Prop( _SC("CameraLocked"), &CPlayer::GetCameraLocked )
-		.Prop( _SC("Class"), &CPlayer::GetClass )
-		.Prop( _SC("ID"), &CPlayer::GetID )
-		.Prop( _SC("IP"), &CPlayer::GetIP )
-		.Prop( _SC("IsSpawned"), &CPlayer::GetSpawned )
-		.Prop( _SC("Key"), &CPlayer::GetKey )
-		.Prop( _SC("Name"), &CPlayer::GetName )
-		.Prop( _SC("Ping"), &CPlayer::GetPing )
-		.Prop( _SC("Spawned"), &CPlayer::GetSpawned )
-		.Prop( _SC("StandingOnObject" ), &CPlayer::StandingOnObject )
-		.Prop( _SC("StandingOnVehicle"), &CPlayer::StandingOnVehicle )
-		.Prop( _SC("State"), &CPlayer::GetState )
-		.Prop( _SC("Typing"), &CPlayer::Typing )
-		.Prop( _SC("UniqueWorld"), &CPlayer::GetUniqueWorld )
-		.Prop( _SC("Weapon"), &CPlayer::GetWeapon )
+	// Read-only properties
+	c
+		.Prop(_SC("Alpha"), &CPlayer::GetAlpha)
+		.Prop(_SC("Ammo"), &CPlayer::GetWeaponAmmo)
+		.Prop(_SC("Away"), &CPlayer::GetAwayStatus)
+		.Prop(_SC("CameraLocked"), &CPlayer::GetCameraLocked)
+		.Prop(_SC("Class"), &CPlayer::GetClass)
+		.Prop(_SC("ID"), &CPlayer::GetID)
+		.Prop(_SC("IP"), &CPlayer::GetIP)
+		.Prop(_SC("IsSpawned"), &CPlayer::GetSpawned)
+		.Prop(_SC("Key"), &CPlayer::GetKey)
+		.Prop(_SC("Name"), &CPlayer::GetName)
+		.Prop(_SC("Ping"), &CPlayer::GetPing)
+		.Prop(_SC("Spawned"), &CPlayer::GetSpawned)
+		.Prop(_SC("StandingOnObject"), &CPlayer::StandingOnObject)
+		.Prop(_SC("StandingOnVehicle"), &CPlayer::StandingOnVehicle)
+		.Prop(_SC("State"), &CPlayer::GetState)
+		.Prop(_SC("Typing"), &CPlayer::Typing)
+		.Prop(_SC("UniqueWorld"), &CPlayer::GetUniqueWorld)
+		.Prop(_SC("Weapon"), &CPlayer::GetWeapon);
 
-		// Functions
-		.Func( _SC("AddSpeed"), &CPlayer::AddSpeed, 2, "xx" )
-		.Func( _SC("Ban"), &CPlayer::Ban, 1, "x" )
-		.Func( _SC("Disarm"), &CPlayer::Disarm, 1, "x" )
-		.Func( _SC("Eject"), &CPlayer::Eject, 1, "x" )
-		.Func( _SC("GetAmmoAtSlot"), &CPlayer::GetAmmoAtSlot, 2, "xi" )
-		.Func( _SC("GetWeaponAtSlot"), &CPlayer::GetWeaponAtSlot, 2, "xi" )
-		.Func( _SC("GiveMoney"), &CPlayer::GiveMoney, 2, "xi" )
-		.Func( _SC("GiveWeapon"), &CPlayer::GiveWeapon, 3, "xii" )
-		.Func( _SC("Kick"), &CPlayer::Kick, 1, "x" )
-		.Func( _SC("RemoveWeapon"), &CPlayer::RemoveWeapon, 2, "xi" )
-		.Func( _SC("RemoveMarker"), &CPlayer::RemoveMarker, 1, "x" )
-		.Func( _SC("RestoreCamera"), &CPlayer::RestoreCamera, 1, "x" )
-		.Func( _SC("Select"), &CPlayer::Select, 1, "x" )
-		.Func( _SC("SetAlpha"), &CPlayer::SetAlpha, 3, "xii" )
-		.Overload<void (CPlayer::*)(int, int)>( _SC("SetAnim"), &CPlayer::Animation )
-		.Overload<void (CPlayer::*)(int)>( _SC("SetAnim"), &CPlayer::CompatAnimation )
-		.Func( _SC("SetCameraPos"), &CPlayer::SetCameraPos, 3, "xxx" )
-		.Func( _SC("SetDrunkLevel"), &CPlayer::SetDrunkLevel, 3, "xii" )
-		.Func( _SC("SetInterior"), &CPlayer::SetInterior, 2, "xi" )
-		.Func( _SC("SetMarker"), &CPlayer::SetMarker, 2, "xi" )
-		.Func( _SC("SetWantedLevel"), &CPlayer::SetWantedLevel, 2, "xi" )
-		.Func( _SC("SetWeapon"), &CPlayer::SetWeapon, 3, "xii" )
-		.Func( _SC("Spawn"), &CPlayer::Spawn, 1, "x" )
-		.Func( _SC("StreamedToPlayer"), &CPlayer::StreamedToPlayer, 2, "xx" );
+	// Functions
+	c.Func(_SC("AddSpeed"), &CPlayer::AddSpeed, 2, "xx")
+		.Func(_SC("Ban"), &CPlayer::Ban, 1, "x")
+		.Func(_SC("Disarm"), &CPlayer::Disarm, 1, "x")
+		.Func(_SC("Eject"), &CPlayer::Eject, 1, "x")
+		.Func(_SC("GetAmmoAtSlot"), &CPlayer::GetAmmoAtSlot, 2, "xi")
+		.Func(_SC("GetWeaponAtSlot"), &CPlayer::GetWeaponAtSlot, 2, "xi")
+		.Func(_SC("GiveMoney"), &CPlayer::GiveMoney, 2, "xi")
+		.Func(_SC("GiveWeapon"), &CPlayer::GiveWeapon, 3, "xii")
+		.Func(_SC("Kick"), &CPlayer::Kick, 1, "x")
+		.Func(_SC("RemoveWeapon"), &CPlayer::RemoveWeapon, 2, "xi")
+		.Func(_SC("RemoveMarker"), &CPlayer::RemoveMarker, 1, "x")
+		.Func(_SC("RestoreCamera"), &CPlayer::RestoreCamera, 1, "x")
+		.Func(_SC("Select"), &CPlayer::Select, 1, "x")
+		.Func(_SC("SetAlpha"), &CPlayer::SetAlpha, 3, "xii")
+		.Overload(_SC("SetAnim"), &CPlayer::Animation)
+		.Overload(_SC("SetAnim"), &CPlayer::CompatAnimation)
+		.Func(_SC("SetCameraPos"), &CPlayer::SetCameraPos, 3, "xxx")
+		.Func(_SC("SetDrunkLevel"), &CPlayer::SetDrunkLevel, 3, "xii")
+		.Func(_SC("SetInterior"), &CPlayer::SetInterior, 2, "xi")
+		.Func(_SC("SetMarker"), &CPlayer::SetMarker, 2, "xi")
+		.Func(_SC("SetWantedLevel"), &CPlayer::SetWantedLevel, 2, "xi")
+		.Func(_SC("SetWeapon"), &CPlayer::SetWeapon, 3, "xii")
+		.Func(_SC("Spawn"), &CPlayer::Spawn, 1, "x")
+		.Func(_SC("StreamedToPlayer"), &CPlayer::StreamedToPlayer, 2, "xx");
 
 	RootTable(v).Bind( _SC("CPlayer"), c );
 }
