@@ -58,11 +58,21 @@ class CCore
 		bool IsReloadingAllowed() { return this->canReload; }
 		void ChangeReloadPermission(bool bCanReload) { this->canReload = bCanReload; }
 
-		// Entity maps
-		std::array<CPlayer *, MAX_PLAYERS> playerMap;
-		std::array<CPickup *, MAX_PICKUPS> pickupMap;
-		std::array<CObject *, MAX_OBJECTS> objectMap;
-		std::array<CVehicle *, MAX_VEHICLES> vehicleMap;
+	public:
+		CObject * AllocateObject(int gObjectId, bool isOurs = true);
+		CPickup * AllocatePickup(int gPickupId, bool isOurs = true);
+		CPlayer * AllocatePlayer(int gPlayerId);
+		CVehicle * AllocateVehicle(int gVehicleId, bool isOurs = true);
+
+		CObject * RetrieveObject(int gObjectId);
+		CPickup * RetrievePickup(int gPickupId);
+		CPlayer * RetrievePlayer(int gPlayerId);
+		CVehicle * RetrieveVehicle(int gVehicleId);
+
+		void DereferenceObject(int gObjectId);
+		void DereferencePickup(int gPickupId);
+		void DereferencePlayer(int gPlayerId);
+		void DereferenceVehicle(int gVehicleId);
 
 	private:
 		// Constructor
@@ -76,6 +86,12 @@ class CCore
 
 		// The singleton instance itself
 		static CCore * pCoreInstance;
+
+		// Entity maps
+		std::array<CPlayer *, MAX_PLAYERS> playerMap;
+		std::array<CPickup *, MAX_PICKUPS> pickupMap;
+		std::array<CObject *, MAX_OBJECTS> objectMap;
+		std::array<CVehicle *, MAX_VEHICLES> vehicleMap;
 
 		// Our list of timers.
 		static const int maxTimers = 255;

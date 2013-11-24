@@ -34,7 +34,7 @@ void CPlayer::SetMoney( int money )
 
 	Function callback = RootTable().GetFunction( _SC("onPlayerCashChange") );
 	if( !callback.IsNull() )
-		callback( pCore->playerMap[this->nPlayerId], oldCash, money );
+		callback( pCore->RetrievePlayer(this->nPlayerId), oldCash, money );
 
 	functions->SetPlayerMoney( this->nPlayerId, money );
 }
@@ -45,7 +45,7 @@ void CPlayer::SetScore( int score )
 
 	Function callback = RootTable().GetFunction( _SC("onPlayerScoreChange") );
 	if( !callback.IsNull() )
-		callback( pCore->playerMap[this->nPlayerId], oldScore, score );
+		callback( pCore->RetrievePlayer(this->nPlayerId), oldScore, score );
 
 	functions->SetPlayerScore( this->nPlayerId, score );
 }
@@ -62,7 +62,7 @@ void CPlayer::SetVehicle( CVehicle * vehiclePointer )
 	{
 		Function callback = RootTable().GetFunction( _SC("onPlayerEnterVehicle") );
 		if( !callback.IsNull() )
-			callback( pCore->playerMap[this->nPlayerId], vehiclePointer );
+			callback( pCore->RetrievePlayer(this->nPlayerId), vehiclePointer );
 
 		functions->PutPlayerInVehicle( this->nPlayerId, vehiclePointer->nVehicleId, 0, 1, 1 );
 	}
@@ -138,10 +138,7 @@ int CPlayer::GetAlpha() const { return functions->GetPlayerAlpha(this->nPlayerId
 CVehicle * CPlayer::GetVehicle() const
 {
 	int vehicleId = functions->GetPlayerVehicleID( this->nPlayerId );
-	if( vehicleId < 1 )
-		return nullptr;
-	else
-		return pCore->vehicleMap[vehicleId];
+	return pCore->RetrieveVehicle(vehicleId);
 }
 
 bool CPlayer::GetFrozen() const { return !functions->EnabledPlayerControllable(this->nPlayerId); }
@@ -174,7 +171,7 @@ void CPlayer::SetSpectateTarget(CPlayer * pTarget)
 CPlayer * CPlayer::GetSpectateTarget() const
 {
 	int target = functions->GetPlayerSpectateTarget(this->nPlayerId);
-	return (target == -1 ? nullptr : pCore->playerMap[target]);
+	return pCore->RetrievePlayer(target);
 }
 
 void CPlayer::AddSpeed( Vector speed ) const
@@ -210,10 +207,7 @@ void CPlayer::Animation( int group, int anim ) const { functions->SetPlayerAnima
 CVehicle * CPlayer::StandingOnVehicle() const
 {
 	int veh = functions->GetPlayerStandingOnVehicle( this->nPlayerId );
-	if (veh < 1)
-		return nullptr;
-	else
-		return pCore->vehicleMap[veh];
+	return pCore->RetrieveVehicle(veh);
 }
 
 CObject * CPlayer::StandingOnObject() const

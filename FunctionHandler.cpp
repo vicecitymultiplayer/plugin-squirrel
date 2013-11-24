@@ -38,7 +38,7 @@ void ClientMessageToAllWithAlpha(const SQChar* message, int r, int g, int b, int
 	for (int i = 0; i < functions->GetMaxPlayers(); i++)
 	{
 		if (functions->IsPlayerConnected(i))
-			ClientMessageWithAlpha(message, pCore->playerMap[i], r, g, b, a);
+			ClientMessageWithAlpha(message, pCore->RetrievePlayer(i), r, g, b, a);
 	}
 }
 
@@ -199,46 +199,28 @@ int  GetPlayerIDFromName( const SQChar* name ) { return functions->GetPlayerIDFr
 CVehicle * CreateVehicle( int model, int world, Vector * pos, float angle, int col1, int col2 )
 {
 	int vId = functions->CreateVehicle( model, world, pos->x, pos->y, pos->z, angle, col1, col2 );
-	if( vId < 1 )
+	if (vId < 0)
 		return nullptr;
 	else
-	{
-		CVehicle * v = new CVehicle;
-		v->Init( vId );
-
-		pCore->vehicleMap[vId] = v;
-		return v;
-	}
+		return pCore->AllocateVehicle(vId);
 }
 
 CPickup * CreatePickup( int model, int world, int quantity, Vector * pos, int alpha, bool isAuto )
 {
 	int pId = functions->CreatePickup( model, world, quantity, pos->x, pos->y, pos->z, alpha, isAuto );
-	if( pId < 0 )
+	if (pId < 0)
 		return nullptr;
 	else
-	{
-		CPickup * p = new CPickup;
-		p->Init( pId );
-
-		pCore->pickupMap[pId] = p;
-		return p;
-	}
+		return pCore->AllocatePickup(pId);
 }
 
 CObject * CreateObject( int model, int world, Vector * pos, int alpha )
 {
 	int oId = functions->CreateObject( model, world, pos->x, pos->y, pos->z, alpha );
-	if( oId < 0 )
+	if (oId < 0)
 		return nullptr;
 	else
-	{
-		CObject * o = new CObject;
-		o->Init( oId );
-
-		pCore->objectMap[oId] = o;
-		return o;
-	}
+		return pCore->AllocateObject(oId);
 }
 
 CVehicle * CreateVehicleExpanded( int model, int world, float x, float y, float z, float angle, int col1, int col2 )
@@ -259,30 +241,9 @@ CObject * CreateObjectExpanded( int model, int world, float x, float y, float z,
 	return CreateObject( model, world, &pos, alpha );
 }
 
-CPickup * FindPickup( int id )
-{
-	if (id < 0 || id > MAX_PICKUPS - 1)
-		return nullptr;
-
-	return pCore->pickupMap[id];
-}
-
-CObject * FindObject( int id )
-{
-	if (id < 0 || id > MAX_OBJECTS - 1)
-		return nullptr;
-
-	return pCore->objectMap[id];
-}
-
-CVehicle * FindVehicle( int id )
-{
-	if (id < 0 || id > MAX_VEHICLES - 1)
-		return nullptr;
-
-	return pCore->vehicleMap[id];
-}
-
+CPickup * FindPickup(int id) { return pCore->RetrievePickup(id); }
+CObject * FindObject(int id) { return pCore->RetrieveObject(id); }
+CVehicle * FindVehicle(int id) { return pCore->RetrieveVehicle(id); }
 void SetWorldBounds( float maxX, float minX, float maxY, float minY )
 {
 	functions->SetWorldBounds( maxX, minX, maxY, minY );
@@ -1649,7 +1610,7 @@ SQInteger FindPlayer( HSQUIRRELVM v )
 			sq_getinteger( v, 2, &playerID );
 
 			if (playerID < MAX_PLAYERS && playerID >= 0)
-				pPlayer = pCore->playerMap[playerID];
+				pPlayer = pCore->RetrievePlayer(playerID);
 			else
 			{
 				sq_pushnull( v );
@@ -1693,7 +1654,7 @@ SQInteger FindPlayer( HSQUIRRELVM v )
 				return 1;
 			}
 			else
-				pPlayer = pCore->playerMap[pID];
+				pPlayer = pCore->RetrievePlayer(pID);
 		}
 		else
 			return sq_throwerror( v, "Unexpected argument in FindPlayer: must be integer or string" );

@@ -436,3 +436,159 @@ FILE * CCore::GetLogInstance()
 
 	return this->pLogFile;
 }
+
+CPlayer * CCore::AllocatePlayer(int gPlayerId)
+{
+	if (gPlayerId < 0 || gPlayerId > MAX_PLAYERS - 1)
+		return nullptr;
+	else if (functions->IsPlayerConnected(gPlayerId) == 0)
+		return nullptr;
+	else if (this->playerMap[gPlayerId] != nullptr)
+		return this->playerMap[gPlayerId];
+
+	CPlayer * pPlayer = new CPlayer();
+	pPlayer->nPlayerId = gPlayerId;
+
+	this->playerMap[pPlayer->nPlayerId] = pPlayer;
+	return pPlayer;
+}
+
+CObject * CCore::AllocateObject(int gObjectId, bool isOurs)
+{
+	if (gObjectId < 0 || gObjectId > MAX_OBJECTS - 1)
+		return nullptr;
+	else if (functions->GetObjectModel(gObjectId) < 1)
+		return nullptr;
+	else if (this->objectMap[gObjectId] != nullptr)
+		return this->objectMap[gObjectId];
+
+	CObject * pObject = new CObject();
+	pObject->Init(gObjectId, isOurs);
+
+	this->objectMap[pObject->nObjectId] = pObject;
+	return pObject;
+}
+
+CPickup * CCore::AllocatePickup(int gPickupId, bool isOurs)
+{
+	if (gPickupId < 0 || gPickupId > MAX_PICKUPS - 1)
+		return nullptr;
+	else if (functions->PickupGetModel(gPickupId) < 1)
+		return nullptr;
+	else if (this->pickupMap[gPickupId] != nullptr)
+		return this->pickupMap[gPickupId];
+
+	CPickup * pPickup = new CPickup();
+	pPickup->Init(gPickupId, isOurs);
+
+	this->pickupMap[pPickup->nPickupId] = pPickup;
+	return pPickup;
+}
+
+CVehicle * CCore::AllocateVehicle(int gVehicleId, bool isOurs)
+{
+	if (gVehicleId < 0 || gVehicleId > MAX_VEHICLES - 1)
+		return nullptr;
+	else if (functions->GetVehicleModel(gVehicleId) < 1)
+		return nullptr;
+	else if (this->vehicleMap[gVehicleId] != nullptr)
+		return this->vehicleMap[gVehicleId];
+
+	CVehicle * pVehicle = new CVehicle();
+	pVehicle->Init(gVehicleId, isOurs);
+
+	this->vehicleMap[pVehicle->nVehicleId] = pVehicle;
+	return pVehicle;
+}
+
+void CCore::DereferenceObject(int gObjectId)
+{
+	if (gObjectId < 0 || gObjectId > MAX_OBJECTS - 1)
+		return;
+	else if (this->objectMap[gObjectId] == nullptr)
+		return;
+	else
+	{
+		CObject * pObject = this->objectMap[gObjectId];
+		delete pObject;
+
+		this->objectMap[gObjectId] = nullptr;
+	}
+}
+
+void CCore::DereferencePickup(int gPickupId)
+{
+	if (gPickupId < 0 || gPickupId > MAX_PICKUPS - 1)
+		return;
+	else if (this->pickupMap[gPickupId] == nullptr)
+		return;
+	else
+	{
+		CPickup * pPickup = this->pickupMap[gPickupId];
+		delete pPickup;
+
+		this->pickupMap[gPickupId] = nullptr;
+	}
+}
+
+void CCore::DereferencePlayer(int gPlayerId)
+{
+	if (gPlayerId < 0 || gPlayerId > MAX_PLAYERS - 1)
+		return;
+	else if (this->playerMap[gPlayerId] == nullptr)
+		return;
+	else
+	{
+		CPlayer * pPlayer = this->playerMap[gPlayerId];
+		delete pPlayer;
+
+		this->playerMap[gPlayerId] = nullptr;
+	}
+}
+
+void CCore::DereferenceVehicle(int gVehicleId)
+{
+	if (gVehicleId < 0 || gVehicleId > MAX_VEHICLES - 1)
+		return;
+	else if (this->vehicleMap[gVehicleId] == nullptr)
+		return;
+	else
+	{
+		CVehicle * pVehicle = this->vehicleMap[gVehicleId];
+		delete pVehicle;
+
+		this->vehicleMap[gVehicleId] = nullptr;
+	}
+}
+
+CObject * CCore::RetrieveObject(int gObjectId)
+{
+	if (gObjectId < 0 || gObjectId > MAX_OBJECTS - 1)
+		return nullptr;
+
+	return this->objectMap[gObjectId];
+}
+
+CPickup * CCore::RetrievePickup(int gPickupId)
+{
+	if (gPickupId < 0 || gPickupId > MAX_PICKUPS - 1)
+		return nullptr;
+
+	return this->pickupMap[gPickupId];
+}
+
+CPlayer * CCore::RetrievePlayer(int gPlayerId)
+{
+	if (gPlayerId < 0 || gPlayerId > MAX_PLAYERS - 1)
+		return nullptr;
+
+	return this->playerMap[gPlayerId];
+}
+
+CVehicle * CCore::RetrieveVehicle(int gVehicleId)
+{
+	if (gVehicleId < 0 || gVehicleId > MAX_VEHICLES - 1)
+		return nullptr;
+
+	return this->vehicleMap[gVehicleId];
+}

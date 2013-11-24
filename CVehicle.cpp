@@ -113,10 +113,7 @@ CPlayer * CVehicle::GetDriver() const
 		}
 	}
 
-	if( driver == -1 )
-		return NULL;
-	else
-		return pCore->playerMap[driver];
+	return pCore->RetrievePlayer(driver);
 }
 
 void CVehicle::Delete()
@@ -148,11 +145,7 @@ bool CVehicle::GetWrecked() const { return (functions->IsVehicleWrecked(this->nV
 CPlayer * CVehicle::GetOccupant( int slot ) const
 {
 	int nPlayerId = functions->GetVehicleOccupant( this->nVehicleId, slot );
-	
-	if( nPlayerId == -1 )
-		return NULL;
-	else
-		return pCore->playerMap[nPlayerId];
+	return pCore->RetrievePlayer(nPlayerId);
 }
 
 int CVehicle::SetHandlingData( int rule, float value ) const { return functions->SetInstHandlingRule( this->nVehicleId, rule, value ); }
