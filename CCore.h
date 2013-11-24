@@ -57,11 +57,11 @@ class CCore
 		bool IsReloadingAllowed() { return this->canReload; }
 		void ChangeReloadPermission(bool bCanReload) { this->canReload = bCanReload; }
 
-		// Class maps; unencapsulated due to errors trying to access them otherwise
-		CPlayer  ** playerMap;
-		CPickup  ** pickupMap;
-		CObject  ** objectMap;
-		CVehicle ** vehicleMap;
+		// Entity maps
+		std::vector<CPlayer *> playerMap;
+		std::vector<CPickup *> pickupMap;
+		std::vector<CObject *> objectMap;
+		std::vector<CVehicle *> vehicleMap;
 
 	private:
 		// Constructor

@@ -20,35 +20,15 @@ CCore::CCore()
 	pLogFile    = nullptr;
 
 	// Create the entity arrays
-	this->playerMap = new CPlayer *[MAX_PLAYERS];
-	assert(this->playerMap != nullptr);
-
-	this->pickupMap = new CPickup *[MAX_PICKUPS];
-	assert(this->pickupMap != nullptr);
-
-	this->objectMap = new CObject *[MAX_OBJECTS];
-	assert(this->objectMap != nullptr);
-
-	this->vehicleMap = new CVehicle *[MAX_VEHICLES];
-	assert(this->vehicleMap != nullptr);
+	this->playerMap = std::vector<CPlayer *>(MAX_PLAYERS, nullptr);
+	this->pickupMap = std::vector<CPickup *>(MAX_PICKUPS, nullptr);
+	this->objectMap = std::vector<CObject *>(MAX_OBJECTS, nullptr);
+	this->vehicleMap = std::vector<CVehicle *>(MAX_VEHICLES, nullptr);
 
 	// Construct all timer arrays
 	unsigned int i;
 	for( i = 0; i < this->maxTimers; i++ )
 		this->pTimerArray[i] = nullptr;
-
-	// Clean our entity maps of any garbage and filth
-	for ( i = 0; i < MAX_PLAYERS; i++ )
-		this->playerMap[i] = nullptr;
-
-	for( i = 0; i < MAX_VEHICLES; i++ )
-		this->vehicleMap[i] = nullptr;
-
-	for( i = 0; i < MAX_PICKUPS; i++ )
-		this->pickupMap[i] = nullptr;
-
-	for( i = 0; i < MAX_OBJECTS; i++ )
-		this->objectMap[i] = nullptr;
 	
 	canReload = false;
 	pLogFile = fopen("server_log.txt", "a");
@@ -79,31 +59,38 @@ CCore::~CCore()
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
 		if (this->playerMap[i] != nullptr)
+		{
 			delete this->playerMap[i];
+			this->playerMap[i] = nullptr;
+		}
 	}
 
 	for (i = 0; i < MAX_OBJECTS; i++)
 	{
 		if (this->objectMap[i] != nullptr)
+		{
 			delete this->objectMap[i];
+			this->objectMap[i] = nullptr;
+		}
 	}
 
 	for (i = 0; i < MAX_PICKUPS; i++)
 	{
 		if (this->pickupMap[i] != nullptr)
+		{
 			delete this->pickupMap[i];
+			this->pickupMap[i] = nullptr;
+		}
 	}
 
 	for (i = 0; i < MAX_VEHICLES; i++)
 	{
 		if (this->vehicleMap[i] != nullptr)
+		{
 			delete this->vehicleMap[i];
+			this->vehicleMap[i] = nullptr;
+		}
 	}
-
-	delete[] this->playerMap;
-	delete[] this->objectMap;
-	delete[] this->pickupMap;
-	delete[] this->vehicleMap;
 }
 
 void CCore::LoadVM()
@@ -131,7 +118,6 @@ void CCore::ScanForEntities()
 	{
 		if( functions->GetVehicleModel( i ) > 0 )
 		{
-			printf("vehicle oops at %d = %d", i, functions->GetVehicleModel(i));
 			this->vehicleMap[i] = new CVehicle;
 			this->vehicleMap[i]->Init( i, false );
 		}
@@ -142,7 +128,6 @@ void CCore::ScanForEntities()
 	{
 		if( functions->PickupGetModel( i ) > 0 )
 		{
-			printf("pickup oops at %d = %d", i, functions->PickupGetModel(i));
 			this->pickupMap[i] = new CPickup;
 			this->pickupMap[i]->Init( i, false );
 		}
@@ -153,7 +138,6 @@ void CCore::ScanForEntities()
 	{
 		if( functions->GetObjectModel( i ) > 0 )
 		{
-			printf("object oops at %d = %d", i, functions->GetObjectModel(i));
 			this->objectMap[i] = new CObject;
 			this->objectMap[i]->Init( i, false );
 		}
@@ -164,7 +148,6 @@ void CCore::ScanForEntities()
 	{
 		if( functions->IsPlayerConnected( i ) )
 		{
-			printf("player oops at %d = %d", i, functions->IsPlayerConnected(i));
 			this->playerMap[i] = new CPlayer;
 			this->playerMap[i]->nPlayerId = i;
 		}
