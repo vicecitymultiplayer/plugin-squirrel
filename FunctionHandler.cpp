@@ -1639,7 +1639,7 @@ int CreateBlip( int world, Vector * pos, int scale, RGBa color, int nSpriteId )
 }
 
 void DestroyRadioStream( int radioID ) { functions->RemoveRadioStream( radioID ); }
-int CreateRadioStream( const char * radioName, const char * radioURL, unsigned int bCanSelect )
+int CreateRadioStream( const char * radioName, const char * radioURL, bool bCanSelect )
 {
 	return functions->AddRadioStream( -1, radioName, radioURL, bCanSelect );
 }

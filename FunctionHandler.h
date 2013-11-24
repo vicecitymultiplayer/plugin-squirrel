@@ -88,7 +88,7 @@ bool EnabledChatTagDefault   ( void );
 int CreateBlip( int world, Vector * pos, int scale, RGBa color, int nSpriteId );
 void DestroyBlip( int blipID );
 
-int CreateRadioStream( const char * radioName, const char * radioURL, unsigned int bCanSelect );
+int CreateRadioStream( const char * radioName, const char * radioURL, bool bCanSelect );
 void DestroyRadioStream( int radioID );
 
 void CreateExplosion ( int world, int type, Vector * pos, int playerCaused, bool onGround );
@@ -216,12 +216,6 @@ void LoadVCMPModule( const SQChar * name );
 SQInteger FindPlayer( HSQUIRRELVM v );
 SQInteger InPoly( HSQUIRRELVM v );
 SQInteger NewTimer( HSQUIRRELVM v );
-
-int CreateMarker(int world, Vector pos, int scale, RGBa color, int spriteId);
-void RemoveMarker(int markerId);
-
-int AddRadioStream(const SQChar * radioName, const SQChar * radioURL, bool showInCarListing);
-void RemoveRadioStream(int streamId);
 
 // These functions are for compatibility, but will be deprecated
 DWORD    GetTime         ( void );

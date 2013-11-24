@@ -74,6 +74,12 @@ void RegisterGlobals()
 		.Func( _SC("GetJoinMessages"), EnabledJoinMessages, 1, _SC("t" ) )
 		.Func( _SC("GetDeathMessages"), EnabledDeathMessages, 1, _SC("t" ) )
 
+		.Func( _SC("CreateRadioStream"), CreateRadioStream, 4, _SC("tssb") )
+		.Func( _SC("DestroyRadioStream"), DestroyRadioStream, 2, _SC("ti") )
+
+		.Func( _SC("CreateMarker"), CreateBlip, 6, _SC("tixixi") )
+		.Func( _SC("DestroyMarker"), DestroyBlip, 2, _SC("ti") )
+
 		.Overload<void (*)(int, int, Vector *, int, bool)>( _SC("CreateExplosion"), CreateExplosion )
 		.Overload<void (*)(int, int, float, float, float, int, bool)>( _SC("CreateExplosion"), CreateExplosionExpanded )
 
