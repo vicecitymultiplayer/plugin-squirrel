@@ -248,15 +248,21 @@ void CVehicle::AddVehicleRelTurnSpeed( Vector speed )
 	functions->AddVehicleRelTurnSpeed( this->nVehicleId, speed.x, speed.y, speed.z );
 }
 
+int CVehicle::GetRadio() { return functions->GetVehicleRadio(this->nVehicleId); }
+void CVehicle::SetRadio(int nRadioId) { functions->SetVehicleRadio(this->nVehicleId, nRadioId); }
+
+bool CVehicle::GetRadioLockStatus() { return functions->IsVehicleRadioLocked(this->nVehicleId) == 1; }
+void CVehicle::SetRadioLocked(bool isLocked) { functions->SetVehicleRadioLocked(this->nVehicleId, isLocked); }
+
 void RegisterVehicle()
 {
 	Class <CVehicle> c(v);
 
 	// Read-write properties
 	c
-		.Prop( _SC("World"), &CVehicle::GetWorld, &CVehicle::SetWorld )
 		.Prop( _SC("Immunity"), &CVehicle::GetImmunity, &CVehicle::SetImmunity )
 		.Prop( _SC("Pos"), &CVehicle::GetPosition, &CVehicle::SetPosition )
+		.Prop( _SC("World"), &CVehicle::GetWorld, &CVehicle::SetWorld )
 		.Prop( _SC("SpawnPos"), &CVehicle::GetSpawnPos, &CVehicle::SetSpawnPos )
 		.Prop( _SC("SpawnAngle"), &CVehicle::GetSpawnAngle, &CVehicle::SetSpawnAngle )
 		.Prop( _SC("RespawnTimer"), &CVehicle::GetIdleRespawnTimer, &CVehicle::SetIdleRespawnTimer )
@@ -274,7 +280,9 @@ void RegisterVehicle()
 		.Prop( _SC("Speed"), &CVehicle::GetSpeed, &CVehicle::SetSpeed )
 		.Prop( _SC("RelativeSpeed"), &CVehicle::GetRelativeSpeed, &CVehicle::SetRelativeSpeed )
 		.Prop( _SC("TurnSpeed"), &CVehicle::GetTurnSpeed, &CVehicle::SetTurnSpeed )
-		.Prop( _SC("RelativeTurnSpeed"), &CVehicle::GetRelativeTurnSpeed, &CVehicle::SetRelativeTurnSpeed );
+		.Prop( _SC("RelativeTurnSpeed"), &CVehicle::GetRelativeTurnSpeed, &CVehicle::SetRelativeTurnSpeed )
+		.Prop( _SC("Radio"), &CVehicle::GetRadio, &CVehicle::SetRadio )
+		.Prop( _SC("RadioLocked"), &CVehicle::GetRadioLockStatus, &CVehicle::SetRadioLocked );
 	
 	// Read-only properties
 	c
