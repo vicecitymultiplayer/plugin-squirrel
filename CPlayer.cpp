@@ -15,24 +15,18 @@ void CPlayer::SetArmour( float armour ) { functions->SetPlayerArmour( this->nPla
 
 bool CPlayer::StreamedToPlayer( CPlayer * player ) const
 {
-	if( player != NULL )
+	if( player != nullptr )
 		return Boolify( functions->IsPlayerStreamedForPlayer( player->nPlayerId, this->nPlayerId ) );
 
-	return NULL;
+	return false;
 }
+
 void CPlayer::SetAdmin( bool toSetAdmin ) { functions->SetPlayerAdmin( this->nPlayerId, toSetAdmin ); }
 void CPlayer::SetWorld( int world ) { functions->SetPlayerWorld( this->nPlayerId, world ); }
 void CPlayer::SetSecWorld( int world ) { functions->SetPlayerSecWorld( this->nPlayerId, world ); }
 void CPlayer::SetTeam( int team ) { functions->SetPlayerTeam( this->nPlayerId, team ); }
 void CPlayer::SetSkin( int skin ) { functions->SetPlayerSkin( this->nPlayerId, skin ); }
-void CPlayer::SetColour( cRGB colour )
-{
-	unsigned int iColour = colour.r;
-	iColour = (iColour << 8) + colour.g;
-	iColour = (iColour << 8) + colour.b;
-
-	functions->SetPlayerColour( this->nPlayerId, iColour );
-}
+void CPlayer::SetColour( cRGB colour ) { functions->SetPlayerColour( this->nPlayerId, colour.toUInt() ); }
 
 void CPlayer::SetMoney( int money )
 {
@@ -64,7 +58,7 @@ void CPlayer::SetVehicle( CVehicle * vehiclePointer )
 	// <TODO>
 	// Need to get this and other classes to derive from a base class so I can
 	// check the entity type properly.
-	if( vehiclePointer != NULL )
+	if( vehiclePointer != nullptr )
 	{
 		Function callback = RootTable().GetFunction( _SC("onPlayerEnterVehicle") );
 		if( !callback.IsNull() )
@@ -145,7 +139,7 @@ CVehicle * CPlayer::GetVehicle() const
 {
 	int vehicleId = functions->GetPlayerVehicleID( this->nPlayerId );
 	if( vehicleId < 1 )
-		return NULL;
+		return nullptr;
 	else
 		return pCore->vehicleMap[vehicleId];
 }
@@ -217,7 +211,7 @@ CVehicle * CPlayer::StandingOnVehicle() const
 {
 	int veh = functions->GetPlayerStandingOnVehicle( this->nPlayerId );
 	if (veh < 1)
-		return NULL;
+		return nullptr;
 	else
 		return pCore->vehicleMap[veh];
 }
@@ -226,7 +220,7 @@ CObject * CPlayer::StandingOnObject() const
 {
 	int obj = functions->GetPlayerStandingOnObject( this->nPlayerId );
 	if( obj < 1 )
-		return NULL;
+		return nullptr;
 	else
 	{
 		static CObject objInstance;
