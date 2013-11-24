@@ -63,6 +63,26 @@ class CVehicle;
 			float x;
 			float y;
 			float z;
+
+			float Length(void) const { return sqrt(pow(this->x, 2) + pow(this->y, 2) + pow(this->z, 2)); }
+			float Distance(const Vector &v) const { return sqrt(pow(this->x - v.x, 2) + pow(this->y - v.y, 2) + pow(this->z - v.z, 2)); }
+			float Dot(const Vector &v) { return (this->x * v.x) + (this->y * v.y) + (this->z * v.z); }
+			Vector& Normalize(void)
+			{
+				float invLen = 1.0f / this->Length();
+				this->x *= invLen;
+				this->y *= invLen;
+				this->z *= invLen;
+				return *this;
+			}
+
+			bool operator ==(const Vector &v) const { return this->x == v.x && this->y == v.y && this->z == v.z; }
+			Vector operator -(void) const { return Vector(-x, -y, -z); }
+			Vector operator +(const Vector &v) const { return Vector(this->x + v.x, this->y + v.y, this->z + v.z); }
+			Vector operator -(const Vector &v) const { return Vector(this->x - v.x, this->y - v.y, this->z - v.z); }
+			Vector operator *(const float f) const { return Vector(this->x * f, this->y * f, this->z * f); }
+			Vector operator /(const float f) const { return Vector(this->x / f, this->y / f, this->z / f); }
+			Vector& operator =(const Vector &v) { this->x = v.x; this->y = v.y; this->z = v.z; return *this; }
 	};
 
 	class Quaternion
@@ -74,6 +94,14 @@ class CVehicle;
 			float x;
 			float y;
 			float z;
+
+			bool operator ==(const Quaternion &q) const { return this->w == q.w && this->x == q.x && this->y == q.y && this->z == q.z; }
+			Quaternion operator -(void) const { return Quaternion(-w, -x, -y, -z); }
+			Quaternion operator +(const Quaternion &q) const { return Quaternion(this->w + q.w, this->x + q.x, this->y + q.y, this->z + q.z); }
+			Quaternion operator -(const Quaternion &q) const { return Quaternion(this->w - q.w, this->x - q.x, this->y - q.y, this->z - q.z); }
+			Quaternion operator *(const float f) const { return Quaternion(this->w * f, this->x * f, this->y * f, this->z * f); }
+			Quaternion operator /(const float f) const { return Quaternion(this->w / f, this->x / f, this->y / f, this->z / f); }
+			Quaternion& operator =(const Quaternion &q) { this->w = q.w; this->x = q.x; this->y = q.y; this->z = q.z; return *this; }
 	};
 
 	class RGBa
