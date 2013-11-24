@@ -40,7 +40,7 @@ void CPlayer::SetMoney( int money )
 
 	Function callback = RootTable().GetFunction( _SC("onPlayerCashChange") );
 	if( !callback.IsNull() )
-		callback( pCore->FindPlayer(this->nPlayerId), oldCash, money );
+		callback( pCore->playerMap[this->nPlayerId], oldCash, money );
 
 	functions->SetPlayerMoney( this->nPlayerId, money );
 }
@@ -51,7 +51,7 @@ void CPlayer::SetScore( int score )
 
 	Function callback = RootTable().GetFunction( _SC("onPlayerScoreChange") );
 	if( !callback.IsNull() )
-		callback( pCore->FindPlayer(this->nPlayerId), oldScore, score );
+		callback( pCore->playerMap[this->nPlayerId], oldScore, score );
 
 	functions->SetPlayerScore( this->nPlayerId, score );
 }
@@ -68,7 +68,7 @@ void CPlayer::SetVehicle( CVehicle * vehiclePointer )
 	{
 		Function callback = RootTable().GetFunction( _SC("onPlayerEnterVehicle") );
 		if( !callback.IsNull() )
-			callback( pCore->FindPlayer(this->nPlayerId), vehiclePointer );
+			callback( pCore->playerMap[this->nPlayerId], vehiclePointer );
 
 		functions->PutPlayerInVehicle( this->nPlayerId, vehiclePointer->nVehicleId, 0, 1, 1 );
 	}
@@ -147,7 +147,7 @@ CVehicle * CPlayer::GetVehicle()
 	if( vehicleId < 1 )
 		return NULL;
 	else
-		return pCore->FindVehicle(vehicleId);
+		return pCore->vehicleMap[vehicleId];
 }
 
 bool CPlayer::GetFrozen() { return !functions->EnabledPlayerControllable( this->nPlayerId ); }
@@ -205,7 +205,7 @@ CVehicle * CPlayer::StandingOnVehicle()
 	if (veh < 1)
 		return NULL;
 	else
-		return pCore->FindVehicle(veh);
+		return pCore->vehicleMap[veh];
 }
 
 CObject * CPlayer::StandingOnObject()

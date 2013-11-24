@@ -1,90 +1,121 @@
 #include "CCore.h"
 #include "Functions.h"
 #include "ConsoleUtils.h"
+#include <cassert>
 
 // Static members
 unsigned short   CCore::refCount;
 CCore          * CCore::pCoreInstance;
+extern CCore   * pCore;
 
 // We have to make the VM a global variable, else the server will crash
 // due to access violations in Sqrat when the VM pointer becomes NULL for
 // no known reason.
 HSQUIRRELVM v;
 
-// Constructor to set everything up in
 CCore::CCore()
 {
-	// Reset this stuff
 	v           = nullptr;
 	script      = nullptr;
 	pLogFile    = nullptr;
 
+	// Create the object arrays
+	this->playerMap = new CPlayer *[MAX_PLAYERS];
+	assert(this->playerMap != nullptr);
+
+	this->pickupMap = new CPickup *[MAX_PICKUPS];
+	assert(this->pickupMap != nullptr);
+
+	this->objectMap = new CObject *[MAX_OBJECTS];
+	assert(this->objectMap != nullptr);
+
+	this->vehicleMap = new CVehicle *[MAX_VEHICLES];
+	assert(this->vehicleMap != nullptr);
+
 	// Construct all timer arrays
-	for( int i = 0; i < this->maxTimers; i++ )
-		pTimerArray[i] = nullptr;
+	unsigned int i;
+	for( i = 0; i < this->maxTimers; i++ )
+		this->pTimerArray[i] = nullptr;
 
 	// Clean our entity maps of any garbage and filth
-	for( int i = 0; i < MAX_PLAYERS; i++ )
-		playerMap[i] = nullptr;
+	for ( i = 0; i < MAX_PLAYERS; i++ )
+		this->playerMap[i] = nullptr;
 
-	for( int i = 0; i < MAX_VEHICLES; i++ )
-		vehicleMap[i] = nullptr;
+	for( i = 0; i < MAX_VEHICLES; i++ )
+		this->vehicleMap[i] = nullptr;
 
-	for( int i = 0; i < MAX_PICKUPS; i++ )
-		pickupMap[i] = nullptr;
+	for( i = 0; i < MAX_PICKUPS; i++ )
+		this->pickupMap[i] = nullptr;
 
-	for( int i = 0; i < MAX_OBJECTS; i++ )
-		objectMap[i] = nullptr;
+	for( i = 0; i < MAX_OBJECTS; i++ )
+		this->objectMap[i] = nullptr;
 	
-	// Set up the canReload variable
 	canReload = false;
-
-	// Open up the logs
 	pLogFile = fopen("server_log.txt", "a");
-
-	// Load the VM
 	this->LoadVM();
 }
 
-// Destructor to clean up
 CCore::~CCore()
 {
-	if( script != NULL )
+	if( script != nullptr )
 	{
-		// Destroy the script instance
 		delete script;
-
-		// Remove dangling pointers
-		script = NULL;
+		script = nullptr;
 	}
 
 	// Release the VM if we can
-	if( v != NULL )
+	if( v != nullptr )
 	{
-		// Close the Squirrel VM
 		sq_close( v );
-
-		// Remove dangling pointers
-		v = NULL;
+		v = nullptr;
 	}
+
+	// Throughout this entire ordeal, we don't actually kick players
+	// or remove vehicles, objects, or pickups. Why not?
+	//
+	// The server is dying. We'd like to let it manage what to do with
+	// entities, rather than manage it ourselves.
+	unsigned int i;
+	for (i = 0; i < MAX_PLAYERS; i++)
+	{
+		if (this->playerMap[i] != nullptr)
+			delete this->playerMap[i];
+	}
+
+	for (i = 0; i < MAX_OBJECTS; i++)
+	{
+		if (this->objectMap[i] != nullptr)
+			delete this->objectMap[i];
+	}
+
+	for (i = 0; i < MAX_PICKUPS; i++)
+	{
+		if (this->pickupMap[i] != nullptr)
+			delete this->pickupMap[i];
+	}
+
+	for (i = 0; i < MAX_VEHICLES; i++)
+	{
+		if (this->vehicleMap[i] != nullptr)
+			delete this->vehicleMap[i];
+	}
+
+	delete[] this->playerMap;
+	delete[] this->objectMap;
+	delete[] this->pickupMap;
+	delete[] this->vehicleMap;
 }
 
-// Load the VM
 void CCore::LoadVM()
 {
 	// Initialize the virtual machine
 	v = sq_open( 1024 );
-
-	// Set up our print and error functions
 	sq_setprintfunc( v, printfunc, errorfunc );
 
-	// Set our default VM in Sqrat
 	DefaultVM::Set( v );
 
 	// Force Sqrat to enable error handling
 	Sqrat::ErrorHandling::Enable(true);
-
-	// Push a root table
 	sq_pushroottable( v );
 
 	// Register our entities so they're accessible by scripts
@@ -95,40 +126,45 @@ void CCore::LoadVM()
 void CCore::ScanForEntities()
 {
 	// Scan for vehicles
-	for( int i = 0; i < MAX_VEHICLES; i++ )
+	unsigned int i;
+	for( i = 0; i < MAX_VEHICLES; i++ )
 	{
 		if( functions->GetVehicleModel( i ) > 0 )
 		{
+			printf("vehicle oops at %d = %d", i, functions->GetVehicleModel(i));
 			this->vehicleMap[i] = new CVehicle;
 			this->vehicleMap[i]->Init( i, false );
 		}
 	}
 
 	// Scan for pickups
-	for( int i = 0; i < MAX_PICKUPS; i++ )
+	for( i = 0; i < MAX_PICKUPS; i++ )
 	{
 		if( functions->PickupGetModel( i ) > 0 )
 		{
+			printf("pickup oops at %d = %d", i, functions->PickupGetModel(i));
 			this->pickupMap[i] = new CPickup;
 			this->pickupMap[i]->Init( i, false );
 		}
 	}
 
 	// Scan for objects
-	for( int i = 0; i < MAX_OBJECTS; i++ )
+	for( i = 0; i < MAX_OBJECTS; i++ )
 	{
 		if( functions->GetObjectModel( i ) > 0 )
 		{
+			printf("object oops at %d = %d", i, functions->GetObjectModel(i));
 			this->objectMap[i] = new CObject;
 			this->objectMap[i]->Init( i, false );
 		}
 	}
 
 	// Scan for players
-	for( int i = 0; i < MAX_PLAYERS; i++ )
+	for( i = 0; i < MAX_PLAYERS; i++ )
 	{
 		if( functions->IsPlayerConnected( i ) )
 		{
+			printf("player oops at %d = %d", i, functions->IsPlayerConnected(i));
 			this->playerMap[i] = new CPlayer;
 			this->playerMap[i]->nPlayerId = i;
 		}
@@ -140,7 +176,7 @@ void CCore::AddTimer(CTimer * pTimer)
 {
 	for( int i = 0; i < this->maxTimers; i++ )
 	{
-		if( pTimerArray[i] == NULL )
+		if( pTimerArray[i] == nullptr )
 		{
 			pTimerArray[i] = pTimer;
 			return;
@@ -152,12 +188,12 @@ void CCore::ProcessTimers(float elapsedTime)
 {
 	for( int i = 0; i < this->maxTimers; i++ )
 	{
-		if( pTimerArray[i] != NULL && !pTimerArray[i]->isPaused )
+		if( pTimerArray[i] != nullptr && !pTimerArray[i]->isPaused )
 		{
 			if( pTimerArray[i]->Pulse( elapsedTime * 1000.0f ) == true )
 			{
 				delete pTimerArray[i];
-				pTimerArray[i] = NULL;
+				pTimerArray[i] = nullptr;
 			}
 		}
 	}
@@ -167,7 +203,7 @@ void CCore::DropAllTimers()
 {
 	for( int i = 0; i < this->maxTimers; i++ )
 	{
-		if( pTimerArray[i] != NULL )
+		if( pTimerArray[i] != nullptr )
 			pTimerArray[i]->committingSeppuku = true;
 	}
 }
@@ -177,28 +213,28 @@ void CCore::CleanWorld()
 	unsigned int i;
 	for( i = 0; i < MAX_VEHICLES; i++ )
 	{
-		if( vehicleMap[i] != NULL && vehicleMap[i]->isOurs )
+		if( vehicleMap[i] != nullptr && vehicleMap[i]->isOurs )
 		{
 			vehicleMap[i]->Delete();
-			vehicleMap[i] = NULL;
+			vehicleMap[i] = nullptr;
 		}
 	}
 
 	for( i = 0; i < MAX_PICKUPS; i++ )
 	{
-		if( pickupMap[i] != NULL && vehicleMap[i]->isOurs )
+		if( pickupMap[i] != nullptr && vehicleMap[i]->isOurs )
 		{
 			pickupMap[i]->Delete();
-			vehicleMap[i] = NULL;
+			vehicleMap[i] = nullptr;
 		}
 	}
 
 	for( i = 0; i < MAX_OBJECTS; i++ )
 	{
-		if( objectMap[i] != NULL && vehicleMap[i]->isOurs )
+		if( objectMap[i] != nullptr && vehicleMap[i]->isOurs )
 		{
 			objectMap[i]->Delete();
-			objectMap[i] = NULL;
+			objectMap[i] = nullptr;
 		}
 	}
 }
@@ -222,13 +258,8 @@ void CCore::RegisterEntities()
 	if (SQ_FAILED(sqstd_register_systemlib(v)))
 		OutputWarning("sqstd_systemlib failed to load.");
 
-	// Register our structures
 	RegisterStructures();
-
-	// Register our functions
 	RegisterGlobals();
-
-	// Register our constants
 	RegisterConstants();
 
 	// Register the classes
@@ -242,7 +273,6 @@ void CCore::RegisterEntities()
 	sqstd_seterrorhandlers( v );
 }
 
-// Load the scripts
 inline void ZeroBuffer( char * buffer, int size )
 {
 	for( int i = 0; i < size; i++ )
@@ -252,7 +282,7 @@ inline void ZeroBuffer( char * buffer, int size )
 void CCore::LoadScript()
 {
 	// Scan for entities that were already created
-	//this->ScanForEntities();
+	this->ScanForEntities();
 
 	// No reloading at this point
 	this->canReload = false;
@@ -260,7 +290,7 @@ void CCore::LoadScript()
 	FILE * file;
 
 	file = fopen( "server.cfg", "r" );
-	if( file == NULL )
+	if( file == nullptr )
 		OutputError( "SqVCMP could not read server.cfg" );
 	else
 	{
@@ -270,7 +300,7 @@ void CCore::LoadScript()
 		char * lineBuffer = (char *)malloc( sizeof(char) * lineSize );
 
 		// Did we do it?
-		if( lineBuffer == NULL )
+		if( lineBuffer == nullptr )
 			OutputError( "SqVCMP could not allocate memory to read server.cfg" );
 		else
 		{
@@ -338,8 +368,8 @@ void CCore::LoadScript()
 
 bool CCore::ParseConfigLine( char * lineBuffer )
 {
-	char * gamemodeSearch = NULL;
-	if( ( gamemodeSearch = strstr( lineBuffer, "sqgamemode " ) ) == NULL )
+	char * gamemodeSearch = nullptr;
+	if( ( gamemodeSearch = strstr( lineBuffer, "sqgamemode " ) ) == nullptr )
 		return false;
 	else if( strlen( gamemodeSearch ) < 1 )
 		return false;
@@ -404,135 +434,22 @@ void CCore::Release()
 	// Decrease the number of references
 	if( refCount > 0 )
 		refCount--;
-			
+	
 	// See if we should destroy our instance
-	if( refCount <= 0 && pCoreInstance != NULL )
+	if( refCount <= 0 && pCoreInstance != nullptr )
 	{
 		// Delete the core instance
 		delete pCoreInstance;
+
+		pCoreInstance = nullptr;
+		pCore = nullptr;
 	}
-}
-
-CObject * CCore::FindObject(int nObjectId)
-{
-	if (nObjectId < 0 || nObjectId > MAX_OBJECTS - 1)
-		return nullptr;
-
-	return this->objectMap[nObjectId];
-}
-
-CPickup * CCore::FindPickup(int nPickupId)
-{
-	if (nPickupId < 0 || nPickupId > MAX_PICKUPS - 1)
-		return nullptr;
-
-	return this->pickupMap[nPickupId];
-}
-
-CPlayer * CCore::FindPlayer(int nPlayerId)
-{
-	if (nPlayerId < 0 || nPlayerId > MAX_PLAYERS - 1)
-		return nullptr;
-
-	return this->playerMap[nPlayerId];
-}
-
-CVehicle * CCore::FindVehicle(int nVehicleId)
-{
-	if (nVehicleId < 0 || nVehicleId > MAX_VEHICLES - 1)
-		return nullptr;
-
-	return this->vehicleMap[nVehicleId];
 }
 
 FILE * CCore::GetLogInstance()
 {
-	if (this->pLogFile == NULL)
+	if (this->pLogFile == nullptr)
 		return nullptr;
 
 	return this->pLogFile;
-}
-
-bool CCore::AssignObject(int nObjectId, CObject * pObject)
-{
-	if (nObjectId < 0 || nObjectId > MAX_OBJECTS - 1)
-		return false;
-
-	this->objectMap[nObjectId] = pObject;
-	return true;
-}
-
-bool CCore::AssignPickup(int nPickupId, CPickup * pPickup)
-{
-	if (nPickupId < 0 || nPickupId > MAX_PICKUPS - 1)
-		return false;
-
-	this->pickupMap[nPickupId] = pPickup;
-	return true;
-}
-
-bool CCore::AssignPlayer(int nPlayerId, CPlayer * pPlayer)
-{
-	if (nPlayerId < 0 || nPlayerId > MAX_PLAYERS - 1)
-		return false;
-
-	this->playerMap[nPlayerId] = pPlayer;
-	return true;
-}
-
-bool CCore::AssignVehicle(int nVehicleId, CVehicle * pVehicle)
-{
-	if (nVehicleId < 0 || nVehicleId > MAX_VEHICLES - 1)
-		return false;
-
-	this->vehicleMap[nVehicleId] = pVehicle;
-	return true;
-}
-
-void CCore::ClearObject(int nObjectId)
-{
-	if (nObjectId < 0 || nObjectId > MAX_OBJECTS - 1)
-		return;
-
-	if (this->objectMap[nObjectId] != nullptr)
-	{
-		delete this->objectMap[nObjectId];
-		this->objectMap[nObjectId] = nullptr;
-	}
-}
-
-void CCore::ClearPickup(int nPickupId)
-{
-	if (nPickupId < 0 || nPickupId > MAX_PICKUPS - 1)
-		return;
-
-	if (this->pickupMap[nPickupId] != nullptr)
-	{
-		delete this->pickupMap[nPickupId];
-		this->pickupMap[nPickupId] = nullptr;
-	}
-}
-
-void CCore::ClearPlayer(int nPlayerId)
-{
-	if (nPlayerId < 0 || nPlayerId > MAX_PLAYERS - 1)
-		return;
-
-	if (this->playerMap[nPlayerId] != nullptr)
-	{
-		delete this->playerMap[nPlayerId];
-		this->playerMap[nPlayerId] = nullptr;
-	}
-}
-
-void CCore::ClearVehicle(int nVehicleId)
-{
-	if (nVehicleId < 0 || nVehicleId > MAX_VEHICLES - 1)
-		return;
-
-	if (this->vehicleMap[nVehicleId] != nullptr)
-	{
-		delete this->vehicleMap[nVehicleId];
-		this->vehicleMap[nVehicleId] = nullptr;
-	}
 }
