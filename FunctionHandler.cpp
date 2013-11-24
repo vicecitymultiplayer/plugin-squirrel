@@ -1637,26 +1637,6 @@ bool IsWeaponDataModified ( int weaponID, int fieldID ) { return functions->IsWe
 bool ResetWeaponData      ( int weaponID ) { return functions->ResetWeaponData( weaponID ); }
 bool ResetAllWeaponData   () { return functions->ResetAllWeaponData(); }
 
-int CreateMarker(int world, Vector pos, int scale, RGBa color, int spriteId)
-{
-
-}
-
-void RemoveMarker(int markerId)
-{
-
-}
-
-int AddRadioStream(const SQChar * radioName, const SQChar * radioURL, bool showInCarListing)
-{
-
-}
-
-void RemoveRadioStream(int streamId)
-{
-
-}
-
 SQInteger release_hook( SQUserPointer p, SQInteger size ) { return 1; }
 SQInteger FindPlayer( HSQUIRRELVM v )
 {
@@ -1668,7 +1648,7 @@ SQInteger FindPlayer( HSQUIRRELVM v )
 			SQInteger playerID;
 			sq_getinteger( v, 2, &playerID );
 
-			if (playerID < MAX_PLAYERS && playerID > 0)
+			if (playerID < MAX_PLAYERS && playerID >= 0)
 				pPlayer = pCore->playerMap[playerID];
 			else
 			{
