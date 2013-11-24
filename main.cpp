@@ -56,6 +56,24 @@ void errorfunc(HSQUIRRELVM v, const SQChar *s, ...)
 	va_end(arglist);
 }
 
+// Convert a Vector to string
+const Sqrat::string VectorToString(const Vector* v)
+{
+	std::basic_stringstream<SQChar> out;
+	out << _SC("(") << v->x << _SC(", ") << v->y << _SC(", ") << v->z << _SC(")");
+
+	return out.str();
+}
+
+// Convert a Quaternion to string
+const Sqrat::string QuaternionToString(const Quaternion* q)
+{
+	std::basic_stringstream<SQChar> out;
+	out << _SC("(") << q->w << _SC(", ") << q->x << _SC(", ") << q->y << _SC(", ") << q->z << _SC(")");
+
+	return out.str();
+}
+
 void RegisterStructures()
 {
 	Class<Vector> a(v);
@@ -79,13 +97,34 @@ void RegisterStructures()
 	a
 		.Var( _SC("x"), &Vector::x )
 		.Var( _SC("y"), &Vector::y )
-		.Var( _SC("z"), &Vector::z );
+		.Var( _SC("z"), &Vector::z )
+		
+		.Func(_SC("Distance"), &Vector::Distance)
+		.Func(_SC("Dot"), &Vector::Dot)
+		.Func(_SC("Length"), &Vector::Length)
+		.Func(_SC("Normalize"), &Vector::Normalize)
+		
+		.Func(_SC("_add"), &Vector::operator +)
+		.Func(_SC("_mul"), &Vector::operator *)
+		.Func(_SC("_div"), &Vector::operator /)
+		.Func<Vector (Vector::*)(void) const>(_SC("unm"), &Vector::operator -)
+		.Func<Vector (Vector::*)(const Vector&) const>(_SC("_sub"), &Vector::operator -)
+		
+		.GlobalFunc(_SC("_tostring"), &VectorToString);
 
 	b
 		.Var( _SC("w"), &Quaternion::w )
 		.Var( _SC("x"), &Quaternion::x )
 		.Var( _SC("y"), &Quaternion::y )
-		.Var( _SC("z"), &Quaternion::z );
+		.Var( _SC("z"), &Quaternion::z )
+
+		.Func(_SC("_add"), &Quaternion::operator +)
+		.Func(_SC("_mul"), &Quaternion::operator *)
+		.Func(_SC("_div"), &Quaternion::operator /)
+		.Func<Quaternion(Quaternion::*)(void) const>(_SC("unm"), &Quaternion::operator -)
+		.Func<Quaternion(Quaternion::*)(const Quaternion&) const>(_SC("_sub"), &Quaternion::operator -)
+
+		.GlobalFunc(_SC("_tostring"), &QuaternionToString);
 
 	c
 		.Var( _SC("r"), &RGBa::r )
