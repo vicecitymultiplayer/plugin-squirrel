@@ -19,7 +19,7 @@ CCore::CCore()
 	script      = nullptr;
 	pLogFile    = nullptr;
 
-	// Create the object arrays
+	// Create the entity arrays
 	this->playerMap = new CPlayer *[MAX_PLAYERS];
 	assert(this->playerMap != nullptr);
 

@@ -52,34 +52,37 @@ int OnInitServer()
 
 void OnShutdownServer()
 {
-	Function callback;
-	try
+	if (pCore != nullptr)
 	{
-		callback = RootTable().GetFunction(_SC("onServerStop"));
-		if (!callback.IsNull())
-			callback();
-	}
-	catch (Sqrat::Error e)
-	{
-		OutputWarning("onServerStop failed to execute -- check the console for more details.");
-	}
+		Function callback;
+		try
+		{
+			callback = RootTable().GetFunction(_SC("onServerStop"));
+			if (!callback.IsNull())
+				callback();
+		}
+		catch (Sqrat::Error e)
+		{
+			OutputWarning("onServerStop failed to execute -- check the console for more details.");
+		}
 
-	callback.Release();
-	callback = RootTable().GetFunction(_SC("onScriptUnload"));
+		callback.Release();
+		callback = RootTable().GetFunction(_SC("onScriptUnload"));
 
-	try
-	{
-		if (!callback.IsNull())
-			callback();
-	}
-	catch (Sqrat::Error e)
-	{
-		OutputWarning("onScriptUnload failed to execute -- check the console for more details.");
-	}
-	callback.Release();
+		try
+		{
+			if (!callback.IsNull())
+				callback();
+		}
+		catch (Sqrat::Error e)
+		{
+			OutputWarning("onScriptUnload failed to execute -- check the console for more details.");
+		}
+		callback.Release();
 
-	// Dereference the core
-	pCore->Release();
+		// Dereference the core
+		pCore->Release();
+	}
 }
 
 void OnFrame( float fElapsedTime )
@@ -90,27 +93,30 @@ void OnFrame( float fElapsedTime )
 
 void OnPlayerConnect( int nPlayerId )
 {
-	CPlayer * newPlayer = new CPlayer;
-	newPlayer->nPlayerId = nPlayerId;
-	pCore->playerMap[nPlayerId] = newPlayer;
-
-	Function callback = RootTable().GetFunction(_SC("onPlayerJoin"));
-	try
+	if (pCore != nullptr)
 	{
-		if (!callback.IsNull())
-			callback.Execute<CPlayer *>(newPlayer);
-	}
-	catch (Sqrat::Error e)
-	{
-		OutputWarning("onPlayerJoin failed to execute -- check the console for more details.");
-	}
+		CPlayer * newPlayer = new CPlayer;
+		newPlayer->nPlayerId = nPlayerId;
+		pCore->playerMap[nPlayerId] = newPlayer;
 
-	callback.Release();
+		Function callback = RootTable().GetFunction(_SC("onPlayerJoin"));
+		try
+		{
+			if (!callback.IsNull())
+				callback.Execute<CPlayer *>(newPlayer);
+		}
+		catch (Sqrat::Error e)
+		{
+			OutputWarning("onPlayerJoin failed to execute -- check the console for more details.");
+		}
+
+		callback.Release();
+	}
 }
 
 void OnPlayerDisconnect( int nPlayerId, int nReason )
 {
-	if( pCore )
+	if( pCore != nullptr )
 	{
 		CPlayer * playerInstance = pCore->playerMap[nPlayerId];
 		Function callback = RootTable().GetFunction(_SC("onPlayerPart"));
@@ -138,583 +144,668 @@ void OnPlayerDisconnect( int nPlayerId, int nReason )
 
 int OnPlayerRequestClass( int nPlayerId, int nOffset )
 {
-	CPlayer * playerInstance = pCore->playerMap[nPlayerId];
-	Function callback = RootTable().GetFunction(_SC("onPlayerRequestClass"));
-	int returnValue = 1;
-
-	try
+	if (pCore != nullptr)
 	{
-		if (!callback.IsNull())
-			returnValue = callback.Evaluate<int, CPlayer *, int>(playerInstance, nOffset);
-	}
-	catch (Sqrat::Error e)
-	{
-		OutputWarning("onPlayerRequestClass failed to execute -- check the console for more details.");
-	}
+		CPlayer * playerInstance = pCore->playerMap[nPlayerId];
+		Function callback = RootTable().GetFunction(_SC("onPlayerRequestClass"));
+		int returnValue = 1;
 
-	callback.Release();
-	return returnValue;
+		try
+		{
+			if (!callback.IsNull())
+				returnValue = callback.Evaluate<int, CPlayer *, int>(playerInstance, nOffset);
+		}
+		catch (Sqrat::Error e)
+		{
+			OutputWarning("onPlayerRequestClass failed to execute -- check the console for more details.");
+		}
+
+		callback.Release();
+		return returnValue;
+	}
+	else
+		return 1;
 }
 
 int OnPlayerRequestSpawn( int nPlayerId )
 {
-	CPlayer * playerInstance = pCore->playerMap[nPlayerId];
-	Function callback = RootTable().GetFunction(_SC("onPlayerRequestSpawn"));
-	int returnValue = 1;
-
-	try
+	if (pCore != nullptr)
 	{
-		if (!callback.IsNull())
-			returnValue = callback.Evaluate<int, CPlayer *>(playerInstance);
-	}
-	catch (Sqrat::Error e)
-	{
-		OutputWarning("onPlayerRequestSpawn failed to execute -- check the console for more details.");
-	}
+		CPlayer * playerInstance = pCore->playerMap[nPlayerId];
+		Function callback = RootTable().GetFunction(_SC("onPlayerRequestSpawn"));
+		int returnValue = 1;
 
-	callback.Release();
-	return returnValue;
+		try
+		{
+			if (!callback.IsNull())
+				returnValue = callback.Evaluate<int, CPlayer *>(playerInstance);
+		}
+		catch (Sqrat::Error e)
+		{
+			OutputWarning("onPlayerRequestSpawn failed to execute -- check the console for more details.");
+		}
+
+		callback.Release();
+		return returnValue;
+	}
+	else
+		return 1;
 }
 
 void OnPlayerSpawn( int nPlayerId )
 {
-	CPlayer * playerInstance = pCore->playerMap[nPlayerId];
-	Function callback = RootTable().GetFunction(_SC("onPlayerSpawn"));
-
-	try
+	if (pCore != nullptr)
 	{
-		if (!callback.IsNull())
-			callback.Execute<CPlayer *>(playerInstance);
-	}
-	catch (Sqrat::Error e)
-	{
-		OutputWarning("onPlayerSpawn failed to execute -- check the console for more details.");
-	}
+		CPlayer * playerInstance = pCore->playerMap[nPlayerId];
+		Function callback = RootTable().GetFunction(_SC("onPlayerSpawn"));
 
-	callback.Release();
+		try
+		{
+			if (!callback.IsNull())
+				callback.Execute<CPlayer *>(playerInstance);
+		}
+		catch (Sqrat::Error e)
+		{
+			OutputWarning("onPlayerSpawn failed to execute -- check the console for more details.");
+		}
+
+		callback.Release();
+	}
 }
 
 void OnPlayerDeath( int nPlayerId, int nKillerId, int nReason, int nBodyPart )
 {
-	CPlayer * playerInstance = pCore->playerMap[nPlayerId];
-	if (nReason == 70 || !functions->IsPlayerConnected(nKillerId))
+	if (pCore != nullptr)
 	{
-		Function callback = RootTable().GetFunction(_SC("onPlayerDeath"));
-		try
+		CPlayer * playerInstance = pCore->playerMap[nPlayerId];
+		if (nReason == 70 || !functions->IsPlayerConnected(nKillerId))
 		{
-			if (!callback.IsNull())
-				callback.Execute<CPlayer *, int>(playerInstance, nReason);
-		}
-		catch (Sqrat::Error e)
-		{
-			OutputWarning("onPlayerDeath failed to execute -- check the console for more details.");
-		}
+			Function callback = RootTable().GetFunction(_SC("onPlayerDeath"));
+			try
+			{
+				if (!callback.IsNull())
+					callback.Execute<CPlayer *, int>(playerInstance, nReason);
+			}
+			catch (Sqrat::Error e)
+			{
+				OutputWarning("onPlayerDeath failed to execute -- check the console for more details.");
+			}
 
-		callback.Release();
-	}
-	else
-	{
-		CPlayer * killerInstance = pCore->playerMap[nKillerId];
-		Function callback;
-		if (functions->GetPlayerTeam(nPlayerId) == functions->GetPlayerTeam(nKillerId))
-			callback = RootTable().GetFunction(_SC("onPlayerTeamKill"));
+			callback.Release();
+		}
 		else
-			callback = RootTable().GetFunction(_SC("onPlayerKill"));
-
-		try
 		{
-			if (!callback.IsNull())
-				callback.Execute<CPlayer *, CPlayer *, int, int>(killerInstance, playerInstance, nReason, nBodyPart);
-		}
-		catch (Sqrat::Error e)
-		{
-			OutputWarning("onPlayer(Team)Kill failed to execute -- check the console for more details.");
-		}
+			CPlayer * killerInstance = pCore->playerMap[nKillerId];
+			Function callback;
+			if (functions->GetPlayerTeam(nPlayerId) == functions->GetPlayerTeam(nKillerId))
+				callback = RootTable().GetFunction(_SC("onPlayerTeamKill"));
+			else
+				callback = RootTable().GetFunction(_SC("onPlayerKill"));
 
-		callback.Release();
+			try
+			{
+				if (!callback.IsNull())
+					callback.Execute<CPlayer *, CPlayer *, int, int>(killerInstance, playerInstance, nReason, nBodyPart);
+			}
+			catch (Sqrat::Error e)
+			{
+				OutputWarning("onPlayer(Team)Kill failed to execute -- check the console for more details.");
+			}
+
+			callback.Release();
+		}
 	}
 }
 
 int OnPlayerRequestEnter( int nPlayerId, int nVehicleId, int nSlotId )
 {
-	CPlayer  * playerInstance = pCore->playerMap[nPlayerId];
-	CVehicle * vehicleInstance = pCore->vehicleMap[nVehicleId];
-
-	Function callback = RootTable().GetFunction(_SC("onPlayerEnteringVehicle"));
-	int returnValue = 1;
-	try
+	if (pCore != nullptr)
 	{
-		if (!callback.IsNull() && playerInstance != nullptr && vehicleInstance != nullptr)
-			returnValue = callback.Evaluate<int, CPlayer *, CVehicle *, int>(playerInstance, vehicleInstance, nSlotId);
-	}
-	catch (Sqrat::Error e)
-	{
-		OutputWarning("onPlayerEnteringVehicle failed to execute -- check the console for more details.");
-	}
+		CPlayer  * playerInstance = pCore->playerMap[nPlayerId];
+		CVehicle * vehicleInstance = pCore->vehicleMap[nVehicleId];
 
-	callback.Release();
-	return returnValue;
+		Function callback = RootTable().GetFunction(_SC("onPlayerEnteringVehicle"));
+		int returnValue = 1;
+		try
+		{
+			if (!callback.IsNull() && playerInstance != nullptr && vehicleInstance != nullptr)
+				returnValue = callback.Evaluate<int, CPlayer *, CVehicle *, int>(playerInstance, vehicleInstance, nSlotId);
+		}
+		catch (Sqrat::Error e)
+		{
+			OutputWarning("onPlayerEnteringVehicle failed to execute -- check the console for more details.");
+		}
+
+		callback.Release();
+		return returnValue;
+	}
+	else
+		return 1;
 }
 
 void OnPlayerEnterVehicle( int nPlayerId, int nVehicleId, int nSlotId )
 {
-	CPlayer  * playerInstance = pCore->playerMap[nPlayerId];
-	CVehicle * vehicleInstance = pCore->vehicleMap[nVehicleId];
-
-	Function callback = RootTable().GetFunction(_SC("onPlayerEnterVehicle"));
-	try
+	if (pCore != nullptr)
 	{
-		if (!callback.IsNull() && playerInstance != nullptr && vehicleInstance != nullptr)
-			callback.Execute<CPlayer *, CVehicle *, int>(playerInstance, vehicleInstance, nSlotId);
-	}
-	catch (Sqrat::Error e)
-	{
-		OutputWarning("onPlayerEnterVehicle failed to execute -- check the console for more details.");
-	}
+		CPlayer  * playerInstance = pCore->playerMap[nPlayerId];
+		CVehicle * vehicleInstance = pCore->vehicleMap[nVehicleId];
 
-	callback.Release();
+		Function callback = RootTable().GetFunction(_SC("onPlayerEnterVehicle"));
+		try
+		{
+			if (!callback.IsNull() && playerInstance != nullptr && vehicleInstance != nullptr)
+				callback.Execute<CPlayer *, CVehicle *, int>(playerInstance, vehicleInstance, nSlotId);
+		}
+		catch (Sqrat::Error e)
+		{
+			OutputWarning("onPlayerEnterVehicle failed to execute -- check the console for more details.");
+		}
+
+		callback.Release();
+	}
 }
 
 void OnPlayerExitVehicle( int nPlayerId, int nVehicleId )
 {
-	CPlayer  * playerInstance = pCore->playerMap[nPlayerId];
-	CVehicle * vehicleInstance = pCore->vehicleMap[nVehicleId];
-	Function callback = RootTable().GetFunction(_SC("onPlayerExitVehicle"));
-
-	try
+	if (pCore != nullptr)
 	{
-		if (!callback.IsNull())
-			callback.Execute<CPlayer *, CVehicle *>(playerInstance, vehicleInstance);
-	}
-	catch (Sqrat::Error e)
-	{
-		OutputWarning("onPlayerExitVehicle failed to execute -- check the console for more details.");
-	}
+		CPlayer  * playerInstance = pCore->playerMap[nPlayerId];
+		CVehicle * vehicleInstance = pCore->vehicleMap[nVehicleId];
+		Function callback = RootTable().GetFunction(_SC("onPlayerExitVehicle"));
 
-	callback.Release();
+		try
+		{
+			if (!callback.IsNull())
+				callback.Execute<CPlayer *, CVehicle *>(playerInstance, vehicleInstance);
+		}
+		catch (Sqrat::Error e)
+		{
+			OutputWarning("onPlayerExitVehicle failed to execute -- check the console for more details.");
+		}
+
+		callback.Release();
+	}
 }
 
 int OnPickupClaimPicked( int nPickupId, int nPlayerId )
 {
-	CPlayer * playerInstance = pCore->playerMap[nPlayerId];
-	CPickup * pickupInstance = pCore->pickupMap[nPickupId];
-
-	Function callback = RootTable().GetFunction(_SC("onPickupClaimPicked"));
-	int returnValue = 1;
-	try
+	if (pCore != nullptr)
 	{
-		if (!callback.IsNull())
-			returnValue = callback.Evaluate<int, CPlayer *, CPickup *>(playerInstance, pickupInstance);
-	}
-	catch (Sqrat::Error e)
-	{
-		OutputWarning("onPickupClaimPicked failed to execute -- check the console for more details.");
-	}
+		CPlayer * playerInstance = pCore->playerMap[nPlayerId];
+		CPickup * pickupInstance = pCore->pickupMap[nPickupId];
 
-	callback.Release();
-	return returnValue;
+		Function callback = RootTable().GetFunction(_SC("onPickupClaimPicked"));
+		int returnValue = 1;
+		try
+		{
+			if (!callback.IsNull())
+				returnValue = callback.Evaluate<int, CPlayer *, CPickup *>(playerInstance, pickupInstance);
+		}
+		catch (Sqrat::Error e)
+		{
+			OutputWarning("onPickupClaimPicked failed to execute -- check the console for more details.");
+		}
+
+		callback.Release();
+		return returnValue;
+	}
+	else
+		return 1;
 }
 
 void OnPickupPickedUp( int nPickupId, int nPlayerId )
 {
-	CPlayer * playerInstance = pCore->playerMap[nPlayerId];
-	CPickup * pickupInstance = pCore->pickupMap[nPickupId];
-	Function callback = RootTable().GetFunction(_SC("onPickupPickedUp"));
-
-	try
+	if (pCore != nullptr)
 	{
-		if (!callback.IsNull())
-			callback.Execute<CPlayer *, CPickup *>(playerInstance, pickupInstance);
-	}
-	catch (Sqrat::Error e)
-	{
-		OutputWarning("onPickupPickedUp failed to execute -- check the console for more details.");
-	}
+		CPlayer * playerInstance = pCore->playerMap[nPlayerId];
+		CPickup * pickupInstance = pCore->pickupMap[nPickupId];
+		Function callback = RootTable().GetFunction(_SC("onPickupPickedUp"));
 
-	callback.Release();
+		try
+		{
+			if (!callback.IsNull())
+				callback.Execute<CPlayer *, CPickup *>(playerInstance, pickupInstance);
+		}
+		catch (Sqrat::Error e)
+		{
+			OutputWarning("onPickupPickedUp failed to execute -- check the console for more details.");
+		}
+
+		callback.Release();
+	}
 }
 
 void OnPickupRespawn( int nPickupId )
 {
-	CPickup * pickupInstance = pCore->pickupMap[nPickupId];
-	Function callback = RootTable().GetFunction(_SC("onPickupRespawn"));
-
-	try
+	if (pCore != nullptr)
 	{
-		if (!callback.IsNull())
-			callback.Execute<CPickup *>(pickupInstance);
-	}
-	catch (Sqrat::Error e)
-	{
-		OutputWarning("onPickupRespawn failed to execute -- check the console for more details.");
-	}
+		CPickup * pickupInstance = pCore->pickupMap[nPickupId];
+		Function callback = RootTable().GetFunction(_SC("onPickupRespawn"));
 
-	callback.Release();
+		try
+		{
+			if (!callback.IsNull())
+				callback.Execute<CPickup *>(pickupInstance);
+		}
+		catch (Sqrat::Error e)
+		{
+			OutputWarning("onPickupRespawn failed to execute -- check the console for more details.");
+		}
+
+		callback.Release();
+	}
 }
 
 void OnVehicleExplode( int nVehicleId )
 {
-	CVehicle * vehicleInstance = pCore->vehicleMap[nVehicleId];
-	Function callback = RootTable().GetFunction(_SC("onVehicleExplode"));
-
-	try
+	if (pCore != nullptr)
 	{
-		if (!callback.IsNull())
-			callback.Execute<CVehicle *>(vehicleInstance);
-	}
-	catch (Sqrat::Error e)
-	{
-		OutputWarning("onVehicleExplode failed to execute -- check the console for more details.");
-	}
+		CVehicle * vehicleInstance = pCore->vehicleMap[nVehicleId];
+		Function callback = RootTable().GetFunction(_SC("onVehicleExplode"));
 
-	callback.Release();
+		try
+		{
+			if (!callback.IsNull())
+				callback.Execute<CVehicle *>(vehicleInstance);
+		}
+		catch (Sqrat::Error e)
+		{
+			OutputWarning("onVehicleExplode failed to execute -- check the console for more details.");
+		}
+
+		callback.Release();
+	}
 }
 
 void OnVehicleRespawn( int nVehicleId )
 {
-	CVehicle * vehicleInstance = pCore->vehicleMap[nVehicleId];
-	Function callback = RootTable().GetFunction(_SC("onVehicleRespawn"));
-
-	try
+	if (pCore != nullptr)
 	{
-		if (!callback.IsNull())
-			callback.Execute<CVehicle *>(vehicleInstance);
-	}
-	catch (Sqrat::Error e)
-	{
-		OutputWarning("onVehicleRespawn failed to execute -- check the console for more details.");
-	}
+		CVehicle * vehicleInstance = pCore->vehicleMap[nVehicleId];
+		Function callback = RootTable().GetFunction(_SC("onVehicleRespawn"));
 
-	callback.Release();
+		try
+		{
+			if (!callback.IsNull())
+				callback.Execute<CVehicle *>(vehicleInstance);
+		}
+		catch (Sqrat::Error e)
+		{
+			OutputWarning("onVehicleRespawn failed to execute -- check the console for more details.");
+		}
+
+		callback.Release();
+	}
 }
 
 int OnPublicMessage( int nPlayerId, const char* pszText )
 {
-	CPlayer * playerInstance = pCore->playerMap[nPlayerId];
-	Function callback = RootTable().GetFunction(_SC("onPlayerChat"));
-	int returnValue = 1;
-
-	try
+	if (pCore != nullptr)
 	{
-		if (!callback.IsNull())
-			returnValue = callback.Evaluate<int, CPlayer *, const char *>(playerInstance, pszText);
-	}
-	catch (Sqrat::Error e)
-	{
-		OutputWarning("onPlayerChat failed to execute -- check the console for more details.");
-	}
+		CPlayer * playerInstance = pCore->playerMap[nPlayerId];
+		Function callback = RootTable().GetFunction(_SC("onPlayerChat"));
+		int returnValue = 1;
 
-	callback.Release();
-	return returnValue;
+		try
+		{
+			if (!callback.IsNull())
+				returnValue = callback.Evaluate<int, CPlayer *, const char *>(playerInstance, pszText);
+		}
+		catch (Sqrat::Error e)
+		{
+			OutputWarning("onPlayerChat failed to execute -- check the console for more details.");
+		}
+
+		callback.Release();
+		return returnValue;
+	}
+	else
+		return 1;
 }
 
 int OnCommandMessage( int nPlayerId, const char* pszText )
 {
-	CPlayer * playerInstance = pCore->playerMap[nPlayerId];
-	Function callback        = RootTable().GetFunction( _SC("onPlayerCommand") );
-	int returnValue          = 1;
-
-	if( !callback.IsNull() )
+	if (pCore != nullptr)
 	{
-		char * szText = strdup( pszText );
-		char * szSpacePos = strchr( szText, ' ' );
+		CPlayer * playerInstance = pCore->playerMap[nPlayerId];
+		Function callback = RootTable().GetFunction(_SC("onPlayerCommand"));
+		int returnValue = 1;
 
-		if(szSpacePos) {
-			szSpacePos[0] = '\0';
-		}
-
-		const char * szArguments = szSpacePos ? &szSpacePos[1] : "";
-
-		try
+		if (!callback.IsNull())
 		{
-			returnValue = callback.Evaluate<int>(playerInstance, szText, szArguments);
-		}
-		catch (Sqrat::Error e)
-		{
-			OutputWarning("onPlayerCommand failed to execute -- check the console for more details.");
+			char * szText = strdup(pszText);
+			char * szSpacePos = strchr(szText, ' ');
+
+			if (szSpacePos) {
+				szSpacePos[0] = '\0';
+			}
+
+			const char * szArguments = szSpacePos ? &szSpacePos[1] : "";
+
+			try
+			{
+				returnValue = callback.Evaluate<int>(playerInstance, szText, szArguments);
+			}
+			catch (Sqrat::Error e)
+			{
+				OutputWarning("onPlayerCommand failed to execute -- check the console for more details.");
+			}
+
+			free(szText);
 		}
 
-		free( szText );
+		callback.Release();
+		return returnValue;
 	}
-	
-	callback.Release();
-	return returnValue;
+	else
+		return 1;
 }
 
 int OnPrivateMessage( int nPlayerId, int nTargetId, const char* pszText )
 {
-	CPlayer * playerInstance = pCore->playerMap[nPlayerId];
-	CPlayer * targetInstance = pCore->playerMap[nTargetId];
-
-	Function callback = RootTable().GetFunction(_SC("onPlayerPM"));
-	int returnValue = 1;
-	try
+	if (pCore != nullptr)
 	{
-		if (!callback.IsNull())
-			returnValue = callback.Evaluate<int, CPlayer *, CPlayer *, const char *>(playerInstance, targetInstance, pszText);
-	}
-	catch (Sqrat::Error e)
-	{
-		OutputWarning("onPlayerPM failed to execute -- check the console for more details.");
-	}
+		CPlayer * playerInstance = pCore->playerMap[nPlayerId];
+		CPlayer * targetInstance = pCore->playerMap[nTargetId];
 
-	callback.Release();
-	return returnValue;
+		Function callback = RootTable().GetFunction(_SC("onPlayerPM"));
+		int returnValue = 1;
+		try
+		{
+			if (!callback.IsNull())
+				returnValue = callback.Evaluate<int, CPlayer *, CPlayer *, const char *>(playerInstance, targetInstance, pszText);
+		}
+		catch (Sqrat::Error e)
+		{
+			OutputWarning("onPlayerPM failed to execute -- check the console for more details.");
+		}
+
+		callback.Release();
+		return returnValue;
+	}
+	else
+		return 1;
 }
 
 void OnPlayerBeginTyping( int nPlayerId )
 {
-	CPlayer * playerInstance = pCore->playerMap[nPlayerId];
-	Function callback = RootTable().GetFunction(_SC("onPlayerBeginTyping"));
-	try
+	if (pCore != nullptr)
 	{
-		if (!callback.IsNull())
-			callback.Execute<CPlayer *>(playerInstance);
-	}
-	catch (Sqrat::Error e)
-	{
-		OutputWarning("onPlayerBeginTyping failed to execute -- check the console for more details.");
-	}
+		CPlayer * playerInstance = pCore->playerMap[nPlayerId];
+		Function callback = RootTable().GetFunction(_SC("onPlayerBeginTyping"));
+		try
+		{
+			if (!callback.IsNull())
+				callback.Execute<CPlayer *>(playerInstance);
+		}
+		catch (Sqrat::Error e)
+		{
+			OutputWarning("onPlayerBeginTyping failed to execute -- check the console for more details.");
+		}
 
-	callback.Release();
+		callback.Release();
+	}
 }
 
 void OnPlayerEndTyping( int nPlayerId )
 {
-	CPlayer * playerInstance = pCore->playerMap[nPlayerId];
-	Function callback = RootTable().GetFunction(_SC("onPlayerEndTyping"));
-	try
+	if (pCore != nullptr)
 	{
-		if (!callback.IsNull())
-			callback.Execute<CPlayer *>(playerInstance);
-	}
-	catch (Sqrat::Error e)
-	{
-		OutputWarning("onPlayerEndTyping failed to execute -- check the console for more details.");
-	}
+		CPlayer * playerInstance = pCore->playerMap[nPlayerId];
+		Function callback = RootTable().GetFunction(_SC("onPlayerEndTyping"));
+		try
+		{
+			if (!callback.IsNull())
+				callback.Execute<CPlayer *>(playerInstance);
+		}
+		catch (Sqrat::Error e)
+		{
+			OutputWarning("onPlayerEndTyping failed to execute -- check the console for more details.");
+		}
 
-	callback.Release();
+		callback.Release();
+	}
 }
 
 int OnLoginAttempt( char* playerName, const char* password, const char* pszIpAddress )
 {
-	Function callback = RootTable().GetFunction(_SC("onLoginAttempt"));
-	int returnValue = 1;
-
-	try
+	if (pCore != nullptr)
 	{
-		if (!callback.IsNull())
-			returnValue = callback.Evaluate<int, char *, const char *, const char *>(playerName, password, pszIpAddress);
-	}
-	catch (Sqrat::Error e)
-	{
-		OutputWarning("onLoginAttempt failed to execute -- check the console for more details.");
-	}
+		Function callback = RootTable().GetFunction(_SC("onLoginAttempt"));
+		int returnValue = 1;
 
-	callback.Release();
-	return returnValue;
+		try
+		{
+			if (!callback.IsNull())
+				returnValue = callback.Evaluate<int, char *, const char *, const char *>(playerName, password, pszIpAddress);
+		}
+		catch (Sqrat::Error e)
+		{
+			OutputWarning("onLoginAttempt failed to execute -- check the console for more details.");
+		}
+
+		callback.Release();
+		return returnValue;
+	}
+	else
+		return 1;
 }
 
 void OnNameChangeable( char * playerName, char ** namePtr )
 {
-	Function callback = RootTable().GetFunction(_SC("onNameChangeable"));
-	try
+	if (pCore != nullptr)
 	{
-		if (!callback.IsNull())
+		Function callback = RootTable().GetFunction(_SC("onNameChangeable"));
+		try
 		{
-			char * name = callback.Evaluate<char *, char *>(playerName);
-			if (name && strlen(name) > 0)
-				namePtr = &name;
+			if (!callback.IsNull())
+			{
+				char * name = callback.Evaluate<char *, char *>(playerName);
+				if (name && strlen(name) > 0)
+					namePtr = &name;
+			}
 		}
-	}
-	catch (Sqrat::Error e)
-	{
-		OutputWarning("onNameChangeable failed to execute -- check the console for more details.");
-	}
+		catch (Sqrat::Error e)
+		{
+			OutputWarning("onNameChangeable failed to execute -- check the console for more details.");
+		}
 
-	callback.Release();
+		callback.Release();
+	}
 }
 
 void OnVehicleUpdate( int nVehicleId, int nUpdateType )
 {
-	savedVehicleData vehInfo = lastVehInfo[nVehicleId];
-	Vector lastPos           = Vector( vehInfo.lastX, vehInfo.lastY, vehInfo.lastZ );
-	float  lastHP            = vehInfo.lastHP;
-
-	float x, y, z;
-	functions->GetVehiclePos( nVehicleId, &x, &y, &z );
-
-	float hp = functions->GetVehicleHealth( nVehicleId );
-
-	// Check for onVehicleHealthChange triggers
-	if( lastHP != hp )
+	if (pCore != nullptr)
 	{
-		Function callback = RootTable().GetFunction(_SC("onVehicleHealthChange"));
-		try
+		savedVehicleData vehInfo = lastVehInfo[nVehicleId];
+		Vector lastPos = Vector(vehInfo.lastX, vehInfo.lastY, vehInfo.lastZ);
+		float  lastHP = vehInfo.lastHP;
+
+		float x, y, z;
+		functions->GetVehiclePos(nVehicleId, &x, &y, &z);
+
+		float hp = functions->GetVehicleHealth(nVehicleId);
+
+		// Check for onVehicleHealthChange triggers
+		if (lastHP != hp)
 		{
-			if (!callback.IsNull())
+			Function callback = RootTable().GetFunction(_SC("onVehicleHealthChange"));
+			try
 			{
-				CVehicle * vehInst = pCore->vehicleMap[nVehicleId];
-				callback.Execute<CVehicle *, float, float>(vehInst, lastHP, hp);
+				if (!callback.IsNull())
+				{
+					CVehicle * vehInst = pCore->vehicleMap[nVehicleId];
+					callback.Execute<CVehicle *, float, float>(vehInst, lastHP, hp);
+				}
 			}
-		}
-		catch (Sqrat::Error e)
-		{
-			OutputWarning("onVehicleHealthChange failed to execute -- check the console for more details.");
-		}
-
-		callback.Release();
-		vehInfo.lastHP = hp;
-	}
-
-	// Check for onVehicleMove triggers
-	if( lastPos.x != x || lastPos.y != y || lastPos.z != z )
-	{
-		Function callback = RootTable().GetFunction(_SC("onVehicleMove"));
-		try
-		{
-			if (!callback.IsNull())
+			catch (Sqrat::Error e)
 			{
-				CVehicle * vehInst = pCore->vehicleMap[nVehicleId];
-				callback.Execute<CVehicle *, float, float, float, float, float, float>(vehInst, lastPos.x, lastPos.y, lastPos.z, x, y, z);
+				OutputWarning("onVehicleHealthChange failed to execute -- check the console for more details.");
 			}
+
+			callback.Release();
+			vehInfo.lastHP = hp;
 		}
-		catch (Sqrat::Error e)
+
+		// Check for onVehicleMove triggers
+		if (lastPos.x != x || lastPos.y != y || lastPos.z != z)
 		{
-			OutputWarning("onVehicleMove failed to execute -- check the console for more details.");
+			Function callback = RootTable().GetFunction(_SC("onVehicleMove"));
+			try
+			{
+				if (!callback.IsNull())
+				{
+					CVehicle * vehInst = pCore->vehicleMap[nVehicleId];
+					callback.Execute<CVehicle *, float, float, float, float, float, float>(vehInst, lastPos.x, lastPos.y, lastPos.z, x, y, z);
+				}
+			}
+			catch (Sqrat::Error e)
+			{
+				OutputWarning("onVehicleMove failed to execute -- check the console for more details.");
+			}
+
+			callback.Release();
+			vehInfo.lastX = x;
+			vehInfo.lastY = y;
+			vehInfo.lastZ = z;
 		}
 
-		callback.Release();
-		vehInfo.lastX = x;
-		vehInfo.lastY = y;
-		vehInfo.lastZ = z;
+		lastVehInfo[nVehicleId] = vehInfo;
 	}
-
-	lastVehInfo[nVehicleId] = vehInfo;
 }
 
 void OnPlayerUpdate( int nPlayerId, int nUpdateType )
 {
-	savedPlayerData plrInfo = lastPlrInfo[nPlayerId];
-	Vector lastPos          = Vector( plrInfo.lastX, plrInfo.lastY, plrInfo.lastZ );
-	float  lastArmour       = plrInfo.lastArmour;
-	float  lastHP           = plrInfo.lastHP;
-	int    lastWep          = plrInfo.lastWep;
-
-	float x, y, z;
-	functions->GetPlayerPos( nPlayerId, &x, &y, &z );
-
-	float hp     = functions->GetPlayerHealth( nPlayerId );
-	float armour = functions->GetPlayerArmour( nPlayerId );
-	int wep      = functions->GetPlayerWeapon( nPlayerId );
-
-	// Check for onPlayerMove triggers
-	if( lastPos.x != x || lastPos.y != y || lastPos.z != z )
+	if (pCore != nullptr)
 	{
-		Function callback = RootTable().GetFunction(_SC("onPlayerMove"));
-		try
-		{
-			if (!callback.IsNull())
-				callback(pCore->playerMap[nPlayerId], lastPos.x, lastPos.y, lastPos.z, x, y, z);
-		}
-		catch (Sqrat::Error e)
-		{
-			OutputWarning("onPlayerMove failed to execute -- check the console for more details.");
-		}
-		
-		callback.Release();
-		plrInfo.lastX = x;
-		plrInfo.lastY = y;
-		plrInfo.lastZ = z;
-	}
+		savedPlayerData plrInfo = lastPlrInfo[nPlayerId];
+		Vector lastPos = Vector(plrInfo.lastX, plrInfo.lastY, plrInfo.lastZ);
+		float  lastArmour = plrInfo.lastArmour;
+		float  lastHP = plrInfo.lastHP;
+		int    lastWep = plrInfo.lastWep;
 
-	// Check for onPlayerHealthChange triggers
-	if( lastHP != hp )
-	{
-		Function callback = RootTable().GetFunction( _SC("onPlayerHealthChange") );
-		try
-		{
-			if (!callback.IsNull())
-				callback(pCore->playerMap[nPlayerId], lastHP, hp);
-		}
-		catch (Sqrat::Error e)
-		{
-			OutputWarning("onPlayerHealthChange failed to execute -- check the console for more details.");
-		}
-		
-		callback.Release();
-		plrInfo.lastHP = hp;
-	}
+		float x, y, z;
+		functions->GetPlayerPos(nPlayerId, &x, &y, &z);
 
-	// Check for onPlayerArmourChange triggers
-	if( lastArmour != armour )
-	{
-		Function callback = RootTable().GetFunction( _SC("onPlayerArmourChange") );
-		try
-		{
-			if (!callback.IsNull())
-				callback(pCore->playerMap[nPlayerId], lastArmour, armour);
-		}
-		catch (Sqrat::Error e)
-		{
-			OutputWarning("onPlayerArmourChange failed to execute -- check the console for more details.");
-		}
-		
-		callback.Release();
-		plrInfo.lastArmour = armour;
-	}
+		float hp = functions->GetPlayerHealth(nPlayerId);
+		float armour = functions->GetPlayerArmour(nPlayerId);
+		int wep = functions->GetPlayerWeapon(nPlayerId);
 
-	// Check for onPlayerWeaponChange triggers
-	if( lastWep != wep )
-	{
-		Function callback = RootTable().GetFunction( _SC("onPlayerWeaponChange") );
-		try
+		// Check for onPlayerMove triggers
+		if (lastPos.x != x || lastPos.y != y || lastPos.z != z)
 		{
-			if (!callback.IsNull())
-				callback(pCore->playerMap[nPlayerId], lastWep, wep);
-		}
-		catch (Sqrat::Error e)
-		{
-			OutputWarning("onPlayerWeaponChange failed to execute -- check the console for more details.");
-		}
-		
-		callback.Release();
-		plrInfo.lastWep = wep;
-	}
+			Function callback = RootTable().GetFunction(_SC("onPlayerMove"));
+			try
+			{
+				if (!callback.IsNull())
+					callback(pCore->playerMap[nPlayerId], lastPos.x, lastPos.y, lastPos.z, x, y, z);
+			}
+			catch (Sqrat::Error e)
+			{
+				OutputWarning("onPlayerMove failed to execute -- check the console for more details.");
+			}
 
-	lastPlrInfo[nPlayerId] = plrInfo;
+			callback.Release();
+			plrInfo.lastX = x;
+			plrInfo.lastY = y;
+			plrInfo.lastZ = z;
+		}
+
+		// Check for onPlayerHealthChange triggers
+		if (lastHP != hp)
+		{
+			Function callback = RootTable().GetFunction(_SC("onPlayerHealthChange"));
+			try
+			{
+				if (!callback.IsNull())
+					callback(pCore->playerMap[nPlayerId], lastHP, hp);
+			}
+			catch (Sqrat::Error e)
+			{
+				OutputWarning("onPlayerHealthChange failed to execute -- check the console for more details.");
+			}
+
+			callback.Release();
+			plrInfo.lastHP = hp;
+		}
+
+		// Check for onPlayerArmourChange triggers
+		if (lastArmour != armour)
+		{
+			Function callback = RootTable().GetFunction(_SC("onPlayerArmourChange"));
+			try
+			{
+				if (!callback.IsNull())
+					callback(pCore->playerMap[nPlayerId], lastArmour, armour);
+			}
+			catch (Sqrat::Error e)
+			{
+				OutputWarning("onPlayerArmourChange failed to execute -- check the console for more details.");
+			}
+
+			callback.Release();
+			plrInfo.lastArmour = armour;
+		}
+
+		// Check for onPlayerWeaponChange triggers
+		if (lastWep != wep)
+		{
+			Function callback = RootTable().GetFunction(_SC("onPlayerWeaponChange"));
+			try
+			{
+				if (!callback.IsNull())
+					callback(pCore->playerMap[nPlayerId], lastWep, wep);
+			}
+			catch (Sqrat::Error e)
+			{
+				OutputWarning("onPlayerWeaponChange failed to execute -- check the console for more details.");
+			}
+
+			callback.Release();
+			plrInfo.lastWep = wep;
+		}
+
+		lastPlrInfo[nPlayerId] = plrInfo;
+	}
 }
 
 void OnObjectShot( int nObjectId, int nPlayerId, int nWeapon )
 {
-	Function callback = RootTable().GetFunction( _SC("onObjectShot") );
-	try
+	if (pCore != nullptr)
 	{
-		if (!callback.IsNull())
-			callback.Execute<CObject *, CPlayer *, int>(pCore->objectMap[nObjectId], pCore->playerMap[nPlayerId], nWeapon);
+		Function callback = RootTable().GetFunction(_SC("onObjectShot"));
+		try
+		{
+			if (!callback.IsNull())
+				callback.Execute<CObject *, CPlayer *, int>(pCore->objectMap[nObjectId], pCore->playerMap[nPlayerId], nWeapon);
+		}
+		catch (Sqrat::Error e)
+		{
+			OutputWarning("onObjectShot failed to execute -- check the console for more details.");
+		}
+
+		callback.Release();
 	}
-	catch (Sqrat::Error e)
-	{
-		OutputWarning("onObjectShot failed to execute -- check the console for more details.");
-	}
-		
-	callback.Release();
 }
 
 void OnObjectBump( int nObjectId, int nPlayerId )
 {
-	Function callback = RootTable().GetFunction( _SC("onObjectBump") );
-	try
+	if (pCore != nullptr)
 	{
-		if (!callback.IsNull())
-			callback.Execute<CObject *, CPlayer *>(pCore->objectMap[nObjectId], pCore->playerMap[nPlayerId]);
+		Function callback = RootTable().GetFunction(_SC("onObjectBump"));
+		try
+		{
+			if (!callback.IsNull())
+				callback.Execute<CObject *, CPlayer *>(pCore->objectMap[nObjectId], pCore->playerMap[nPlayerId]);
+		}
+		catch (Sqrat::Error e)
+		{
+			OutputWarning("onObjectBump failed to execute -- check the console for more details.");
+		}
+
+		callback.Release();
 	}
-	catch (Sqrat::Error e)
-	{
-		OutputWarning("onObjectBump failed to execute -- check the console for more details.");
-	}
-		
-	callback.Release();
 }
 
 // We don't handle this one because we don't take internal commands from other modules.
@@ -723,7 +814,8 @@ int OnInternalCommand( unsigned int uCmdType, const char* pszText )
 	return 1;
 }
 
-void OnEntityPoolChange (int nEntityType, int nEntityId, unsigned int bDeleted) {
+void OnEntityPoolChange (int nEntityType, int nEntityId, unsigned int bDeleted)
+{
 	if (pCore != nullptr)
 	{
 		if (nEntityType == 1) {
@@ -764,80 +856,95 @@ void OnEntityPoolChange (int nEntityType, int nEntityId, unsigned int bDeleted) 
 
 void OnKeyBindDown(int nPlayerId, int nBindId)
 {
-	Function callback = RootTable().GetFunction(_SC("onKeyDown"));
-	try
+	if (pCore != nullptr)
 	{
-		if (!callback.IsNull())
-			callback.Execute<CPlayer *, int>(pCore->playerMap[nPlayerId], nBindId);
-	}
-	catch (Sqrat::Error e)
-	{
-		OutputWarning("onKeyDown failed to execute -- check the console for more details.");
-	}
+		Function callback = RootTable().GetFunction(_SC("onKeyDown"));
+		try
+		{
+			if (!callback.IsNull())
+				callback.Execute<CPlayer *, int>(pCore->playerMap[nPlayerId], nBindId);
+		}
+		catch (Sqrat::Error e)
+		{
+			OutputWarning("onKeyDown failed to execute -- check the console for more details.");
+		}
 
-	callback.Release();
+		callback.Release();
+	}
 }
 
 void OnKeyBindUp(int nPlayerId, int nBindId)
 {
-	Function callback = RootTable().GetFunction(_SC("onKeyUp"));
-	try
+	if (pCore != nullptr)
 	{
-		if (!callback.IsNull())
-			callback.Execute<CPlayer *, int>(pCore->playerMap[nPlayerId], nBindId);
-	}
-	catch (Sqrat::Error e)
-	{
-		OutputWarning("onKeyUp failed to execute -- check the console for more details.");
-	}
+		Function callback = RootTable().GetFunction(_SC("onKeyUp"));
+		try
+		{
+			if (!callback.IsNull())
+				callback.Execute<CPlayer *, int>(pCore->playerMap[nPlayerId], nBindId);
+		}
+		catch (Sqrat::Error e)
+		{
+			OutputWarning("onKeyUp failed to execute -- check the console for more details.");
+		}
 
-	callback.Release();
+		callback.Release();
+	}
 }
 
 void OnPlayerAwayChange(int nPlayerId, unsigned int bNewStatus)
 {
-	Function callback = RootTable().GetFunction(_SC("onPlayerAwayChange"));
-	try
+	if (pCore != nullptr)
 	{
-		if (!callback.IsNull())
-			callback.Execute<CPlayer *, bool>(pCore->playerMap[nPlayerId], bNewStatus == 1);
-	}
-	catch (Sqrat::Error e)
-	{
-		OutputWarning("onPlayerAwayChange failed to execute -- check the console for more details.");
-	}
+		Function callback = RootTable().GetFunction(_SC("onPlayerAwayChange"));
+		try
+		{
+			if (!callback.IsNull())
+				callback.Execute<CPlayer *, bool>(pCore->playerMap[nPlayerId], bNewStatus == 1);
+		}
+		catch (Sqrat::Error e)
+		{
+			OutputWarning("onPlayerAwayChange failed to execute -- check the console for more details.");
+		}
 
-	callback.Release();
+		callback.Release();
+	}
 }
 
 void OnPlayerSpectate(int nPlayerId, int nTargetId)
 {
-	Function callback = RootTable().GetFunction(_SC("onPlayerSpectate"));
-	try
+	if (pCore != nullptr)
 	{
-		if (!callback.IsNull())
-			callback.Execute<CPlayer *, CPlayer *>(pCore->playerMap[nPlayerId], pCore->playerMap[nTargetId]);
-	}
-	catch (Sqrat::Error e)
-	{
-		OutputWarning("onPlayerSpectate failed to execute -- check the console for more details.");
-	}
+		Function callback = RootTable().GetFunction(_SC("onPlayerSpectate"));
+		try
+		{
+			if (!callback.IsNull())
+				callback.Execute<CPlayer *, CPlayer *>(pCore->playerMap[nPlayerId], pCore->playerMap[nTargetId]);
+		}
+		catch (Sqrat::Error e)
+		{
+			OutputWarning("onPlayerSpectate failed to execute -- check the console for more details.");
+		}
 
-	callback.Release();
+		callback.Release();
+	}
 }
 
 void OnPlayerCrashDump(int nPlayerId, const char * szCrashReport)
 {
-	Function callback = RootTable().GetFunction(_SC("onPlayerCrashDump"));
-	try
+	if (pCore != nullptr)
 	{
-		if (!callback.IsNull())
-			callback.Execute<CPlayer *, const SQChar *>(pCore->playerMap[nPlayerId], szCrashReport);
-	}
-	catch (Sqrat::Error e)
-	{
-		OutputWarning("onPlayerCrashDump failed to execute -- check the console for more details.");
-	}
+		Function callback = RootTable().GetFunction(_SC("onPlayerCrashDump"));
+		try
+		{
+			if (!callback.IsNull())
+				callback.Execute<CPlayer *, const SQChar *>(pCore->playerMap[nPlayerId], szCrashReport);
+		}
+		catch (Sqrat::Error e)
+		{
+			OutputWarning("onPlayerCrashDump failed to execute -- check the console for more details.");
+		}
 
-	callback.Release();
+		callback.Release();
+	}
 }
