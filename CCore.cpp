@@ -20,10 +20,10 @@ CCore::CCore()
 	pLogFile    = nullptr;
 
 	// Create the entity arrays
-	this->playerMap = std::vector<CPlayer *>(MAX_PLAYERS, nullptr);
-	this->pickupMap = std::vector<CPickup *>(MAX_PICKUPS, nullptr);
-	this->objectMap = std::vector<CObject *>(MAX_OBJECTS, nullptr);
-	this->vehicleMap = std::vector<CVehicle *>(MAX_VEHICLES, nullptr);
+	this->playerMap.fill(nullptr);
+	this->pickupMap.fill(nullptr);
+	this->objectMap.fill(nullptr);
+	this->vehicleMap.fill(nullptr);
 
 	// Construct all timer arrays
 	unsigned int i;

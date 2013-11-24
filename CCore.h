@@ -12,6 +12,7 @@
 #include <sqstdaux.h>
 #include <sqstdblob.h>
 #include <sqstdsystem.h>
+#include <array>
 
 // Include this header only once
 #pragma once
@@ -58,10 +59,10 @@ class CCore
 		void ChangeReloadPermission(bool bCanReload) { this->canReload = bCanReload; }
 
 		// Entity maps
-		std::vector<CPlayer *> playerMap;
-		std::vector<CPickup *> pickupMap;
-		std::vector<CObject *> objectMap;
-		std::vector<CVehicle *> vehicleMap;
+		std::array<CPlayer *, MAX_PLAYERS> playerMap;
+		std::array<CPickup *, MAX_PICKUPS> pickupMap;
+		std::array<CObject *, MAX_OBJECTS> objectMap;
+		std::array<CVehicle *, MAX_VEHICLES> vehicleMap;
 
 	private:
 		// Constructor
