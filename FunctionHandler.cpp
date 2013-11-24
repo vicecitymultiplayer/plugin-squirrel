@@ -1649,7 +1649,9 @@ double GetWeaponDataValue ( int weaponID, int fieldID ) { return functions->GetW
 bool ResetWeaponDataValue ( int weaponID, int fieldID ) { return functions->ResetWeaponDataValue( weaponID, fieldID ); }
 bool IsWeaponDataModified ( int weaponID, int fieldID ) { return functions->IsWeaponDataValueModified( weaponID, fieldID ); }
 bool ResetWeaponData      ( int weaponID ) { return functions->ResetWeaponData( weaponID ); }
-bool ResetAllWeaponData   () { functions->ResetAllWeaponData(); }
+bool ResetAllWeaponData   () { return functions->ResetAllWeaponData(); }
+
+
 
 SQInteger release_hook( SQUserPointer p, SQInteger size ) { return 1; }
 SQInteger FindPlayer( HSQUIRRELVM v )
