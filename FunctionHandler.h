@@ -217,6 +217,12 @@ SQInteger FindPlayer( HSQUIRRELVM v );
 SQInteger InPoly( HSQUIRRELVM v );
 SQInteger NewTimer( HSQUIRRELVM v );
 
+int CreateMarker(int world, Vector pos, int scale, RGBa color, int spriteId);
+void RemoveMarker(int markerId);
+
+int AddRadioStream(const SQChar * radioName, const SQChar * radioURL, bool showInCarListing);
+void RemoveRadioStream(int streamId);
+
 // These functions are for compatibility, but will be deprecated
 DWORD    GetTime         ( void );
 const SQChar * GetFullTime     ( void );

@@ -156,6 +156,13 @@ void RegisterGlobals()
 		.Func( _SC( "GetWeaponID" ), GetWeaponID, 2, _SC("ts" ) )
 		.Func( _SC( "GetTickCount" ), SQGetTickCount, 1, _SC("t" ) )
 
+		.Func(_SC("SetWeaponDataValue"), SetWeaponDataValue, 4, _SC("tiin"))
+		.Func(_SC("GetWeaponDataValue"), GetWeaponDataValue, 3, _SC("tii"))
+		.Func(_SC("ResetWeaponDataValue"), ResetWeaponDataValue, 3, _SC("tii"))
+		.Func(_SC("IsWeaponDataModified"), IsWeaponDataModified, 3, _SC("tii"))
+		.Func(_SC("ResetWeaponData"), ResetWeaponData, 2, _SC("ti"))
+		.Func(_SC("ResetAllWeaponData"), ResetAllWeaponData, 1, _SC("t"))
+
 		.Func( _SC( "DistanceFromPoint" ), DistanceFromPoint, 5, _SC("tffff" ) )
 		.Func( _SC( "ReloadScripts" ), ReloadScripts, 1, _SC("t" ) )
 
