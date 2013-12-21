@@ -66,6 +66,9 @@
     <ClInclude Include="Functions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="sqrat\sqrat.h">
+      <Filter>Header Files\Sqrat</Filter>
+    </ClInclude>
     <ClInclude Include="sqrat\sqratimport.h">
       <Filter>Header Files\Sqrat</Filter>
     </ClInclude>
@@ -82,6 +85,9 @@
       <Filter>Header Files\Sqrat</Filter>
     </ClInclude>
     <ClInclude Include="sqrat\sqrat\sqratConst.h">
+      <Filter>Header Files\Sqrat</Filter>
+    </ClInclude>
+    <ClInclude Include="sqrat\sqrat\sqratext_Ref.h">
       <Filter>Header Files\Sqrat</Filter>
     </ClInclude>
     <ClInclude Include="sqrat\sqrat\sqratFunction.h">
@@ -115,9 +121,6 @@
       <Filter>Header Files\Sqrat</Filter>
     </ClInclude>
     <ClInclude Include="sqrat\sqmodule.h">
-      <Filter>Header Files\Sqrat</Filter>
-    </ClInclude>
-    <ClInclude Include="sqrat\sqrat.h">
       <Filter>Header Files\Sqrat</Filter>
     </ClInclude>
   </ItemGroup>

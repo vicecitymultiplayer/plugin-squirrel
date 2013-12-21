@@ -1,7 +1,4 @@
-//
 // wrapper for the Squirrel VM under Sqrat
-//
-
 //
 // Copyright (c) 2011 Alston Chen
 //
@@ -24,6 +21,7 @@
 //  3. This notice may not be removed or altered from any source
 //  distribution.
 //
+//
 
 #if !defined(_SCRAT_VM_H_)
 #define _SCRAT_VM_H_
@@ -43,6 +41,7 @@
 
 namespace Sqrat
 {
+
 
 #ifdef SQUNICODE
 #define scvprintf vwprintf

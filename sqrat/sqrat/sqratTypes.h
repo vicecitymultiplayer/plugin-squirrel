@@ -41,7 +41,10 @@
 
 namespace Sqrat {
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// \internal
 // copied from http://www.experts-exchange.com/Programming/Languages/CPP/A_223-Determing-if-a-C-type-is-convertable-to-another-at-compile-time.html
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template <typename T1, typename T2>
 struct is_convertible
 {
@@ -60,6 +63,10 @@ public:
     );
 };
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// \internal
+// integer value utility, T must be integral type
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template <typename T, bool b>
 struct popAsInt
 {
@@ -84,15 +91,16 @@ struct popAsInt
             value = static_cast<T>(sqValuef);
             break;
         default:
-#if !defined (SCRAT_NO_ERROR_CHECKING)
             Error::Instance().Throw(vm, Sqrat::Error::FormatTypeError(vm, idx, _SC("integer")));
-#endif
             value = static_cast<T>(0);
             break;
         }
     }
 };
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// \internal
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template <typename T>
 struct popAsInt<T, false>
 {
@@ -103,6 +111,9 @@ struct popAsInt<T, false>
     }
 };
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// \internal
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template <typename T>
 struct popAsFloat
 {
@@ -127,15 +138,12 @@ struct popAsFloat
             value = static_cast<T>(sqValuef);
             break;
         default:
-#if !defined (SCRAT_NO_ERROR_CHECKING)
             Error::Instance().Throw(vm, Sqrat::Error::FormatTypeError(vm, idx, _SC("float")));
-#endif
             value = 0;
             break;
         }
     }
 };
-
 
 //
 // Variable Accessors
@@ -146,22 +154,17 @@ template<class T>
 struct Var {
     T value;
     Var(HSQUIRRELVM vm, SQInteger idx) {
-#if !defined (SCRAT_NO_ERROR_CHECKING)
         // don't want to override previous errors
         if (!Sqrat::Error::Instance().Occurred(vm)) {
-#endif
             // check if return is NULL here because copying (not referencing)
             T* ptr = ClassType<T>::GetInstance(vm, idx);
-            if (ptr != NULL) {
+            if (ptr != NULL)
                 value = *ptr;
-#if !defined (SCRAT_NO_ERROR_CHECKING)
-            } else if (is_convertible<T, SQInteger>::YES) { /* value is likely of integral type like enums */
+            else if (is_convertible<T, SQInteger>::YES)
+            { /* value is likely of integral type like enums */
                 Sqrat::Error::Instance().Clear(vm);
                 value = popAsInt<T, is_convertible<T, SQInteger>::YES>(vm, idx).value;
-            } else
-                // initialize value to avoid warnings
-                value = popAsInt<T, is_convertible<T, SQInteger>::YES>(vm, idx).value;
-#endif
+            }
         } else
             // initialize value to avoid warnings
             value = popAsInt<T, is_convertible<T, SQInteger>::YES>(vm, idx).value;
@@ -171,6 +174,7 @@ struct Var {
             ClassType<T>::PushInstanceCopy(vm, value);
         else /* try integral type */
             pushAsInt<T, is_convertible<T, SQInteger>::YES>().push(vm, (value));
+
     }
 
 private:
@@ -246,24 +250,6 @@ struct Var<const T* const> {
     }
     static void push(HSQUIRRELVM vm, const T* const value) {
         ClassType<T>::PushInstance(vm, const_cast<T*>(value));
-    }
-};
-
-template<class T>
-struct Var<SharedPtr<T> > {
-    SharedPtr<T> value;
-    Var(HSQUIRRELVM vm, SQInteger idx) {
-        const T& instance = Var<T&>(vm, idx).value;
-#if !defined (SCRAT_NO_ERROR_CHECKING)
-        if (!Error::Instance().Occurred(vm)) {
-#endif
-            value = new T(instance);
-#if !defined (SCRAT_NO_ERROR_CHECKING)
-        }
-#endif
-    }
-    static void push(HSQUIRRELVM vm, SharedPtr<T> value) {
-        PushVarR(vm, value.Get());
     }
 };
 

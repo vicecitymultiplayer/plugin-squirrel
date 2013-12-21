@@ -38,16 +38,11 @@
 
 namespace Sqrat {
 
-/// @cond DEV
-
-
 //
 // Overload name generator
 //
-
 class SqOverloadName {
 public:
-
     static string Get(const SQChar* name, int args) {
         std::basic_stringstream<SQChar> overloadName;
         overloadName << _SC("__sqrat_ol_ ") << name << _SC("_") << args;
@@ -56,7 +51,6 @@ public:
     }
 };
 
-
 //
 // Squirrel Overload Functions
 //
@@ -64,7 +58,6 @@ public:
 template <class R>
 class SqOverload {
 public:
-
     static SQInteger Func(HSQUIRRELVM vm) {
         // Get the arg count
         int argCount = sq_gettop(vm) - 2;
@@ -75,14 +68,9 @@ public:
         string overloadName = SqOverloadName::Get(funcName, argCount);
 
         sq_pushstring(vm, overloadName.c_str(), -1);
-
-#if !defined (SCRAT_NO_ERROR_CHECKING)
         if(SQ_FAILED(sq_get(vm, 1))) { // Lookup the proper overload
             return sq_throwerror(vm, _SC("wrong number of parameters"));
         }
-#else
-        sq_get(vm, 1);
-#endif
 
         // Push the args again
         for(int i = 1; i <= argCount + 1; ++i) {
@@ -90,17 +78,13 @@ public:
         }
 
         sq_call(vm, argCount + 1, true, ErrorHandling::IsEnabled());
-
-#if !defined (SCRAT_NO_ERROR_CHECKING)
         if (Error::Instance().Occurred(vm)) {
             return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
-#endif
 
         return 1;
     }
 };
-
 
 //
 // void return specialization
@@ -109,7 +93,6 @@ public:
 template <>
 class SqOverload<void> {
 public:
-
     static SQInteger Func(HSQUIRRELVM vm) {
         // Get the arg count
         int argCount = sq_gettop(vm) - 2;
@@ -120,14 +103,9 @@ public:
         string overloadName = SqOverloadName::Get(funcName, argCount);
 
         sq_pushstring(vm, overloadName.c_str(), -1);
-
-#if !defined (SCRAT_NO_ERROR_CHECKING)
         if(SQ_FAILED(sq_get(vm, 1))) { // Lookup the proper overload
             return sq_throwerror(vm, _SC("wrong number of parameters"));
         }
-#else
-        sq_get(vm, 1);
-#endif
 
         // Push the args again
         for(int i = 1; i <= argCount + 1; ++i) {
@@ -135,18 +113,13 @@ public:
         }
 
         sq_call(vm, argCount + 1, false, ErrorHandling::IsEnabled());
-
-#if !defined (SCRAT_NO_ERROR_CHECKING)
         if (Error::Instance().Occurred(vm)) {
             return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
-#endif
 
         return 0;
     }
 };
-
-
 //
 // Global Overloaded Function Resolvers
 //
@@ -315,7 +288,6 @@ SQFUNCTION SqGlobalOverloadedFunc(R & (*method)(A1, A2, A3, A4, A5, A6, A7, A8, 
     return &SqGlobal<R&>::template Func14<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, 2, true>;
 }
 
-
 //
 // Member Global Overloaded Function Resolvers
 //
@@ -474,7 +446,6 @@ SQFUNCTION SqMemberGlobalOverloadedFunc(R & (*method)(A1, A2, A3, A4, A5, A6, A7
     return &SqGlobal<R&>::template Func14<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, 1, true>;
 }
 
-
 //
 // Member Overloaded Function Resolvers
 //
@@ -498,6 +469,7 @@ template <class C, class R>
 inline SQFUNCTION SqMemberOverloadedFunc(R & (C::*method)() const) {
     return &SqMember<C, R&>::template Func0C<true>;
 }
+
 
 // Arg Count 1
 template <class C, class R, class A1>
@@ -792,7 +764,6 @@ inline SQFUNCTION SqMemberOverloadedFunc(R & (C::*method)(A1, A2, A3, A4, A5, A6
     return &SqMember<C, R&>::template Func14C<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, true>;
 }
 
-
 //
 // Overload handler resolver
 //
@@ -881,7 +852,6 @@ template <class C, class R, class A1, class A2, class A3, class A4, class A5, cl
 inline SQFUNCTION SqOverloadFunc(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14) const ) {
     return &SqOverload<R>::Func;
 }
-
 
 //
 // Query argument count
@@ -977,7 +947,6 @@ inline int SqGetArgCount(R (*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A1
     return 14;
 }
 
-
 //
 // Query member function argument count
 //
@@ -1072,7 +1041,6 @@ inline int SqGetArgCount(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10,
     return 14;
 }
 
-
 //
 // Query const member function argument count
 //
@@ -1142,32 +1110,26 @@ template <class C, class R, class A1, class A2, class A3, class A4, class A5, cl
 inline int SqGetArgCount(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10) const) {
     return 10;
 }
-
 // Arg Count 11
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
 inline int SqGetArgCount(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11) const) {
     return 11;
 }
-
 // Arg Count 12
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
 inline int SqGetArgCount(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12) const) {
     return 12;
 }
-
 // Arg Count 13
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
 inline int SqGetArgCount(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13) const) {
     return 13;
 }
-
 // Arg Count 14
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
 inline int SqGetArgCount(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14) const) {
     return 14;
 }
-
-/// @endcond
 
 }
 

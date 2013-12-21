@@ -587,7 +587,7 @@ int OnLoginAttempt( char* playerName, const char* password, const char* pszIpAdd
 
 void OnNameChangeable( char * playerName, char ** namePtr )
 {
-	if (pCore != nullptr)
+	/*if (pCore != nullptr)
 	{
 		Function callback = RootTable().GetFunction(_SC("onNameChangeable"));
 		try
@@ -606,7 +606,7 @@ void OnNameChangeable( char * playerName, char ** namePtr )
 		}
 
 		callback.Release();
-	}
+	}*/
 }
 
 void OnVehicleUpdate( int nVehicleId, int nUpdateType )
