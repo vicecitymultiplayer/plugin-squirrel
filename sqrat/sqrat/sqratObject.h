@@ -132,6 +132,8 @@ public:
         HSQOBJECT slotObj;
         sq_pushobject(vm, GetObject());
         sq_pushstring(vm, slot, -1);
+
+#if !defined (SCRAT_NO_ERROR_CHECKING)
         if(SQ_FAILED(sq_get(vm, -2))) {
             sq_pop(vm, 1);
             return Object(vm); // Return a NULL object
@@ -141,6 +143,13 @@ public:
             sq_pop(vm, 2);
             return ret;
         }
+#else
+        sq_get(vm, -2);
+        sq_getstackobj(vm, -1, &slotObj);
+        Object ret(slotObj, vm); // must addref before the pop!
+        sq_pop(vm, 2);
+        return ret;
+#endif
     }
 
     template <class T>
@@ -155,6 +164,8 @@ public:
         HSQOBJECT slotObj;
         sq_pushobject(vm, GetObject());
         sq_pushinteger(vm, index);
+
+#if !defined (SCRAT_NO_ERROR_CHECKING)
         if(SQ_FAILED(sq_get(vm, -2))) {
             sq_pop(vm, 1);
             return Object(vm); // Return a NULL object
@@ -164,6 +175,13 @@ public:
             sq_pop(vm, 2);
             return ret;
         }
+#else
+        sq_get(vm, -2);
+        sq_getstackobj(vm, -1, &slotObj);
+        Object ret(slotObj, vm); // must addref before the pop!
+        sq_pop(vm, 2);
+        return ret;
+#endif
     }
 
     template <class T>
@@ -229,55 +247,29 @@ public:
 
 protected:
     // Bind a function and it's associated Squirrel closure to the object
-	inline void BindFunc(const SQChar* name, void* method, size_t methodSize, SQFUNCTION func, bool staticVar = false) {
-		sq_pushobject(vm, GetObject());
-		sq_pushstring(vm, name, -1);
+    inline void BindFunc(const SQChar* name, void* method, size_t methodSize, SQFUNCTION func, bool staticVar = false) {
+        sq_pushobject(vm, GetObject());
+        sq_pushstring(vm, name, -1);
 
-		SQUserPointer methodPtr = sq_newuserdata(vm, static_cast<SQUnsignedInteger>(methodSize));
-		memcpy(methodPtr, method, methodSize);
+        SQUserPointer methodPtr = sq_newuserdata(vm, static_cast<SQUnsignedInteger>(methodSize));
+        memcpy(methodPtr, method, methodSize);
 
-		sq_newclosure(vm, func, 1);
-		sq_newslot(vm, -3, staticVar);
-		sq_pop(vm, 1); // pop table
-	}
+        sq_newclosure(vm, func, 1);
+        sq_newslot(vm, -3, staticVar);
+        sq_pop(vm,1); // pop table
+    }
 
-	inline void BindFunc(const SQChar* name, void* method, size_t methodSize, SQFUNCTION func, SQInteger paramCount, const SQChar * params, bool staticVar = false) {
-		sq_pushobject(vm, GetObject());
-		sq_pushstring(vm, name, -1);
+    inline void BindFunc(const SQInteger index, void* method, size_t methodSize, SQFUNCTION func, bool staticVar = false) {
+        sq_pushobject(vm, GetObject());
+        sq_pushinteger(vm, index);
 
-		SQUserPointer methodPtr = sq_newuserdata(vm, static_cast<SQUnsignedInteger>(methodSize));
-		memcpy(methodPtr, method, methodSize);
+        SQUserPointer methodPtr = sq_newuserdata(vm, static_cast<SQUnsignedInteger>(methodSize));
+        memcpy(methodPtr, method, methodSize);
 
-		sq_newclosure(vm, func, 1);
-		sq_setparamscheck(vm, paramCount, params);
-		sq_newslot(vm, -3, staticVar);
-		sq_pop(vm, 1); // pop table
-	}
-
-	inline void BindFunc(const SQInteger index, void* method, size_t methodSize, SQFUNCTION func, bool staticVar = false) {
-		sq_pushobject(vm, GetObject());
-		sq_pushinteger(vm, index);
-
-		SQUserPointer methodPtr = sq_newuserdata(vm, static_cast<SQUnsignedInteger>(methodSize));
-		memcpy(methodPtr, method, methodSize);
-
-		sq_newclosure(vm, func, 1);
-		sq_newslot(vm, -3, staticVar);
-		sq_pop(vm, 1); // pop table
-	}
-
-	inline void BindFunc(const SQInteger index, void* method, size_t methodSize, SQFUNCTION func, SQInteger paramCount, const SQChar * params, bool staticVar = false) {
-		sq_pushobject(vm, GetObject());
-		sq_pushinteger(vm, index);
-
-		SQUserPointer methodPtr = sq_newuserdata(vm, static_cast<SQUnsignedInteger>(methodSize));
-		memcpy(methodPtr, method, methodSize);
-
-		sq_newclosure(vm, func, 1);
-		sq_setparamscheck(vm, paramCount, params);
-		sq_newslot(vm, -3, staticVar);
-		sq_pop(vm, 1); // pop table
-	}
+        sq_newclosure(vm, func, 1);
+        sq_newslot(vm, -3, staticVar);
+        sq_pop(vm,1); // pop table
+    }
 
 
     // Bind a function and it's associated Squirrel closure to the object

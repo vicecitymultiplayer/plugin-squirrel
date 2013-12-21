@@ -37,9 +37,9 @@
 namespace Sqrat {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// \internal
-// utility taken from http://stackoverflow.com/questions/2733377/is-there-a-way-to-test-whether-a-c-class-has-a-default-constructor-other-than/2770326#2770326
-// may be obsolete in C++ 11
+/// @cond DEV
+/// utility taken from http://stackoverflow.com/questions/2733377/is-there-a-way-to-test-whether-a-c-class-has-a-default-constructor-other-than/2770326#2770326
+/// may be obsolete in C++ 11
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template< class T >
 class is_default_constructible {
@@ -55,10 +55,17 @@ class is_default_constructible {
 public:
     enum { value = sizeof( sfinae<T>(0) ) == sizeof(int) };
 };
+/// @endcond
 
-//
-// DefaultAllocator
-//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// DefaultAllocator is the allocator to use for Class that can both be constructed and copied
+///
+/// \tparam C Type of class
+///
+/// \remarks
+/// There is mechanisms defined in this class that allow the Class::Ctor method to work properly.
+///
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class C>
 class DefaultAllocator {
 
@@ -90,25 +97,40 @@ class DefaultAllocator {
     };
 
 public:
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Called by Sqrat to set up an instance on the stack for the template class
+    ///
+    /// \param vm VM that has an instance object of the correct type at position 1 in its stack
+    ///
+    /// \return Squirrel error code
+    ///
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     static SQInteger New(HSQUIRRELVM vm) {
         C* instance = NewC<C, is_default_constructible<C>::value >().p;
         setInstance(vm, instance);
         return 0;
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// @cond DEV
+    /// following New functions are used only if constructors are bound via Ctor() in class
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     template <int count>
     static SQInteger iNew(HSQUIRRELVM vm) {
         return New(vm);
     }
 
-   // following New functions are used only if constructors are bound via Ctor() in class
-
     template <typename A1>
     static SQInteger iNew(HSQUIRRELVM vm) {
         Var<A1> a1(vm, 2);
+
+#if !defined (SCRAT_NO_ERROR_CHECKING)
         if (Error::Instance().Occurred(vm)) {
             return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
+#endif
+
         return setInstance(vm, new C(
             a1.value
             ));
@@ -117,9 +139,13 @@ public:
     static SQInteger iNew(HSQUIRRELVM vm) {
         Var<A1> a1(vm, 2);
         Var<A2> a2(vm, 3);
+
+#if !defined (SCRAT_NO_ERROR_CHECKING)
         if (Error::Instance().Occurred(vm)) {
             return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
+#endif
+
         return setInstance(vm, new C(
             a1.value,
             a2.value
@@ -142,9 +168,13 @@ public:
         Var<A2> a2(vm, 3);
         Var<A3> a3(vm, 4);
         Var<A4> a4(vm, 5);
+
+#if !defined (SCRAT_NO_ERROR_CHECKING)
         if (Error::Instance().Occurred(vm)) {
             return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
+#endif
+
         return setInstance(vm, new C(
             a1.value,
             a2.value,
@@ -159,9 +189,13 @@ public:
         Var<A3> a3(vm, 4);
         Var<A4> a4(vm, 5);
         Var<A5> a5(vm, 6);
+
+#if !defined (SCRAT_NO_ERROR_CHECKING)
         if (Error::Instance().Occurred(vm)) {
             return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
+#endif
+
         return setInstance(vm, new C(
             a1.value,
             a2.value,
@@ -178,9 +212,13 @@ public:
         Var<A4> a4(vm, 5);
         Var<A5> a5(vm, 6);
         Var<A6> a6(vm, 7);
+
+#if !defined (SCRAT_NO_ERROR_CHECKING)
         if (Error::Instance().Occurred(vm)) {
             return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
+#endif
+
         return setInstance(vm, new C(
             a1.value,
             a2.value,
@@ -199,9 +237,13 @@ public:
         Var<A5> a5(vm, 6);
         Var<A6> a6(vm, 7);
         Var<A7> a7(vm, 8);
+
+#if !defined (SCRAT_NO_ERROR_CHECKING)
         if (Error::Instance().Occurred(vm)) {
             return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
+#endif
+
         return setInstance(vm, new C(
             a1.value,
             a2.value,
@@ -222,9 +264,13 @@ public:
         Var<A6> a6(vm, 7);
         Var<A7> a7(vm, 8);
         Var<A8> a8(vm, 9);
+
+#if !defined (SCRAT_NO_ERROR_CHECKING)
         if (Error::Instance().Occurred(vm)) {
             return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
+#endif
+
         return setInstance(vm, new C(
             a1.value,
             a2.value,
@@ -247,9 +293,13 @@ public:
         Var<A7> a7(vm, 8);
         Var<A8> a8(vm, 9);
         Var<A9> a9(vm, 10);
+
+#if !defined (SCRAT_NO_ERROR_CHECKING)
         if (Error::Instance().Occurred(vm)) {
             return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
+#endif
+
         return setInstance(vm, new C(
             a1.value,
             a2.value,
@@ -262,9 +312,20 @@ public:
             a9.value
             ));
     }
+    /// @endcond
 
 public:
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Called by Sqrat to set up the instance at idx on the stack as a copy of a value of the same type
+    ///
+    /// \param vm    VM that has an instance object of the correct type at idx
+    /// \param idx   Index of the stack that the instance object is at
+    /// \param value A pointer to data of the same type as the instance object
+    ///
+    /// \return Squirrel error code
+    ///
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     static SQInteger Copy(HSQUIRRELVM vm, SQInteger idx, const void* value) {
         C* instance = new C(*static_cast<const C*>(value));
         sq_setinstanceup(vm, idx, instance);
@@ -272,6 +333,15 @@ public:
         return 0;
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Called by Sqrat to delete an instance's data
+    ///
+    /// \param ptr  Pointer to the data contained by the instance
+    /// \param size Size of the data contained by the instance
+    ///
+    /// \return Squirrel error code
+    ///
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     static SQInteger Delete(SQUserPointer ptr, SQInteger size) {
         C* instance = reinterpret_cast<C*>(ptr);
         delete instance;
@@ -279,40 +349,112 @@ public:
     }
 };
 
-//
-// NoConstructorAllocator
-//
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// NoConstructor is the allocator to use for Class that can NOT be constructed or copied
+///
+/// \tparam C Type of class
+///
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class C>
 class NoConstructor {
 public:
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Called by Sqrat to set up an instance on the stack for the template class (not allowed in this allocator)
+    ///
+    /// \param vm VM that has an instance object of the correct type at position 1 in its stack
+    ///
+    /// \return Squirrel error code
+    ///
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     static SQInteger New(HSQUIRRELVM vm) {
+#if !defined (SCRAT_NO_ERROR_CHECKING)
         return sq_throwerror(vm, (ClassType<C>::ClassName(vm) + string(_SC(" constructing is not allowed"))).c_str());
+#else
+        return 0;
+#endif
     }
-    static SQInteger Copy(HSQUIRRELVM vm, SQInteger, const void*) {
-        return sq_throwerror(vm, (ClassType<C>::ClassName(vm) + string(_SC(" copying is not allowed"))).c_str());
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Called by Sqrat to set up the instance at idx on the stack as a copy of a value of the same type (not used in this allocator)
+    ///
+    /// \param vm    VM that has an instance object of the correct type at idx
+    /// \param idx   Index of the stack that the instance object is at
+    /// \param value A pointer to data of the same type as the instance object
+    ///
+    /// \return Squirrel error code
+    ///
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    static SQInteger Copy(HSQUIRRELVM vm, SQInteger idx, const void* value) {
+        return 0;
     }
-    static SQInteger Delete(SQUserPointer, SQInteger) {
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Called by Sqrat to delete an instance's data (not used in this allocator)
+    ///
+    /// \param ptr  Pointer to the data contained by the instance
+    /// \param size Size of the data contained by the instance
+    ///
+    /// \return Squirrel error code
+    ///
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    static SQInteger Delete(SQUserPointer ptr, SQInteger size) {
         return 0;
     }
 };
 
-//
-// CopyOnly
-//
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// CopyOnly is the allocator to use for Class that can be copied but not constructed
+///
+/// \tparam C Type of class
+///
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class C>
 class CopyOnly {
 public:
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Called by Sqrat to set up an instance on the stack for the template class (not allowed in this allocator)
+    ///
+    /// \param vm VM that has an instance object of the correct type at position 1 in its stack
+    ///
+    /// \return Squirrel error code
+    ///
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     static SQInteger New(HSQUIRRELVM vm) {
+#if !defined (SCRAT_NO_ERROR_CHECKING)
         return sq_throwerror(vm, (ClassType<C>::ClassName(vm) + string(_SC(" constructing is not allowed"))).c_str());
+#else
+        return 0;
+#endif
     }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Called by Sqrat to set up the instance at idx on the stack as a copy of a value of the same type
+    ///
+    /// \param vm    VM that has an instance object of the correct type at idx
+    /// \param idx   Index of the stack that the instance object is at
+    /// \param value A pointer to data of the same type as the instance object
+    ///
+    /// \return Squirrel error code
+    ///
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     static SQInteger Copy(HSQUIRRELVM vm, SQInteger idx, const void* value) {
         C* instance = new C(*static_cast<const C*>(value));
         sq_setinstanceup(vm, idx, instance);
         sq_setreleasehook(vm, idx, &Delete);
         return 0;
     }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Called by Sqrat to delete an instance's data
+    ///
+    /// \param ptr  Pointer to the data contained by the instance
+    /// \param size Size of the data contained by the instance
+    ///
+    /// \return Squirrel error code
+    ///
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     static SQInteger Delete(SQUserPointer ptr, SQInteger size) {
         C* instance = reinterpret_cast<C*>(ptr);
         delete instance;
@@ -321,24 +463,293 @@ public:
 };
 
 
-//
-// NoCopy
-//
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// NoCopy is the allocator to use for Class that can be constructed but not copied
+///
+/// \tparam C Type of class
+///
+/// \remarks
+/// There is mechanisms defined in this class that allow the Class::Ctor method to work properly.
+///
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template<class C>
 class NoCopy {
-public:
-    static SQInteger New(HSQUIRRELVM vm) {
-        C* instance = new C();
+
+    static SQInteger setInstance(HSQUIRRELVM vm, C* instance)
+    {
         sq_setinstanceup(vm, 1, instance);
         sq_setreleasehook(vm, 1, &Delete);
         return 0;
     }
 
-    static SQInteger Copy(HSQUIRRELVM vm, SQInteger idx, const void* value) {
-        return sq_throwerror(vm, (ClassType<C>::ClassName(vm) + string(_SC(" copying is not allowed"))).c_str());
+    template <class T, bool b>
+    struct NewC
+    {
+        T* p;
+        NewC()
+        {
+           p = new T();
+        }
+    };
+
+    template <class T>
+    struct NewC<T, false>
+    {
+        T* p;
+        NewC()
+        {
+           p = 0;
+        }
+    };
+
+public:
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Called by Sqrat to set up an instance on the stack for the template class
+    ///
+    /// \param vm VM that has an instance object of the correct type at position 1 in its stack
+    ///
+    /// \return Squirrel error code
+    ///
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    static SQInteger New(HSQUIRRELVM vm) {
+        C* instance = NewC<C, is_default_constructible<C>::value >().p;
+        setInstance(vm, instance);
+        return 0;
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// @cond DEV
+    /// following New functions are used only if constructors are bound via Ctor() in class
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    template <int count>
+    static SQInteger iNew(HSQUIRRELVM vm) {
+        return New(vm);
+    }
+
+    template <typename A1>
+    static SQInteger iNew(HSQUIRRELVM vm) {
+        Var<A1> a1(vm, 2);
+
+#if !defined (SCRAT_NO_ERROR_CHECKING)
+        if (Error::Instance().Occurred(vm)) {
+            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+        }
+#endif
+
+        return setInstance(vm, new C(
+            a1.value
+            ));
+    }
+    template <typename A1,typename A2>
+    static SQInteger iNew(HSQUIRRELVM vm) {
+        Var<A1> a1(vm, 2);
+        Var<A2> a2(vm, 3);
+
+#if !defined (SCRAT_NO_ERROR_CHECKING)
+        if (Error::Instance().Occurred(vm)) {
+            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+        }
+#endif
+
+        return setInstance(vm, new C(
+            a1.value,
+            a2.value
+            ));
+    }
+    template <typename A1,typename A2,typename A3>
+    static SQInteger iNew(HSQUIRRELVM vm) {
+        Var<A1> a1(vm, 2);
+        Var<A2> a2(vm, 3);
+        Var<A3> a3(vm, 4);
+
+#if !defined (SCRAT_NO_ERROR_CHECKING)
+        if (Error::Instance().Occurred(vm)) {
+            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+        }
+#endif
+
+        return setInstance(vm, new C(
+            a1.value,
+            a2.value,
+            a3.value
+            ));
+    }
+    template <typename A1,typename A2,typename A3,typename A4>
+    static SQInteger iNew(HSQUIRRELVM vm) {
+        Var<A1> a1(vm, 2);
+        Var<A2> a2(vm, 3);
+        Var<A3> a3(vm, 4);
+        Var<A4> a4(vm, 5);
+
+#if !defined (SCRAT_NO_ERROR_CHECKING)
+        if (Error::Instance().Occurred(vm)) {
+            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+        }
+#endif
+
+        return setInstance(vm, new C(
+            a1.value,
+            a2.value,
+            a3.value,
+            a4.value
+            ));
+    }
+    template <typename A1,typename A2,typename A3,typename A4,typename A5>
+    static SQInteger iNew(HSQUIRRELVM vm) {
+        Var<A1> a1(vm, 2);
+        Var<A2> a2(vm, 3);
+        Var<A3> a3(vm, 4);
+        Var<A4> a4(vm, 5);
+        Var<A5> a5(vm, 6);
+
+#if !defined (SCRAT_NO_ERROR_CHECKING)
+        if (Error::Instance().Occurred(vm)) {
+            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+        }
+#endif
+
+        return setInstance(vm, new C(
+            a1.value,
+            a2.value,
+            a3.value,
+            a4.value,
+            a5.value
+            ));
+    }
+    template <typename A1,typename A2,typename A3,typename A4,typename A5,typename A6>
+    static SQInteger iNew(HSQUIRRELVM vm) {
+        Var<A1> a1(vm, 2);
+        Var<A2> a2(vm, 3);
+        Var<A3> a3(vm, 4);
+        Var<A4> a4(vm, 5);
+        Var<A5> a5(vm, 6);
+        Var<A6> a6(vm, 7);
+
+#if !defined (SCRAT_NO_ERROR_CHECKING)
+        if (Error::Instance().Occurred(vm)) {
+            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+        }
+#endif
+
+        return setInstance(vm, new C(
+            a1.value,
+            a2.value,
+            a3.value,
+            a4.value,
+            a5.value,
+            a6.value
+            ));
+    }
+    template <typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7>
+    static SQInteger iNew(HSQUIRRELVM vm) {
+        Var<A1> a1(vm, 2);
+        Var<A2> a2(vm, 3);
+        Var<A3> a3(vm, 4);
+        Var<A4> a4(vm, 5);
+        Var<A5> a5(vm, 6);
+        Var<A6> a6(vm, 7);
+        Var<A7> a7(vm, 8);
+
+#if !defined (SCRAT_NO_ERROR_CHECKING)
+        if (Error::Instance().Occurred(vm)) {
+            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+        }
+#endif
+
+        return setInstance(vm, new C(
+            a1.value,
+            a2.value,
+            a3.value,
+            a4.value,
+            a5.value,
+            a6.value,
+            a7.value
+            ));
+    }
+    template <typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8>
+    static SQInteger iNew(HSQUIRRELVM vm) {
+        Var<A1> a1(vm, 2);
+        Var<A2> a2(vm, 3);
+        Var<A3> a3(vm, 4);
+        Var<A4> a4(vm, 5);
+        Var<A5> a5(vm, 6);
+        Var<A6> a6(vm, 7);
+        Var<A7> a7(vm, 8);
+        Var<A8> a8(vm, 9);
+
+#if !defined (SCRAT_NO_ERROR_CHECKING)
+        if (Error::Instance().Occurred(vm)) {
+            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+        }
+#endif
+
+        return setInstance(vm, new C(
+            a1.value,
+            a2.value,
+            a3.value,
+            a4.value,
+            a5.value,
+            a6.value,
+            a7.value,
+            a8.value
+            ));
+    }
+    template <typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8,typename A9>
+    static SQInteger iNew(HSQUIRRELVM vm) {
+        Var<A1> a1(vm, 2);
+        Var<A2> a2(vm, 3);
+        Var<A3> a3(vm, 4);
+        Var<A4> a4(vm, 5);
+        Var<A5> a5(vm, 6);
+        Var<A6> a6(vm, 7);
+        Var<A7> a7(vm, 8);
+        Var<A8> a8(vm, 9);
+        Var<A9> a9(vm, 10);
+
+#if !defined (SCRAT_NO_ERROR_CHECKING)
+        if (Error::Instance().Occurred(vm)) {
+            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+        }
+#endif
+
+        return setInstance(vm, new C(
+            a1.value,
+            a2.value,
+            a3.value,
+            a4.value,
+            a5.value,
+            a6.value,
+            a7.value,
+            a8.value,
+            a9.value
+            ));
+    }
+    /// @endcond
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Called by Sqrat to set up the instance at idx on the stack as a copy of a value of the same type (not used in this allocator)
+    ///
+    /// \param vm    VM that has an instance object of the correct type at idx
+    /// \param idx   Index of the stack that the instance object is at
+    /// \param value A pointer to data of the same type as the instance object
+    ///
+    /// \return Squirrel error code
+    ///
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    static SQInteger Copy(HSQUIRRELVM vm, SQInteger idx, const void* value) {
+        return 0;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Called by Sqrat to delete an instance's data
+    ///
+    /// \param ptr  Pointer to the data contained by the instance
+    /// \param size Size of the data contained by the instance
+    ///
+    /// \return Squirrel error code
+    ///
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     static SQInteger Delete(SQUserPointer ptr, SQInteger size) {
         C* instance = reinterpret_cast<C*>(ptr);
         delete instance;
