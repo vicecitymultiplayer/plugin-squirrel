@@ -4,7 +4,7 @@
 #include "CCore.h"
 #include "main.h"
 
-inline bool Boolify( unsigned int n ) { return ( n == 1 ? true : false ); }
+inline bool Boolify( unsigned int n ) { return ( n ? true : false ); }
 
 // The core
 extern CCore * pCore;
