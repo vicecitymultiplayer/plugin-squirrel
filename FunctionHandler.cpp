@@ -1002,7 +1002,7 @@ int BindKey( bool onKeyDown, int key, int key2, int key3 )
 	return keyslot;
 }
 
-bool RemoveKeybind( int nKeybindId ) { return functions->RemoveKeyBind( nKeybindId ); }
+bool RemoveKeybind( int nKeybindId ) { return (functions->RemoveKeyBind( nKeybindId ) ? true : false); }
 void RemoveAllKeybinds( void ) { functions->RemoveAllKeyBinds(); }
 
 void ReloadScripts( void )
@@ -1595,12 +1595,12 @@ void CreateRadioStreamWithID(int streamID, const char * radioName, const char * 
 	functions->AddRadioStream(streamID, radioName, radioURL, bCanSelect);
 }
 
-bool SetWeaponDataValue   ( int weaponID, int fieldID, double value ) { return functions->SetWeaponDataValue( weaponID, fieldID, value ); }
-double GetWeaponDataValue ( int weaponID, int fieldID ) { return functions->GetWeaponDataValue( weaponID, fieldID ); }
-bool ResetWeaponDataValue ( int weaponID, int fieldID ) { return functions->ResetWeaponDataValue( weaponID, fieldID ); }
-bool IsWeaponDataModified ( int weaponID, int fieldID ) { return functions->IsWeaponDataValueModified( weaponID, fieldID ); }
-bool ResetWeaponData      ( int weaponID ) { return functions->ResetWeaponData( weaponID ); }
-bool ResetAllWeaponData   () { return functions->ResetAllWeaponData(); }
+bool SetWeaponDataValue   ( int weaponID, int fieldID, double value ) { return (functions->SetWeaponDataValue( weaponID, fieldID, value ) ? true : false); }
+double GetWeaponDataValue ( int weaponID, int fieldID ) { return (functions->GetWeaponDataValue( weaponID, fieldID ) ? true : false); }
+bool ResetWeaponDataValue ( int weaponID, int fieldID ) { return (functions->ResetWeaponDataValue( weaponID, fieldID ) ? true : false); }
+bool IsWeaponDataModified ( int weaponID, int fieldID ) { return (functions->IsWeaponDataValueModified( weaponID, fieldID ) ? true : false); }
+bool ResetWeaponData      ( int weaponID ) { return (functions->ResetWeaponData( weaponID ) ? true : false); }
+bool ResetAllWeaponData   () { return (functions->ResetAllWeaponData() ? true : false); }
 
 SQInteger release_hook( SQUserPointer p, SQInteger size ) { return 1; }
 SQInteger FindPlayer( HSQUIRRELVM v )
