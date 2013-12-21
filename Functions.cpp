@@ -74,7 +74,8 @@ void RegisterGlobals()
 		.Func( _SC("GetJoinMessages"), EnabledJoinMessages, 1, _SC("t" ) )
 		.Func( _SC("GetDeathMessages"), EnabledDeathMessages, 1, _SC("t" ) )
 
-		.Func( _SC("CreateRadioStream"), CreateRadioStream, 4, _SC("tssb") )
+		.Overload( _SC("CreateRadioStream"), CreateRadioStreamWithID )
+		.Overload( _SC("CreateRadioStream"), CreateRadioStream )
 		.Func( _SC("DestroyRadioStream"), DestroyRadioStream, 2, _SC("ti") )
 
 		.Func( _SC("CreateMarker"), CreateBlip, 6, _SC("tixixi") )

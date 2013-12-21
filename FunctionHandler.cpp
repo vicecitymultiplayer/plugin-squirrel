@@ -1585,10 +1585,14 @@ int CreateBlip( int world, Vector * pos, int scale, RGBa color, int nSpriteId )
 	return functions->CreateCoordBlip( -1, world, pos->x, pos->y, pos->z, scale, color.toUInt(), nSpriteId );
 }
 
-void DestroyRadioStream( int radioID ) { functions->RemoveRadioStream( radioID ); }
-int CreateRadioStream( const char * radioName, const char * radioURL, bool bCanSelect )
+void DestroyRadioStream(int radioID) { functions->RemoveRadioStream(radioID); }
+int CreateRadioStream(const char * radioName, const char * radioURL, bool bCanSelect)
 {
-	return functions->AddRadioStream( -1, radioName, radioURL, bCanSelect );
+	return functions->AddRadioStream(-1, radioName, radioURL, bCanSelect);
+}
+void CreateRadioStreamWithID(int streamID, const char * radioName, const char * radioURL, bool bCanSelect)
+{
+	functions->AddRadioStream(streamID, radioName, radioURL, bCanSelect);
 }
 
 bool SetWeaponDataValue   ( int weaponID, int fieldID, double value ) { return functions->SetWeaponDataValue( weaponID, fieldID, value ); }

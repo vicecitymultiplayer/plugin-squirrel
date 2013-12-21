@@ -88,7 +88,8 @@ bool EnabledChatTagDefault   ( void );
 int CreateBlip( int world, Vector * pos, int scale, RGBa color, int nSpriteId );
 void DestroyBlip( int blipID );
 
-int CreateRadioStream( const char * radioName, const char * radioURL, bool bCanSelect );
+int CreateRadioStream(const char * radioName, const char * radioURL, bool bCanSelect);
+void CreateRadioStreamWithID(int radioID, const char * radioName, const char * radioURL, bool bCanSelect);
 void DestroyRadioStream( int radioID );
 
 void CreateExplosion ( int world, int type, Vector * pos, int playerCaused, bool onGround );
