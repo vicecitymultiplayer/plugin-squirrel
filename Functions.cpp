@@ -89,9 +89,7 @@ void RegisterGlobals()
 
 		.Func( _SC("SetUseClasses"), SetUseClasses )
 		.Func( _SC("UsingClasses"), UsingClasses )
-
-		.Overload( _SC("AddClass"), AddClass )
-		.Overload( _SC("AddClass"), AddClassExpanded )
+		.Func( _SC("AddClass"), AddClass )
 
 		.Overload( _SC("SetSpawnPlayerPos"), SetSpawnPlayerPos )
 		.Overload( _SC("SetSpawnCameraPos"), SetSpawnCameraPos )
