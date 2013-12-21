@@ -135,7 +135,7 @@ void RegisterTimer()
 
 	// Functions
 	c
-		.Func( _SC("Delete"), &CTimer::Delete, 1, "x" );
+		.Func( _SC("Delete"), &CTimer::Delete );
 
 	// Freely editable variables
 	c
