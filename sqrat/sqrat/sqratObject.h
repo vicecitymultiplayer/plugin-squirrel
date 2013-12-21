@@ -71,9 +71,7 @@ public:
     virtual ~Object() {
         if(release) {
             Release();
-            release = false;
         }
-
     }
 
     Object& operator=(const Object& so) {
@@ -117,7 +115,6 @@ public:
 
     void Release() {
         sq_release(vm, &obj);
-        sq_resetobject(&obj);
     }
 
     SQUserPointer GetInstanceUP(SQUserPointer tag = NULL) const {
@@ -132,8 +129,6 @@ public:
         HSQOBJECT slotObj;
         sq_pushobject(vm, GetObject());
         sq_pushstring(vm, slot, -1);
-
-#if !defined (SCRAT_NO_ERROR_CHECKING)
         if(SQ_FAILED(sq_get(vm, -2))) {
             sq_pop(vm, 1);
             return Object(vm); // Return a NULL object
@@ -143,13 +138,6 @@ public:
             sq_pop(vm, 2);
             return ret;
         }
-#else
-        sq_get(vm, -2);
-        sq_getstackobj(vm, -1, &slotObj);
-        Object ret(slotObj, vm); // must addref before the pop!
-        sq_pop(vm, 2);
-        return ret;
-#endif
     }
 
     template <class T>
@@ -164,8 +152,6 @@ public:
         HSQOBJECT slotObj;
         sq_pushobject(vm, GetObject());
         sq_pushinteger(vm, index);
-
-#if !defined (SCRAT_NO_ERROR_CHECKING)
         if(SQ_FAILED(sq_get(vm, -2))) {
             sq_pop(vm, 1);
             return Object(vm); // Return a NULL object
@@ -175,13 +161,6 @@ public:
             sq_pop(vm, 2);
             return ret;
         }
-#else
-        sq_get(vm, -2);
-        sq_getstackobj(vm, -1, &slotObj);
-        Object ret(slotObj, vm); // must addref before the pop!
-        sq_pop(vm, 2);
-        return ret;
-#endif
     }
 
     template <class T>
@@ -197,7 +176,7 @@ public:
         sq_pop(vm, 1);
         return ret;
     }
-
+    
     template <class C>
     Object& SetReleaseHook(){
         sq_pushobject(vm, GetObject());
@@ -205,7 +184,7 @@ public:
         sq_pop(vm, 1);
         return *this;
     }
-
+       
     struct iterator
     {
         friend class Object;
@@ -220,7 +199,7 @@ public:
         HSQOBJECT getKey() { return Key; }
         HSQOBJECT getValue() { return Value; }
     private:
-
+        
         HSQOBJECT Key;
         HSQOBJECT Value;
         SQInteger Index;
@@ -243,8 +222,8 @@ public:
             sq_pop(vm,2);
             return false;
         }
-    }
-
+    }    
+    
 protected:
     // Bind a function and it's associated Squirrel closure to the object
     inline void BindFunc(const SQChar* name, void* method, size_t methodSize, SQFUNCTION func, bool staticVar = false) {
