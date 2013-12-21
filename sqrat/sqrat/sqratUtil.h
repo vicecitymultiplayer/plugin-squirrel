@@ -38,7 +38,7 @@ typedef std::basic_string<SQChar> string;
 
 #ifdef SQUNICODE
 
-/* from http://stackoverflow.com/questions/15333259/c-stdwstring-to-stdstring-quick-and-dirty-conversion-for-use-as-key-in, 
+/* from http://stackoverflow.com/questions/15333259/c-stdwstring-to-stdstring-quick-and-dirty-conversion-for-use-as-key-in,
    only works for ASCII chars */
 /**
 * Convert a std::string into a std::wstring
@@ -76,44 +76,7 @@ public:
     }
 };
 
-class ErrorHandling {
-private:
-    static bool& errorHandling() {
-        static bool eh = true;
-        return eh;
-    }
-public:
-    static bool IsEnabled() {
-        return errorHandling();
-    }
-    static void Enable(bool enable) {
-        errorHandling() = enable;
-    }
-};
-
-class Exception {
-public:
-    Exception(const string& msg) : message(msg) {}
-    Exception(const Exception& ex) : message(ex.message) {}
-
-    const string Message() const {
-        return message;
-    }
-
-private:
-    string message;
-};
-
-inline string LastErrorString( HSQUIRRELVM vm ) {
-    const SQChar* sqErr;
-    sq_getlasterror(vm);
-    if(sq_gettype(vm, -1) == OT_NULL) {
-        return string();
-    }
-    sq_tostring(vm, -1);
-    sq_getstring(vm, -1, &sqErr);
-    return string(sqErr);
-}
+#if !defined (SCRAT_NO_ERROR_CHECKING)
 class Error {
 public:
     static Error& Instance() {
@@ -159,6 +122,243 @@ private:
     Error() {}
 
     std::map< HSQUIRRELVM, string > errMap;
+};
+#endif
+
+class ErrorHandling {
+private:
+    static bool& errorHandling() {
+        static bool eh = true;
+        return eh;
+    }
+public:
+    static bool IsEnabled() {
+        return errorHandling();
+    }
+    static void Enable(bool enable) {
+        errorHandling() = enable;
+    }
+};
+
+inline string LastErrorString( HSQUIRRELVM vm ) {
+    const SQChar* sqErr;
+    sq_getlasterror(vm);
+    if(sq_gettype(vm, -1) == OT_NULL) {
+        return string();
+    }
+    sq_tostring(vm, -1);
+    sq_getstring(vm, -1, &sqErr);
+    return string(sqErr);
+}
+
+template <class T>
+class SharedPtr
+{
+private:
+    T*            m_Ptr;
+    unsigned int* m_RefCount;
+public:
+    SharedPtr()
+    {
+        Init(NULL);
+    }
+    SharedPtr(T* ptr)
+    {
+        Init(ptr);
+    }
+    template <class U>
+    SharedPtr(U* ptr)
+    {
+        Init(m_Ptr);
+    }
+    SharedPtr(const SharedPtr<T>& copy)
+    {
+        if (copy.Get() != NULL)
+        {
+            m_Ptr = copy.Get();
+
+            m_RefCount = copy.m_RefCount;
+            *m_RefCount += 1;
+        }
+        else
+        {
+            m_Ptr      = NULL;
+            m_RefCount = NULL;
+        }
+    }
+    template <class U>
+    SharedPtr(const SharedPtr<U>& copy)
+    {
+        if (copy.Get() != NULL)
+        {
+            m_Ptr = static_cast<T*>(copy.Get());
+
+            m_RefCount = copy.m_RefCount;
+            *m_RefCount += 1;
+        }
+        else
+        {
+            m_Ptr      = NULL;
+            m_RefCount = NULL;
+        }
+    }
+    ~SharedPtr()
+    {
+        Reset();
+    }
+    SharedPtr<T>& operator=(const SharedPtr<T>& copy)
+    {
+        if (this != &copy)
+        {
+            Reset();
+
+            if (copy.Get() != NULL)
+            {
+                m_Ptr = copy.Get();
+
+                m_RefCount = copy.m_RefCount;
+                *m_RefCount += 1;
+            }
+            else
+            {
+                m_Ptr      = NULL;
+                m_RefCount = NULL;
+            }
+        }
+
+        return *this;
+    }
+    template <class U>
+    SharedPtr<T>& operator=(const SharedPtr<U>& copy)
+    {
+        Reset();
+
+        if (copy.Get() != NULL)
+        {
+            m_Ptr = static_cast<T*>(copy.Get());
+
+            m_RefCount = copy.m_RefCount;
+            *m_RefCount += 1;
+        }
+        else
+        {
+            m_Ptr      = NULL;
+            m_RefCount = NULL;
+        }
+
+        return *this;
+    }
+    void Init(T* ptr)
+    {
+        Reset();
+
+        m_Ptr = ptr;
+
+        m_RefCount = new unsigned int;
+        *m_RefCount = 1;
+    }
+    template <class U>
+    void Init(U* ptr)
+    {
+        Reset();
+
+        m_Ptr = static_cast<T*>(ptr);
+
+        m_RefCount = new unsigned int;
+        *m_RefCount = 1;
+    }
+    void Reset()
+    {
+        if (m_Ptr != NULL)
+        {
+            if (*m_RefCount == 1)
+            {
+                delete m_Ptr;
+                delete m_RefCount;
+
+                m_Ptr      = NULL;
+                m_RefCount = NULL;
+            }
+            else
+                *m_RefCount -= 1;
+        }
+    }
+    bool operator!() const
+    {
+        return m_Ptr == NULL;
+    }
+    template <typename U>
+    bool operator ==(const SharedPtr<U>& right) const
+    {
+        return m_Ptr == right.m_Ptr;
+    }
+    bool operator ==(const SharedPtr<T>& right) const
+    {
+        return m_Ptr == right.m_Ptr;
+    }
+    template <typename U>
+    bool friend operator ==(const SharedPtr<T>& left, const U* right)
+    {
+        return left.m_Ptr == right;
+    }
+    bool friend operator ==(const SharedPtr<T>& left, const T* right)
+    {
+        return left.m_Ptr == right;
+    }
+    template <typename U>
+    bool friend operator ==(const U* left, const SharedPtr<T>& right)
+    {
+        return left == right.m_Ptr;
+    }
+    bool friend operator ==(const T* left, const SharedPtr<T>& right)
+    {
+        return left == right.m_Ptr;
+    }
+    template <typename U>
+    bool operator !=(const SharedPtr<U>& right) const
+    {
+        return m_Ptr != right.m_Ptr;
+    }
+    bool operator !=(const SharedPtr<T>& right) const
+    {
+        return m_Ptr != right.m_Ptr;
+    }
+    template <typename U>
+    bool friend operator !=(const SharedPtr<T>& left, const U* right)
+    {
+        return left.m_Ptr != right;
+    }
+    bool friend operator !=(const SharedPtr<T>& left, const T* right)
+    {
+        return left.m_Ptr != right;
+    }
+    template <typename U>
+    bool friend operator !=(const U* left, const SharedPtr<T>& right)
+    {
+        return left != right.m_Ptr;
+    }
+    bool friend operator !=(const T* left, const SharedPtr<T>& right)
+    {
+        return left != right.m_Ptr;
+    }
+    T& operator*() const
+    {
+        assert(m_Ptr != NULL);
+        return *m_Ptr;
+    }
+    T* operator->() const
+    {
+        assert(m_Ptr != NULL);
+        return m_Ptr;
+    }
+    operator bool() const
+    {
+        return m_Ptr != NULL;
+    }
+    T* Get() const
+    {
+        return m_Ptr;
+    }
 };
 
 }

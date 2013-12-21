@@ -594,9 +594,10 @@ void OnNameChangeable( char * playerName, char ** namePtr )
 		{
 			if (!callback.IsNull())
 			{
-				char * name = callback.Evaluate<char *, char *>(playerName);
-				if (name && strlen(name) > 0)
-					namePtr = &name;
+				Sqrat::SharedPtr<char *> name = callback.Evaluate<char *, char *>(playerName);
+				char ** realName = name.Get();
+				if (name && strlen(*realName) > 0)
+					namePtr = realName;
 			}
 		}
 		catch (Sqrat::Error e)

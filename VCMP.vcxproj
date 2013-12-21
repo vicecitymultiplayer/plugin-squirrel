@@ -205,7 +205,6 @@
     <ClInclude Include="sqrat\sqrat\sqratClass.h" />
     <ClInclude Include="sqrat\sqrat\sqratClassType.h" />
     <ClInclude Include="sqrat\sqrat\sqratConst.h" />
-    <ClInclude Include="sqrat\sqrat\sqratext_Ref.h" />
     <ClInclude Include="sqrat\sqrat\sqratFunction.h" />
     <ClInclude Include="sqrat\sqrat\sqratGlobalMethods.h" />
     <ClInclude Include="sqrat\sqrat\sqratMemberMethods.h" />
