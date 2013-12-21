@@ -96,11 +96,6 @@ void OnPlayerConnect( int nPlayerId )
 	if (pCore != nullptr)
 	{
 		CPlayer * newPlayer = pCore->AllocatePlayer(nPlayerId);
-		printf(".1>%p\n", newPlayer);
-		printf(".2>%p\n", pCore->RetrievePlayer(nPlayerId));
-		printf(".3>%p\n", newPlayer);
-		printf(".4>%p\n", pCore->RetrievePlayer(nPlayerId));
-
 		Function callback = RootTable().GetFunction(_SC("onPlayerJoin"));
 		try
 		{
@@ -146,8 +141,6 @@ int OnPlayerRequestClass( int nPlayerId, int nOffset )
 	if (pCore != nullptr)
 	{
 		CPlayer * playerInstance = pCore->RetrievePlayer(nPlayerId);
-		printf("%d %p %p %p %p\n", nPlayerId, pCore, pCore->RetrievePlayer(0), pCore->RetrievePlayer(nPlayerId), playerInstance);
-
 		Function callback = RootTable().GetFunction(_SC("onPlayerRequestClass"));
 		int returnValue = 1;
 
