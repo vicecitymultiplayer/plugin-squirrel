@@ -199,7 +199,7 @@ int  GetPlayerIDFromName( const SQChar* name ) { return functions->GetPlayerIDFr
 CVehicle * CreateVehicle( int model, int world, Vector * pos, float angle, int col1, int col2 )
 {
 	int vId = functions->CreateVehicle( model, world, pos->x, pos->y, pos->z, angle, col1, col2 );
-	if (vId < 0)
+	if (vId < 1)
 		return nullptr;
 	else
 		return pCore->AllocateVehicle(vId);
@@ -207,7 +207,7 @@ CVehicle * CreateVehicle( int model, int world, Vector * pos, float angle, int c
 
 CPickup * CreatePickup( int model, int world, int quantity, Vector * pos, int alpha, bool isAuto )
 {
-	int pId = functions->CreatePickup( model, world, quantity, pos->x, pos->y, pos->z, alpha, isAuto );
+	int pId = functions->CreatePickup(model, world, quantity, pos->x, pos->y, pos->z, alpha, isAuto);
 	if (pId < 0)
 		return nullptr;
 	else
