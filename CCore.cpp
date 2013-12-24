@@ -455,7 +455,6 @@ CPlayer * CCore::AllocatePlayer(int gPlayerId)
 
 CObject * CCore::AllocateObject(int gObjectId, bool isOurs)
 {
-	gObjectId--;
 	if (gObjectId < 0 || gObjectId > MAX_OBJECTS - 1)
 		return nullptr;
 	else if (functions->GetObjectModel(gObjectId) < 1)
@@ -472,7 +471,6 @@ CObject * CCore::AllocateObject(int gObjectId, bool isOurs)
 
 CPickup * CCore::AllocatePickup(int gPickupId, bool isOurs)
 {
-	gPickupId--;
 	if (gPickupId < 0 || gPickupId > MAX_PICKUPS - 1)
 		return nullptr;
 	else if (functions->PickupGetModel(gPickupId) < 1)
@@ -506,7 +504,6 @@ CVehicle * CCore::AllocateVehicle(int gVehicleId, bool isOurs)
 
 void CCore::DereferenceObject(int gObjectId)
 {
-	gObjectId--;
 	if (gObjectId < 0 || gObjectId > MAX_OBJECTS - 1)
 		return;
 	else if (this->objectMap[gObjectId] == nullptr)
@@ -522,7 +519,6 @@ void CCore::DereferenceObject(int gObjectId)
 
 void CCore::DereferencePickup(int gPickupId)
 {
-	gPickupId--;
 	if (gPickupId < 0 || gPickupId > MAX_PICKUPS - 1)
 		return;
 	else if (this->pickupMap[gPickupId] == nullptr)
@@ -569,7 +565,6 @@ void CCore::DereferenceVehicle(int gVehicleId)
 
 CObject * CCore::RetrieveObject(int gObjectId)
 {
-	gObjectId--;
 	if (gObjectId < 0 || gObjectId > MAX_OBJECTS - 1)
 		return nullptr;
 
@@ -578,7 +573,6 @@ CObject * CCore::RetrieveObject(int gObjectId)
 
 CPickup * CCore::RetrievePickup(int gPickupId)
 {
-	gPickupId--;
 	if (gPickupId < 0 || gPickupId > MAX_PICKUPS - 1)
 		return nullptr;
 
