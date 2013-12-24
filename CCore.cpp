@@ -373,7 +373,7 @@ bool CCore::ParseConfigLine( char * lineBuffer )
 			sprintf( buf, "Could not load script '%s'", gamemodeSearch );
 
 			OutputWarning( buf );
-			OutputWarning( e.Message(Sqrat::DefaultVM::Get()).c_str() );
+			OutputWarning( e.Message().c_str() );
 
 			return false;
 		}
