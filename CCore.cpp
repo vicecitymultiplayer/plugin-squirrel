@@ -116,41 +116,29 @@ void CCore::ScanForEntities()
 	unsigned int i;
 	for( i = 0; i < MAX_VEHICLES; i++ )
 	{
-		if( functions->GetVehicleModel( i ) > 0 )
-		{
-			this->vehicleMap[i] = new CVehicle;
-			this->vehicleMap[i]->Init( i, false );
-		}
+		if (functions->GetVehicleModel(i) > 0)
+			this->AllocateVehicle(i, false);
 	}
 
 	// Scan for pickups
 	for( i = 0; i < MAX_PICKUPS; i++ )
 	{
-		if( functions->PickupGetModel( i ) > 0 )
-		{
-			this->pickupMap[i] = new CPickup;
-			this->pickupMap[i]->Init( i, false );
-		}
+		if (functions->PickupGetModel(i) > 0)
+			this->AllocatePickup(i, false);
 	}
 
 	// Scan for objects
 	for( i = 0; i < MAX_OBJECTS; i++ )
 	{
-		if( functions->GetObjectModel( i ) > 0 )
-		{
-			this->objectMap[i] = new CObject;
-			this->objectMap[i]->Init( i, false );
-		}
+		if (functions->GetObjectModel(i) > 0)
+			this->AllocateObject(i, false);
 	}
 
 	// Scan for players
 	for( i = 0; i < MAX_PLAYERS; i++ )
 	{
-		if( functions->IsPlayerConnected( i ) )
-		{
-			this->playerMap[i] = new CPlayer;
-			this->playerMap[i]->nPlayerId = i;
-		}
+		if (functions->IsPlayerConnected(i))
+			this->AllocatePlayer(i);
 	}
 }
 
@@ -487,7 +475,6 @@ CPickup * CCore::AllocatePickup(int gPickupId, bool isOurs)
 
 CVehicle * CCore::AllocateVehicle(int gVehicleId, bool isOurs)
 {
-	gVehicleId--;
 	if (gVehicleId < 0 || gVehicleId > MAX_VEHICLES - 1)
 		return nullptr;
 	else if (functions->GetVehicleModel(gVehicleId) < 1)
@@ -498,7 +485,7 @@ CVehicle * CCore::AllocateVehicle(int gVehicleId, bool isOurs)
 	CVehicle * pVehicle = new CVehicle();
 	pVehicle->Init(gVehicleId, isOurs);
 
-	this->vehicleMap[pVehicle->nVehicleId] = pVehicle;
+	this->vehicleMap[pVehicle->nVehicleId - 1] = pVehicle;
 	return pVehicle;
 }
 
