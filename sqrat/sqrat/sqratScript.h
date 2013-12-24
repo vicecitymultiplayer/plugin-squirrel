@@ -38,102 +38,37 @@ namespace Sqrat {
 
 class Script : public Object {
 public:
-    Script(HSQUIRRELVM v = DefaultVM::Get()) : Object(v, true) {
+    Script(HSQUIRRELVM v = DefaultVM::Get()) : Object(v, false) {
     }
 
-    void CompileString(const string& script) {
-        if(!sq_isnull(obj)) {
-            sq_release(vm, &obj);
-            sq_resetobject(&obj);
-        }
-        if(SQ_FAILED(sq_compilebuffer(vm, script.c_str(), static_cast<SQInteger>(script.size() /** sizeof(SQChar)*/), _SC(""), true))) {
-            Error::Instance().Throw(vm, LastErrorString(vm));
-            return;
+    void CompileString(const SQChar * script) {
+        if(SQ_FAILED(sq_compilebuffer(vm, script, static_cast<SQInteger>(sizeof(script) * sizeof(SQChar)), _SC(""), true))) {
+            throw Exception(LastErrorString(vm));
         }
         sq_getstackobj(vm,-1,&obj);
-        sq_addref(vm, &obj);
-        sq_pop(vm, 1);
     }
 
-    bool CompileString(const string& script, string& errMsg) {
-        if(!sq_isnull(obj)) {
-            sq_release(vm, &obj);
-            sq_resetobject(&obj);
-        }
-        if(SQ_FAILED(sq_compilebuffer(vm, script.c_str(), static_cast<SQInteger>(script.size() /** sizeof(SQChar)*/), _SC(""), true))) {
-            errMsg = LastErrorString(vm);
-            return false;
+    void CompileFile(const SQChar * path) {
+        if(SQ_FAILED(sqstd_loadfile(vm, path, true))) {
+            throw Exception(LastErrorString(vm));
         }
         sq_getstackobj(vm,-1,&obj);
-        sq_addref(vm, &obj);
-        sq_pop(vm, 1);
-        return true;
-    }
-
-    void CompileFile(const string& path) {
-        if(!sq_isnull(obj)) {
-            sq_release(vm, &obj);
-            sq_resetobject(&obj);
-        }
-        if(SQ_FAILED(sqstd_loadfile(vm, path.c_str(), true))) {
-            Error::Instance().Throw(vm, LastErrorString(vm));
-            return;
-        }
-        sq_getstackobj(vm,-1,&obj);
-        sq_addref(vm, &obj);
-        sq_pop(vm, 1);
-    }
-
-    bool CompileFile(const string& path, string& errMsg) {
-        if(!sq_isnull(obj)) {
-            sq_release(vm, &obj);
-            sq_resetobject(&obj);
-        }
-        if(SQ_FAILED(sqstd_loadfile(vm, path.c_str(), true))) {
-            errMsg = LastErrorString(vm);
-            return false;
-        }
-        sq_getstackobj(vm,-1,&obj);
-        sq_addref(vm, &obj);
-        sq_pop(vm, 1);
-        return true;
     }
 
     void Run() {
         if(!sq_isnull(obj)) {
-            SQRESULT result;
             sq_pushobject(vm, obj);
             sq_pushroottable(vm);
-            result = sq_call(vm, 1, false, true);
-            sq_pop(vm, 1);
-            if(SQ_FAILED(result)) {
-                Error::Instance().Throw(vm, LastErrorString(vm));
-                return;
+            if(SQ_FAILED(sq_call(vm, 1, false, true))) {
+                throw Exception(LastErrorString(vm));
             }
         }
     }
-
-    bool Run(string& errMsg) {
-        if(!sq_isnull(obj)) {
-            SQRESULT result;
-            sq_pushobject(vm, obj);
-            sq_pushroottable(vm);
-            result = sq_call(vm, 1, false, true);
-            sq_pop(vm, 1);
-            if(SQ_FAILED(result)) {
-                errMsg = LastErrorString(vm);
-                return false;
-            }
-        }
-        return true;
-    }
-
 
     void WriteCompiledFile(const string& path) {
         if(!sq_isnull(obj)) {
             sq_pushobject(vm, obj);
             sqstd_writeclosuretofile(vm, path.c_str());
-            //sq_pop(vm, 1);  // needed?
         }
     }
 };
