@@ -37,7 +37,7 @@ int OnInitServer()
 		if (!callback.IsNull())
 			callback();
 	}
-	catch (Sqrat::Error e)
+	catch (Sqrat::Exception e)
 	{
 		OutputWarning("onServerStart failed to execute -- check the console for more details.");
 	}
@@ -61,7 +61,7 @@ void OnShutdownServer()
 			if (!callback.IsNull())
 				callback();
 		}
-		catch (Sqrat::Error e)
+		catch (Sqrat::Exception e)
 		{
 			OutputWarning("onServerStop failed to execute -- check the console for more details.");
 		}
@@ -74,7 +74,7 @@ void OnShutdownServer()
 			if (!callback.IsNull())
 				callback();
 		}
-		catch (Sqrat::Error e)
+		catch (Sqrat::Exception e)
 		{
 			OutputWarning("onScriptUnload failed to execute -- check the console for more details.");
 		}
@@ -102,7 +102,7 @@ void OnPlayerConnect( int nPlayerId )
 			if (!callback.IsNull())
 				callback.Execute<CPlayer *>(newPlayer);
 		}
-		catch (Sqrat::Error e)
+		catch (Sqrat::Exception e)
 		{
 			OutputWarning("onPlayerJoin failed to execute -- check the console for more details.");
 		}
@@ -123,7 +123,7 @@ void OnPlayerDisconnect( int nPlayerId, int nReason )
 			if (!callback.IsNull())
 				callback(playerInstance, nReason);
 		}
-		catch (Sqrat::Error e)
+		catch (Sqrat::Exception e)
 		{
 			OutputWarning("onPlayerPart failed to execute -- check the console for more details.");
 		}
@@ -149,7 +149,7 @@ int OnPlayerRequestClass( int nPlayerId, int nOffset )
 			if (!callback.IsNull())
 				returnValue = callback.Evaluate<int, CPlayer *, int>(playerInstance, nOffset);
 		}
-		catch (Sqrat::Error e)
+		catch (Sqrat::Exception e)
 		{
 			OutputWarning("onPlayerRequestClass failed to execute -- check the console for more details.");
 		}
@@ -174,7 +174,7 @@ int OnPlayerRequestSpawn( int nPlayerId )
 			if (!callback.IsNull())
 				returnValue = callback.Evaluate<int, CPlayer *>(playerInstance);
 		}
-		catch (Sqrat::Error e)
+		catch (Sqrat::Exception e)
 		{
 			OutputWarning("onPlayerRequestSpawn failed to execute -- check the console for more details.");
 		}
@@ -198,7 +198,7 @@ void OnPlayerSpawn( int nPlayerId )
 			if (!callback.IsNull())
 				callback.Execute<CPlayer *>(playerInstance);
 		}
-		catch (Sqrat::Error e)
+		catch (Sqrat::Exception e)
 		{
 			OutputWarning("onPlayerSpawn failed to execute -- check the console for more details.");
 		}
@@ -220,7 +220,7 @@ void OnPlayerDeath( int nPlayerId, int nKillerId, int nReason, int nBodyPart )
 				if (!callback.IsNull())
 					callback.Execute<CPlayer *, int>(playerInstance, nReason);
 			}
-			catch (Sqrat::Error e)
+			catch (Sqrat::Exception e)
 			{
 				OutputWarning("onPlayerDeath failed to execute -- check the console for more details.");
 			}
@@ -241,7 +241,7 @@ void OnPlayerDeath( int nPlayerId, int nKillerId, int nReason, int nBodyPart )
 				if (!callback.IsNull())
 					callback.Execute<CPlayer *, CPlayer *, int, int>(killerInstance, playerInstance, nReason, nBodyPart);
 			}
-			catch (Sqrat::Error e)
+			catch (Sqrat::Exception e)
 			{
 				OutputWarning("onPlayer(Team)Kill failed to execute -- check the console for more details.");
 			}
@@ -265,7 +265,7 @@ int OnPlayerRequestEnter( int nPlayerId, int nVehicleId, int nSlotId )
 			if (!callback.IsNull() && playerInstance != nullptr && vehicleInstance != nullptr)
 				returnValue = callback.Evaluate<int, CPlayer *, CVehicle *, int>(playerInstance, vehicleInstance, nSlotId);
 		}
-		catch (Sqrat::Error e)
+		catch (Sqrat::Exception e)
 		{
 			OutputWarning("onPlayerEnteringVehicle failed to execute -- check the console for more details.");
 		}
@@ -290,7 +290,7 @@ void OnPlayerEnterVehicle( int nPlayerId, int nVehicleId, int nSlotId )
 			if (!callback.IsNull() && playerInstance != nullptr && vehicleInstance != nullptr)
 				callback.Execute<CPlayer *, CVehicle *, int>(playerInstance, vehicleInstance, nSlotId);
 		}
-		catch (Sqrat::Error e)
+		catch (Sqrat::Exception e)
 		{
 			OutputWarning("onPlayerEnterVehicle failed to execute -- check the console for more details.");
 		}
@@ -312,7 +312,7 @@ void OnPlayerExitVehicle( int nPlayerId, int nVehicleId )
 			if (!callback.IsNull())
 				callback.Execute<CPlayer *, CVehicle *>(playerInstance, vehicleInstance);
 		}
-		catch (Sqrat::Error e)
+		catch (Sqrat::Exception e)
 		{
 			OutputWarning("onPlayerExitVehicle failed to execute -- check the console for more details.");
 		}
@@ -335,7 +335,7 @@ int OnPickupClaimPicked( int nPickupId, int nPlayerId )
 			if (!callback.IsNull())
 				returnValue = callback.Evaluate<int, CPlayer *, CPickup *>(playerInstance, pickupInstance);
 		}
-		catch (Sqrat::Error e)
+		catch (Sqrat::Exception e)
 		{
 			OutputWarning("onPickupClaimPicked failed to execute -- check the console for more details.");
 		}
@@ -360,7 +360,7 @@ void OnPickupPickedUp( int nPickupId, int nPlayerId )
 			if (!callback.IsNull())
 				callback.Execute<CPlayer *, CPickup *>(playerInstance, pickupInstance);
 		}
-		catch (Sqrat::Error e)
+		catch (Sqrat::Exception e)
 		{
 			OutputWarning("onPickupPickedUp failed to execute -- check the console for more details.");
 		}
@@ -381,7 +381,7 @@ void OnPickupRespawn( int nPickupId )
 			if (!callback.IsNull())
 				callback.Execute<CPickup *>(pickupInstance);
 		}
-		catch (Sqrat::Error e)
+		catch (Sqrat::Exception e)
 		{
 			OutputWarning("onPickupRespawn failed to execute -- check the console for more details.");
 		}
@@ -402,7 +402,7 @@ void OnVehicleExplode( int nVehicleId )
 			if (!callback.IsNull())
 				callback.Execute<CVehicle *>(vehicleInstance);
 		}
-		catch (Sqrat::Error e)
+		catch (Sqrat::Exception e)
 		{
 			OutputWarning("onVehicleExplode failed to execute -- check the console for more details.");
 		}
@@ -423,7 +423,7 @@ void OnVehicleRespawn( int nVehicleId )
 			if (!callback.IsNull())
 				callback.Execute<CVehicle *>(vehicleInstance);
 		}
-		catch (Sqrat::Error e)
+		catch (Sqrat::Exception e)
 		{
 			OutputWarning("onVehicleRespawn failed to execute -- check the console for more details.");
 		}
@@ -445,7 +445,7 @@ int OnPublicMessage( int nPlayerId, const char* pszText )
 			if (!callback.IsNull())
 				returnValue = callback.Evaluate<int, CPlayer *, const char *>(playerInstance, pszText);
 		}
-		catch (Sqrat::Error e)
+		catch (Sqrat::Exception e)
 		{
 			OutputWarning("onPlayerChat failed to execute -- check the console for more details.");
 		}
@@ -480,7 +480,7 @@ int OnCommandMessage( int nPlayerId, const char* pszText )
 			{
 				returnValue = callback.Evaluate<int>(playerInstance, szText, szArguments);
 			}
-			catch (Sqrat::Error e)
+			catch (Sqrat::Exception e)
 			{
 				OutputWarning("onPlayerCommand failed to execute -- check the console for more details.");
 			}
@@ -509,7 +509,7 @@ int OnPrivateMessage( int nPlayerId, int nTargetId, const char* pszText )
 			if (!callback.IsNull())
 				returnValue = callback.Evaluate<int, CPlayer *, CPlayer *, const char *>(playerInstance, targetInstance, pszText);
 		}
-		catch (Sqrat::Error e)
+		catch (Sqrat::Exception e)
 		{
 			OutputWarning("onPlayerPM failed to execute -- check the console for more details.");
 		}
@@ -532,7 +532,7 @@ void OnPlayerBeginTyping( int nPlayerId )
 			if (!callback.IsNull())
 				callback.Execute<CPlayer *>(playerInstance);
 		}
-		catch (Sqrat::Error e)
+		catch (Sqrat::Exception e)
 		{
 			OutputWarning("onPlayerBeginTyping failed to execute -- check the console for more details.");
 		}
@@ -552,7 +552,7 @@ void OnPlayerEndTyping( int nPlayerId )
 			if (!callback.IsNull())
 				callback.Execute<CPlayer *>(playerInstance);
 		}
-		catch (Sqrat::Error e)
+		catch (Sqrat::Exception e)
 		{
 			OutputWarning("onPlayerEndTyping failed to execute -- check the console for more details.");
 		}
@@ -573,7 +573,7 @@ int OnLoginAttempt( char* playerName, const char* password, const char* pszIpAdd
 			if (!callback.IsNull())
 				returnValue = callback.Evaluate<int, char *, const char *, const char *>(playerName, password, pszIpAddress);
 		}
-		catch (Sqrat::Error e)
+		catch (Sqrat::Exception e)
 		{
 			OutputWarning("onLoginAttempt failed to execute -- check the console for more details.");
 		}
@@ -600,7 +600,7 @@ void OnNameChangeable( char * playerName, char ** namePtr )
 					namePtr = realName;
 			}
 		}
-		catch (Sqrat::Error e)
+		catch (Sqrat::Exception e)
 		{
 			OutputWarning("onNameChangeable failed to execute -- check the console for more details.");
 		}
@@ -634,7 +634,7 @@ void OnVehicleUpdate( int nVehicleId, int nUpdateType )
 					callback.Execute<CVehicle *, float, float>(vehInst, lastHP, hp);
 				}
 			}
-			catch (Sqrat::Error e)
+			catch (Sqrat::Exception e)
 			{
 				OutputWarning("onVehicleHealthChange failed to execute -- check the console for more details.");
 			}
@@ -655,7 +655,7 @@ void OnVehicleUpdate( int nVehicleId, int nUpdateType )
 					callback.Execute<CVehicle *, float, float, float, float, float, float>(vehInst, lastPos.x, lastPos.y, lastPos.z, x, y, z);
 				}
 			}
-			catch (Sqrat::Error e)
+			catch (Sqrat::Exception e)
 			{
 				OutputWarning("onVehicleMove failed to execute -- check the console for more details.");
 			}
@@ -696,7 +696,7 @@ void OnPlayerUpdate( int nPlayerId, int nUpdateType )
 				if (!callback.IsNull())
 					callback(pCore->RetrievePlayer(nPlayerId), lastPos.x, lastPos.y, lastPos.z, x, y, z);
 			}
-			catch (Sqrat::Error e)
+			catch (Sqrat::Exception e)
 			{
 				OutputWarning("onPlayerMove failed to execute -- check the console for more details.");
 			}
@@ -716,7 +716,7 @@ void OnPlayerUpdate( int nPlayerId, int nUpdateType )
 				if (!callback.IsNull())
 					callback(pCore->RetrievePlayer(nPlayerId), lastHP, hp);
 			}
-			catch (Sqrat::Error e)
+			catch (Sqrat::Exception e)
 			{
 				OutputWarning("onPlayerHealthChange failed to execute -- check the console for more details.");
 			}
@@ -734,7 +734,7 @@ void OnPlayerUpdate( int nPlayerId, int nUpdateType )
 				if (!callback.IsNull())
 					callback(pCore->RetrievePlayer(nPlayerId), lastArmour, armour);
 			}
-			catch (Sqrat::Error e)
+			catch (Sqrat::Exception e)
 			{
 				OutputWarning("onPlayerArmourChange failed to execute -- check the console for more details.");
 			}
@@ -752,7 +752,7 @@ void OnPlayerUpdate( int nPlayerId, int nUpdateType )
 				if (!callback.IsNull())
 					callback(pCore->RetrievePlayer(nPlayerId), lastWep, wep);
 			}
-			catch (Sqrat::Error e)
+			catch (Sqrat::Exception e)
 			{
 				OutputWarning("onPlayerWeaponChange failed to execute -- check the console for more details.");
 			}
@@ -775,7 +775,7 @@ void OnObjectShot( int nObjectId, int nPlayerId, int nWeapon )
 			if (!callback.IsNull())
 				callback.Execute<CObject *, CPlayer *, int>(pCore->RetrieveObject(nObjectId), pCore->RetrievePlayer(nPlayerId), nWeapon);
 		}
-		catch (Sqrat::Error e)
+		catch (Sqrat::Exception e)
 		{
 			OutputWarning("onObjectShot failed to execute -- check the console for more details.");
 		}
@@ -794,7 +794,7 @@ void OnObjectBump( int nObjectId, int nPlayerId )
 			if (!callback.IsNull())
 				callback.Execute<CObject *, CPlayer *>(pCore->RetrieveObject(nObjectId), pCore->RetrievePlayer(nPlayerId));
 		}
-		catch (Sqrat::Error e)
+		catch (Sqrat::Exception e)
 		{
 			OutputWarning("onObjectBump failed to execute -- check the console for more details.");
 		}
@@ -847,7 +847,7 @@ void OnKeyBindDown(int nPlayerId, int nBindId)
 			if (!callback.IsNull())
 				callback.Execute<CPlayer *, int>(pCore->RetrievePlayer(nPlayerId), nBindId);
 		}
-		catch (Sqrat::Error e)
+		catch (Sqrat::Exception e)
 		{
 			OutputWarning("onKeyDown failed to execute -- check the console for more details.");
 		}
@@ -866,7 +866,7 @@ void OnKeyBindUp(int nPlayerId, int nBindId)
 			if (!callback.IsNull())
 				callback.Execute<CPlayer *, int>(pCore->RetrievePlayer(nPlayerId), nBindId);
 		}
-		catch (Sqrat::Error e)
+		catch (Sqrat::Exception e)
 		{
 			OutputWarning("onKeyUp failed to execute -- check the console for more details.");
 		}
@@ -885,7 +885,7 @@ void OnPlayerAwayChange(int nPlayerId, unsigned int bNewStatus)
 			if (!callback.IsNull())
 				callback.Execute<CPlayer *, bool>(pCore->RetrievePlayer(nPlayerId), bNewStatus == 1);
 		}
-		catch (Sqrat::Error e)
+		catch (Sqrat::Exception e)
 		{
 			OutputWarning("onPlayerAwayChange failed to execute -- check the console for more details.");
 		}
@@ -904,7 +904,7 @@ void OnPlayerSpectate(int nPlayerId, int nTargetId)
 			if (!callback.IsNull())
 				callback.Execute<CPlayer *, CPlayer *>(pCore->RetrievePlayer(nPlayerId), pCore->RetrievePlayer(nTargetId));
 		}
-		catch (Sqrat::Error e)
+		catch (Sqrat::Exception e)
 		{
 			OutputWarning("onPlayerSpectate failed to execute -- check the console for more details.");
 		}
@@ -923,7 +923,7 @@ void OnPlayerCrashDump(int nPlayerId, const char * szCrashReport)
 			if (!callback.IsNull())
 				callback.Execute<CPlayer *, const SQChar *>(pCore->RetrievePlayer(nPlayerId), szCrashReport);
 		}
-		catch (Sqrat::Error e)
+		catch (Sqrat::Exception e)
 		{
 			OutputWarning("onPlayerCrashDump failed to execute -- check the console for more details.");
 		}

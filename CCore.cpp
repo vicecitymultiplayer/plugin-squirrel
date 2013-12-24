@@ -367,7 +367,7 @@ bool CCore::ParseConfigLine( char * lineBuffer )
 			this->script->CompileFile( gamemodeSearch );
 			this->script->Run();
 		}
-		catch( Sqrat::Error e )
+		catch( Sqrat::Exception e )
 		{
 			char buf[145];
 			sprintf( buf, "Could not load script '%s'", gamemodeSearch );
@@ -386,7 +386,7 @@ bool CCore::ParseConfigLine( char * lineBuffer )
 
 			callback.Release();
 		}
-		catch (Sqrat::Error e)
+		catch (Sqrat::Exception e)
 		{
 			OutputWarning("onScriptLoad failed to execute -- check the console for more details.");
 		}
