@@ -5,18 +5,18 @@
 // Core instance
 extern CCore * pCore;
 
-void CPickup::SetWorld( const int world ) { functions->SetPickupWorld( this->nPickupId, world ); }
-void CPickup::SetAlpha( const int alpha ) { functions->PickupSetAlpha( this->nPickupId, alpha ); }
-void CPickup::SetAuto( const bool automatic ) { functions->PickupSetAutomatic( this->nPickupId, automatic ); }
-void CPickup::SetAutoTimer( const int timer ) { functions->SetPickupAutoTimer( this->nPickupId, timer ); }
-void CPickup::SetPos( const Vector pos ) { functions->PickupSetPos( this->nPickupId, pos.x, pos.y, pos.z ); }
+void CPickup::SetWorld( int world ) { functions->SetPickupWorld( this->nPickupId, world ); }
+void CPickup::SetAlpha( int alpha ) { functions->PickupSetAlpha( this->nPickupId, alpha ); }
+void CPickup::SetAuto( bool automatic ) { functions->PickupSetAutomatic( this->nPickupId, automatic ); }
+void CPickup::SetAutoTimer( int timer ) { functions->SetPickupAutoTimer( this->nPickupId, timer ); }
+void CPickup::SetPos( Vector pos ) { functions->PickupSetPos( this->nPickupId, pos.x, pos.y, pos.z ); }
 
-int CPickup::GetWorld() const { return functions->GetPickupWorld( this->nPickupId ); }
-int CPickup::GetAlpha() const { return functions->PickupGetAlpha(this->nPickupId); }
-bool CPickup::GetAuto() const { return (functions->PickupIsAutomatic(this->nPickupId) == 1 ? true : false); }
-int CPickup::GetAutoTimer() const { return functions->GetPickupAutoTimer(this->nPickupId); }
+int CPickup::GetWorld() { return functions->GetPickupWorld( this->nPickupId ); }
+int CPickup::GetAlpha() { return functions->PickupGetAlpha(this->nPickupId); }
+bool CPickup::GetAuto() { return (functions->PickupIsAutomatic(this->nPickupId) == 1 ? true : false); }
+int CPickup::GetAutoTimer() { return functions->GetPickupAutoTimer(this->nPickupId); }
 
-Vector CPickup::GetPos() const
+Vector CPickup::GetPos()
 {
 	float x, y, z;
 	functions->PickupGetPos( this->nPickupId, &x, &y, &z );
@@ -24,16 +24,16 @@ Vector CPickup::GetPos() const
 	return Vector( x, y, z );
 }
 
-int CPickup::GetModel() const { return functions->PickupGetModel(this->nPickupId); }
-int CPickup::GetQuantity() const { return functions->PickupGetQuantity(this->nPickupId); }
+int CPickup::GetModel() { return functions->PickupGetModel(this->nPickupId); }
+int CPickup::GetQuantity() { return functions->PickupGetQuantity(this->nPickupId); }
 void CPickup::Delete()
 {
 	//PS! this instance will be deleted due to a callback!!!
 	functions->DeletePickup( this->nPickupId );
 }
 
-int CPickup::GetID() const { return this->nPickupId; }
-bool CPickup::StreamedToPlayer(CPlayer * player) const { return (functions->IsPickupStreamedForPlayer(this->nPickupId, player->nPlayerId) == 1 ? true : false); }
+int CPickup::GetID() { return this->nPickupId; }
+bool CPickup::StreamedToPlayer(CPlayer * player) { return (functions->IsPickupStreamedForPlayer(this->nPickupId, player->nPlayerId) == 1 ? true : false); }
 
 void RegisterPickup()
 {

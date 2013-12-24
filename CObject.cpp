@@ -2,14 +2,14 @@
 #include "CPlayer.h"
 #include "main.h"
 
-void CObject::SetWorld( const int world ) { functions->SetObjectWorld( this->nObjectId, world ); }
-void CObject::SetPos( const Vector pos ) { functions->SetObjectPos( this->nObjectId, pos.x, pos.y, pos.z ); }
+void CObject::SetWorld( int world ) { functions->SetObjectWorld( this->nObjectId, world ); }
+void CObject::SetPos( Vector pos ) { functions->SetObjectPos( this->nObjectId, pos.x, pos.y, pos.z ); }
 
-int CObject::GetModel() const { return functions->GetObjectModel( this->nObjectId ); }
-int CObject::GetAlpha() const { return functions->GetObjectAlpha(this->nObjectId); }
-int CObject::GetWorld() const { return functions->GetObjectWorld(this->nObjectId); }
+int CObject::GetModel() { return functions->GetObjectModel( this->nObjectId ); }
+int CObject::GetAlpha() { return functions->GetObjectAlpha(this->nObjectId); }
+int CObject::GetWorld() { return functions->GetObjectWorld(this->nObjectId); }
 
-Vector CObject::GetPos() const
+Vector CObject::GetPos()
 {
 	float x, y, z;
 	functions->GetObjectPos( this->nObjectId, &x, &y, &z );
@@ -18,7 +18,7 @@ Vector CObject::GetPos() const
 	return p;
 }
 
-Quaternion CObject::GetRotation() const
+Quaternion CObject::GetRotation()
 {
 	float w, x, y, z;
 	functions->GetObjectRot( this->nObjectId, &x, &y, &z, &w );
@@ -27,7 +27,7 @@ Quaternion CObject::GetRotation() const
 	return q;
 }
 
-Vector CObject::GetRotationEuler() const
+Vector CObject::GetRotationEuler()
 {
 	float x, y, z;
 	functions->GetObjectRotEuler( this->nObjectId, &x, &y, &z );
@@ -42,39 +42,39 @@ void CObject::Delete()
 	functions->DeleteObject( this->nObjectId );
 }
 
-void CObject::MoveTo( Vector pos, int time ) const
+void CObject::MoveTo( Vector pos, int time )
 {
 	functions->MoveObjectTo( this->nObjectId, pos.x, pos.y, pos.z, time );
 }
 
-void CObject::MoveBy( Vector offset, int time ) const
+void CObject::MoveBy( Vector offset, int time )
 {
 	functions->MoveObjectBy( this->nObjectId, offset.x, offset.y, offset.z, time );
 }
 
-void CObject::RotateTo( Quaternion rotation, int time ) const
+void CObject::RotateTo( Quaternion rotation, int time )
 {
 	functions->RotObjectTo( this->nObjectId, rotation.x, rotation.y, rotation.z, rotation.w, time );
 }
 
-void CObject::RotateBy( Quaternion rotOffset, int time ) const
+void CObject::RotateBy( Quaternion rotOffset, int time )
 {
 	functions->RotObjectBy( this->nObjectId, rotOffset.x, rotOffset.y, rotOffset.z, rotOffset.w, time );
 }
 
-void CObject::RotateToEuler( Vector rotation, int time ) const
+void CObject::RotateToEuler( Vector rotation, int time )
 {
 	functions->RotObjectToEuler( this->nObjectId, rotation.x, rotation.y, rotation.z, time );
 }
 
-void CObject::RotateByEuler( Vector rotOffset, int time ) const
+void CObject::RotateByEuler( Vector rotOffset, int time )
 {
 	functions->RotObjectByEuler( this->nObjectId, rotOffset.x, rotOffset.y, rotOffset.z, time );
 }
 
-void CObject::SetAlpha( int alpha, int fadeTime ) const { functions->SetObjectAlpha( this->nObjectId, alpha, fadeTime ); }
-int CObject::GetID() const { return this->nObjectId; }
-bool CObject::StreamedToPlayer( CPlayer * player ) const
+void CObject::SetAlpha( int alpha, int fadeTime ) { functions->SetObjectAlpha( this->nObjectId, alpha, fadeTime ); }
+int CObject::GetID() { return this->nObjectId; }
+bool CObject::StreamedToPlayer( CPlayer * player )
 {
 	if( player != NULL )
 		return ( functions->IsObjectStreamedForPlayer( this->nObjectId, player->nPlayerId ) == 1 ? true : false );
@@ -82,10 +82,10 @@ bool CObject::StreamedToPlayer( CPlayer * player ) const
 	return false;
 }
 
-void CObject::SetReportingShots( const bool toReport ) { functions->SetObjectShotReport( this->nObjectId, toReport ); }
-void CObject::SetReportingBumps( const bool toReport ) { functions->SetObjectBumpReport( this->nObjectId, toReport ); }
-bool CObject::GetReportingShots() const { return ( functions->IsObjectShotReport( this->nObjectId ) == 1 ? true : false ); }
-bool CObject::GetReportingBumps() const { return ( functions->IsObjectBumpReport( this->nObjectId ) == 1 ? true : false ); }
+void CObject::SetReportingShots( bool toReport ) { functions->SetObjectShotReport( this->nObjectId, toReport ); }
+void CObject::SetReportingBumps( bool toReport ) { functions->SetObjectBumpReport( this->nObjectId, toReport ); }
+bool CObject::GetReportingShots() { return ( functions->IsObjectShotReport( this->nObjectId ) == 1 ? true : false ); }
+bool CObject::GetReportingBumps() { return ( functions->IsObjectBumpReport( this->nObjectId ) == 1 ? true : false ); }
 
 void RegisterObject()
 {

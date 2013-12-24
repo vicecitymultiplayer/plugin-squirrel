@@ -8,25 +8,25 @@ class CPickup
 		void Init( int lnPickupId, bool lIsOurs = true ) { this->isOurs = lIsOurs; this->nPickupId = lnPickupId; }
 
 	public:
-		void SetWorld( const int world );
-		void SetAlpha( const int alpha );
-		void SetAuto( const bool automatic );
-		void SetAutoTimer( const int timer );
-		void SetPos( const Vector pos );
+		void SetWorld( int world );
+		void SetAlpha( int alpha );
+		void SetAuto( bool automatic );
+		void SetAutoTimer( int timer );
+		void SetPos( Vector pos );
 
 	public:
-		int GetWorld() const;
-		int GetAlpha() const;
-		bool GetAuto() const;
-		int GetAutoTimer() const;
-		Vector GetPos() const;
-		int GetModel() const;
-		int GetQuantity() const;
-		int GetID() const;
+		int GetWorld();
+		int GetAlpha();
+		bool GetAuto();
+		int GetAutoTimer();
+		Vector GetPos();
+		int GetModel();
+		int GetQuantity();
+		int GetID();
 
 	public:
 		void Delete();
-		bool StreamedToPlayer( CPlayer * player ) const;
+		bool StreamedToPlayer( CPlayer * player );
 			
 	public:
 		int nPickupId;
