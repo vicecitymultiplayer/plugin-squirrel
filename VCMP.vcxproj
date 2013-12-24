@@ -216,6 +216,7 @@
     <ClInclude Include="sqrat\sqrat\sqratTypes.h" />
     <ClInclude Include="sqrat\sqrat\sqratUtil.h" />
     <ClInclude Include="sqrat\sqrat\sqratVM.h" />
+    <ClInclude Include="UtilStructs.h" />
     <ClInclude Include="VCMP.h" />
   </ItemGroup>
   <ItemGroup>
@@ -231,6 +232,7 @@
     <ClCompile Include="FunctionHandler.cpp" />
     <ClCompile Include="Functions.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="UtilStructs.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="squirrelsrc\sqstdlib\sqstdlib.vcxproj">

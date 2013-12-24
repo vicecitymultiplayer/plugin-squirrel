@@ -96,7 +96,7 @@ CCore::~CCore()
 void CCore::LoadVM()
 {
 	// Initialize the virtual machine
-	v = sq_open( 1024 );
+	v = sq_open( 2048 );
 	sq_setprintfunc( v, printfunc, errorfunc );
 
 	DefaultVM::Set( v );
@@ -450,6 +450,10 @@ CPlayer * CCore::AllocatePlayer(int gPlayerId)
 	pPlayer->nPlayerId = gPlayerId;
 
 	this->playerMap[pPlayer->nPlayerId] = pPlayer;
+	printf("Allocating player ref\n");
+	char * name = new char[64];
+	functions->GetPlayerName(pPlayer->GetID(), name, 64);
+	printf("%d %p %s\n", this->playerMap[gPlayerId]->GetID(), this->playerMap[gPlayerId], name);
 	return pPlayer;
 }
 
@@ -582,6 +586,8 @@ CPlayer * CCore::RetrievePlayer(int gPlayerId)
 	if (gPlayerId < 0 || gPlayerId > MAX_PLAYERS - 1)
 		return nullptr;
 
+	printf("Retrieving player ref\n");
+	printf("%d %p\n", this->playerMap[gPlayerId]->GetID(), this->playerMap[gPlayerId]);
 	return this->playerMap[gPlayerId];
 }
 

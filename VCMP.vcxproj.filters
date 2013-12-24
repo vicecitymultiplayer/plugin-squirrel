@@ -66,6 +66,9 @@
     <ClInclude Include="Functions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="UtilStructs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="sqrat\sqrat.h">
       <Filter>Header Files\Sqrat</Filter>
     </ClInclude>
@@ -159,6 +162,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CallbackHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UtilStructs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -107,7 +107,11 @@ int CPlayer::GetState() const { return functions->GetPlayerState(this->nPlayerId
 SQChar * CPlayer::GetName() const
 {
 	char * name = new char[64];
-	functions->GetPlayerName( this->nPlayerId, name, 64 );
+	printf("%d %s", this->nPlayerId, name);
+	printf(" %d\n", functions->IsPlayerConnected(this->nPlayerId));
+	functions->GetPlayerName(this->nPlayerId, name, 64);
+	printf(" %s", name);
+	printf(" %d\n", functions->IsPlayerConnected(this->nPlayerId));
 
 	return name;
 }
@@ -254,6 +258,14 @@ void CPlayer::SetDrunkLevel(int visuals, int handling) const
 		functions->TogglePlayerDrunkEffects(this->nPlayerId, 1);
 }
 
+const Sqrat::string PlayerToString(CPlayer * p)
+{
+	std::basic_stringstream<SQChar> out;
+	out << p->GetName();
+
+	return out.str();
+}
+
 void RegisterPlayer()
 {
 	Class<CPlayer> c(v);
@@ -343,5 +355,6 @@ void RegisterPlayer()
 		.Func(_SC("Spawn"), &CPlayer::Spawn)
 		.Func(_SC("StreamedToPlayer"), &CPlayer::StreamedToPlayer);
 
+	c.GlobalFunc(_SC("_tostring"), &PlayerToString);
 	RootTable(v).Bind( _SC("CPlayer"), c );
 }
