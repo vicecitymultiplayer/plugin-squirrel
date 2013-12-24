@@ -455,6 +455,7 @@ CPlayer * CCore::AllocatePlayer(int gPlayerId)
 
 CObject * CCore::AllocateObject(int gObjectId, bool isOurs)
 {
+	gObjectId--;
 	if (gObjectId < 0 || gObjectId > MAX_OBJECTS - 1)
 		return nullptr;
 	else if (functions->GetObjectModel(gObjectId) < 1)
@@ -471,6 +472,7 @@ CObject * CCore::AllocateObject(int gObjectId, bool isOurs)
 
 CPickup * CCore::AllocatePickup(int gPickupId, bool isOurs)
 {
+	gPickupId--;
 	if (gPickupId < 0 || gPickupId > MAX_PICKUPS - 1)
 		return nullptr;
 	else if (functions->PickupGetModel(gPickupId) < 1)
@@ -487,6 +489,7 @@ CPickup * CCore::AllocatePickup(int gPickupId, bool isOurs)
 
 CVehicle * CCore::AllocateVehicle(int gVehicleId, bool isOurs)
 {
+	gVehicleId--;
 	if (gVehicleId < 0 || gVehicleId > MAX_VEHICLES - 1)
 		return nullptr;
 	else if (functions->GetVehicleModel(gVehicleId) < 1)
