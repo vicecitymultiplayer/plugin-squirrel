@@ -107,11 +107,7 @@ int CPlayer::GetState() { return functions->GetPlayerState(this->nPlayerId); }
 SQChar * CPlayer::GetName()
 {
 	char * name = new char[64];
-	printf("%d %s", this->nPlayerId, name);
-	printf(" %d\n", functions->IsPlayerConnected(this->nPlayerId));
 	functions->GetPlayerName(this->nPlayerId, name, 64);
-	printf(" %s", name);
-	printf(" %d\n", functions->IsPlayerConnected(this->nPlayerId));
 
 	return name;
 }

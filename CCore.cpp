@@ -450,10 +450,6 @@ CPlayer * CCore::AllocatePlayer(int gPlayerId)
 	pPlayer->nPlayerId = gPlayerId;
 
 	this->playerMap[pPlayer->nPlayerId] = pPlayer;
-	printf("Allocating player ref\n");
-	char * name = new char[64];
-	functions->GetPlayerName(pPlayer->GetID(), name, 64);
-	printf("%d %p %s\n", this->playerMap[gPlayerId]->GetID(), this->playerMap[gPlayerId], name);
 	return pPlayer;
 }
 
@@ -507,6 +503,7 @@ CVehicle * CCore::AllocateVehicle(int gVehicleId, bool isOurs)
 
 void CCore::DereferenceObject(int gObjectId)
 {
+	gObjectId--;
 	if (gObjectId < 0 || gObjectId > MAX_OBJECTS - 1)
 		return;
 	else if (this->objectMap[gObjectId] == nullptr)
@@ -522,6 +519,7 @@ void CCore::DereferenceObject(int gObjectId)
 
 void CCore::DereferencePickup(int gPickupId)
 {
+	gPickupId--;
 	if (gPickupId < 0 || gPickupId > MAX_PICKUPS - 1)
 		return;
 	else if (this->pickupMap[gPickupId] == nullptr)
@@ -552,6 +550,7 @@ void CCore::DereferencePlayer(int gPlayerId)
 
 void CCore::DereferenceVehicle(int gVehicleId)
 {
+	gVehicleId--;
 	if (gVehicleId < 0 || gVehicleId > MAX_VEHICLES - 1)
 		return;
 	else if (this->vehicleMap[gVehicleId] == nullptr)
@@ -567,6 +566,7 @@ void CCore::DereferenceVehicle(int gVehicleId)
 
 CObject * CCore::RetrieveObject(int gObjectId)
 {
+	gObjectId--;
 	if (gObjectId < 0 || gObjectId > MAX_OBJECTS - 1)
 		return nullptr;
 
@@ -575,6 +575,7 @@ CObject * CCore::RetrieveObject(int gObjectId)
 
 CPickup * CCore::RetrievePickup(int gPickupId)
 {
+	gPickupId--;
 	if (gPickupId < 0 || gPickupId > MAX_PICKUPS - 1)
 		return nullptr;
 
@@ -586,13 +587,12 @@ CPlayer * CCore::RetrievePlayer(int gPlayerId)
 	if (gPlayerId < 0 || gPlayerId > MAX_PLAYERS - 1)
 		return nullptr;
 
-	printf("Retrieving player ref\n");
-	printf("%d %p\n", this->playerMap[gPlayerId]->GetID(), this->playerMap[gPlayerId]);
 	return this->playerMap[gPlayerId];
 }
 
 CVehicle * CCore::RetrieveVehicle(int gVehicleId)
 {
+	gVehicleId--;
 	if (gVehicleId < 0 || gVehicleId > MAX_VEHICLES - 1)
 		return nullptr;
 
