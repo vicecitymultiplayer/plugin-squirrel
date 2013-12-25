@@ -234,6 +234,7 @@ void CPlayer::Select() { functions->ForcePlayerSelect(this->nPlayerId); }
 bool CPlayer::GetCameraLocked() { return Boolify(functions->IsCameraLocked(this->nPlayerId)); }
 void CPlayer::RestoreCamera() { functions->RestoreCamera(this->nPlayerId); }
 int CPlayer::GetKey() { return functions->GetPlayerKey(this->nPlayerId); }
+double CPlayer::GetFPS() { return functions->GetPlayerFPS(this->nPlayerId); }
 
 void CPlayer::SetMarker(int nDummy) { functions->TogglePlayerHasMarker(this->nPlayerId, 1); }
 void CPlayer::RemoveMarker() { functions->TogglePlayerHasMarker(this->nPlayerId, 0); }
@@ -311,6 +312,7 @@ void RegisterPlayer()
 		.Prop(_SC("Away"), &CPlayer::GetAwayStatus)
 		.Prop(_SC("CameraLocked"), &CPlayer::GetCameraLocked)
 		.Prop(_SC("Class"), &CPlayer::GetClass)
+		.Prop(_SC("FPS"), &CPlayer::GetFPS)
 		.Prop(_SC("ID"), &CPlayer::GetID)
 		.Prop(_SC("IP"), &CPlayer::GetIP)
 		.Prop(_SC("IsSpawned"), &CPlayer::GetSpawned)

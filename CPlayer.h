@@ -75,6 +75,7 @@ class CPlayer
 		bool GetCanUseColors();
 		bool GetMarkerVisible();
 		bool GetDrunkStatus();
+		double GetFPS();
 
 	public:
 		void Kick();
