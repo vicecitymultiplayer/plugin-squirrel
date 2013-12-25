@@ -133,6 +133,20 @@ typedef void (*SDK_RemoveAllKeyBinds) (void);
 typedef int (*SDK_CreateCoordBlip) (int nIndex, int nWorld, float fX, float fY, float fZ, int nScale, unsigned int uColour, int nSprite);
 typedef void (*SDK_DestroyCoordBlip) (int nIndex);
 typedef unsigned int (*SDK_GetCoordBlipInfo) (int nIndex, int* pnWorld, float* pfX, float* pfY, float* pfZ, int* pnScale, unsigned int* puColour, int* pnSprite);
+typedef int (*SDK_CreateSprite) (int nIndex, const char * pszFilename, float fX, float fY, float fRotX, float fRotY, float fRotation, unsigned char byAlpha);
+typedef void (*SDK_DestroySprite) (int nIndex);
+typedef void (*SDK_ShowSpriteToAll) (int nIndex);
+typedef void (*SDK_ShowSpriteToPlayer) (int nIndex, int nPlayerId);
+typedef void (*SDK_HideSpriteFromAll) (int nIndex);
+typedef void (*SDK_HideSpriteFromPlayer) (int nIndex, int nPlayerId);
+typedef void (*SDK_MoveSpriteForAll) (int nIndex, float fX, float fY);
+typedef void (*SDK_MoveSpriteForPlayer) (int nIndex, int nPlayerId, float fX, float fY);
+typedef void (*SDK_SetSpriteCenterForAll) (int nIndex, float fX, float fY);
+typedef void (*SDK_SetSpriteCenterForPlayer) (int nIndex, int nPlayerId, float fX, float fY);
+typedef void (*SDK_RotateSpriteForAll) (int nIndex, float fRotation);
+typedef void (*SDK_RotateSpriteForPlayer) (int nIndex, int nPlayerId, float fRotation);
+typedef void (*SDK_SetSpriteAlphaForAll) (int nIndex, unsigned char byAlpha);
+typedef void (*SDK_SetSpriteAlphaForPlayer) (int nIndex, int nPlayerId, unsigned char byAlpha);
 typedef int (*SDK_AddRadioStream) (int nRadioId, const char* pszRadioName, const char* pszRadioURL, unsigned int bIsListed);
 typedef int (*SDK_RemoveRadioStream) (int nRadioId);
 typedef int (*SDK_SetUseClasses) (unsigned int bToggle);
@@ -179,6 +193,7 @@ typedef int (*SDK_SetPlayerScore) (int nPlayerId, int nScore);
 typedef int (*SDK_GetPlayerScore) (int nPlayerId);
 typedef int (*SDK_GetPlayerPing) (int nPlayerId);
 typedef unsigned int (*SDK_IsPlayerTyping) (int nPlayerId);
+typedef double (*SDK_GetPlayerFPS) (int nPlayerId);
 typedef int (*SDK_SetPlayerHealth) (int nPlayerId, float fHealth);
 typedef float (*SDK_GetPlayerHealth) (int nPlayerId);
 typedef int (*SDK_SetPlayerArmour) (int nPlayerId, float fArmour);
@@ -500,6 +515,22 @@ struct PluginFuncs {
 	SDK_DestroyCoordBlip DestroyCoordBlip;
 	SDK_GetCoordBlipInfo GetCoordBlipInfo;
 
+	//SPRITES
+	SDK_CreateSprite CreateSprite;
+	SDK_DestroySprite DestroySprite;
+	SDK_ShowSpriteToAll ShowSpriteToAll;
+	SDK_ShowSpriteToPlayer ShowSpriteToPlayer;
+	SDK_HideSpriteFromAll HideSpriteFromAll;
+	SDK_HideSpriteFromPlayer HideSpriteFromPlayer;
+	SDK_MoveSpriteForAll MoveSpriteForAll;
+	SDK_MoveSpriteForPlayer MoveSpriteForPlayer;
+	SDK_SetSpriteCenterForAll SetSpriteCenterForAll;
+	SDK_SetSpriteCenterForPlayer SetSpriteCenterForPlayer;
+	SDK_RotateSpriteForAll RotateSpriteForAll;
+	SDK_RotateSpriteForPlayer RotateSpriteForPlayer;
+	SDK_SetSpriteAlphaForAll SetSpriteAlphaForAll;
+	SDK_SetSpriteAlphaForPlayer SetSpriteAlphaForPlayer;
+
 	//RADIOS
 	SDK_AddRadioStream AddRadioStream;
 	SDK_RemoveRadioStream RemoveRadioStream;
@@ -555,6 +586,7 @@ struct PluginFuncs {
 	SDK_GetPlayerScore GetPlayerScore;
 	SDK_GetPlayerPing GetPlayerPing;
 	SDK_IsPlayerTyping IsPlayerTyping;
+	SDK_GetPlayerFPS GetPlayerFPS;
 
 	//PLAYERS: health and location
 	SDK_SetPlayerHealth SetPlayerHealth;
