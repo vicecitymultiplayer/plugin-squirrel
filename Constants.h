@@ -2,3 +2,4 @@
 #define MAX_VEHICLES	1000
 #define MAX_OBJECTS		3000
 #define MAX_PICKUPS		2000
+#define MAX_SPRITES		128

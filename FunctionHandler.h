@@ -8,6 +8,7 @@
 #include "CPlayer.h"
 #include "CTimer.h"
 #include "CVehicle.h"
+#include "CSprite.h"
 
 #pragma once
 
@@ -146,6 +147,7 @@ bool IsWorldCompatibleWithPlayer ( CPlayer * player, int world );
 CVehicle * CreateVehicle ( int model, int world, Vector * pos, float angle, int col1, int col2 );
 CPickup * CreatePickup   ( int model, int world, int quantity, Vector * pos, int alpha, bool isAuto );
 CObject * CreateObject   ( int model, int world, Vector * pos, int alpha );
+CSprite * CreateSprite   ( const SQChar * filename, uint16_t x, uint16_t y, uint16_t rX, uint16_t rY, float rot, uint16_t alpha );
 
 CVehicle * CreateVehicleExpanded ( int model, int world, float x, float y, float z, float angle, int col1, int col2 );
 CPickup * CreatePickupExpanded   ( int model, int world, int quantity, float x, float y, float z, int alpha, bool isAuto );

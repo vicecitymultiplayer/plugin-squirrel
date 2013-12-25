@@ -129,6 +129,9 @@
     <ClInclude Include="..\..\sqrat\sqrat\sqratVM.h">
       <Filter>Header Files\Sqrat</Filter>
     </ClInclude>
+    <ClInclude Include="CSprite.h">
+      <Filter>Header Files\Objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -169,6 +172,9 @@
     </ClCompile>
     <ClCompile Include="UtilStructs.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CSprite.cpp">
+      <Filter>Source Files\Objects</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

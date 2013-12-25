@@ -4,6 +4,7 @@
 #include "CTimer.h"
 #include "CVehicle.h"
 #include "CObject.h"
+#include "CSprite.h"
 #include "ConsoleUtils.h"
 
 #include <sqstdio.h>

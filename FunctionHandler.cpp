@@ -223,6 +223,20 @@ CObject * CreateObject( int model, int world, Vector * pos, int alpha )
 		return pCore->AllocateObject(oId);
 }
 
+CSprite * CreateSprite(const SQChar * filename, uint16_t x, uint16_t y, uint16_t rX, uint16_t rY, float rot, uint16_t alpha)
+{
+	int sId = functions->CreateSprite(-1, filename, x, y, rX, rY, rot, alpha);
+	if (sId < 0)
+		return nullptr;
+	else
+	{
+		CSprite * pSprite = new CSprite();
+		pSprite->nSpriteId = sId;
+
+		return pSprite;
+	}
+}
+
 CVehicle * CreateVehicleExpanded( int model, int world, float x, float y, float z, float angle, int col1, int col2 )
 {
 	Vector pos = Vector( x, y, z );
