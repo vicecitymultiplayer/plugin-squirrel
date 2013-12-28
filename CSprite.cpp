@@ -56,18 +56,18 @@ void RegisterSprite()
 {
 	Class<CSprite> c(v);
 	c
-		.Func(_SC("ShowForAll"), &CSprite::ShowForAll)
-		.Func(_SC("ShowForPlayer"), &CSprite::ShowForPlayer)
-		.Func(_SC("HideFromAll"), &CSprite::HideFromAll)
-		.Func(_SC("HideFromPlayer"), &CSprite::HideFromPlayer)
-		.Func(_SC("SetPosForAll"), &CSprite::SetPositionForAll)
-		.Func(_SC("SetPosForPlayer"), &CSprite::SetPositionForPlayer)
-		.Func(_SC("SetCenterForAll"), &CSprite::SetRotationCenterForAll)
-		.Func(_SC("SetCenterForPlayer"), &CSprite::SetRotationCenterForPlayer)
-		.Func(_SC("RotateForAll"), &CSprite::SetRotationForAll)
-		.Func(_SC("RotateForPlayer"), &CSprite::SetRotationForPlayer)
-		.Func(_SC("SetAlphaForAll"), &CSprite::SetAlphaForAll)
-		.Func(_SC("SetAlphaForPlayer"), &CSprite::SetAlphaForPlayer);
+		.Func(_SC("ShowForAll"), &CSprite::ShowForAll, 1, _SC("x"))
+		.Func(_SC("ShowForPlayer"), &CSprite::ShowForPlayer, 2, _SC("xx"))
+		.Func(_SC("HideFromAll"), &CSprite::HideFromAll, 1, _SC("x"))
+		.Func(_SC("HideFromPlayer"), &CSprite::HideFromPlayer, 2, _SC("xx"))
+		.Func(_SC("SetPosForAll"), &CSprite::SetPositionForAll, 3, _SC("xii"))
+		.Func(_SC("SetPosForPlayer"), &CSprite::SetPositionForPlayer, 4, _SC("xxii"))
+		.Func(_SC("SetCenterForAll"), &CSprite::SetRotationCenterForAll, 3, _SC("xii"))
+		.Func(_SC("SetCenterForPlayer"), &CSprite::SetRotationCenterForPlayer, 4, _SC("xxii"))
+		.Func(_SC("RotateForAll"), &CSprite::SetRotationForAll, 2, _SC("xn"))
+		.Func(_SC("RotateForPlayer"), &CSprite::SetRotationForPlayer, 3, _SC("xxn"))
+		.Func(_SC("SetAlphaForAll"), &CSprite::SetAlphaForAll, 2, _SC("xi"))
+		.Func(_SC("SetAlphaForPlayer"), &CSprite::SetAlphaForPlayer, 3, _SC("xxi"));
 
 	RootTable(v).Bind(_SC("CSprite"), c);
 }
