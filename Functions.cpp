@@ -106,7 +106,7 @@ void RegisterGlobals()
 		.Func( _SC("GetPlayerIDFromName"), GetPlayerIDFromName, 2, _SC("ts" ) )
 		.Func( _SC("IsWorldCompatibleWithPlayer"), IsWorldCompatibleWithPlayer, 2, _SC("txi" ) )
 		
-		.Func( _SC("CreateSprite"), CreateSprite, 8, _SC("tsiiiifi") )
+		.Func( _SC("CreateSprite"), CreateSprite, 8, _SC("tsiiiini") )
 
 		.Overload<CVehicle * (*)(int, int, Vector *, float, int, int)>( _SC("CreateVehicle"), CreateVehicle )
 		.Overload<CVehicle * (*)(int, int, float, float, float, float, int, int)>( _SC("CreateVehicle"), CreateVehicleExpanded )
