@@ -1,7 +1,7 @@
-Module_objs = CallbackHandler.o CCore.o CObject.o ConsoleUtils.o CPickup.o CPlayer.o CTimer.o CVehicle.o Exports.o FunctionHandler.o Functions.o main.o
+Module_objs = CallbackHandler.o CCore.o CObject.o ConsoleUtils.o CPickup.o CPlayer.o CSprite.o CTimer.o CVehicle.o Exports.o FunctionHandler.o Functions.o main.o UtilStructs.o
 
 CC = g++
-CFLAGS = -fpermissive -Wall -O2 -DNDEBUG -fPIC -I. -I./sqrat -I./squirrel -I./sqrat/sqrat
+CFLAGS = -fpermissive -Wall -O2 -DNDEBUG -fPIC -I. -I./sqrat -I./squirrel -I./sqrat/sqrat -std=c++11
 SQLIB = squirrelsrc/lib/
 LDFLAGS = -Wl,-Bsymbolic
 
@@ -30,6 +30,9 @@ CPickup.o: CPickup.cpp CPickup.h
 CPlayer.o: CPlayer.cpp CPlayer.h
 	$(CC) $(CFLAGS) -c CPlayer.cpp -o $@
 
+CSprite.o: CSprite.cpp CSprite.h
+	$(CC) $(CFLAGS) -c CSprite.cpp -o $@
+
 CTimer.o: CTimer.cpp CTimer.h
 	$(CC) $(CFLAGS) -c CTimer.cpp -o $@
 
@@ -47,6 +50,9 @@ Functions.o: Functions.cpp Functions.h
 
 main.o: main.cpp main.h
 	$(CC) $(CFLAGS) -c main.cpp -o $@
+
+UtilStructs.o: UtilStructs.cpp UtilStructs.h
+	$(CC) $(CFLAGS) -c UtilStructs.cpp -o $@
 
 clean:
 	rm -f $(Module_objs) squirrel04.so
