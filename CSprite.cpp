@@ -15,19 +15,19 @@ void CSprite::HideFromPlayer(CPlayer * pPlayer) {
 	functions->HideSpriteFromPlayer(this->nSpriteId, pPlayer->GetID());
 }
 
-void CSprite::SetPositionForAll(float x, float y) {
+void CSprite::SetPositionForAll(int x, int y) {
 	functions->MoveSpriteForAll(this->nSpriteId, x, y);
 }
 
-void CSprite::SetPositionForPlayer(CPlayer * pPlayer, float x, float y) {
+void CSprite::SetPositionForPlayer(CPlayer * pPlayer, int x, int y) {
 	functions->MoveSpriteForPlayer(this->nSpriteId, pPlayer->GetID(), x, y);
 }
 
-void CSprite::SetRotationCenterForAll(float x, float y) {
+void CSprite::SetRotationCenterForAll(int x, int y) {
 	functions->SetSpriteCenterForAll(this->nSpriteId, x, y);
 }
 
-void CSprite::SetRotationCenterForPlayer(CPlayer * pPlayer, float x, float y) {
+void CSprite::SetRotationCenterForPlayer(CPlayer * pPlayer, int x, int y) {
 	functions->SetSpriteCenterForPlayer(this->nSpriteId, pPlayer->GetID(), x, y);
 }
 

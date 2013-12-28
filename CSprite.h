@@ -11,11 +11,11 @@ class CSprite
 		void HideFromAll(void);
 		void HideFromPlayer(CPlayer * pPlayer);
 
-		void SetPositionForAll(float x, float y);
-		void SetPositionForPlayer(CPlayer * pPlayer, float x, float y);
+		void SetPositionForAll(int x, int y);
+		void SetPositionForPlayer(CPlayer * pPlayer, int x, int y);
 
-		void SetRotationCenterForAll(float x, float y);
-		void SetRotationCenterForPlayer(CPlayer * pPlayer, float x, float y);
+		void SetRotationCenterForAll(int x, int y);
+		void SetRotationCenterForPlayer(CPlayer * pPlayer, int x, int y);
 
 		void SetRotationForAll(float rotation);
 		void SetRotationForPlayer(CPlayer * pPlayer, float rotation);
