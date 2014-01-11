@@ -132,6 +132,12 @@
     <ClInclude Include="CSprite.h">
       <Filter>Header Files\Objects</Filter>
     </ClInclude>
+    <ClInclude Include="SQModule.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SQImports.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

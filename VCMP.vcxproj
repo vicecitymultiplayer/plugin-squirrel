@@ -218,6 +218,8 @@
     <ClInclude Include="FunctionHandler.h" />
     <ClInclude Include="Functions.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="SQImports.h" />
+    <ClInclude Include="SQModule.h" />
     <ClInclude Include="UtilStructs.h" />
     <ClInclude Include="VCMP.h" />
   </ItemGroup>

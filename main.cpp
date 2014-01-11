@@ -26,6 +26,7 @@ PluginFuncs		*	functions;
 PluginInfo		* 	information;
 PluginCallbacks *	callbacks;
 CCore           *   pCore;
+HSQAPI				sq;
 
 // See CCore.cpp for original definition
 extern HSQUIRRELVM  v;
@@ -64,13 +65,16 @@ extern "C" EXPORT unsigned int VcmpPluginInit( PluginFuncs* givenPluginFuncs, Pl
 	information = givenPluginInfo;
 
 	// Set our plugin information
-	information->uPluginVer = 0x100;
-	strcpy( information->szName, "SQHost1" );
+	information->uPluginVer = 0x110;
+	strcpy( information->szName, "SQHost2" );
 
 	// Define our exports
-	pExp                = new SquirrelExports;
-	pExp->GetSquirrelVM = pfGetSquirrelVM;
-	pExp->uStructSize   = sizeof( SquirrelExports );
+	sq = nullptr;
+	InitSQAPI();
+
+	pExp                 = new SquirrelExports;
+	pExp->GetSquirrelAPI = pfGetSquirrelAPI;
+	pExp->uStructSize    = sizeof( SquirrelExports );
 
 	// Export them
 	functions->ExportFunctions( information->nPluginId, (void **)&pExp, sizeof( SquirrelExports ) );
