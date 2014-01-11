@@ -71,8 +71,15 @@ void SetMaxHeight( float maxHeight )      { functions->SetMaxHeight( maxHeight )
 
 const SQChar * GetServerName()
 {
-	char serverName[129];
-	functions->GetServerName( serverName, 129 );
+	// We cannot guarantee that Squirrel will free serverName once it
+	//     is done with it. This could cause a memory leak every time
+	//     such a function is called. However, we can't just return a
+	//     char array, because it will be undefined once out of scope.
+	//
+	//     Thus, we try to prevent such an issue by using this static
+	//     char array hack.
+	static char serverName[128];
+	functions->GetServerName( serverName, 128 );
 
 	return serverName;
 }
@@ -81,16 +88,16 @@ int GetMaxPlayers() { return functions->GetMaxPlayers(); }
 
 const SQChar * GetServerPassword()
 {
-	char password[129];
-	functions->GetServerPassword( password, 129 );
+	static char password[128];
+	functions->GetServerPassword( password, 128 );
 
 	return password;
 }
 
 const SQChar * GetGameModeText()
 {
-	char gamemode[97];
-	functions->GetGameModeText( gamemode, 97 );
+	static char gamemode[96];
+	functions->GetGameModeText( gamemode, 96 );
 
 	return gamemode;
 }
@@ -1883,7 +1890,7 @@ const SQChar * GetFullTime( void )
 	OutputWarning( "GetFullTime is deprecated and may be removed in the future.\n"
 		"          Please use Squirrel's date() function instead." );
 	
-	char date[96];
+	static char date[96];
 	time_t rawtime;
 	time( &rawtime );
 

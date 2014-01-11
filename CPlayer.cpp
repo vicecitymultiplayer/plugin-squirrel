@@ -106,8 +106,8 @@ int CPlayer::GetState() { return functions->GetPlayerState(this->nPlayerId); }
 
 SQChar * CPlayer::GetName()
 {
-	char name[65];
-	functions->GetPlayerName(this->nPlayerId, name, 65);
+	static char name[64];
+	functions->GetPlayerName(this->nPlayerId, name, 64);
 
 	return name;
 }
@@ -257,8 +257,8 @@ void CPlayer::SetDrunkLevel(int visuals, int handling)
 
 SQChar * CPlayer::GetUniqueID()
 {
-	char uid[41];
-	functions->GetPlayerUID(this->nPlayerId, uid, 41);
+	static char uid[40];
+	functions->GetPlayerUID(this->nPlayerId, uid, 40);
 
 	return uid;
 }
