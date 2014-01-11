@@ -4,8 +4,8 @@
 #include <iostream>
 #include <stdio.h>
 
-void OutputScriptInfo ( char * msg );
-void OutputDebug      ( char * msg );
-void OutputMessage    ( char * msg );
-void OutputWarning    ( char * msg );
-void OutputError      ( char * msg );
+void OutputScriptInfo ( const char * msg );
+void OutputDebug      ( const char * msg );
+void OutputMessage    ( const char * msg );
+void OutputWarning    ( const char * msg );
+void OutputError      ( const char * msg );

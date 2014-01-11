@@ -2,7 +2,7 @@
 #include "CCore.h"
 
 extern CCore * pCore;
-void OutputScriptInfo( char * msg )
+void OutputScriptInfo( const char * msg )
 {
 	#ifdef WIN32
 		HANDLE hstdout = GetStdHandle( STD_OUTPUT_HANDLE );
@@ -22,14 +22,14 @@ void OutputScriptInfo( char * msg )
 	#endif
 }
 
-void OutputDebug( char * msg )
+void OutputDebug( const char * msg )
 {
 	#ifdef _DEBUG
 		OutputMessage( msg );
 	#endif
 }
 
-void OutputMessage( char * msg )
+void OutputMessage( const char * msg )
 {
 	#ifdef WIN32
 		HANDLE hstdout = GetStdHandle( STD_OUTPUT_HANDLE );
@@ -49,7 +49,7 @@ void OutputMessage( char * msg )
 	#endif
 }
 
-void OutputWarning( char * msg )
+void OutputWarning( const char * msg )
 {
 	#ifdef WIN32
 		HANDLE hstdout = GetStdHandle( STD_OUTPUT_HANDLE );
@@ -69,7 +69,7 @@ void OutputWarning( char * msg )
 	#endif
 }
 
-void OutputError( char * msg )
+void OutputError( const char * msg )
 {
 	#ifdef WIN32
 		HANDLE hstdout = GetStdHandle( STD_OUTPUT_HANDLE );
