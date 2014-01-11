@@ -6,8 +6,8 @@ PROJNAME := squirrel04
 OBJS = $(patsubst %.cpp, %.$(BUILDTYPE)$(BITCOUNT).o, $(SOURCES))
 PROG = $(PROJNAME)$(BUILDTYPE)$(BITCOUNT).so
 
-LIBDIRS = 
-STCLIBS = 
+LIBDIRS = -L../squirrel/squirrelsrc/lib
+STCLIBS = -lsquirrel$(BITCOUNT) -lsqstdlib$(BITCOUNT)
 DYNLIBS = -ldl -lpthread
 
 CFLAGS  = -fpermissive -Wall -O2 -lm -fPIC -c -D_WCHAR_T_EXISTS -DLINUX -D_SQ64 -DNDEBUG -I. -I./squirrel -std=c++11
