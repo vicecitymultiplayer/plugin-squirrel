@@ -133,7 +133,7 @@ typedef void (*SDK_RemoveAllKeyBinds) (void);
 typedef int (*SDK_CreateCoordBlip) (int nIndex, int nWorld, float fX, float fY, float fZ, int nScale, unsigned int uColour, int nSprite);
 typedef void (*SDK_DestroyCoordBlip) (int nIndex);
 typedef unsigned int (*SDK_GetCoordBlipInfo) (int nIndex, int* pnWorld, float* pfX, float* pfY, float* pfZ, int* pnScale, unsigned int* puColour, int* pnSprite);
-typedef int (*SDK_CreateSprite) (int nIndex, const char * pszFilename, unsigned int fX, unsigned int fY, unsigned int fRotX, unsigned int fRotY, float fRotation, unsigned char byAlpha);
+typedef int (*SDK_CreateSprite) (int nIndex, const char * pszFilename, int fX, int fY, int fRotX, int fRotY, float fRotation, unsigned char byAlpha);
 typedef void (*SDK_DestroySprite) (int nIndex);
 typedef void (*SDK_ShowSpriteToAll) (int nIndex);
 typedef void (*SDK_ShowSpriteToPlayer) (int nIndex, int nPlayerId);
@@ -194,6 +194,7 @@ typedef int (*SDK_GetPlayerScore) (int nPlayerId);
 typedef int (*SDK_GetPlayerPing) (int nPlayerId);
 typedef unsigned int (*SDK_IsPlayerTyping) (int nPlayerId);
 typedef double (*SDK_GetPlayerFPS) (int nPlayerId);
+typedef int (*SDK_GetPlayerUID) (int nPlayerId, char* szBuffer, int nBufferLen);
 typedef int (*SDK_SetPlayerHealth) (int nPlayerId, float fHealth);
 typedef float (*SDK_GetPlayerHealth) (int nPlayerId);
 typedef int (*SDK_SetPlayerArmour) (int nPlayerId, float fArmour);
@@ -587,6 +588,7 @@ struct PluginFuncs {
 	SDK_GetPlayerPing GetPlayerPing;
 	SDK_IsPlayerTyping IsPlayerTyping;
 	SDK_GetPlayerFPS GetPlayerFPS;
+	SDK_GetPlayerUID GetPlayerUID;
 
 	//PLAYERS: health and location
 	SDK_SetPlayerHealth SetPlayerHealth;
