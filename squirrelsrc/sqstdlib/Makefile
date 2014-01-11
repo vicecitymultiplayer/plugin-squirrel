@@ -1,11 +1,10 @@
 SQUIRREL= ..
 
-
-OUT= $(SQUIRREL)/lib/libsqstdlib.a
+OUT= $(SQUIRREL)/lib/libsqstdlib$(BITCOUNT).a
 INCZ= -I$(SQUIRREL)/include -I. -Iinclude
 
 OBJS= \
-	sqstdblob.o \
+	sqstdblob.$(BIT.o \
 	sqstdio.o \
 	sqstdstream.o \
 	sqstdmath.o \
@@ -26,16 +25,19 @@ SRCS= \
 	
 	
 sq32:
-	gcc -O2 -fno-exceptions -fno-rtti -Wall -fno-strict-aliasing -c $(SRCS) $(INCZ)
+	$(eval BITCOUNT:=32)
+	gcc -O2 -m32 -fno-exceptions -fno-rtti -Wall -fno-strict-aliasing -c $(SRCS) $(INCZ) -fPIC
 	ar rc $(OUT) *.o
 	rm *.o
 
 sqprof:
-	gcc -O2 -pg -fno-exceptions -fno-rtti -pie -gstabs -g3 -Wall -fno-strict-aliasing -c $(SRCS) $(INCZ)
+	$(eval BITCOUNT:=32)
+	gcc -O2 -m32 -pg -fno-exceptions -fno-rtti -pie -gstabs -g3 -Wall -fno-strict-aliasing -c $(SRCS) $(INCZ) -fPIC
 	ar rc $(OUT) *.o
 	rm *.o
 	
 sq64:
-	gcc -O2 -m64 -fno-exceptions -D_SQ64 -fno-rtti -Wall -fno-strict-aliasing -c $(SRCS) $(INCZ)
+	$(eval BITCOUNT:=64)
+	gcc -O2 -m64 -fno-exceptions -D_SQ64 -fno-rtti -Wall -fno-strict-aliasing -c $(SRCS) $(INCZ) -fPIC
 	ar rc $(OUT) *.o
 	rm *.o
