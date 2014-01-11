@@ -1,58 +1,51 @@
-Module_objs = CallbackHandler.o CCore.o CObject.o ConsoleUtils.o CPickup.o CPlayer.o CSprite.o CTimer.o CVehicle.o Exports.o FunctionHandler.o Functions.o main.o UtilStructs.o
+CC      := g++
+DIRS    := .
+SOURCES := $(foreach dir, $(DIRS), $(wildcard $(dir)/*.cpp))
+PROJNAME := squirrel04
 
-CC = g++
-CFLAGS = -fpermissive -Wall -O2 -DNDEBUG -fPIC -I. -I./sqrat -I./squirrel -I./sqrat/sqrat -std=c++11
-SQLIB = squirrelsrc/lib/
-LDFLAGS = -Wl,-Bsymbolic
+OBJS = $(patsubst %.cpp, %.$(BUILDTYPE)$(BITCOUNT).o, $(SOURCES))
+PROG = $(PROJNAME)$(BUILDTYPE)$(BITCOUNT).so
 
-all: squirrel04.so
+LIBDIRS = 
+STCLIBS = 
+DYNLIBS = -ldl -lpthread
 
-default: all
+CFLAGS  = -fpermissive -Wall -O2 -lm -fPIC -c -D_WCHAR_T_EXISTS -DLINUX -D_SQ64 -DNDEBUG -I. -I./squirrel -std=c++11
+LDFLAGS = -Wl,-Bsymbolic $(LIBDIRS) -shared
+LDLIBS = -Wl,-Bstatic $(STCLIBS) -Wl,-Bdynamic -ldl $(DYNLIBS)
+COMMONFLAGS = -m$(BITCOUNT) 
 
-squirrel04.so: $(Module_objs)
-	$(CC) -o $@ $(Module_objs) $(SQLIB)libsqstdlib.a $(SQLIB)libsquirrel.a -shared -s $(LDFLAGS)
+ifeq ($(BUILDTYPE), dbg)
+	COMMONFLAGS += -g
+else
+	COMMONFLAGS += -s
+endif
 
-CallbackHandler.o: CallbackHandler.cpp CallbackHandler.h
-	$(CC) $(CFLAGS) -c CallbackHandler.cpp -o $@
+all: build
 
-CCore.o: CCore.cpp CCore.h
-	$(CC) $(CFLAGS) -c CCore.cpp -o $@
+build: build32 build64
+build32:
+	$(MAKE) BITCOUNT=32 BUILDTYPE=rel xbuild
+build64:
+	$(MAKE) BITCOUNT=64 BUILDTYPE=rel xbuild
 
-CObject.o: CObject.cpp CObject.h
-	$(CC) $(CFLAGS) -c CObject.cpp -o $@
+debug: debug32 debug64
+debug32:
+	$(MAKE) BITCOUNT=32 BUILDTYPE=dbg xbuild
+debug64:
+	$(MAKE) BITCOUNT=64 BUILDTYPE=dbg xbuild
 
-ConsoleUtils.o: ConsoleUtils.cpp ConsoleUtils.h
-	$(CC) $(CFLAGS) -c ConsoleUtils.cpp -o $@
+xbuild: $(PROG)
+	cp $(PROG) ../build/$(PROG)
+ifeq ($(BUILDTYPE), rel)
+	cd ../build; touch ./package.py; chmod +x ./package.py; ./package.py $(PROG); cd -
+endif
 
-CPickup.o: CPickup.cpp CPickup.h
-	$(CC) $(CFLAGS) -c CPickup.cpp -o $@
+$(PROG): $(OBJS)
+	$(CC) $(LDFLAGS) $(COMMONFLAGS) -o $(PROG) $(OBJS) $(LDLIBS)
 
-CPlayer.o: CPlayer.cpp CPlayer.h
-	$(CC) $(CFLAGS) -c CPlayer.cpp -o $@
-
-CSprite.o: CSprite.cpp CSprite.h
-	$(CC) $(CFLAGS) -c CSprite.cpp -o $@
-
-CTimer.o: CTimer.cpp CTimer.h
-	$(CC) $(CFLAGS) -c CTimer.cpp -o $@
-
-CVehicle.o: CVehicle.cpp CVehicle.h
-	$(CC) $(CFLAGS) -c CVehicle.cpp -o $@
-
-Exports.o: Exports.cpp Exports.h
-	$(CC) $(CFLAGS) -c Exports.cpp -o $@
-
-FunctionHandler.o: FunctionHandler.cpp FunctionHandler.h
-	$(CC) $(CFLAGS) -c FunctionHandler.cpp -o $@
-
-Functions.o: Functions.cpp Functions.h
-	$(CC) $(CFLAGS) -c Functions.cpp -o $@
-
-main.o: main.cpp main.h
-	$(CC) $(CFLAGS) -c main.cpp -o $@
-
-UtilStructs.o: UtilStructs.cpp UtilStructs.h
-	$(CC) $(CFLAGS) -c UtilStructs.cpp -o $@
+%.$(BUILDTYPE)$(BITCOUNT).o: %.cpp
+	$(CC) $(CFLAGS) $(COMMONFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(Module_objs) squirrel04.so
+	-rm *.o *.so
