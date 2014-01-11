@@ -362,7 +362,7 @@ bool CCore::ParseConfigLine( char * lineBuffer )
 			sprintf( buf, "Could not load script '%s'", gamemodeSearch );
 
 			OutputWarning( buf );
-			OutputWarning( const_cast<char *>(e.Message().c_str()) );
+			OutputWarning( e.Message().c_str() );
 
 			return false;
 		}
