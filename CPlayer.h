@@ -76,6 +76,7 @@ class CPlayer
 		bool GetMarkerVisible();
 		bool GetDrunkStatus();
 		double GetFPS();
+		SQChar * GetUniqueID();
 
 	public:
 		void Kick();

@@ -92,8 +92,8 @@ bool CPlayer::Typing() { return Boolify(functions->IsPlayerTyping(this->nPlayerI
 
 SQChar * CPlayer::GetIP()
 {
-	char * ip = new char[16];
-	functions->GetPlayerIP( this->nPlayerId, ip, 16 );
+	char * ip = new char[17];
+	functions->GetPlayerIP( this->nPlayerId, ip, 17 );
 
 	return ip;
 }
@@ -106,8 +106,8 @@ int CPlayer::GetState() { return functions->GetPlayerState(this->nPlayerId); }
 
 SQChar * CPlayer::GetName()
 {
-	char * name = new char[64];
-	functions->GetPlayerName(this->nPlayerId, name, 64);
+	char name[65];
+	functions->GetPlayerName(this->nPlayerId, name, 65);
 
 	return name;
 }
@@ -255,6 +255,14 @@ void CPlayer::SetDrunkLevel(int visuals, int handling)
 		functions->TogglePlayerDrunkEffects(this->nPlayerId, 1);
 }
 
+SQChar * CPlayer::GetUniqueID()
+{
+	char uid[41];
+	functions->GetPlayerUID(this->nPlayerId, uid, 41);
+
+	return uid;
+}
+
 const Sqrat::string PlayerToString(CPlayer * p)
 {
 	std::basic_stringstream<SQChar> out;
@@ -325,6 +333,7 @@ void RegisterPlayer()
 		.Prop(_SC("State"), &CPlayer::GetState)
 		.Prop(_SC("Typing"), &CPlayer::Typing)
 		.Prop(_SC("UniqueWorld"), &CPlayer::GetUniqueWorld)
+		.Prop(_SC("UniqueID"), &CPlayer::GetUniqueID)
 		.Prop(_SC("Weapon"), &CPlayer::GetWeapon);
 
 	// Functions
