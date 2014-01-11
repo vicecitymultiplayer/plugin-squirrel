@@ -71,8 +71,8 @@ void SetMaxHeight( float maxHeight )      { functions->SetMaxHeight( maxHeight )
 
 const SQChar * GetServerName()
 {
-	char * serverName = new char[128];
-	functions->GetServerName( serverName, 128 );
+	char serverName[129];
+	functions->GetServerName( serverName, 129 );
 
 	return serverName;
 }
@@ -81,16 +81,16 @@ int GetMaxPlayers() { return functions->GetMaxPlayers(); }
 
 const SQChar * GetServerPassword()
 {
-	char * password = new char[128];
-	functions->GetServerPassword( password, 128 );
+	char password[129];
+	functions->GetServerPassword( password, 129 );
 
 	return password;
 }
 
 const SQChar * GetGameModeText()
 {
-	char * gamemode = new char[96];
-	functions->GetGameModeText( gamemode, 96 );
+	char gamemode[97];
+	functions->GetGameModeText( gamemode, 97 );
 
 	return gamemode;
 }
@@ -1883,7 +1883,7 @@ const SQChar * GetFullTime( void )
 	OutputWarning( "GetFullTime is deprecated and may be removed in the future.\n"
 		"          Please use Squirrel's date() function instead." );
 	
-	char * date = new char[96];
+	char date[96];
 	time_t rawtime;
 	time( &rawtime );
 
