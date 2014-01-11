@@ -2,7 +2,7 @@
 #include "CCore.h"
 
 // God have mercy on our souls
-#define SQAPI(sz) sq-> ## sz = sq_ ## sz
+#define SQAPI(sz) sq->sz = sq_ ## sz
 extern HSQAPI sq;
 extern HSQUIRRELVM v;
 
