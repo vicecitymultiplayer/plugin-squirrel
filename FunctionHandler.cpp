@@ -287,8 +287,8 @@ void SetWastedSettings( int deathTime, int fadeTime, float fadeInSpeed, float fa
 		fadeInSpeed,
 		fadeOutSpeed,
 		colour.toUInt(),
-		corpseFadeDelay,
-		corpseFadeTime
+		rCorpseFadeDelay,
+		rCorpseFadeTime
 	);
 }
 
