@@ -74,6 +74,7 @@ extern "C" EXPORT unsigned int VcmpPluginInit( PluginFuncs* givenPluginFuncs, Pl
 
 	pExp                 = new SquirrelExports;
 	pExp->GetSquirrelAPI = pfGetSquirrelAPI;
+	pExp->GetSquirrelVM  = pfGetSquirrelVM;
 	pExp->uStructSize    = sizeof( SquirrelExports );
 
 	// Export them
