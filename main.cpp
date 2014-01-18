@@ -26,36 +26,46 @@ extern HSQUIRRELVM  v;
 void printfunc(HSQUIRRELVM v, const SQChar *s, ...) 
 {
 	va_list arglist;
-	char * szBuffer;
+	char szInitBuffer[512];
 
 	va_start(arglist, s);
 	{
-		int nReqSize = vsnprintf(NULL, 0, s, arglist) + 1;
-		szBuffer = new char[nReqSize];
-		vsnprintf(szBuffer, nReqSize, s, arglist);
+		int nChars = vsnprintf(szInitBuffer, 512, s, arglist);
+		if (nChars > 511)
+		{
+			char * szBuffer = new char[nChars + 1];
+			vsnprintf(szBuffer, nChars, s, arglist);
+			OutputScriptInfo(szBuffer);
+
+			delete[] szBuffer;
+		}
+		else
+			OutputScriptInfo(szInitBuffer);
 	}
 	va_end(arglist);
-
-	OutputScriptInfo(szBuffer);
-	delete[] szBuffer;
 } 
 
 // Squirrel's error function
 void errorfunc(HSQUIRRELVM v, const SQChar *s, ...) 
 {
-	va_list arglist; 
-	char * szBuffer;
+	va_list arglist;
+	char szInitBuffer[512];
 
 	va_start(arglist, s);
 	{
-		int nReqSize = vsnprintf(NULL, 0, s, arglist) + 1;
-		szBuffer = new char[nReqSize];
-		vsnprintf(szBuffer, nReqSize, s, arglist);
+		int nChars = vsnprintf(szInitBuffer, 512, s, arglist);
+		if (nChars > 511)
+		{
+			char * szBuffer = new char[nChars + 1];
+			vsnprintf(szBuffer, nChars, s, arglist);
+			OutputError(szBuffer);
+
+			delete[] szBuffer;
+		}
+		else
+			OutputError(szInitBuffer);
 	}
 	va_end(arglist);
-
-	OutputError(szBuffer);
-	delete[] szBuffer;
 }
 
 extern "C" EXPORT unsigned int VcmpPluginInit( PluginFuncs* givenPluginFuncs, PluginCallbacks* givenPluginCalls, PluginInfo* givenPluginInfo )

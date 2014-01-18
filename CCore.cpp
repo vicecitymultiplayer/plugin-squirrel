@@ -386,19 +386,24 @@ bool CCore::ParseConfigLine( char * lineBuffer )
 
 void CCore::printf(char* pszFormat, ...)
 {
+	char szInitBuffer[512];
 	va_list va;
-	char * szBuffer;
+
 	va_start(va, pszFormat);
 	{
-		int nReqSize = vsnprintf(NULL, 0, pszFormat, va) + 1;
-		//::printf("%d\n", nReqSize);
-		szBuffer = new char[nReqSize];
-		vsnprintf(szBuffer, nReqSize, pszFormat, va);
+		int nChars = vsnprintf(szInitBuffer, 512, pszFormat, va);
+		if (nChars > 511)
+		{
+			char * szBuffer = new char[nChars + 1];
+			vsnprintf(szBuffer, nChars, pszFormat, va);
+			this->rawprint(szBuffer);
+
+			delete[] szBuffer;
+		}
+		else
+			this->rawprint(szInitBuffer);
 	}
 	va_end(va);
-
-	this->rawprint(szBuffer);
-	delete[] szBuffer;
 }
 
 void CCore::rawprint(const char * pszOutput)
