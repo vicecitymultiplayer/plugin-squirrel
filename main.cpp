@@ -30,8 +30,8 @@ void printfunc(HSQUIRRELVM v, const SQChar *s, ...)
 
 	va_start(arglist, s);
 	{
-		int nChars = vsnprintf(szInitBuffer, 512, s, arglist);
-		if (nChars > 511)
+		int nChars = vsnprintf(szInitBuffer, sizeof(szInitBuffer), s, arglist);
+		if (nChars > sizeof(szInitBuffer) - 1)
 		{
 			char * szBuffer = new char[nChars + 1];
 			vsnprintf(szBuffer, nChars, s, arglist);
@@ -53,8 +53,8 @@ void errorfunc(HSQUIRRELVM v, const SQChar *s, ...)
 
 	va_start(arglist, s);
 	{
-		int nChars = vsnprintf(szInitBuffer, 512, s, arglist);
-		if (nChars > 511)
+		int nChars = vsnprintf(szInitBuffer, sizeof(szInitBuffer), s, arglist);
+		if (nChars > sizeof(szInitBuffer) - 1)
 		{
 			char * szBuffer = new char[nChars + 1];
 			vsnprintf(szBuffer, nChars, s, arglist);

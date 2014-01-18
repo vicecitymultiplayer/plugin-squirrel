@@ -1741,7 +1741,7 @@ SQInteger InPoly( HSQUIRRELVM v )
 
 			sq_pushbool( v, isInPath );
 			return 1;
-			}
+		}
 		else
 			return sq_throwerror( v, "Unexpected number of parameters for InPoly: all X vertices must be accompanied by a Y vertex" );
 	}

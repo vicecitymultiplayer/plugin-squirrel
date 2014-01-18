@@ -391,8 +391,8 @@ void CCore::printf(char* pszFormat, ...)
 
 	va_start(va, pszFormat);
 	{
-		int nChars = vsnprintf(szInitBuffer, 512, pszFormat, va);
-		if (nChars > 511)
+		int nChars = vsnprintf(szInitBuffer, sizeof(szInitBuffer), pszFormat, va);
+		if (nChars > sizeof(szInitBuffer) - 1)
 		{
 			char * szBuffer = new char[nChars + 1];
 			vsnprintf(szBuffer, nChars, pszFormat, va);
