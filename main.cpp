@@ -1,27 +1,18 @@
-// Main include
 #include "main.h"
-
-// Callback handler
 #include "CallbackHandler.h"
-
-// Function registration
+#include "ConsoleUtils.h"
+#include "Exports.h"
 #include "Functions.h"
 
-// Classes
 #include "CCore.h"
 #include "CObject.h"
 #include "CPickup.h"
 #include "CPlayer.h"
 #include "CVehicle.h"
 
-// Console stuff
-#include "ConsoleUtils.h"
+#include <string>
 
-// Module exports
-#include "Exports.h"
-SquirrelExports * pExp;
-
-// Definitions
+SquirrelExports *	pExp;
 PluginFuncs		*	functions;
 PluginInfo		* 	information;
 PluginCallbacks *	callbacks;
@@ -33,28 +24,38 @@ extern HSQUIRRELVM  v;
 
 // Squirrel's print function
 void printfunc(HSQUIRRELVM v, const SQChar *s, ...) 
-{ 
-	va_list arglist; 
-	va_start(arglist, s); 
-	char * outbuf = new char[768];
-	vsprintf(outbuf, s, arglist);
-	va_end(arglist); 
+{
+	va_list arglist;
+	char * szBuffer;
 
-	OutputScriptInfo( outbuf );
-	delete outbuf;
+	va_start(arglist, s);
+	{
+		int nReqSize = vsnprintf(NULL, 0, s, arglist) + 1;
+		szBuffer = new char[nReqSize];
+		vsnprintf(szBuffer, nReqSize, s, arglist);
+	}
+	va_end(arglist);
+
+	OutputScriptInfo(szBuffer);
+	delete[] szBuffer;
 } 
 
 // Squirrel's error function
 void errorfunc(HSQUIRRELVM v, const SQChar *s, ...) 
 {
 	va_list arglist; 
-	va_start(arglist, s); 
-	
-	vfprintf(stdout, s, arglist);
-	if( pCore->GetLogInstance() != nullptr )
-		vfprintf(pCore->GetLogInstance(), s, arglist);
+	char * szBuffer;
 
+	va_start(arglist, s);
+	{
+		int nReqSize = vsnprintf(NULL, 0, s, arglist) + 1;
+		szBuffer = new char[nReqSize];
+		vsnprintf(szBuffer, nReqSize, s, arglist);
+	}
 	va_end(arglist);
+
+	OutputError(szBuffer);
+	delete[] szBuffer;
 }
 
 extern "C" EXPORT unsigned int VcmpPluginInit( PluginFuncs* givenPluginFuncs, PluginCallbacks* givenPluginCalls, PluginInfo* givenPluginInfo )

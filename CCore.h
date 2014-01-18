@@ -51,6 +51,7 @@ class CCore
 		bool ParseConfigLine( char * lineBuffer );
 
 		void printf( char* pszFormat, ... );
+		void rawprint(const char * pszOutput);
 
 	public:
 		FILE     * GetLogInstance();

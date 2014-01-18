@@ -384,20 +384,28 @@ bool CCore::ParseConfigLine( char * lineBuffer )
 	}
 }
 
-void CCore::printf( char* pszFormat, ... )
+void CCore::printf(char* pszFormat, ...)
 {
-	char szBuffer[512];
-
 	va_list va;
+	char * szBuffer;
 	va_start(va, pszFormat);
-	vsnprintf(szBuffer, 512, pszFormat, va);
+	{
+		int nReqSize = vsnprintf(NULL, 0, pszFormat, va) + 1;
+		//::printf("%d\n", nReqSize);
+		szBuffer = new char[nReqSize];
+		vsnprintf(szBuffer, nReqSize, pszFormat, va);
+	}
 	va_end(va);
 
-	fputs(szBuffer, stdout);
-	if( this->pLogFile != nullptr )
-		fprintf(this->pLogFile, "%s", szBuffer);
-	else
-		puts("Cannot write to logfile");
+	this->rawprint(szBuffer);
+	delete[] szBuffer;
+}
+
+void CCore::rawprint(const char * pszOutput)
+{
+	fputs(pszOutput, stdout);
+	if (this->pLogFile != nullptr)
+		fprintf(this->pLogFile, "%s", pszOutput);
 }
 
 // Release a core instance
