@@ -6,7 +6,7 @@ PROJNAME := squirrel04
 OBJS = $(patsubst %.cpp, %.$(BUILDTYPE)$(BITCOUNT).o, $(SOURCES))
 PROG = $(PROJNAME)$(BUILDTYPE)$(BITCOUNT).so
 
-LIBDIRS = -L../squirrel/squirrelsrc/lib
+LIBDIRS = -L./squirrelsrc/lib
 STCLIBS = -lsquirrel$(BITCOUNT) -lsqstdlib$(BITCOUNT)
 DYNLIBS = -ldl -lpthread
 
