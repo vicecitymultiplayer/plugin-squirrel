@@ -4,7 +4,8 @@ EXT     := cpp
 PROJNAME := squirrel04
 
 INCDIRS = -I. -I./squirrel
-LIBDIRS = -L../squirrel/squirrelsrc/lib
+LIBDIRS = -L./squirrelsrc/lib
+
 STCLIBS = -lsquirrel$(BITCOUNT) -lsqstdlib$(BITCOUNT)
 DYNLIBS = -ldl -lpthread
 BASEOBJDIR = objdir

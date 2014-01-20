@@ -14,3 +14,6 @@ build/
 builds/
 *.pdb
 *.exe
+*.user
+*.a
+*.lib
