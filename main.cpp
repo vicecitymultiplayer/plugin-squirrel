@@ -58,14 +58,15 @@ void errorfunc(HSQUIRRELVM v, const SQChar *s, ...)
 		{
 			char * szBuffer = new char[nChars + 1];
 			vsnprintf(szBuffer, nChars, s, arglist);
-			OutputError(szBuffer);
+			pCore->rawprint(szBuffer);
 
 			delete[] szBuffer;
 		}
 		else
-			OutputError(szInitBuffer);
+			pCore->rawprint(szInitBuffer);
 	}
 	va_end(arglist);
+	pCore->rawprint("\n");
 }
 
 extern "C" EXPORT unsigned int VcmpPluginInit( PluginFuncs* givenPluginFuncs, PluginCallbacks* givenPluginCalls, PluginInfo* givenPluginInfo )
