@@ -1,27 +1,32 @@
 CC      := g++
 DIRS    := .
-SOURCES := $(foreach dir, $(DIRS), $(wildcard $(dir)/*.cpp))
+EXT     := cpp
 PROJNAME := squirrel04
 
-OBJS = $(patsubst %.cpp, %.$(BUILDTYPE)$(BITCOUNT).o, $(SOURCES))
-PROG = $(PROJNAME)$(BUILDTYPE)$(BITCOUNT).so
-
+INCDIRS = -I. -I./squirrel
 LIBDIRS = -L./squirrelsrc/lib
+
 STCLIBS = -lsquirrel$(BITCOUNT) -lsqstdlib$(BITCOUNT)
 DYNLIBS = -ldl -lpthread
+BASEOBJDIR = objdir
 
-CFLAGS  = -fpermissive -Wall -O2 -lm -fPIC -c -D_WCHAR_T_EXISTS -DLINUX -D_SQ64 -DNDEBUG -I. -I./squirrel -std=c++11
+CFLAGS  = -fpermissive -Wall -O2 -lm -fPIC -c -D_WCHAR_T_EXISTS -DLINUX -D_SQ64 -DNDEBUG $(INCDIRS) -std=c++11
+
+SOURCES = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.$(EXT)))
+OBJDIR = $(BASEOBJDIR)/$(BUILDTYPE)$(BITCOUNT)
+OBJS = $(patsubst %.$(EXT), $(OBJDIR)/%.o, $(SOURCES))
+PROG = $(PROJNAME)$(BUILDTYPE)$(BITCOUNT).so
+PROGPATH = $(OBJDIR)/$(PROG)
+
 LDFLAGS = -Wl,-Bsymbolic $(LIBDIRS) -shared
-LDLIBS = -Wl,-Bstatic $(STCLIBS) -Wl,-Bdynamic -ldl $(DYNLIBS)
-COMMONFLAGS = -m$(BITCOUNT) 
+LDLIBS = -Wl,-Bstatic $(STCLIBS) -Wl,-Bdynamic $(DYNLIBS)
+COMMONFLAGS = -m$(BITCOUNT)
 
 ifeq ($(BUILDTYPE), dbg)
 	COMMONFLAGS += -g
 else
 	COMMONFLAGS += -s
 endif
-
-all: build
 
 build: build32 build64
 build32:
@@ -35,17 +40,29 @@ debug32:
 debug64:
 	$(MAKE) BITCOUNT=64 BUILDTYPE=dbg xbuild
 
-xbuild: $(PROG)
-	cp $(PROG) ../build/$(PROG)
+xbuild: $(PROGPATH)
+	@mkdir -p ../build
+	cp $(PROGPATH) ../build/$(PROG)
 ifeq ($(BUILDTYPE), rel)
 	cd ../build; touch ./package.py; chmod +x ./package.py; ./package.py $(PROG); cd -
 endif
 
-$(PROG): $(OBJS)
-	$(CC) $(LDFLAGS) $(COMMONFLAGS) -o $(PROG) $(OBJS) $(LDLIBS)
+$(PROGPATH): $(OBJS)
+	@mkdir -p $(dir $@)
+	$(CC) $(LDFLAGS) $(COMMONFLAGS) -o $(PROGPATH) $(OBJS) $(LDLIBS)
+	
+-include $(OBJS:.o=.o.d)
 
-%.$(BUILDTYPE)$(BITCOUNT).o: %.cpp
+$(OBJDIR)/%.o: %.$(EXT)
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $(COMMONFLAGS) -c $< -o $@
+	$(CC) -MM $(CFLAGS) $< > $@.d
+	@mv -f $@.d $@.d.tmp
+	@sed -e 's|.*:|$@:|' < $@.d.tmp > $@.d
+	@sed -e 's/.*://' -e 's/\\$$//' < $@.d.tmp | fmt -1 | sed -e 's/^ *//' -e 's/$$/:/' >> $@.d
+	@rm -f $@.d.tmp
 
+.PHONY: clean
+	
 clean:
-	-rm *.o *.so
+	-@rm -R -f $(BASEOBJDIR)
