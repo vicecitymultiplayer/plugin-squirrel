@@ -489,7 +489,7 @@ CPickup * CCore::AllocatePickup(int gPickupId, bool isOurs)
 
 CVehicle * CCore::AllocateVehicle(int gVehicleId, bool isOurs)
 {
-	if (gVehicleId < 0 || gVehicleId > MAX_VEHICLES - 1)
+	if (gVehicleId <= 0 || gVehicleId > MAX_VEHICLES)
 		return nullptr;
 	else if (functions->GetVehicleModel(gVehicleId) < 1)
 		return nullptr;
@@ -499,7 +499,7 @@ CVehicle * CCore::AllocateVehicle(int gVehicleId, bool isOurs)
 	CVehicle * pVehicle = new CVehicle();
 	pVehicle->Init(gVehicleId, isOurs);
 
-	this->vehicleMap[pVehicle->nVehicleId - 1] = pVehicle;
+	this->vehicleMap[pVehicle->nVehicleId] = pVehicle;
 	return pVehicle;
 }
 
@@ -550,8 +550,7 @@ void CCore::DereferencePlayer(int gPlayerId)
 
 void CCore::DereferenceVehicle(int gVehicleId)
 {
-	gVehicleId--;
-	if (gVehicleId < 0 || gVehicleId > MAX_VEHICLES - 1)
+	if (gVehicleId <= 0 || gVehicleId > MAX_VEHICLES)
 		return;
 	else if (this->vehicleMap[gVehicleId] == nullptr)
 		return;
@@ -590,8 +589,7 @@ CPlayer * CCore::RetrievePlayer(int gPlayerId)
 
 CVehicle * CCore::RetrieveVehicle(int gVehicleId)
 {
-	gVehicleId--;
-	if (gVehicleId < 0 || gVehicleId > MAX_VEHICLES - 1)
+	if (gVehicleId <= 0 || gVehicleId > MAX_VEHICLES)
 		return nullptr;
 
 	return this->vehicleMap[gVehicleId];

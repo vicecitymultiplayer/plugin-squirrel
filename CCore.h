@@ -93,7 +93,7 @@ class CCore
 		std::array<CPlayer *, MAX_PLAYERS> playerMap;
 		std::array<CPickup *, MAX_PICKUPS> pickupMap;
 		std::array<CObject *, MAX_OBJECTS> objectMap;
-		std::array<CVehicle *, MAX_VEHICLES> vehicleMap;
+		std::array<CVehicle *, MAX_VEHICLES + 1> vehicleMap;
 
 		// Our list of timers.
 		static const int maxTimers = 255;
