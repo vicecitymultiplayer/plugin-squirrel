@@ -37,6 +37,7 @@ Vector Vector::operator -(const Vector &v) const { return Vector(this->x - v.x, 
 Vector Vector::operator *(const float f) const { return Vector(this->x * f, this->y * f, this->z * f); }
 Vector Vector::operator /(const float f) const { return Vector(this->x / f, this->y / f, this->z / f); }
 Vector& Vector::operator =(const Vector &v) { this->x = v.x; this->y = v.y; this->z = v.z; return *this; }
+Vector& Vector::operator =(const float f) { this->x = 0.0f; this->y = 0.0f; this->z = f; return *this; }
 
 bool Quaternion::operator ==(const Quaternion &q) const { return this->w == q.w && this->x == q.x && this->y == q.y && this->z == q.z; }
 Quaternion Quaternion::operator -(void) const { return Quaternion(-w, -x, -y, -z); }
@@ -45,6 +46,7 @@ Quaternion Quaternion::operator -(const Quaternion &q) const { return Quaternion
 Quaternion Quaternion::operator *(const float f) const { return Quaternion(this->w * f, this->x * f, this->y * f, this->z * f); }
 Quaternion Quaternion::operator /(const float f) const { return Quaternion(this->w / f, this->x / f, this->y / f, this->z / f); }
 Quaternion& Quaternion::operator =(const Quaternion &q) { this->w = q.w; this->x = q.x; this->y = q.y; this->z = q.z; return *this; }
+Quaternion& Quaternion::operator =(const float q) { this->w = 0.0f; this->x = 0.0f; this->y = 0.0f; this->z = q; return *this; }
 
 unsigned int RGBa::toUInt() { return this->r << 24 | this->g << 16 | this->b << 8 | this->a; }
 unsigned int cRGB::toUInt() { return this->r << 16 | this->g << 8 | this->b; }

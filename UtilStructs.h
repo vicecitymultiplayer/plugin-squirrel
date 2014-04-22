@@ -27,6 +27,7 @@ class Vector
 		Vector operator *(const float f) const;
 		Vector operator /(const float f) const;
 		Vector& operator =(const Vector &v);
+		Vector& operator =(const float f);
 };
 
 class Quaternion
@@ -47,6 +48,7 @@ class Quaternion
 		Quaternion operator *(const float f) const;
 		Quaternion operator /(const float f) const;
 		Quaternion& operator =(const Quaternion &q);
+		Quaternion& operator =(const float q);
 };
 
 class RGBa
