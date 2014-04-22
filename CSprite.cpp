@@ -67,7 +67,8 @@ void RegisterSprite()
 		.Func(_SC("RotateForAll"), &CSprite::SetRotationForAll, 2, _SC("xn"))
 		.Func(_SC("RotateForPlayer"), &CSprite::SetRotationForPlayer, 3, _SC("xxn"))
 		.Func(_SC("SetAlphaForAll"), &CSprite::SetAlphaForAll, 2, _SC("xi"))
-		.Func(_SC("SetAlphaForPlayer"), &CSprite::SetAlphaForPlayer, 3, _SC("xxi"));
+		.Func(_SC("SetAlphaForPlayer"), &CSprite::SetAlphaForPlayer, 3, _SC("xxi"))
+		.Func(_SC("Delete"), &CSprite::Delete, 1, _SC("x"));
 
 	RootTable(v).Bind(_SC("CSprite"), c);
 }
