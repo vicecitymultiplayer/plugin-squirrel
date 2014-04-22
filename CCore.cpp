@@ -240,6 +240,7 @@ void CCore::RegisterEntities()
 	RegisterTimer();
 	RegisterVehicle();
 	RegisterSprite();
+	RegisterTextdraw();
 
 	// Set the default internal error handlers up
 	sqstd_seterrorhandlers( v );

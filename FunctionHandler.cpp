@@ -244,6 +244,20 @@ CSprite * CreateSprite(const SQChar * filename, uint16_t x, uint16_t y, uint16_t
 	}
 }
 
+CTextdraw * CreateTextdraw(const SQChar * text, int x, int y, unsigned int colour)
+{
+	int sId = functions->CreateTextdraw(-1, text, x, y, colour);
+	if (sId < 0)
+		return nullptr;
+	else
+	{
+		CTextdraw * pTextdraw = new CTextdraw();
+		pTextdraw->nTextdrawId = sId;
+
+		return pTextdraw;
+	}
+}
+
 CVehicle * CreateVehicleExpanded( int model, int world, float x, float y, float z, float angle, int col1, int col2 )
 {
 	Vector pos = Vector( x, y, z );

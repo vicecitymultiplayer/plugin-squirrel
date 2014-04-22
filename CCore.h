@@ -5,6 +5,7 @@
 #include "CVehicle.h"
 #include "CObject.h"
 #include "CSprite.h"
+#include "CTextdraw.h"
 #include "ConsoleUtils.h"
 
 #include <sqstdio.h>
