@@ -54,13 +54,13 @@ unsigned int ARGB::toUInt() { return this->a << 24 | this->r << 16 | this->g << 
 
 void RegisterStructures()
 {
-	ImprovedClass<Vector> a;
-	ImprovedClass<Quaternion> b;
-	ImprovedClass<RGBa> c;
-	ImprovedClass<cRGB> d;
-	ImprovedClass<Bounds> e;
-	ImprovedClass<WastedSettings> f;
-	ImprovedClass<ARGB> g;
+	Sqrat::Class<Vector> a;
+	Sqrat::Class<Quaternion> b;
+	Sqrat::Class<RGBa> c;
+	Sqrat::Class<cRGB> d;
+	Sqrat::Class<Bounds> e;
+	Sqrat::Class<WastedSettings> f;
+	Sqrat::Class<ARGB> g;
 
 	a.Ctor<float, float, float>();
 	a.Ctor<int, int, int>();
