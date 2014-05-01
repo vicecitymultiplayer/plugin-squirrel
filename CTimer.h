@@ -6,8 +6,7 @@
 // Define structures for timer maps
 typedef struct
 {
-	//void * pData;
-	HSQOBJECT pData;
+	void * pData;
 	SQObjectType datatype; // This is some shitty programming yo
 } TimerParam;
 
@@ -31,8 +30,14 @@ class CTimer
 
 		~CTimer()
 		{
-			if( params.size() > 0 )
-				params.clear();
+			for (int i = 0; i < params.size(); i++)
+			{
+				if (this->params[i].pData != nullptr)
+					delete this->params[i].pData;
+			}
+
+			if( this->params.size() > 0 )
+				this->params.clear();
 		}
 		
 		bool Pulse( float elapsedTime );
