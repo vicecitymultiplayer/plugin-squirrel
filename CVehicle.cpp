@@ -17,11 +17,14 @@ void CVehicle::SetSpawnPos( Vector pos )
 	functions->SetVehicleSpawnPos( this->nVehicleId, pos.x, pos.y, pos.z, zRot );
 }
 
-void CVehicle::SetSpawnAngle( float angle )
+void CVehicle::SetSpawnAngle(Quaternion angle)
 {
-	float x, y, z;
-	functions->GetVehicleSpawnPos( this->nVehicleId, &x, &y, &z, NULL );
-	functions->SetVehicleSpawnPos( this->nVehicleId, x, y, z, angle );
+	functions->SetVehicleSpawnRot(this->nVehicleId, angle.x, angle.y, angle.z, angle.w);
+}
+
+void CVehicle::SetSpawnAngleEuler(Vector angle)
+{
+	functions->SetVehicleSpawnRotEuler(this->nVehicleId, angle.x, angle.y, angle.z);
 }
 
 void CVehicle::SetIdleRespawnTimer( unsigned int time ) { functions->SetVehicleIdleRespawnTimer( this->nVehicleId, time ); }
@@ -66,10 +69,18 @@ Vector CVehicle::GetSpawnPos()
 	return Vector( x, y, z );
 }
 
-float CVehicle::GetSpawnAngle()
+Quaternion CVehicle::GetSpawnAngle()
 {
-	float angle;
-	functions->GetVehicleSpawnPos( this->nVehicleId, NULL, NULL, NULL, &angle );
+	Quaternion angle;
+	functions->GetVehicleSpawnRot(this->nVehicleId, &angle.x, &angle.y, &angle.z, &angle.w);
+
+	return angle;
+}
+
+Vector CVehicle::GetSpawnAngleEuler()
+{
+	Vector angle;
+	functions->GetVehicleSpawnRotEuler(this->nVehicleId, &angle.x, &angle.y, &angle.z);
 
 	return angle;
 }
@@ -257,6 +268,7 @@ void RegisterVehicle()
 		.Prop( _SC("Pos"), &CVehicle::GetPosition, &CVehicle::SetPosition )
 		.Prop( _SC("World"), &CVehicle::GetWorld, &CVehicle::SetWorld )
 		.Prop( _SC("SpawnPos"), &CVehicle::GetSpawnPos, &CVehicle::SetSpawnPos )
+		.Prop( _SC("EulerSpawnAngle"), &CVehicle::GetSpawnAngleEuler, &CVehicle::SetSpawnAngleEuler )
 		.Prop( _SC("SpawnAngle"), &CVehicle::GetSpawnAngle, &CVehicle::SetSpawnAngle )
 		.Prop( _SC("RespawnTimer"), &CVehicle::GetIdleRespawnTimer, &CVehicle::SetIdleRespawnTimer )
 		.Prop( _SC("Health"), &CVehicle::GetHealth, &CVehicle::SetHealth )
