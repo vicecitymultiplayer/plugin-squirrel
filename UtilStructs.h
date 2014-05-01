@@ -33,8 +33,8 @@ class Vector
 class Quaternion
 {
 	public:
-		Quaternion( float w, float x, float y, float z ) { this->w = w; this->x = x; this->y = y; this->z = z; }
-		Quaternion( int w, int x, int y, int z ) { this->w = w; this->x = x; this->y = y; this->z = z; }
+		Quaternion( float x, float y, float z, float w ) { this->w = w; this->x = x; this->y = y; this->z = z; }
+		Quaternion( int x, int y, int z, int w ) { this->w = w; this->x = x; this->y = y; this->z = z; }
 		Quaternion() { this->w = 0.0f; this->x = 0.0f; this->y = 0.0f; this->z = 0.0f; }
 		float w;
 		float x;
