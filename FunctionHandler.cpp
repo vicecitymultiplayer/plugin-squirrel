@@ -244,6 +244,20 @@ CSprite * CreateSprite(const SQChar * filename, uint16_t x, uint16_t y, uint16_t
 	}
 }
 
+CTextdraw * CreateTextdraw(const SQChar * text, int x, int y, unsigned int colour)
+{
+	int sId = functions->CreateTextdraw(-1, text, x, y, colour);
+	if (sId < 0)
+		return nullptr;
+	else
+	{
+		CTextdraw * pTextdraw = new CTextdraw();
+		pTextdraw->nTextdrawId = sId;
+
+		return pTextdraw;
+	}
+}
+
 CVehicle * CreateVehicleExpanded( int model, int world, float x, float y, float z, float angle, int col1, int col2 )
 {
 	Vector pos = Vector( x, y, z );
@@ -1807,56 +1821,48 @@ SQInteger NewTimer( HSQUIRRELVM v )
 				for( int i = 5; i <= sq_gettop( v ); i++ )
 				{
 					TimerParam pTempParam;
-					sq_getstackobj( v, i, &pTempParam.pData );
-					/*pTempParam.datatype = sq_gettype( v, i );
+					pTempParam.datatype = sq_gettype( v, i );
 					switch( pTempParam.datatype )
 					{
 						case OT_INTEGER:
-							sq_getinteger( v, i, (SQInteger *)&pTempParam.pData );
+							pTempParam.pData = new Sqrat::Var<SQInteger>(v, i);
 							break;
 
 						case OT_FLOAT:
-							sq_getfloat( v, i, (SQFloat *)&pTempParam.pData );
+							pTempParam.pData = new Sqrat::Var<SQFloat>(v, i);
 							break;
 
 						case OT_BOOL:
-							sq_getbool( v, i, (SQBool *)&pTempParam.pData );
+							pTempParam.pData = new Sqrat::Var<bool>(v, i);
 							break;
 
 						case OT_STRING:
-							sq_getstring( v, i, reinterpret_cast<const SQChar **>(const_cast<const void **>(&pTempParam.pData)) );
+							pTempParam.pData = new Sqrat::Var<string>(v, i);
+							break;
+
+						case OT_TABLE:
+							pTempParam.pData = new Sqrat::Var<Sqrat::Table>(v, i);
+
+						case OT_ARRAY:
+							pTempParam.pData = new Sqrat::Var<Sqrat::Array>(v, i);
 							break;
 
 						case OT_USERDATA:
 						case OT_USERPOINTER:
-							sq_getuserpointer( v, i, (SQUserPointer *)&pTempParam.pData );
-							break;
-
-						// <TODO>
-						case OT_TABLE:
-						case OT_ARRAY:
 						case OT_CLASS:
-							sq_resetobject( (HSQOBJECT *)pTempParam.pData );
-							sq_getstackobj( v, i, (HSQOBJECT *)&pTempParam.pData );
-							sq_addref( v, (HSQOBJECT *)&pTempParam.pData );
+						case OT_INSTANCE:
+							pTempParam.pData = new Sqrat::Var<Sqrat::Object>(v, i);
 							break;
 
 						case OT_CLOSURE:
 						case OT_NATIVECLOSURE:
-							sq_getstackobj( v, i, (HSQOBJECT *)&pTempParam.pData );
-							break;
-
-						case OT_INSTANCE:
-							SQObject * obj;
-							sq_getinstanceup( v, i, (SQUserPointer *)&pTempParam.pData, NULL );
+							pTempParam.pData = new Sqrat::Var<Sqrat::Function>(v, i);
 							break;
 
 						case OT_NULL:
-							break;
-
 						default:
 							break;
-					}*/
+					}
 
 					pTimer->params.push_back(pTempParam);
 				}
@@ -1866,11 +1872,9 @@ SQInteger NewTimer( HSQUIRRELVM v )
 			pTimer->intervalInTicks   = fInterval;
 			pTimer->maxNumberOfPulses = maxPulses;
 
-			// Go through hell and back to push a CTimer instance
-			// LOL JK
 			Sqrat::ClassType<CTimer>().PushInstance( v, pTimer );
-
 			pCore->AddTimer(pTimer);
+
 			return 1;
 		}
 	}

@@ -138,6 +138,7 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DisableSpecificWarnings>4138;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -184,26 +185,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\sqrat\sqmodule.h" />
-    <ClInclude Include="..\..\sqrat\sqrat.h" />
-    <ClInclude Include="..\..\sqrat\sqratimport.h" />
-    <ClInclude Include="..\..\sqrat\sqrat\sqratAllocator.h" />
-    <ClInclude Include="..\..\sqrat\sqrat\sqratArray.h" />
-    <ClInclude Include="..\..\sqrat\sqrat\sqratClass.h" />
-    <ClInclude Include="..\..\sqrat\sqrat\sqratClassType.h" />
-    <ClInclude Include="..\..\sqrat\sqrat\sqratConst.h" />
-    <ClInclude Include="..\..\sqrat\sqrat\sqratext_Ref.h" />
-    <ClInclude Include="..\..\sqrat\sqrat\sqratFunction.h" />
-    <ClInclude Include="..\..\sqrat\sqrat\sqratGlobalMethods.h" />
-    <ClInclude Include="..\..\sqrat\sqrat\sqratImpClass.h" />
-    <ClInclude Include="..\..\sqrat\sqrat\sqratMemberMethods.h" />
-    <ClInclude Include="..\..\sqrat\sqrat\sqratObject.h" />
-    <ClInclude Include="..\..\sqrat\sqrat\sqratOverloadMethods.h" />
-    <ClInclude Include="..\..\sqrat\sqrat\sqratScript.h" />
-    <ClInclude Include="..\..\sqrat\sqrat\sqratTable.h" />
-    <ClInclude Include="..\..\sqrat\sqrat\sqratTypes.h" />
-    <ClInclude Include="..\..\sqrat\sqrat\sqratUtil.h" />
-    <ClInclude Include="..\..\sqrat\sqrat\sqratVM.h" />
     <ClInclude Include="CallbackHandler.h" />
     <ClInclude Include="CCore.h" />
     <ClInclude Include="CObject.h" />
@@ -212,6 +193,7 @@
     <ClInclude Include="CPickup.h" />
     <ClInclude Include="CPlayer.h" />
     <ClInclude Include="CSprite.h" />
+    <ClInclude Include="CTextdraw.h" />
     <ClInclude Include="CTimer.h" />
     <ClInclude Include="CVehicle.h" />
     <ClInclude Include="Exports.h" />
@@ -220,6 +202,24 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="SQImports.h" />
     <ClInclude Include="SQModule.h" />
+    <ClInclude Include="sqrat\sqmodule.h" />
+    <ClInclude Include="sqrat\sqrat.h" />
+    <ClInclude Include="sqrat\sqratimport.h" />
+    <ClInclude Include="sqrat\sqrat\sqratAllocator.h" />
+    <ClInclude Include="sqrat\sqrat\sqratArray.h" />
+    <ClInclude Include="sqrat\sqrat\sqratClass.h" />
+    <ClInclude Include="sqrat\sqrat\sqratClassType.h" />
+    <ClInclude Include="sqrat\sqrat\sqratConst.h" />
+    <ClInclude Include="sqrat\sqrat\sqratFunction.h" />
+    <ClInclude Include="sqrat\sqrat\sqratGlobalMethods.h" />
+    <ClInclude Include="sqrat\sqrat\sqratMemberMethods.h" />
+    <ClInclude Include="sqrat\sqrat\sqratObject.h" />
+    <ClInclude Include="sqrat\sqrat\sqratOverloadMethods.h" />
+    <ClInclude Include="sqrat\sqrat\sqratScript.h" />
+    <ClInclude Include="sqrat\sqrat\sqratTable.h" />
+    <ClInclude Include="sqrat\sqrat\sqratTypes.h" />
+    <ClInclude Include="sqrat\sqrat\sqratUtil.h" />
+    <ClInclude Include="sqrat\sqrat\sqratVM.h" />
     <ClInclude Include="UtilStructs.h" />
     <ClInclude Include="VCMP.h" />
   </ItemGroup>
@@ -231,6 +231,7 @@
     <ClCompile Include="CPickup.cpp" />
     <ClCompile Include="CPlayer.cpp" />
     <ClCompile Include="CSprite.cpp" />
+    <ClCompile Include="CTextdraw.cpp" />
     <ClCompile Include="CTimer.cpp" />
     <ClCompile Include="CVehicle.cpp" />
     <ClCompile Include="Exports.cpp" />

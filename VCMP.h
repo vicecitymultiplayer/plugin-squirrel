@@ -21,22 +21,24 @@
 
 #if !defined _MSC_VER || _MSC_VER >= 1600
 #include <stdint.h>
+#elif defined _MSC_VER
+typedef unsigned __int64 uint64_t;
 #endif
 
-struct ServerSettings {
+typedef struct {
 	unsigned int uStructSize;
 	char szServerName[128];
 	unsigned int uMaxPlayers;
 	unsigned int uPort;
 	unsigned int uFlags;
-};
+} ServerSettings;
 
-struct PluginInfo {
+typedef struct {
 	unsigned int uStructSize;
 	int nPluginId;
 	char szName[32];
 	unsigned int uPluginVer;
-};
+} PluginInfo;
 
 typedef unsigned int (*SDK_GetServerVersion) (void);
 typedef unsigned int (*SDK_GetServerSettings) (ServerSettings* pstSettings);
@@ -147,6 +149,16 @@ typedef void (*SDK_RotateSpriteForAll) (int nIndex, float fRotation);
 typedef void (*SDK_RotateSpriteForPlayer) (int nIndex, int nPlayerId, float fRotation);
 typedef void (*SDK_SetSpriteAlphaForAll) (int nIndex, unsigned char byAlpha);
 typedef void (*SDK_SetSpriteAlphaForPlayer) (int nIndex, int nPlayerId, unsigned char byAlpha);
+typedef int (*SDK_CreateTextdraw) (int nIndex, const char * pszText, int lX, int lY, unsigned int dwColour);
+typedef void (*SDK_DestroyTextdraw) (int nIndex);
+typedef void (*SDK_ShowTextdrawToAll) (int nIndex);
+typedef void (*SDK_ShowTextdrawToPlayer) (int nIndex, int nPlayerId);
+typedef void (*SDK_HideTextdrawFromAll) (int nIndex);
+typedef void (*SDK_HideTextdrawFromPlayer) (int nIndex, int nPlayerId);
+typedef void (*SDK_MoveTextdrawForAll) (int nIndex, int lX, int lY);
+typedef void (*SDK_MoveTextdrawForPlayer) (int nIndex, int nPlayerId, int lX, int lY);
+typedef void (*SDK_SetTextdrawColourForAll) (int nIndex, unsigned int dwColour);
+typedef void (*SDK_SetTextdrawColourForPlayer) (int nIndex, int nPlayerId, unsigned int dwColour);
 typedef int (*SDK_AddRadioStream) (int nRadioId, const char* pszRadioName, const char* pszRadioURL, unsigned int bIsListed);
 typedef int (*SDK_RemoveRadioStream) (int nRadioId);
 typedef int (*SDK_SetUseClasses) (unsigned int bToggle);
@@ -400,7 +412,7 @@ typedef void (*SDK_OnPlayerSpectate) (int nPlayerId, int nTargetId);
 typedef void (*SDK_OnPlayerCrashReport) (int nPlayerId, const char* pszReport);
 typedef void (*SDK_OnServerPerformanceReport) (int nNumStats, const char** ppszDescription, unsigned long long* pnMillisecsSpent);
 
-struct PluginFuncs {
+typedef struct {
 	unsigned int						uStructSize;
 
 	//PLUGIN SYSTEM
@@ -531,6 +543,18 @@ struct PluginFuncs {
 	SDK_RotateSpriteForPlayer RotateSpriteForPlayer;
 	SDK_SetSpriteAlphaForAll SetSpriteAlphaForAll;
 	SDK_SetSpriteAlphaForPlayer SetSpriteAlphaForPlayer;
+
+	//TEXTDRAWS
+	SDK_CreateTextdraw CreateTextdraw;
+	SDK_DestroyTextdraw DestroyTextdraw;
+	SDK_ShowTextdrawToAll ShowTextdrawToAll;
+	SDK_ShowTextdrawToPlayer ShowTextdrawToPlayer;
+	SDK_HideTextdrawFromAll HideTextdrawFromAll;
+	SDK_HideTextdrawFromPlayer HideTextdrawFromPlayer;
+	SDK_MoveTextdrawForAll MoveTextdrawForAll;
+	SDK_MoveTextdrawForPlayer MoveTextdrawForPlayer;
+	SDK_SetTextdrawColourForAll SetTextdrawColourForAll;
+	SDK_SetTextdrawColourForPlayer SetTextdrawColourForPlayer;
 
 	//RADIOS
 	SDK_AddRadioStream AddRadioStream;
@@ -778,9 +802,9 @@ struct PluginFuncs {
 	SDK_IsObjectShotReport IsObjectShotReport;
 	SDK_SetObjectBumpReport SetObjectBumpReport;
 	SDK_IsObjectBumpReport IsObjectBumpReport;
-};
+} PluginFuncs;
 
-struct PluginCallbacks {
+typedef struct {
 	unsigned int				uStructSize;
 
 	SDK_OnInitServer OnInitServer;
@@ -819,4 +843,4 @@ struct PluginCallbacks {
 	SDK_OnPlayerCrashReport OnPlayerCrashReport;
 	SDK_OnServerPerformanceReport OnServerPerformanceReport;
 
-};
+} PluginCallbacks;
