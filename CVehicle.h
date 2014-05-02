@@ -12,7 +12,8 @@ class CVehicle
 		void SetPosition( Vector pos );
 		void SetAngle( float angle );
 		void SetSpawnPos( Vector pos );
-		void SetSpawnAngle( float angle );
+		void SetSpawnAngle( Quaternion angle );
+		void SetSpawnAngleEuler( Vector angle );
 		void SetIdleRespawnTimer( unsigned int time );
 		void SetHealth( float health );
 		void SetColour1( int colour1 );
@@ -36,7 +37,8 @@ class CVehicle
 		int GetImmunity();
 		Vector GetPosition();
 		Vector GetSpawnPos();
-		float GetSpawnAngle();
+		Quaternion GetSpawnAngle();
+		Vector GetSpawnAngleEuler();
 		unsigned int GetIdleRespawnTimer();
 		float GetHealth();
 		int GetColour1();
