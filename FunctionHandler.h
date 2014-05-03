@@ -114,22 +114,6 @@ void AddClass      ( int team,
                      int wep3,
                      int ammo3 );
 
-/*void AddClassExpanded ( int team,
-					 int r,
-					 int g,
-					 int b,
-					 int skin,
-					 float x,
-					 float y,
-					 float z,
-					 float spawnAngle,
-					 int wep1,
-					 int ammo1,
-					 int wep2,
-					 int ammo2,
-					 int wep3,
-					 int ammo3 );*/
-
 void SetSpawnPlayerPos  ( Vector * pos );
 void SetSpawnCameraPos  ( Vector * pos );
 void SetSpawnCameraLook ( Vector * pos );
