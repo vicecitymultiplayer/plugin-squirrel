@@ -3,8 +3,15 @@
 
 class CPlayer
 {
+	private:
+		Vector * pos;
+	
 	public:
-		void SetPosition( Vector * pos );
+		CPlayer() { pos = new Vector(); }
+		~CPlayer() { delete pos; }
+
+	public:
+		void SetPosition( Vector pos );
 		void SetHealth( float health );
 		void SetArmour( float armour );
 		void SetAdmin( bool toSetAdmin );
@@ -12,7 +19,7 @@ class CPlayer
 		void SetSecWorld( int world );
 		void SetTeam( int team );
 		void SetSkin( int skin );
-		void SetColour( cRGB * colour );
+		void SetColour( cRGB colour );
 		void SetMoney( int money );
 		void SetScore( int score );
 		void SetImmunity( unsigned int immunity );
@@ -33,7 +40,7 @@ class CPlayer
 		void SetDrunkStatus( bool isDrunk );
 
 	public:
-		Vector * GetPosition();
+		EntityVector GetPosition();
 		int GetClass();
 		bool GetAdmin();
 		SQChar * GetIP();
@@ -45,7 +52,7 @@ class CPlayer
 		SQChar * GetName();
 		int GetTeam();
 		int GetSkin();
-		cRGB * GetColour();
+		EntityRGB GetColour();
 		int GetMoney();
 		int GetScore();
 		int GetPing();
