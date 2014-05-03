@@ -16,9 +16,9 @@ class CObject
 		int GetModel();
 		int GetAlpha();
 		int GetWorld();
-		Vector GetPos();
-		Quaternion GetRotation();
-		Vector GetRotationEuler();
+		EntityVector GetPos();
+		EntityQuaternion GetRotation();
+		EntityVector GetRotationEuler();
 		int GetID();
 		bool GetReportingShots();
 		bool GetReportingBumps();
