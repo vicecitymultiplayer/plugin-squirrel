@@ -111,6 +111,18 @@ float        GetGamespeed()  { return ( functions->GetGamespeed() != 0 );  }
 float        GetWaterLevel() { return ( functions->GetWaterLevel() != 0 ); }
 float        GetMaxHeight()  { return ( functions->GetMaxHeight() != 0 );  }
 
+int GetPlayers()
+{
+	int count = 0;
+	for (int i = 0; i < functions->GetMaxPlayers(); i++)
+	{
+		if (functions->IsPlayerConnected(i))
+			count++;
+	}
+
+	return count;
+}
+
 void ToggleSyncFrameLimiter ( bool toggle ) { functions->ToggleSyncFrameLimiter( ( toggle ? 1 : 0 ) ); }
 void ToggleFrameLimiter     ( bool toggle ) { functions->ToggleFrameLimiter( ( toggle ? 1 : 0 ) );     }
 void ToggleTaxiBoostJump    ( bool toggle ) { functions->ToggleTaxiBoostJump( ( toggle ? 1 : 0 ) );    }
@@ -215,6 +227,15 @@ CVehicle * CreateVehicle( int model, int world, Vector * pos, float angle, int c
 CPickup * CreatePickup( int model, int world, int quantity, Vector * pos, int alpha, bool isAuto )
 {
 	int pId = functions->CreatePickup(model, world, quantity, pos->x, pos->y, pos->z, alpha, isAuto);
+	if (pId < 0)
+		return nullptr;
+	else
+		return pCore->AllocatePickup(pId);
+}
+
+CPickup * CreatePickupCompat(int model, Vector * pos)
+{
+	int pId = functions->CreatePickup(model, 1, 0, pos->x, pos->y, pos->z, 255, 0);
 	if (pId < 0)
 		return nullptr;
 	else

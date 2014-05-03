@@ -5,10 +5,10 @@ void RegisterGlobals()
 	// All of the parameter checks have a "t" prepended to account for the root table.
 	RootTable(v)
 
-		.Overload(_SC("ClientMessage"), ClientMessage)
-		.Overload(_SC("ClientMessage"), ClientMessageWithAlpha)
-		.Overload(_SC("ClientMessageToAll"), ClientMessageToAll)
-		.Overload(_SC("ClientMessageToAll"), ClientMessageToAllWithAlpha)
+		.Overload<void(*)(const SQChar *, CPlayer *, int, int, int)>(_SC("ClientMessage"), ClientMessage)
+		.Overload<void(*)(const SQChar *, CPlayer *, int, int, int, int)>(_SC("ClientMessage"), ClientMessageWithAlpha)
+		.Overload<void(*)(const SQChar *, int, int, int)>(_SC("ClientMessageToAll"), ClientMessageToAll)
+		.Overload<void(*)(const SQChar *, int, int, int, int)>(_SC("ClientMessageToAll"), ClientMessageToAllWithAlpha)
 		.Func( _SC("Announce"), GameMessage )
 		.Func( _SC("AnnounceAll"), GameMessageToAll )
 		
@@ -38,6 +38,7 @@ void RegisterGlobals()
 		.Func( _SC("GetGamespeed"), GetGamespeed )
 		.Func( _SC("GetWaterLevel"), GetWaterLevel )
 		.Func( _SC("GetMaxHeight"), GetMaxHeight )
+		.Func( _SC("GetPlayers"), GetPlayers )
 
 		.Func( _SC("SetSyncFrameLimiter"), ToggleSyncFrameLimiter )
 		.Func( _SC("SetFrameLimiter"), ToggleFrameLimiter )
@@ -73,8 +74,8 @@ void RegisterGlobals()
 		.Func( _SC("GetJoinMessages"), EnabledJoinMessages )
 		.Func( _SC("GetDeathMessages"), EnabledDeathMessages )
 
-		.Overload( _SC("CreateRadioStream"), CreateRadioStreamWithID )
-		.Overload( _SC("CreateRadioStream"), CreateRadioStream )
+		.Overload<void(*)(int, const SQChar *, const SQChar *, bool)>(_SC("CreateRadioStream"), CreateRadioStreamWithID)
+		.Overload<int(*)(const SQChar *, const SQChar *, bool)>(_SC("CreateRadioStream"), CreateRadioStream)
 		.Func( _SC("DestroyRadioStream"), DestroyRadioStream )
 
 		.Func( _SC("CreateMarker"), CreateBlip )
@@ -111,6 +112,7 @@ void RegisterGlobals()
 		.Overload<CVehicle * (*)(int, int, Vector *, float, int, int)>( _SC("CreateVehicle"), CreateVehicle )
 		.Overload<CVehicle * (*)(int, int, float, float, float, float, int, int)>( _SC("CreateVehicle"), CreateVehicleExpanded )
 
+		.Overload<CPickup * (*)(int, Vector *)>(_SC("CreatePickup"), CreatePickupCompat)
 		.Overload<CPickup * (*)(int, int, int, Vector *, int, bool)>( _SC("CreatePickup"), CreatePickup )
 		.Overload<CPickup * (*)(int, int, int, float, float, float, int, bool)>( _SC("CreatePickup"), CreatePickupExpanded )
 
