@@ -16,12 +16,12 @@ int CPickup::GetAlpha() { return functions->PickupGetAlpha(this->nPickupId); }
 bool CPickup::GetAuto() { return (functions->PickupIsAutomatic(this->nPickupId) == 1 ? true : false); }
 int CPickup::GetAutoTimer() { return functions->GetPickupAutoTimer(this->nPickupId); }
 
-Vector CPickup::GetPos()
+EntityVector CPickup::GetPos()
 {
 	float x, y, z;
 	functions->PickupGetPos( this->nPickupId, &x, &y, &z );
 
-	return Vector( x, y, z );
+	return EntityVector( this->nPickupId, ENTITY_PICKUP, 0, x, y, z );
 }
 
 int CPickup::GetModel() { return functions->PickupGetModel(this->nPickupId); }
