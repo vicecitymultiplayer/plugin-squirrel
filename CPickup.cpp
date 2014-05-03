@@ -21,7 +21,7 @@ EntityVector CPickup::GetPos()
 	float x, y, z;
 	functions->PickupGetPos( this->nPickupId, &x, &y, &z );
 
-	return EntityVector( this->nPickupId, ENTITY_PICKUP, 0, x, y, z );
+	return EntityVector( this->nPickupId, ENTITY_PICKUP, -1, x, y, z );
 }
 
 int CPickup::GetModel() { return functions->PickupGetModel(this->nPickupId); }

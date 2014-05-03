@@ -82,7 +82,7 @@ EntityVector CPlayer::GetPosition()
 	float x, y, z;
 	functions->GetPlayerPos(this->nPlayerId, &x, &y, &z);
 
-	return EntityVector(this->nPlayerId, ENTITY_PLAYER, 0, x, y, z);
+	return EntityVector(this->nPlayerId, ENTITY_PLAYER, -1, x, y, z);
 }
 
 int CPlayer::GetClass() { return functions->GetPlayerClass(this->nPlayerId); }
