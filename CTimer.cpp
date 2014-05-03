@@ -5,6 +5,9 @@
 void  CTimer::Delete()          { this->committingSeppuku = true; }
 float CTimer::GetElapsedTicks() { return this->ticksElapsed; }
 
+void CTimer::Start() { this->isPaused = false; }
+void CTimer::Stop() { this->isPaused = true; }
+
 bool CTimer::Pulse( float elapsedTime )
 {
 	this->ticksElapsed += elapsedTime;
@@ -119,7 +122,9 @@ void RegisterTimer()
 
 	// Functions
 	c
-		.Func( _SC("Delete"), &CTimer::Delete );
+		.Func( _SC("Delete"), &CTimer::Delete )
+		.Func( _SC("Stop"), &CTimer::Stop )
+		.Func( _SC("Start"), &CTimer::Start );
 
 	// Freely editable variables
 	c

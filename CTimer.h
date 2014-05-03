@@ -51,6 +51,8 @@ class CTimer
 	public:
 		float GetElapsedTicks();
 		void Delete();
+		void Start();
+		void Stop();
 
 	public:
 		// Ticks elapsed since last pulse
