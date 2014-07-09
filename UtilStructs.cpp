@@ -1,19 +1,19 @@
 #include "main.h"
 
 // Convert a Vector to string
-const Sqrat::string VectorToString(const Vector* v)
+const std::string Vector::ToString()
 {
 	std::basic_stringstream<SQChar> out;
-	out << _SC("(") << v->x << _SC(", ") << v->y << _SC(", ") << v->z << _SC(")");
+	out << _SC("(") << this->x << _SC(", ") << this->y << _SC(", ") << this->z << _SC(")");
 
 	return out.str();
 }
 
 // Convert a Quaternion to string
-const Sqrat::string QuaternionToString(const Quaternion* q)
+const std::string Quaternion::ToString()
 {
 	std::basic_stringstream<SQChar> out;
-	out << _SC("(") << q->w << _SC(", ") << q->x << _SC(", ") << q->y << _SC(", ") << q->z << _SC(")");
+	out << _SC("(") << this->x << _SC(", ") << this->y << _SC(", ") << this->z << _SC(", ") << this->w << _SC(")");
 
 	return out.str();
 }
@@ -52,6 +52,212 @@ unsigned int RGBa::toUInt() { return this->r << 24 | this->g << 16 | this->b << 
 unsigned int cRGB::toUInt() { return this->r << 16 | this->g << 8 | this->b; }
 unsigned int ARGB::toUInt() { return this->a << 24 | this->r << 16 | this->g << 8 | this->b; }
 
+EntityVector EntityVector::operator -(void) const { return EntityVector(this->m_nEntityId, this->m_nEntityType, this->m_nFlags, -x, -y, -z); }
+EntityVector EntityVector::operator -(const Vector &v) const { return EntityVector(this->m_nEntityId, this->m_nEntityType, this->m_nFlags, this->x - v.x, this->y - v.y, this->z - v.z); }
+EntityVector EntityVector::operator +(const Vector &v) const { return EntityVector(this->m_nEntityId, this->m_nEntityType, this->m_nFlags, this->x + v.x, this->y + v.y, this->z + v.z); }
+EntityVector EntityVector::operator *(const float f) const { return EntityVector(this->m_nEntityId, this->m_nEntityType, this->m_nFlags, this->x * f, this->y * f, this->z * f); }
+EntityVector EntityVector::operator /(const float f) const { return EntityVector(this->m_nEntityId, this->m_nEntityType, this->m_nFlags, this->x / f, this->y / f, this->z / f); }
+
+void EntityVector::SetX(float fX)
+{
+	this->x = fX;
+	switch (this->m_nEntityType)
+	{
+		case ENTITY_PLAYER:
+			functions->SetPlayerPos(this->m_nEntityId, fX, this->y, this->z); break;
+
+		case ENTITY_VEHICLE:
+			switch (m_nFlags)
+			{
+				case VEHVECTOR_POS: functions->SetVehiclePos(this->m_nEntityId, fX, this->y, this->z, 0); break;
+				case VEHVECTOR_SPAWNPOS: functions->SetVehicleSpawnPos(this->m_nEntityId, fX, this->y, this->z, 0.0f); break;
+				case VEHVECTOR_ANGLE: functions->SetVehicleRotEuler(this->m_nEntityId, fX, this->y, this->z); break;
+				case VEHVECTOR_SPAWNANGLE: functions->SetVehicleSpawnRotEuler(this->m_nEntityId, fX, this->y, this->z); break;
+				case VEHVECTOR_SPEED: functions->SetVehicleSpeed(this->m_nEntityId, fX, this->y, this->z); break;
+				case VEHVECTOR_RELSPEED: functions->SetVehicleRelSpeed(this->m_nEntityId, fX, this->y, this->z); break;
+				case VEHVECTOR_TURNSPEED: functions->SetVehicleTurnSpeed(this->m_nEntityId, fX, this->y, this->z); break;
+				case VEHVECTOR_RELTURNSPEED: functions->SetVehicleRelTurnSpeed(this->m_nEntityId, fX, this->y, this->z); break;
+			}
+			break;
+
+		case ENTITY_PICKUP: functions->PickupSetPos(this->m_nEntityId, fX, this->y, this->z); break;
+		case ENTITY_OBJECT:
+			switch (m_nFlags)
+			{
+				case OBJVECTOR_POS: functions->SetObjectPos(this->m_nEntityId, fX, this->y, this->z); break;
+				case OBJVECTOR_ROTATION: functions->RotObjectToEuler(this->m_nEntityId, fX, this->y, this->z, 0); break;
+			}
+			break;
+	}
+}
+
+void EntityVector::SetY(float fY)
+{
+	this->y = fY;
+	switch (this->m_nEntityType)
+	{
+		case ENTITY_PLAYER:
+			functions->SetPlayerPos(this->m_nEntityId, this->x, fY, this->z); break;
+
+		case ENTITY_VEHICLE:
+			switch (m_nFlags)
+			{
+				case VEHVECTOR_POS: functions->SetVehiclePos(this->m_nEntityId, this->x, fY, this->z, 0); break;
+				case VEHVECTOR_SPAWNPOS: functions->SetVehicleSpawnPos(this->m_nEntityId, this->x, fY, this->z, 0.0f); break;
+				case VEHVECTOR_ANGLE: functions->SetVehicleRotEuler(this->m_nEntityId, this->x, fY, this->z); break;
+				case VEHVECTOR_SPAWNANGLE: functions->SetVehicleSpawnRotEuler(this->m_nEntityId, this->x, fY, this->z); break;
+				case VEHVECTOR_SPEED: functions->SetVehicleSpeed(this->m_nEntityId, this->x, fY, this->z); break;
+				case VEHVECTOR_RELSPEED: functions->SetVehicleRelSpeed(this->m_nEntityId, this->x, fY, this->z); break;
+				case VEHVECTOR_TURNSPEED: functions->SetVehicleTurnSpeed(this->m_nEntityId, this->x, fY, this->z); break;
+				case VEHVECTOR_RELTURNSPEED: functions->SetVehicleRelTurnSpeed(this->m_nEntityId, this->x, fY, this->z); break;
+			}
+			break;
+
+		case ENTITY_PICKUP: functions->PickupSetPos(this->m_nEntityId, this->x, fY, this->z); break;
+		case ENTITY_OBJECT:
+			switch (m_nFlags)
+			{
+				case OBJVECTOR_POS: functions->SetObjectPos(this->m_nEntityId, this->x, fY, this->z); break;
+				case OBJVECTOR_ROTATION: functions->RotObjectToEuler(this->m_nEntityId, this->x, fY, this->z, 0); break;
+			}
+			break;
+	}
+}
+
+void EntityVector::SetZ(float fZ)
+{
+	this->z = fZ;
+	switch (this->m_nEntityType)
+	{
+		case ENTITY_PLAYER:
+			functions->SetPlayerPos(this->m_nEntityId, this->x, this->y, fZ); break;
+
+		case ENTITY_VEHICLE:
+			switch (m_nFlags)
+			{
+				case VEHVECTOR_POS: functions->SetVehiclePos(this->m_nEntityId, this->x, this->y, fZ, 0); break;
+				case VEHVECTOR_SPAWNPOS: functions->SetVehicleSpawnPos(this->m_nEntityId, this->x, this->y, fZ, 0.0f); break;
+				case VEHVECTOR_ANGLE: functions->SetVehicleRotEuler(this->m_nEntityId, this->x, this->y, fZ); break;
+				case VEHVECTOR_SPAWNANGLE: functions->SetVehicleSpawnRotEuler(this->m_nEntityId, this->x, this->y, fZ); break;
+				case VEHVECTOR_SPEED: functions->SetVehicleSpeed(this->m_nEntityId, this->x, this->y, fZ); break;
+				case VEHVECTOR_RELSPEED: functions->SetVehicleRelSpeed(this->m_nEntityId, this->x, this->y, fZ); break;
+				case VEHVECTOR_TURNSPEED: functions->SetVehicleTurnSpeed(this->m_nEntityId, this->x, this->y, fZ); break;
+				case VEHVECTOR_RELTURNSPEED: functions->SetVehicleRelTurnSpeed(this->m_nEntityId, this->x, this->y, fZ); break;
+			}
+			break;
+
+		case ENTITY_PICKUP: functions->PickupSetPos(this->m_nEntityId, this->x, this->y, fZ); break;
+		case ENTITY_OBJECT:
+			switch (m_nFlags)
+			{
+				case OBJVECTOR_POS: functions->SetObjectPos(this->m_nEntityId, this->x, this->y, fZ); break;
+				case OBJVECTOR_ROTATION: functions->RotObjectToEuler(this->m_nEntityId, this->x, this->y, fZ, 0); break;
+			}
+			break;
+	}
+}
+
+EntityQuaternion EntityQuaternion::operator -(void) const { return EntityQuaternion(this->m_nEntityId, this->m_nEntityType, this->m_nFlags, -x, -y, -z, -w); }
+EntityQuaternion EntityQuaternion::operator -(const Quaternion &v) const { return EntityQuaternion(this->m_nEntityId, this->m_nEntityType, this->m_nFlags, this->x - v.x, this->y - v.y, this->z - v.z, this->w - v.w); }
+EntityQuaternion EntityQuaternion::operator +(const Quaternion &v) const { return EntityQuaternion(this->m_nEntityId, this->m_nEntityType, this->m_nFlags, this->x + v.x, this->y + v.y, this->z + v.z, this->w + v.w); }
+EntityQuaternion EntityQuaternion::operator *(const float f) const { return EntityQuaternion(this->m_nEntityId, this->m_nEntityType, this->m_nFlags, this->x * f, this->y * f, this->z * f, this->w * f); }
+EntityQuaternion EntityQuaternion::operator /(const float f) const { return EntityQuaternion(this->m_nEntityId, this->m_nEntityType, this->m_nFlags, this->x / f, this->y / f, this->z / f, this->w / f); }
+
+void EntityQuaternion::SetX(float fX)
+{
+	this->x = fX;
+	switch (this->m_nEntityType)
+	{
+		case ENTITY_VEHICLE:
+			switch (this->m_nFlags)
+			{
+				case VEHQUAT_ANGLE: functions->SetVehicleRot(this->m_nEntityId, fX, this->y, this->z, this->w); break;
+				case VEHQUAT_SPAWNANGLE: functions->SetVehicleSpawnRot(this->m_nEntityId, fX, this->y, this->z, this->w); break;
+			}
+			break;
+
+		case ENTITY_OBJECT: functions->RotObjectTo(this->m_nEntityId, fX, this->y, this->z, this->w, 0); break;
+	}
+}
+
+void EntityQuaternion::SetY(float fY)
+{
+	this->y = fY;
+	switch (this->m_nEntityType)
+	{
+		case ENTITY_VEHICLE:
+			switch (this->m_nFlags)
+			{
+				case VEHQUAT_ANGLE: functions->SetVehicleRot(this->m_nEntityId, this->x, fY, this->z, this->w); break;
+				case VEHQUAT_SPAWNANGLE: functions->SetVehicleSpawnRot(this->m_nEntityId, this->x, fY, this->z, this->w); break;
+			}
+			break;
+
+		case ENTITY_OBJECT: functions->RotObjectTo(this->m_nEntityId, this->x, fY, this->z, this->w, 0); break;
+	}
+}
+
+void EntityQuaternion::SetZ(float fZ)
+{
+	this->z = fZ;
+	switch (this->m_nEntityType)
+	{
+		case ENTITY_VEHICLE:
+			switch (this->m_nFlags)
+			{
+				case VEHQUAT_ANGLE: functions->SetVehicleRot(this->m_nEntityId, this->x, this->y, fZ, this->w); break;
+				case VEHQUAT_SPAWNANGLE: functions->SetVehicleSpawnRot(this->m_nEntityId, this->x, this->y, fZ, this->w); break;
+			}
+			break;
+
+		case ENTITY_OBJECT: functions->RotObjectTo(this->m_nEntityId, this->x, this->y, fZ, this->w, 0); break;
+	}
+}
+
+void EntityQuaternion::SetW(float fW)
+{
+	this->w = fW;
+	switch (this->m_nEntityType)
+	{
+		case ENTITY_VEHICLE:
+			switch (this->m_nFlags)
+			{
+				case VEHQUAT_ANGLE: functions->SetVehicleRot(this->m_nEntityId, this->x, this->y, this->z, fW); break;
+				case VEHQUAT_SPAWNANGLE: functions->SetVehicleSpawnRot(this->m_nEntityId, this->x, this->y, this->z, fW); break;
+			}
+			break;
+
+		case ENTITY_OBJECT: functions->RotObjectTo(this->m_nEntityId, this->x, this->y, this->z, fW, 0); break;
+	}
+}
+
+void EntityRGB::SetR(int nR)
+{
+	this->r = nR;
+	switch (this->m_nEntityType)
+	{
+		case ENTITY_PLAYER: functions->SetPlayerColour(this->m_nEntityId, toUInt()); break;
+	}
+}
+
+void EntityRGB::SetG(int nG)
+{
+	this->g = nG;
+	switch (this->m_nEntityType)
+	{
+		case ENTITY_PLAYER: functions->SetPlayerColour(this->m_nEntityId, toUInt()); break;
+	}
+}
+
+void EntityRGB::SetB(int nB)
+{
+	this->b = nB;
+	switch (this->m_nEntityType)
+	{
+		case ENTITY_PLAYER: functions->SetPlayerColour(this->m_nEntityId, toUInt()); break;
+	}
+}
+
 void RegisterStructures()
 {
 	Sqrat::Class<Vector> a;
@@ -61,6 +267,9 @@ void RegisterStructures()
 	Sqrat::Class<Bounds> e;
 	Sqrat::Class<WastedSettings> f;
 	Sqrat::Class<ARGB> g;
+	Sqrat::Class<EntityVector> h;
+	Sqrat::Class<EntityQuaternion> j;
+	Sqrat::Class<EntityRGB> k;
 
 	a.Ctor<float, float, float>();
 	a.Ctor<int, int, int>();
@@ -71,11 +280,18 @@ void RegisterStructures()
 	e.Ctor<float, float, float, float>();
 	e.Ctor<int, int, int, int>();
 
+	h.Ctor<int, int, int, float, float, float>();
+	h.Ctor<int, int, int, int, int, int>();
+
+	j.Ctor<int, int, int, float, float, float, float>();
+	j.Ctor<int, int, int, int, int, int, int>();
+
 	// Because an unsigned char is crashy
 	c.Ctor<int, int, int, int>();
 	d.Ctor<int, int, int>();
 	f.Ctor<int, int, float, float, cRGB, int, int>();
 	g.Ctor<int, int, int, int>();
+	k.Ctor<int, int, int, int, int, int>();
 
 	a
 		.Var(_SC("x"), &Vector::x)
@@ -93,7 +309,7 @@ void RegisterStructures()
 		.Func<Vector(Vector::*)(void) const>(_SC("_unm"), &Vector::operator -)
 		.Func<Vector(Vector::*)(const Vector&) const>(_SC("_sub"), &Vector::operator -)
 
-		.GlobalFunc(_SC("_tostring"), &VectorToString);
+		.Func(_SC("_tostring"), &Vector::ToString);
 
 	b
 		.Var(_SC("w"), &Quaternion::w)
@@ -107,7 +323,7 @@ void RegisterStructures()
 		.Func<Quaternion(Quaternion::*)(void) const>(_SC("_unm"), &Quaternion::operator -)
 		.Func<Quaternion(Quaternion::*)(const Quaternion&) const>(_SC("_sub"), &Quaternion::operator -)
 
-		.GlobalFunc(_SC("_tostring"), &QuaternionToString);
+		.Func(_SC("_tostring"), &Quaternion::ToString);
 
 	c
 		.Var(_SC("r"), &RGBa::r)
@@ -141,6 +357,43 @@ void RegisterStructures()
 		.Var(_SC("g"), &ARGB::g)
 		.Var(_SC("b"), &ARGB::b);
 
+	h
+		.Prop(_SC("x"), &EntityVector::GetX, &EntityVector::SetX)
+		.Prop(_SC("y"), &EntityVector::GetY, &EntityVector::SetY)
+		.Prop(_SC("z"), &EntityVector::GetZ, &EntityVector::SetZ)
+
+		.Func(_SC("Distance"), &EntityVector::Distance)
+		.Func(_SC("Dot"), &EntityVector::Dot)
+		.Func(_SC("Length"), &EntityVector::Length)
+		.Func(_SC("Normalize"), &EntityVector::Normalize)
+
+		.Func(_SC("_add"), &EntityVector::operator +)
+		.Func(_SC("_mul"), &EntityVector::operator *)
+		.Func(_SC("_div"), &EntityVector::operator /)
+		.Func<EntityVector(EntityVector::*)(void) const>(_SC("_unm"), &EntityVector::operator -)
+		.Func<EntityVector(EntityVector::*)(const Vector&) const>(_SC("_sub"), &EntityVector::operator -)
+
+		.Func(_SC("_tostring"), &Vector::ToString);
+
+	j
+		.Prop(_SC("w"), &EntityQuaternion::GetW, &EntityQuaternion::SetW)
+		.Prop(_SC("x"), &EntityQuaternion::GetX, &EntityQuaternion::SetX)
+		.Prop(_SC("y"), &EntityQuaternion::GetY, &EntityQuaternion::SetY)
+		.Prop(_SC("z"), &EntityQuaternion::GetZ, &EntityQuaternion::SetZ)
+
+		.Func(_SC("_add"), &EntityQuaternion::operator +)
+		.Func(_SC("_mul"), &EntityQuaternion::operator *)
+		.Func(_SC("_div"), &EntityQuaternion::operator /)
+		.Func<EntityQuaternion(EntityQuaternion::*)(void) const>(_SC("_unm"), &EntityQuaternion::operator -)
+		.Func<EntityQuaternion(EntityQuaternion::*)(const Quaternion&) const>(_SC("_sub"), &EntityQuaternion::operator -)
+
+		.Func(_SC("_tostring"), &EntityQuaternion::ToString);
+
+	k
+		.Prop(_SC("r"), &EntityRGB::GetR, &EntityRGB::SetR)
+		.Prop(_SC("g"), &EntityRGB::GetG, &EntityRGB::SetG)
+		.Prop(_SC("b"), &EntityRGB::GetB, &EntityRGB::SetB);
+
 	RootTable(v).Bind(_SC("Vector"), a);
 	RootTable(v).Bind(_SC("Quaternion"), b);
 	RootTable(v).Bind(_SC("RGBA"), c);
@@ -148,4 +401,7 @@ void RegisterStructures()
 	RootTable(v).Bind(_SC("Bounds"), e);
 	RootTable(v).Bind(_SC("WastedSettings"), f);
 	RootTable(v).Bind(_SC("ARGB"), g);
+	RootTable(v).Bind(_SC("EntityVector"), h);
+	RootTable(v).Bind(_SC("EntityQuaternon"), j);
+	RootTable(v).Bind(_SC("EntityRGB"), k);
 }

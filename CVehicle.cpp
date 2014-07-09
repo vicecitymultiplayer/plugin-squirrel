@@ -53,36 +53,36 @@ int CVehicle::GetWorld() { return functions->GetVehicleWorld(this->nVehicleId); 
 int CVehicle::GetModel() { return functions->GetVehicleModel(this->nVehicleId); }
 int CVehicle::GetImmunity() { return functions->GetVehicleImmunityFlags(this->nVehicleId); }
 
-Vector CVehicle::GetPosition()
+EntityVector CVehicle::GetPosition()
 {
 	float x, y, z;
 	functions->GetVehiclePos( this->nVehicleId, &x, &y, &z );
 
-	return Vector( x, y, z );
+	return EntityVector( this->nVehicleId, ENTITY_VEHICLE, VEHVECTOR_POS, x, y, z );
 }
 
-Vector CVehicle::GetSpawnPos()
+EntityVector CVehicle::GetSpawnPos()
 {
 	float x, y, z;
 	functions->GetVehicleSpawnPos( this->nVehicleId, &x, &y, &z, NULL );
 
-	return Vector( x, y, z );
+	return EntityVector( this->nVehicleId, ENTITY_VEHICLE, VEHVECTOR_SPAWNPOS, x, y, z );
 }
 
-Quaternion CVehicle::GetSpawnAngle()
+EntityQuaternion CVehicle::GetSpawnAngle()
 {
-	Quaternion angle;
-	functions->GetVehicleSpawnRot(this->nVehicleId, &angle.x, &angle.y, &angle.z, &angle.w);
+	float x, y, z, w;
+	functions->GetVehicleSpawnRot(this->nVehicleId, &x, &y, &z, &w);
 
-	return angle;
+	return EntityQuaternion(this->nVehicleId, ENTITY_VEHICLE, VEHQUAT_SPAWNANGLE, x, y, z, w);
 }
 
-Vector CVehicle::GetSpawnAngleEuler()
+EntityVector CVehicle::GetSpawnAngleEuler()
 {
-	Vector angle;
-	functions->GetVehicleSpawnRotEuler(this->nVehicleId, &angle.x, &angle.y, &angle.z);
+	float x, y, z;
+	functions->GetVehicleSpawnRotEuler(this->nVehicleId, &x, &y, &z);
 
-	return angle;
+	return EntityVector(this->nVehicleId, ENTITY_VEHICLE, VEHVECTOR_SPAWNANGLE, x, y, z);
 }
 
 unsigned int CVehicle::GetIdleRespawnTimer() { return functions->GetVehicleIdleRespawnTimer(this->nVehicleId); }
@@ -165,52 +165,52 @@ void CVehicle::ResetHandlingData( int rule ) { functions->ResetInstHandlingRule(
 void CVehicle::ResetAllHandling() { functions->ResetInstHandling(this->nVehicleId); }
 bool CVehicle::IsHandlingSet( int rule ) { return ( functions->ExistsInstHandlingRule( this->nVehicleId, rule ) == 1 ? true : false ); }
 
-Quaternion CVehicle::GetRotation()
+EntityQuaternion CVehicle::GetRotation()
 {
 	float w, x, y, z;
 	functions->GetVehicleRot( this->nVehicleId, &x, &y, &z, &w );
 
-	return Quaternion(w, x, y, z);
+	return EntityQuaternion(this->nVehicleId, ENTITY_VEHICLE, VEHQUAT_ANGLE, w, x, y, z);
 }
 
-Vector CVehicle::GetEulerRotation()
+EntityVector CVehicle::GetEulerRotation()
 {
 	float x, y, z;
 	functions->GetVehicleRotEuler( this->nVehicleId, &x, &y, &z );
 
-	return Vector( x, y, z );
+	return EntityVector( this->nVehicleId, ENTITY_VEHICLE, VEHVECTOR_ANGLE, x, y, z );
 }
 
-Vector CVehicle::GetSpeed()
+EntityVector CVehicle::GetSpeed()
 {
 	float x, y, z;
 	functions->GetVehicleSpeed( this->nVehicleId, &x, &y, &z );
 
-	return Vector( x, y, z );
+	return EntityVector( this->nVehicleId, ENTITY_VEHICLE, VEHVECTOR_SPEED, x, y, z );
 }
 
-Vector CVehicle::GetRelativeSpeed()
+EntityVector CVehicle::GetRelativeSpeed()
 {
 	float x, y, z;
 	functions->GetVehicleRelSpeed( this->nVehicleId, &x, &y, &z );
 
-	return Vector( x, y, z );
+	return EntityVector( this->nVehicleId, ENTITY_VEHICLE, VEHVECTOR_RELSPEED, x, y, z );
 }
 
-Vector CVehicle::GetTurnSpeed()
+EntityVector CVehicle::GetTurnSpeed()
 {
 	float x, y, z;
 	functions->GetVehicleTurnSpeed( this->nVehicleId, &x, &y, &z );
 
-	return Vector( x, y, z );
+	return EntityVector( this->nVehicleId, ENTITY_VEHICLE, VEHVECTOR_TURNSPEED, x, y, z );
 }
 
-Vector CVehicle::GetRelativeTurnSpeed()
+EntityVector CVehicle::GetRelativeTurnSpeed()
 {
 	float x, y, z;
 	functions->GetVehicleRelTurnSpeed( this->nVehicleId, &x, &y, &z );
 
-	return Vector( x, y, z );
+	return EntityVector( this->nVehicleId, ENTITY_VEHICLE, VEHVECTOR_RELTURNSPEED, x, y, z );
 }
 
 void CVehicle::SetRotation( Quaternion rotation ) { functions->SetVehicleRot( this->nVehicleId, rotation.x, rotation.y, rotation.z, rotation.w ); }
