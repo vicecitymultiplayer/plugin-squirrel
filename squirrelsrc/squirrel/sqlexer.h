@@ -17,7 +17,7 @@ struct SQLexer
 	SQInteger Lex();
 	const SQChar *Tok2Str(SQInteger tok);
 private:
-	SQInteger GetIDType(const SQChar *s,SQInteger len);
+	SQInteger GetIDType(SQChar *s);
 	SQInteger ReadString(SQInteger ndelim,bool verbatim);
 	SQInteger ReadNumber();
 	void LexBlockComment();
@@ -32,6 +32,7 @@ public:
 	SQInteger _currentline;
 	SQInteger _lasttokenline;
 	SQInteger _currentcolumn;
+	SQInteger _lasttokencolumn;
 	const SQChar *_svalue;
 	SQInteger _nvalue;
 	SQFloat _fvalue;

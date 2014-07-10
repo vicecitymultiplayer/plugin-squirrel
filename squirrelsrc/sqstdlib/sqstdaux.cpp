@@ -83,9 +83,8 @@ void sqstd_printcallstack(HSQUIRRELVM v)
 					pf(v,_SC("[%s] WEAKREF\n"),name);
 					break;
 				case OT_BOOL:{
-					SQBool bval;
-					sq_getbool(v,-1,&bval);
-					pf(v,_SC("[%s] %s\n"),name,bval == SQTrue ? _SC("true"):_SC("false"));
+					sq_getinteger(v,-1,&i);
+					pf(v,_SC("[%s] %s\n"),name,i?_SC("true"):_SC("false"));
 							 }
 					break;
 				default: assert(0); break;

@@ -100,7 +100,8 @@ enum SQOpcode
 	_OP_NEWSLOTA=			0x3A,
 	_OP_GETBASE=			0x3B,
 	_OP_CLOSE=				0x3C,
-};							  
+	_OP_DYNAMICCAST=		0x3D,
+};
 
 struct SQInstructionDesc {	  
 	const SQChar *name;		  

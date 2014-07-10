@@ -76,7 +76,7 @@ public:
 	bool Clone(const SQObjectPtr &self, SQObjectPtr &target);
 	bool ObjCmp(const SQObjectPtr &o1, const SQObjectPtr &o2,SQInteger &res);
 	bool StringCat(const SQObjectPtr &str, const SQObjectPtr &obj, SQObjectPtr &dest);
-	static bool IsEqual(const SQObjectPtr &o1,const SQObjectPtr &o2,bool &res);
+	static bool IsEqual(const SQObjectPtr &o1,const SQObjectPtr &o2,bool &res, SQVM* vm = NULL);
 	bool ToString(const SQObjectPtr &o,SQObjectPtr &res);
 	SQString *PrintObjVal(const SQObjectPtr &o);
 
@@ -168,12 +168,14 @@ public:
 	SQSharedState *_sharedstate;
 	SQInteger _nnativecalls;
 	SQInteger _nmetamethodscall;
-	SQRELEASEHOOK _releasehook;
 	//suspend infos
 	SQBool _suspended;
 	SQBool _suspended_root;
 	SQInteger _suspended_target;
 	SQInteger _suspended_traps;
+#ifdef SQ_JIT_LLVM
+	SQBool _jitenabled;
+#endif
 };
 
 struct AutoDec{

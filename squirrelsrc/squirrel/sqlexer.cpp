@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include "sqtable.h"
 #include "sqstring.h"
+#include "sqreflection.h"
 #include "sqcompiler.h"
 #include "sqlexer.h"
 
@@ -37,6 +38,7 @@ void SQLexer::Init(SQSharedState *ss, SQLEXREADFUNC rg, SQUserPointer up,Compile
 	ADD_KEYWORD(break, TK_BREAK);
 	ADD_KEYWORD(continue, TK_CONTINUE);
 	ADD_KEYWORD(return, TK_RETURN);
+	ADD_KEYWORD(define, TK_RETURN);
 	ADD_KEYWORD(null, TK_NULL);
 	ADD_KEYWORD(function, TK_FUNCTION);
 	ADD_KEYWORD(local, TK_LOCAL);
@@ -65,13 +67,36 @@ void SQLexer::Init(SQSharedState *ss, SQLEXREADFUNC rg, SQUserPointer up,Compile
 	ADD_KEYWORD(static,TK_STATIC);
 	ADD_KEYWORD(enum,TK_ENUM);
 	ADD_KEYWORD(const,TK_CONST);
-	ADD_KEYWORD(__LINE__, TK___LINE__);
-	ADD_KEYWORD(__FILE__, TK___FILE__);
+	ADD_KEYWORD(var,TK_TYPEDVAR);
+	ADD_KEYWORD(struct,TK_VALUESTRUCT);
+	ADD_KEYWORD(native,TK_NATIVE);
+
+	ADD_KEYWORD(using, TK_USING);
+	ADD_KEYWORD(namespace, TK_NAMESPACE);
+	ADD_KEYWORD(as, TK_AS_OPERATOR);
+	ADD_KEYWORD(is, TK_IS_OPERATOR);
+	ADD_KEYWORD(dynamic,TK_DYNAMIC_T);
+	ADD_KEYWORD(void,TK_VOID_T);
+	ADD_KEYWORD(char,TK_CHAR8_T);
+	ADD_KEYWORD(byte,TK_BYTE8_T);
+	ADD_KEYWORD(bool,TK_BOOLEAN_T);
+	ADD_KEYWORD(int16,TK_INT16_T);
+	ADD_KEYWORD(uint16,TK_UINT16_T);
+	ADD_KEYWORD(int32,TK_INT32_T);
+	ADD_KEYWORD(uint32,TK_UINT32_T);
+	ADD_KEYWORD(int,TK_INT32_T);
+	ADD_KEYWORD(uint,TK_UINT32_T);
+	ADD_KEYWORD(int64,TK_INT64_T);
+	ADD_KEYWORD(uint64,TK_UINT64_T);
+	ADD_KEYWORD(float,TK_FLOAT32_T);
+	ADD_KEYWORD(double,TK_DOUBLE64_T);
+	ADD_KEYWORD(string,TK_STRING_T);
+	ADD_KEYWORD(nativeptr,TK_NATIVEPTR_T);
 
 	_readf = rg;
 	_up = up;
 	_lasttokenline = _currentline = 1;
-	_currentcolumn = 0;
+	_lasttokencolumn = _currentcolumn = 0;
 	_prevtoken = -1;
 	_reached_eof = SQFalse;
 	Next();
@@ -126,6 +151,7 @@ void SQLexer::LexLineComment()
 SQInteger SQLexer::Lex()
 {
 	_lasttokenline = _currentline;
+	_lasttokencolumn = _currentcolumn;
 	while(CUR_CHAR != SQUIRREL_EOB) {
 		switch(CUR_CHAR){
 		case _SC('\t'): case _SC('\r'): case _SC(' '): NEXT(); continue;
@@ -176,6 +202,7 @@ SQInteger SQLexer::Lex()
 			case _SC('-'): NEXT(); RETURN_TOKEN(TK_NEWSLOT); break;
 			case _SC('<'): NEXT(); RETURN_TOKEN(TK_SHIFTL); break;
 			case _SC('/'): NEXT(); RETURN_TOKEN(TK_ATTR_OPEN); break;
+			case _SC('|'): NEXT(); RETURN_TOKEN(TK_ATTR_OPEN); break;
 			}
 			RETURN_TOKEN('<');
 		case _SC('>'):
@@ -230,6 +257,7 @@ SQInteger SQLexer::Lex()
 			else { NEXT(); RETURN_TOKEN(TK_AND); }
 		case _SC('|'):
 			NEXT();
+			if (CUR_CHAR == _SC('>')){ NEXT(); RETURN_TOKEN(TK_ATTR_CLOSE); continue; }
 			if (CUR_CHAR != _SC('|')){ RETURN_TOKEN('|') }
 			else { NEXT(); RETURN_TOKEN(TK_OR); }
 		case _SC(':'):
@@ -278,10 +306,10 @@ SQInteger SQLexer::Lex()
 	return 0;    
 }
 	
-SQInteger SQLexer::GetIDType(const SQChar *s,SQInteger len)
+SQInteger SQLexer::GetIDType(SQChar *s)
 {
 	SQObjectPtr t;
-	if(_keywords->GetStr(s,len, t)) {
+	if(_keywords->Get(SQString::Create(_sharedstate, s), t)) {
 		return SQInteger(_integer(t));
 	}
 	return TK_IDENTIFIER;
@@ -483,7 +511,7 @@ SQInteger SQLexer::ReadID()
 		NEXT();
 	} while(scisalnum(CUR_CHAR) || CUR_CHAR == _SC('_'));
 	TERMINATE_BUFFER();
-	res = GetIDType(&_longstr[0],_longstr.size() - 1);
+	res = GetIDType(&_longstr[0]);
 	if(res == TK_IDENTIFIER || res == TK_CONSTRUCTOR) {
 		_svalue = &_longstr[0];
 	}

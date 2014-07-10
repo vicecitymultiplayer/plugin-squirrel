@@ -1,4 +1,5 @@
 /* see copyright notice in squirrel.h */
+#include <sqpcheader.h>
 #include <squirrel.h>
 #include <sqstdstring.h>
 #include <string.h>
@@ -10,12 +11,14 @@
 #ifdef SQUNICODE
 #define scstrchr wcschr
 #define scsnprintf wsnprintf
-#define scatoi _wtoi
+#ifndef _MSC_VER
 #define scstrtok wcstok
+#else
+#define scstrtok wcstok_s
+#endif
 #else
 #define scstrchr strchr
 #define scsnprintf snprintf
-#define scatoi atoi
 #define scstrtok strtok
 #endif
 #define MAX_FORMAT_LEN	20
@@ -71,13 +74,10 @@ SQRESULT sqstd_format(HSQUIRRELVM v,SQInteger nformatstringidx,SQInteger *outlen
 	SQChar *dest;
 	SQChar fmt[MAX_FORMAT_LEN];
 	sq_getstring(v,nformatstringidx,&format);
-	SQInteger format_size = sq_getsize(v,nformatstringidx); 
 	SQInteger allocated = (sq_getsize(v,nformatstringidx)+2)*sizeof(SQChar);
 	dest = sq_getscratchpad(v,allocated);
 	SQInteger n = 0,i = 0, nparam = nformatstringidx+1, w = 0;
-	//while(format[n] != '\0') 
-	while(n < format_size)
-	{
+	while(format[n] != '\0') {
 		if(format[n] != '%') {
 			assert(i < allocated);
 			dest[i++] = format[n];

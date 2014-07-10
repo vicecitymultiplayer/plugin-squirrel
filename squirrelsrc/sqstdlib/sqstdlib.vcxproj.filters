@@ -43,5 +43,8 @@
     <ClInclude Include="sqstdstream.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="sqpcheader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

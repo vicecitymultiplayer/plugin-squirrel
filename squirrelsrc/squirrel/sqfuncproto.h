@@ -115,6 +115,11 @@ public:
 	SQInteger GetLine(SQInstruction *curr);
 	bool Save(SQVM *v,SQUserPointer up,SQWRITEFUNC write);
 	static bool Load(SQVM *v,SQUserPointer up,SQREADFUNC read,SQObjectPtr &ret);
+
+#ifdef SQ_JIT_LLVM
+	void JitCompile();
+#endif
+
 #ifndef NO_GARBAGE_COLLECTOR
 	void Mark(SQCollectable **chain);
 	void Finalize(){ _NULL_SQOBJECT_VECTOR(_literals,_nliterals); }
@@ -125,6 +130,10 @@ public:
     SQInteger _stacksize;
 	bool _bgenerator;
 	SQInteger _varparams;
+
+#ifdef SQ_JIT_LLVM
+	llvm::Function* _jitfunction;
+#endif
 
 	SQInteger _nlocalvarinfos;
 	SQLocalVarInfo *_localvarinfos;

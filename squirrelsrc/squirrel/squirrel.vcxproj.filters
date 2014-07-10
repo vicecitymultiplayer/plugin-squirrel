@@ -80,6 +80,9 @@
     <ClInclude Include="sqlexer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="sq_llvm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sqmem.cpp">
@@ -116,6 +119,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sqlexer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sq_llvm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sqreflection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sqstaticanalyser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
