@@ -147,7 +147,11 @@ int OnPlayerRequestClass( int nPlayerId, int nOffset )
 		try
 		{
 			if (!callback.IsNull())
-				returnValue = callback.Evaluate<int, CPlayer *, int>(playerInstance, nOffset);
+			{
+				returnValue = (int)callback.Evaluate<int, CPlayer *, int>(playerInstance, nOffset).Get();
+				if (returnValue)
+					returnValue = *(int *)returnValue;
+			}
 		}
 		catch (Sqrat::Error e)
 		{
@@ -172,7 +176,11 @@ int OnPlayerRequestSpawn( int nPlayerId )
 		try
 		{
 			if (!callback.IsNull())
-				returnValue = callback.Evaluate<int, CPlayer *>(playerInstance);
+			{
+				returnValue = (int)callback.Evaluate<int, CPlayer *>(playerInstance).Get();
+				if (returnValue)
+					returnValue = *(int *)returnValue;
+			}
 		}
 		catch (Sqrat::Error e)
 		{
@@ -266,7 +274,11 @@ int OnPlayerRequestEnter( int nPlayerId, int nVehicleId, int nSlotId )
 		try
 		{
 			if (!callback.IsNull() && playerInstance != nullptr && vehicleInstance != nullptr)
-				returnValue = callback.Evaluate<int, CPlayer *, CVehicle *, int>(playerInstance, vehicleInstance, nSlotId);
+			{
+				returnValue = (int)callback.Evaluate<int, CPlayer *, CVehicle *, int>(playerInstance, vehicleInstance, nSlotId).Get();
+				if (returnValue)
+					returnValue = *(int *)returnValue;
+			}
 		}
 		catch (Sqrat::Error e)
 		{
@@ -336,7 +348,11 @@ int OnPickupClaimPicked( int nPickupId, int nPlayerId )
 		try
 		{
 			if (!callback.IsNull())
-				returnValue = callback.Evaluate<int, CPlayer *, CPickup *>(playerInstance, pickupInstance);
+			{
+				returnValue = (int)callback.Evaluate<int, CPlayer *, CPickup *>(playerInstance, pickupInstance).Get();
+				if (returnValue)
+					returnValue = *(int *)returnValue;
+			}
 		}
 		catch (Sqrat::Error e)
 		{
@@ -446,7 +462,11 @@ int OnPublicMessage( int nPlayerId, const char* pszText )
 		try
 		{
 			if (!callback.IsNull())
-				returnValue = callback.Evaluate<int, CPlayer *, const char *>(playerInstance, pszText);
+			{
+				returnValue = (int)callback.Evaluate<int, CPlayer *, const char *>(playerInstance, pszText).Get();
+				if (returnValue)
+					returnValue = *(int *)returnValue;
+			}
 		}
 		catch (Sqrat::Error e)
 		{
@@ -481,7 +501,9 @@ int OnCommandMessage( int nPlayerId, const char* pszText )
 
 			try
 			{
-				returnValue = callback.Evaluate<int>(playerInstance, szText, szArguments);
+				returnValue = (int)callback.Evaluate<int>(playerInstance, szText, szArguments).Get();
+				if (returnValue)
+					returnValue = *(int *)returnValue;
 			}
 			catch (Sqrat::Error e)
 			{
@@ -510,7 +532,11 @@ int OnPrivateMessage( int nPlayerId, int nTargetId, const char* pszText )
 		try
 		{
 			if (!callback.IsNull())
-				returnValue = callback.Evaluate<int, CPlayer *, CPlayer *, const char *>(playerInstance, targetInstance, pszText);
+			{
+				returnValue = (int)callback.Evaluate<int, CPlayer *, CPlayer *, const char *>(playerInstance, targetInstance, pszText).Get();
+				if (returnValue)
+					returnValue = *(int *)returnValue;
+			}
 		}
 		catch (Sqrat::Error e)
 		{
@@ -574,7 +600,11 @@ int OnLoginAttempt( char* playerName, const char* password, const char* pszIpAdd
 		try
 		{
 			if (!callback.IsNull())
-				returnValue = callback.Evaluate<int, char *, const char *, const char *>(playerName, password, pszIpAddress);
+			{
+				returnValue = (int)callback.Evaluate<int, char *, const char *, const char *>(playerName, password, pszIpAddress).Get();
+				if (returnValue)
+					returnValue = *(int *)returnValue;
+			}
 		}
 		catch (Sqrat::Error e)
 		{
