@@ -1902,6 +1902,11 @@ SQInteger NewTimer( HSQUIRRELVM v )
 }
 
 // These functions are for compatibility, but will be deprecated
+void SetFallEnabled(bool unused)
+{
+	OutputWarning("SetFallEnabled has no effect in 0.4 and will be removed in the future.");
+}
+
 DWORD GetTime( void )
 {
 	OutputWarning( "GetTime is deprecated and may be removed in the future.\n"
