@@ -1,4 +1,5 @@
 #include "main.h"
+#include "CObject.h"
 #pragma once
 
 class CPlayer
@@ -110,6 +111,14 @@ class CPlayer
 
 	public:
 		int nPlayerId;
+
+	private:
+		char name[65];
+		char ip[17];
+		char uid[41];
+		Vector pos;
+		CObject standingOn;
+		cRGB rgb;
 };
 
 void RegisterPlayer();
