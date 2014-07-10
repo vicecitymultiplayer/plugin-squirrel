@@ -49,10 +49,9 @@ struct ClassTypeDataBase {
     COPYFUNC    copyFunc;
     string        className;
     ClassTypeDataBase* baseClass;
-    bool        ctorCalled;
     virtual ~ClassTypeDataBase() {}
     virtual SQUserPointer Cast(SQUserPointer ptr, SQUserPointer classType) = 0;
-    ClassTypeDataBase() : ctorCalled(false){}
+    ClassTypeDataBase() {}
 };
 
 // Keeps track of the nearest base class and the class associated with a ClassTypeDataBase in order to cast pointers to the right base class
@@ -73,6 +72,11 @@ struct ClassType {
     static inline std::map<HSQUIRRELVM, ClassTypeDataBase*>& s_classTypeDataMap() {
         static std::map< HSQUIRRELVM, ClassTypeDataBase* > s_classTypeDataMap;
         return s_classTypeDataMap;
+    }
+
+    static inline std::map<C*, HSQOBJECT>& s_objectTable() {
+        static std::map<C*, HSQOBJECT> s_objectTable;
+        return s_objectTable;
     }
 
     static inline ClassTypeDataBase*& getClassTypeData(HSQUIRRELVM vm) {
@@ -120,22 +124,31 @@ struct ClassType {
         return getClassTypeData(vm)->baseClass;
     }
 
+    static inline SQInteger RemoveFromObjectTable(SQUserPointer ptr, SQInteger) {
+        typename std::map<C*, HSQOBJECT>::iterator it = s_objectTable().find(reinterpret_cast<C*>(ptr));
+        assert(it != s_objectTable().end());
+        s_objectTable().erase(it);
+        return 0;
+    }
+
     static void PushInstance(HSQUIRRELVM vm, C* ptr) {
-#if !defined (SCRAT_NO_ERROR_CHECKING)
-        if (ptr != NULL) {
-            sq_pushobject(vm, ClassObject(vm));
-            sq_createinstance(vm, -1);
-            sq_remove(vm, -2);
-            sq_setinstanceup(vm, -1, ptr);
+        typename std::map<C*, HSQOBJECT>::iterator it = s_objectTable().find(ptr);
+        if (it != s_objectTable().end()) {
+          sq_pushobject(vm, it->second);
+          return;
         }
-        else
+#if !defined (SCRAT_NO_ERROR_CHECKING)
+        if (!ptr) {
             sq_pushnull(vm);
-#else
+            return;
+        }
+#endif
         sq_pushobject(vm, ClassObject(vm));
         sq_createinstance(vm, -1);
         sq_remove(vm, -2);
         sq_setinstanceup(vm, -1, ptr);
-#endif
+        sq_setreleasehook(vm, -1, &RemoveFromObjectTable);
+        sq_getstackobj(vm, -1, &s_objectTable()[ptr]);
     }
 
     static void PushInstanceCopy(HSQUIRRELVM vm, const C& value) {
