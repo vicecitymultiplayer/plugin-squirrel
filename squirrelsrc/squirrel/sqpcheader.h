@@ -16,11 +16,4 @@
 #include "sqobject.h"
 #include "sqstate.h"
 
-#ifdef _UNICODE
-#ifndef _MSC_VER
-#include <wchar.h>
-#include <wctype.h>
-#endif
-#endif
-
 #endif //_SQPCHEADER_H_

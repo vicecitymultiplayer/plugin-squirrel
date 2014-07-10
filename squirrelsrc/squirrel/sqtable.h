@@ -14,7 +14,7 @@
 
 inline SQHash HashObj(const SQObjectPtr &key)
 {
-	switch(sqobjtype(key)) {
+	switch(type(key)) {
 		case OT_STRING:		return _string(key)->_hash;
 		case OT_FLOAT:		return (SQHash)((SQInteger)_float(key));
 		case OT_BOOL: case OT_INTEGER:	return (SQHash)((SQInteger)_integer(key));
@@ -67,11 +67,29 @@ public:
 	{
 		_HashNode *n = &_nodes[hash];
 		do{
-			if(_rawval(n->key) == _rawval(key) && sqobjtype(n->key) == sqobjtype(key)){
+			if(_rawval(n->key) == _rawval(key) && type(n->key) == type(key)){
 				return n;
 			}
 		}while((n = n->next));
 		return NULL;
+	}
+	//for compiler use
+	inline bool GetStr(const SQChar* key,SQInteger keylen,SQObjectPtr &val)
+	{
+		SQHash hash = _hashstr(key,keylen);
+		_HashNode *n = &_nodes[hash & (_numofnodes - 1)];
+		_HashNode *res = NULL;
+		do{
+			if(type(n->key) == OT_STRING && (scstrcmp(_stringval(n->key),key) == 0)){
+				res = n;
+				break;
+			}
+		}while((n = n->next));
+		if (res) {
+			val = _realval(res->val);
+			return true;
+		}
+		return false;
 	}
 	bool Get(const SQObjectPtr &key,SQObjectPtr &val);
 	void Remove(const SQObjectPtr &key);

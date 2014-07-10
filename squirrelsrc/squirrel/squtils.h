@@ -26,9 +26,6 @@ public:
 	}
 	sqvector(const sqvector<T>& v)
 	{
-		_vals = NULL;
-		_size = 0;
-		_allocated = 0;
 		copy(v);
 	}
 	void copy(const sqvector<T>& v)

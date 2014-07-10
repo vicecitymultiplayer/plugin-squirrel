@@ -24,16 +24,7 @@ static SQInteger _system_getenv(HSQUIRRELVM v)
 {
 	const SQChar *s;
 	if(SQ_SUCCEEDED(sq_getstring(v,2,&s))){
-#ifdef _MSC_VER
         sq_pushstring(v,scgetenv(s),-1);
-#else
-		char sMBS[256];
-		wcstombs(sMBS, s, sizeof(sMBS));
-		const char* env = getenv(sMBS);
-		SQChar envWCS[1024];
-		mbstowcs(envWCS, env, sizeof(envWCS));
-		sq_pushstring(v,envWCS,-1);
-#endif
 		return 1;
 	}
 	return 0;
@@ -44,13 +35,7 @@ static SQInteger _system_system(HSQUIRRELVM v)
 {
 	const SQChar *s;
 	if(SQ_SUCCEEDED(sq_getstring(v,2,&s))){
-#ifdef _MSC_VER
 		sq_pushinteger(v,scsystem(s));
-#else
-		char sMBS[256];
-		wcstombs(sMBS, s, sizeof(sMBS));
-		sq_pushinteger(v,system(sMBS));
-#endif
 		return 1;
 	}
 	return sq_throwerror(v,_SC("wrong param"));
@@ -65,9 +50,8 @@ static SQInteger _system_clock(HSQUIRRELVM v)
 
 static SQInteger _system_time(HSQUIRRELVM v)
 {
-	time_t t;
-	time(&t);
-	sq_pushinteger(v,*((SQInteger *)&t));
+	SQInteger t = (SQInteger)time(NULL);
+	sq_pushinteger(v,t);
 	return 1;
 }
 
@@ -75,16 +59,8 @@ static SQInteger _system_remove(HSQUIRRELVM v)
 {
 	const SQChar *s;
 	sq_getstring(v,2,&s);
-#ifdef _MSC_VER
 	if(scremove(s)==-1)
-#else
-	char sMBS[256];
-	wcstombs(sMBS, s, sizeof(sMBS));
-	if(remove(sMBS)==-1)
-#endif
-	{
-		return sq_throwerror(v,_SC("remove() failed"));	
-	}
+		return sq_throwerror(v,_SC("remove() failed"));
 	return 0;
 }
 
@@ -93,17 +69,8 @@ static SQInteger _system_rename(HSQUIRRELVM v)
 	const SQChar *oldn,*newn;
 	sq_getstring(v,2,&oldn);
 	sq_getstring(v,3,&newn);
-#ifdef _MSC_VER
 	if(screname(oldn,newn)==-1)
-#else
-	char oldnMBS[256];
-	char newnMBS[256];
-	wcstombs(oldnMBS, oldn, sizeof(oldnMBS));
-	wcstombs(newnMBS, newn, sizeof(newnMBS));
-#endif
-	{
 		return sq_throwerror(v,_SC("rename() failed"));
-	}
 	return 0;
 }
 

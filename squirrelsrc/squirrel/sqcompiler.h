@@ -70,39 +70,10 @@ struct SQVM;
 #define TK_STATIC 322
 #define TK_ENUM 323
 #define TK_CONST 324
-#define TK_TYPEDVAR 325
-#define TK_VALUESTRUCT 326
-#define TK_NATIVE 327
+#define TK___LINE__ 325
+#define TK___FILE__ 326
 
-#define TK_SQUIRT_BEGIN	(328)
-#define TK_NAMESPACE	(TK_SQUIRT_BEGIN + 1)
-#define TK_USING		(TK_SQUIRT_BEGIN + 2)
-#define TK_IMPORT		(TK_SQUIRT_BEGIN + 3)
-#define TK_AS_OPERATOR	(TK_SQUIRT_BEGIN + 4)
-#define TK_IS_OPERATOR	(TK_SQUIRT_BEGIN + 5)
-
-#define TK_DYNAMIC_T	(TK_SQUIRT_BEGIN + 6)
-#define TK_VOID_T		(TK_DYNAMIC_T + SQ_TYPE_VOID)
-#define TK_BOOLEAN_T	(TK_DYNAMIC_T + SQ_TYPE_BOOLEAN)
-#define TK_CHAR8_T		(TK_DYNAMIC_T + SQ_TYPE_CHAR8)
-#define TK_BYTE8_T		(TK_DYNAMIC_T + SQ_TYPE_BYTE8)
-#define TK_INT16_T		(TK_DYNAMIC_T + SQ_TYPE_INT16)
-#define TK_UINT16_T		(TK_DYNAMIC_T + SQ_TYPE_UINT16)
-#define TK_INT32_T		(TK_DYNAMIC_T + SQ_TYPE_INT32)
-#define TK_UINT32_T		(TK_DYNAMIC_T + SQ_TYPE_UINT32)
-#define TK_INT64_T		(TK_DYNAMIC_T + SQ_TYPE_INT64)
-#define TK_UINT64_T		(TK_DYNAMIC_T + SQ_TYPE_UINT64)
-#define TK_FLOAT32_T	(TK_DYNAMIC_T + SQ_TYPE_FLOAT32)
-#define TK_DOUBLE64_T	(TK_DYNAMIC_T + SQ_TYPE_DOUBLE64)
-#define TK_STRING_T		(TK_DYNAMIC_T + SQ_TYPE_STRING)
-#define TK_OBJECT_T		(TK_DYNAMIC_T + SQ_TYPE_OBJECT)
-#define TK_NATIVEPTR_T	(TK_DYNAMIC_T + SQ_TYPE_NATIVEPTR)
-
-#define TK_SQUIRT_END	(TK_NATIVEPTR_T + 1)
-
-#define _isbuiltintype( tk ) ( TK_DYNAMIC_T <= tk && tk <= TK_NATIVEPTR_T )
-#define _tokentometatype( tk ) ((SQMetaType)(tk - TK_DYNAMIC_T))
 
 typedef void(*CompilerErrorFunc)(void *ud, const SQChar *s);
-bool Compile(SQVM *vm, SQLEXREADFUNC rg, SQUserPointer up, const SQChar *sourcename, SQObjectPtr &out, bool raiseerror, bool lineinfo, struct SQAstNode_Document* pAstNode);
+bool Compile(SQVM *vm, SQLEXREADFUNC rg, SQUserPointer up, const SQChar *sourcename, SQObjectPtr &out, bool raiseerror, bool lineinfo);
 #endif //_SQCOMPILER_H_

@@ -17,8 +17,9 @@ SQRESULT sq_getfunctioninfo(HSQUIRRELVM v,SQInteger level,SQFunctionInfo *fi)
 			SQClosure *c = _closure(ci._closure);
 			SQFunctionProto *proto = c->_function;
 			fi->funcid = proto;
-			fi->name = sqobjtype(proto->_name) == OT_STRING?_stringval(proto->_name):_SC("unknown");
-			fi->source = sqobjtype(proto->_name) == OT_STRING?_stringval(proto->_sourcename):_SC("unknown");
+			fi->name = type(proto->_name) == OT_STRING?_stringval(proto->_name):_SC("unknown");
+			fi->source = type(proto->_sourcename) == OT_STRING?_stringval(proto->_sourcename):_SC("unknown");
+			fi->line = proto->_lineinfos[0]._line;
 			return SQ_OK;
 		}
 	}
@@ -31,12 +32,12 @@ SQRESULT sq_stackinfos(HSQUIRRELVM v, SQInteger level, SQStackInfos *si)
 	if (cssize > level) {
 		memset(si, 0, sizeof(SQStackInfos));
 		SQVM::CallInfo &ci = v->_callsstack[cssize-level-1];
-		switch (sqobjtype(ci._closure)) {
+		switch (type(ci._closure)) {
 		case OT_CLOSURE:{
 			SQFunctionProto *func = _closure(ci._closure)->_function;
-			if (sqobjtype(func->_name) == OT_STRING)
+			if (type(func->_name) == OT_STRING)
 				si->funcname = _stringval(func->_name);
-			if (sqobjtype(func->_sourcename) == OT_STRING)
+			if (type(func->_sourcename) == OT_STRING)
 				si->source = _stringval(func->_sourcename);
 			si->line = func->GetLine(ci._ip);
 						}
@@ -44,7 +45,7 @@ SQRESULT sq_stackinfos(HSQUIRRELVM v, SQInteger level, SQStackInfos *si)
 		case OT_NATIVECLOSURE:
 			si->source = _SC("NATIVE");
 			si->funcname = _SC("unknown");
-			if(sqobjtype(_nativeclosure(ci._closure)->_name) == OT_STRING)
+			if(type(_nativeclosure(ci._closure)->_name) == OT_STRING)
 				si->funcname = _stringval(_nativeclosure(ci._closure)->_name);
 			si->line = -1;
 			break;
@@ -57,10 +58,9 @@ SQRESULT sq_stackinfos(HSQUIRRELVM v, SQInteger level, SQStackInfos *si)
 
 void SQVM::Raise_Error(const SQChar *s, ...)
 {
-	SQInteger len = rsl((SQInteger)scstrlen(s)+(NUMBER_MAX_CHAR*2));
 	va_list vl;
 	va_start(vl, s);
-	scvsprintf(_sp(len), s, vl);
+	scvsprintf(_sp(rsl((SQInteger)scstrlen(s)+(NUMBER_MAX_CHAR*2))), s, vl);
 	va_end(vl);
 	_lasterror = SQString::Create(_ss(this),_spval,-1);
 }
@@ -72,15 +72,14 @@ void SQVM::Raise_Error(const SQObjectPtr &desc)
 
 SQString *SQVM::PrintObjVal(const SQObjectPtr &o)
 {
-	SQInteger len = rsl(NUMBER_MAX_CHAR+1);
-	switch(sqobjtype(o)) {
+	switch(type(o)) {
 	case OT_STRING: return _string(o);
 	case OT_INTEGER:
-		scsprintf(_sp(len), _PRINT_INT_FMT, _integer(o));
+		scsprintf(_sp(rsl(NUMBER_MAX_CHAR+1)), _PRINT_INT_FMT, _integer(o));
 		return SQString::Create(_ss(this), _spval);
 		break;
 	case OT_FLOAT:
-		scsprintf(_sp(len), _SC("%.14g"), _float(o));
+		scsprintf(_sp(rsl(NUMBER_MAX_CHAR+1)), _SC("%.14g"), _float(o));
 		return SQString::Create(_ss(this), _spval);
 		break;
 	default:
@@ -116,36 +115,3 @@ void SQVM::Raise_ParamTypeError(SQInteger nparam,SQInteger typemask,SQInteger ty
 	}
 	Raise_Error(_SC("parameter %d has an invalid type '%s' ; expected: '%s'"), nparam, IdType2Name((SQObjectType)type), _stringval(exptypes));
 }
-
-/*extern "C" {
-
-static PrintfFuncType _printfFunc =
-#ifdef SQUNICODE
-	&wprintf;
-#else
-	&printf;
-#endif
-
-void sq_setstaticprintffunc(PrintfFuncType printfFunc)
-{
-	if(printfFunc == nullptr)
-	{
-		_printfFunc =
-#ifdef SQUNICODE
-		&wprintf;
-#else
-		&printf;
-#endif
-	}
-	else
-	{
-		_printfFunc = printfFunc;
-	}
-}
-
-PrintfFuncType sq_getstaticprintffunc()
-{
-	return _printfFunc;
-}
-
-}*/

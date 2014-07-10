@@ -5,11 +5,7 @@
 #include <setjmp.h>
 #include <sqstdstring.h>
 
-#ifdef _UNICODE
-#ifndef _MSC_VER
-#include <wchar.h>
-#include <wctype.h>
-#endif
+#ifdef _UINCODE
 #define scisprint iswprint
 #else
 #define scisprint isprint

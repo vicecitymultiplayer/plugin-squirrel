@@ -35,8 +35,7 @@ enum SQMetaMethod{
 	MT_TOSTRING=15,
 	MT_NEWMEMBER=16,
 	MT_INHERITED=17,
-	MT_EQ=18,
-	MT_LAST = 19
+	MT_LAST = 18
 };
 
 #define MM_ADD		_SC("_add")
@@ -57,7 +56,6 @@ enum SQMetaMethod{
 #define MM_TOSTRING	_SC("_tostring")
 #define MM_NEWMEMBER _SC("_newmember")
 #define MM_INHERITED _SC("_inherited")
-#define MM_EQ		_SC("_eq")
 
 
 #define _CONSTRUCT_VECTOR(type,size,ptr) { \
@@ -103,7 +101,7 @@ struct SQWeakRef : SQRefCounted
 	SQObject _obj;
 };
 
-#define _realval(o) (sqobjtype((o)) != OT_WEAKREF?(SQObject)o:_weakref(o)->_obj)
+#define _realval(o) (type((o)) != OT_WEAKREF?(SQObject)o:_weakref(o)->_obj)
 
 struct SQObjectPtr;
 
@@ -130,8 +128,8 @@ struct SQObjectPtr;
 	(obj)->_uiRef++; \
 }
 
-#define sqobjtype(obj) ((obj)._type)
-#define is_delegable(t) (sqobjtype(t)&SQOBJECT_DELEGABLE)
+#define type(obj) ((obj)._type)
+#define is_delegable(t) (type(t)&SQOBJECT_DELEGABLE)
 #define raw_type(obj) _RAW_TYPE((obj)._type)
 
 #define _integer(obj) ((obj)._unVal.nInteger)
@@ -157,8 +155,8 @@ struct SQObjectPtr;
 #define _stringval(obj) (obj)._unVal.pString->_val
 #define _userdataval(obj) ((SQUserPointer)sq_aligning((obj)._unVal.pUserData + 1))
 
-#define tofloat(num) ((sqobjtype(num)==OT_INTEGER)?(SQFloat)_integer(num):_float(num))
-#define tointeger(num) ((sqobjtype(num)==OT_FLOAT)?(SQInteger)_float(num):_integer(num))
+#define tofloat(num) ((type(num)==OT_INTEGER)?(SQFloat)_integer(num):_float(num))
+#define tointeger(num) ((type(num)==OT_FLOAT)?(SQInteger)_float(num):_integer(num))
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 #if defined(SQUSEDOUBLE) && !defined(_SQ64) || !defined(SQUSEDOUBLE) && defined(_SQ64)

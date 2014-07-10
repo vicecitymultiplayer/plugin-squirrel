@@ -43,7 +43,7 @@ const SQChar *IdType2Name(SQObjectType type)
 
 const SQChar *GetTypeName(const SQObjectPtr &obj1)
 {
-	return IdType2Name(sqobjtype(obj1));	
+	return IdType2Name(type(obj1));	
 }
 
 SQString *SQString::Create(SQSharedState *ss,const SQChar *s,SQInteger len)
@@ -72,7 +72,7 @@ SQInteger SQString::Next(const SQObjectPtr &refpos, SQObjectPtr &outkey, SQObjec
 
 SQUnsignedInteger TranslateIndex(const SQObjectPtr &idx)
 {
-	switch(sqobjtype(idx)){
+	switch(type(idx)){
 		case OT_NULL:
 			return 0;
 		case OT_INTEGER:
@@ -136,7 +136,7 @@ bool SQGenerator::Yield(SQVM *v,SQInteger target)
 	
 	_stack.resize(size);
 	SQObject _this = v->_stack[v->_stackbase];
-	_stack._vals[0] = ISREFCOUNTED(sqobjtype(_this)) ? SQObjectPtr(_refcounted(_this)->GetWeakRef(sqobjtype(_this))) : _this;
+	_stack._vals[0] = ISREFCOUNTED(type(_this)) ? SQObjectPtr(_refcounted(_this)->GetWeakRef(type(_this))) : _this;
 	for(SQInteger n =1; n<target; n++) {
 		_stack._vals[n] = v->_stack[v->_stackbase+n];
 	}
@@ -179,7 +179,7 @@ bool SQGenerator::Resume(SQVM *v,SQObjectPtr &dest)
 		_etraps.pop_back();
 	}
 	SQObject _this = _stack._vals[0];
-	v->_stack[v->_stackbase] = sqobjtype(_this) == OT_WEAKREF ? _weakref(_this)->_obj : _this;
+	v->_stack[v->_stackbase] = type(_this) == OT_WEAKREF ? _weakref(_this)->_obj : _this;
 
 	for(SQInteger n = 1; n<size; n++) {
 		v->_stack[v->_stackbase+n] = _stack._vals[n];
@@ -247,13 +247,17 @@ SQInteger SQFunctionProto::GetLine(SQInstruction *curr)
 			break;
 		}
 	}
-
+	
+	while(mid > 0 && _lineinfos[mid]._op >= op) mid--;
+	
 	line = _lineinfos[mid]._line;
+
 	return line;
 }
 
 SQClosure::~SQClosure()
 {
+	__ObjRelease(_root);
 	__ObjRelease(_env);
 	__ObjRelease(_base);
 	REMOVE_FROM_CHAIN(&_ss(this)->_gc_chain,this);
@@ -296,9 +300,9 @@ bool CheckTag(HSQUIRRELVM v,SQWRITEFUNC read,SQUserPointer up,SQUnsignedInteger3
 
 bool WriteObject(HSQUIRRELVM v,SQUserPointer up,SQWRITEFUNC write,SQObjectPtr &o)
 {
-	SQUnsignedInteger32 _type = (SQUnsignedInteger32)sqobjtype(o);
+	SQUnsignedInteger32 _type = (SQUnsignedInteger32)type(o);
 	_CHECK_IO(SafeWrite(v,write,up,&_type,sizeof(_type)));
-	switch(sqobjtype(o)){
+	switch(type(o)){
 	case OT_STRING:
 		_CHECK_IO(SafeWrite(v,write,up,&_string(o)->_len,sizeof(SQInteger)));
 		_CHECK_IO(SafeWrite(v,write,up,_stringval(o),rsl(_string(o)->_len)));
@@ -367,7 +371,8 @@ bool SQClosure::Load(SQVM *v,SQUserPointer up,SQREADFUNC read,SQObjectPtr &ret)
 	SQObjectPtr func;
 	_CHECK_IO(SQFunctionProto::Load(v,up,read,func));
 	_CHECK_IO(CheckTag(v,read,up,SQ_CLOSURESTREAM_TAIL));
-	ret = SQClosure::Create(_ss(v),_funcproto(func));
+	ret = SQClosure::Create(_ss(v),_funcproto(func),_table(v->_roottable)->GetWeakRef(OT_TABLE));
+	//FIXME: load an root for this closure
 	return true;
 }
 
@@ -375,9 +380,6 @@ SQFunctionProto::SQFunctionProto(SQSharedState *ss)
 {
 	_stacksize=0;
 	_bgenerator=false;
-#ifdef SQ_JIT_LLVM
-	_jitfunction = NULL;
-#endif
 	INIT_CHAIN();ADD_TO_CHAIN(&_ss(this)->_gc_chain,this);
 }
 
@@ -530,17 +532,6 @@ bool SQFunctionProto::Load(SQVM *v,SQUserPointer up,SQREADFUNC read,SQObjectPtr 
 	ret = f;
 	return true;
 }
-
-#ifdef SQ_JIT_LLVM
-
-void SQFunctionProto::JitCompile()
-{
-	using namespace llvm;
-	std::vector<Value*> arrArgs;
-	_jitfunction = _sharedstate->GetJitEngine().BuildFunction(_name, this);
-}
-
-#endif//SQ_JIT_LLVM
 
 #ifndef NO_GARBAGE_COLLECTOR
 

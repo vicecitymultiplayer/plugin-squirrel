@@ -38,7 +38,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Template|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v100</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
@@ -60,7 +60,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
-    <PlatformToolset>v100</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -99,8 +99,8 @@
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>.\Release\</OutDir>
+    <IntDir>.\Release\</IntDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -193,7 +193,7 @@
     </Bscmake>
     <Lib>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>..\..\$(Platform)\$(Configuration)\squirrel.lib</OutputFile>
+      <OutputFile>..\lib\squirrel.lib</OutputFile>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -222,7 +222,7 @@
     </Bscmake>
     <Lib>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>..\..\$(Platform)\$(Configuration)\squirrel.lib</OutputFile>
+      <OutputFile>..\lib\squirrel.lib</OutputFile>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -249,7 +249,6 @@
     <ClInclude Include="squserdata.h" />
     <ClInclude Include="squtils.h" />
     <ClInclude Include="sqvm.h" />
-    <ClInclude Include="sq_llvm.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sqapi.cpp" />
@@ -261,12 +260,9 @@
     <ClCompile Include="sqlexer.cpp" />
     <ClCompile Include="sqmem.cpp" />
     <ClCompile Include="sqobject.cpp" />
-    <ClCompile Include="sqreflection.cpp" />
     <ClCompile Include="sqstate.cpp" />
-    <ClCompile Include="sqstaticanalyser.cpp" />
     <ClCompile Include="sqtable.cpp" />
     <ClCompile Include="sqvm.cpp" />
-    <ClCompile Include="sq_llvm.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

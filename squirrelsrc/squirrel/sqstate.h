@@ -2,10 +2,8 @@
 #ifndef _SQSTATE_H_
 #define _SQSTATE_H_
 
-#include "sq_llvm.h"
 #include "squtils.h"
 #include "sqobject.h"
-
 struct SQString;
 struct SQTable;
 //max number of character for a printed number
@@ -114,13 +112,6 @@ public:
 private:
 	SQChar *_scratchpad;
 	SQInteger _scratchpadsize;
-
-#ifdef SQ_JIT_LLVM
-	SqJitEngine _llvmJitEngine;
-public:
-	SqJitEngine& GetJitEngine() { return _llvmJitEngine; }
-private:
-#endif
 };
 
 #define _sp(s) (_sharedstate->GetScratchPad(s))
