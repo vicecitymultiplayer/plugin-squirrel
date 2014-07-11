@@ -37,7 +37,7 @@ bool CPickup::StreamedToPlayer(CPlayer * player) { return (functions->IsPickupSt
 
 void RegisterPickup()
 {
-	Class<CPickup> c(v);
+	Class<CPickup> c(v, "CPickup_INTERNAL");
 
 	// Read-write properties
 	c

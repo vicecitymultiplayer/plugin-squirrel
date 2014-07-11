@@ -260,7 +260,7 @@ void CVehicle::SetRadioLocked(const bool isLocked) { functions->SetVehicleRadioL
 
 void RegisterVehicle()
 {
-	Class <CVehicle> c(v);
+	Class <CVehicle> c(v, "CVehicle_INTERNAL");
 
 	// Read-write properties
 	c

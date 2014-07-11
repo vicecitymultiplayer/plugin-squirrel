@@ -54,7 +54,7 @@ void CSprite::Delete() {
 
 void RegisterSprite()
 {
-	Class<CSprite> c(v);
+	Class<CSprite> c(v, "CSprite_INTERNAL");
 	c
 		.Func(_SC("ShowForAll"), &CSprite::ShowForAll)
 		.Func(_SC("ShowForPlayer"), &CSprite::ShowForPlayer)

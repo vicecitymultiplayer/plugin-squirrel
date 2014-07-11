@@ -89,7 +89,7 @@ bool CObject::GetReportingBumps() { return ( functions->IsObjectBumpReport( this
 
 void RegisterObject()
 {
-	Class<CObject> c(v);
+	Class<CObject> c(v, "CObject_INTERNAL");
 
 	// Read-write properties
 	c
