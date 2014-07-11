@@ -9,7 +9,7 @@ inline bool Boolify( unsigned int n ) { return ( n ? true : false ); }
 // The core
 extern CCore * pCore;
 
-void CPlayer::SetPosition( Vector * pos ) { functions->SetPlayerPos( this->nPlayerId, pos->x, pos->y, pos->z ); }
+void CPlayer::SetPosition( Vector pos ) { functions->SetPlayerPos( this->nPlayerId, pos.x, pos.y, pos.z ); }
 void CPlayer::SetHealth( float health ) { functions->SetPlayerHealth( this->nPlayerId, health ); }
 void CPlayer::SetArmour( float armour ) { functions->SetPlayerArmour( this->nPlayerId, armour ); }
 
@@ -26,7 +26,7 @@ void CPlayer::SetWorld( int world ) { functions->SetPlayerWorld( this->nPlayerId
 void CPlayer::SetSecWorld( int world ) { functions->SetPlayerSecWorld( this->nPlayerId, world ); }
 void CPlayer::SetTeam( int team ) { functions->SetPlayerTeam( this->nPlayerId, team ); }
 void CPlayer::SetSkin( int skin ) { functions->SetPlayerSkin( this->nPlayerId, skin ); }
-void CPlayer::SetColour( cRGB * colour ) { functions->SetPlayerColour( this->nPlayerId, colour->toUInt() ); }
+void CPlayer::SetColour( cRGB colour ) { functions->SetPlayerColour( this->nPlayerId, colour.toUInt() ); }
 
 void CPlayer::SetMoney( int money )
 {
@@ -77,13 +77,12 @@ void CPlayer::SetOnRadar( bool showOnRadar ) { functions->TogglePlayerHasMarker(
 void CPlayer::SetCanAttack( bool canAttack ) { functions->TogglePlayerAttackPriv( this->nPlayerId, canAttack ); }
 void CPlayer::SetWeaponSlot( int slot ) { functions->SetPlayerWeaponSlot( this->nPlayerId, slot ); }
 
-Vector * CPlayer::GetPosition()
+EntityVector CPlayer::GetPosition()
 {
 	float x, y, z;
-	functions->GetPlayerPos( this->nPlayerId, &x, &y, &z );
+	functions->GetPlayerPos(this->nPlayerId, &x, &y, &z);
 
-	this->pos = Vector( x, y, z );
-	return &this->pos;
+	return EntityVector(this->nPlayerId, ENTITY_PLAYER, -1, x, y, z);
 }
 
 int CPlayer::GetClass() { return functions->GetPlayerClass(this->nPlayerId); }
@@ -113,15 +112,15 @@ Sqrat::string CPlayer::GetName()
 int CPlayer::GetTeam() { return functions->GetPlayerTeam(this->nPlayerId); }
 int CPlayer::GetSkin() { return functions->GetPlayerSkin(this->nPlayerId); }
 
-cRGB * CPlayer::GetColour()
+EntityRGB CPlayer::GetColour()
 {
 	unsigned int colour = functions->GetPlayerColour( this->nPlayerId );
 	unsigned char r     = (colour >> 16) & 0xff;
 	unsigned char g     = (colour >> 8) & 0xff;
 	unsigned char b     = colour & 0xff;
 
-	this->rgb = cRGB(r, g, b);
-	return &this->rgb;
+	EntityRGB rgb(this->nPlayerId, ENTITY_PLAYER, 0, r, g, b);
+	return rgb;
 }
 
 int CPlayer::GetMoney() { return functions->GetPlayerMoney(this->nPlayerId); }

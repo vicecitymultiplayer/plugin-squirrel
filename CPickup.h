@@ -19,7 +19,7 @@ class CPickup
 		int GetAlpha();
 		bool GetAuto();
 		int GetAutoTimer();
-		Vector GetPos();
+		EntityVector GetPos();
 		int GetModel();
 		int GetQuantity();
 		int GetID();
