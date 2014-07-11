@@ -499,7 +499,7 @@ void PrivMessageAll     ( const SQChar * message )
 void SendPlayerMessage  ( CPlayer * playerToFake, CPlayer * playerTo, const SQChar * message )
 {
 	if( playerToFake != nullptr && playerTo != nullptr )
-		functions->SendClientMessage( playerTo->nPlayerId, 0x007f16ff, "** pm from %s >> %s", playerToFake->GetName(), message );
+		functions->SendClientMessage( playerTo->nPlayerId, 0x007f16ff, "** pm from %s >> %s", playerToFake->GetName().c_str(), message );
 }
 
 const SQChar * GetWeaponName   ( int weaponID )
