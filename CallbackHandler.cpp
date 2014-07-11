@@ -486,7 +486,6 @@ int OnCommandMessage( int nPlayerId, const char* pszText )
 	{
 		CPlayer * playerInstance = pCore->RetrievePlayer(nPlayerId);
 		Function callback = RootTable().GetFunction(_SC("onPlayerCommand"));
-		int returnValue = 1;
 
 		if (!callback.IsNull())
 		{
@@ -501,9 +500,8 @@ int OnCommandMessage( int nPlayerId, const char* pszText )
 
 			try
 			{
-				returnValue = (int)callback.Evaluate<int>(playerInstance, szText, szArguments).Get();
-				if (returnValue)
-					returnValue = *(int *)returnValue;
+				if (!callback.IsNull())
+					callback.Execute(playerInstance, szText, szArguments);
 			}
 			catch (Sqrat::Error e)
 			{
@@ -514,10 +512,9 @@ int OnCommandMessage( int nPlayerId, const char* pszText )
 		}
 
 		callback.Release();
-		return returnValue;
 	}
-	else
-		return 1;
+	
+	return 1;
 }
 
 int OnPrivateMessage( int nPlayerId, int nTargetId, const char* pszText )
