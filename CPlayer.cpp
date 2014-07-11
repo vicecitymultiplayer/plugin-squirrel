@@ -91,10 +91,8 @@ bool CPlayer::Typing() { return Boolify(functions->IsPlayerTyping(this->nPlayerI
 
 SQChar * CPlayer::GetIP()
 {
-	char * ip = new char[17];
-	functions->GetPlayerIP( this->nPlayerId, ip, 17 );
-
-	return ip;
+	functions->GetPlayerIP( this->nPlayerId, this->ip, 17 );
+	return this->ip;
 }
 
 bool CPlayer::GetSpawned() { return Boolify(functions->IsPlayerSpawned(this->nPlayerId) == 1); }
@@ -103,12 +101,12 @@ int CPlayer::GetSecWorld() { return functions->GetPlayerSecWorld(this->nPlayerId
 int CPlayer::GetUniqueWorld() { return functions->GetPlayerUniqueWorld(this->nPlayerId); }
 int CPlayer::GetState() { return functions->GetPlayerState(this->nPlayerId); }
 
-SQChar * CPlayer::GetName()
+Sqrat::string CPlayer::GetName()
 {
-	static char name[64];
-	functions->GetPlayerName(this->nPlayerId, name, 64);
+	memset(this->name, '\0', sizeof(this->name));
+	functions->GetPlayerName(this->nPlayerId, this->name, sizeof(this->name));
 
-	return name;
+	return this->name;
 }
 
 int CPlayer::GetTeam() { return functions->GetPlayerTeam(this->nPlayerId); }
@@ -216,10 +214,8 @@ CObject * CPlayer::StandingOnObject()
 		return nullptr;
 	else
 	{
-		static CObject objInstance;
-		objInstance.nObjectId = obj;
-
-		return &objInstance;
+		this->standingOn.nObjectId = obj;
+		return &this->standingOn;
 	}
 }
 
@@ -256,23 +252,18 @@ void CPlayer::SetDrunkLevel(int visuals, int handling)
 
 SQChar * CPlayer::GetUniqueID()
 {
-	static char uid[40];
-	functions->GetPlayerUID(this->nPlayerId, uid, 40);
-
+	functions->GetPlayerUID(this->nPlayerId, this->uid, 40);
 	return uid;
 }
 
-const Sqrat::string PlayerToString(CPlayer * p)
+Sqrat::string PlayerToString(CPlayer * p)
 {
-	std::basic_stringstream<SQChar> out;
-	out << p->GetName();
-
-	return out.str();
+	return p->GetName();;
 }
 
 void RegisterPlayer()
 {
-	Class<CPlayer> c(v);
+	Class<CPlayer> c(v, "CPlayer_INTERNAL");
 
 	// Read-write properties
 	c

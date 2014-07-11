@@ -38,7 +38,7 @@ void CTextdraw::Delete() {
 
 void RegisterTextdraw()
 {
-	Class<CTextdraw> c(v);
+	Class<CTextdraw> c(v, "CTextdraw_INTERNAL");
 	c
 		.Func(_SC("ShowForAll"), &CTextdraw::ShowForAll)
 		.Func(_SC("ShowForPlayer"), &CTextdraw::ShowForPlayer)

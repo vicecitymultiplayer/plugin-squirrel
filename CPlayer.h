@@ -1,4 +1,5 @@
 #include "main.h"
+#include "CObject.h"
 #pragma once
 
 class CPlayer
@@ -49,7 +50,7 @@ class CPlayer
 		int GetSecWorld();
 		int GetUniqueWorld();
 		int GetState();
-		SQChar * GetName();
+		Sqrat::string GetName();
 		int GetTeam();
 		int GetSkin();
 		EntityRGB GetColour();
@@ -117,6 +118,14 @@ class CPlayer
 
 	public:
 		int nPlayerId;
+
+	private:
+		char name[65];
+		char ip[17];
+		char uid[41];
+		Vector pos;
+		CObject standingOn;
+		cRGB rgb;
 };
 
 void RegisterPlayer();
