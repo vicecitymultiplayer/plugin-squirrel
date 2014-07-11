@@ -43,7 +43,7 @@ class CPlayer
 		int GetSecWorld();
 		int GetUniqueWorld();
 		int GetState();
-		SQChar * GetName();
+		Sqrat::string GetName();
 		int GetTeam();
 		int GetSkin();
 		cRGB * GetColour();

@@ -102,10 +102,12 @@ int CPlayer::GetSecWorld() { return functions->GetPlayerSecWorld(this->nPlayerId
 int CPlayer::GetUniqueWorld() { return functions->GetPlayerUniqueWorld(this->nPlayerId); }
 int CPlayer::GetState() { return functions->GetPlayerState(this->nPlayerId); }
 
-SQChar * CPlayer::GetName()
+Sqrat::string CPlayer::GetName()
 {
-	functions->GetPlayerName(this->nPlayerId, this->name, 64);
-	return name;
+	memset(this->name, '\0', sizeof(this->name));
+	functions->GetPlayerName(this->nPlayerId, this->name, sizeof(this->name));
+
+	return this->name;
 }
 
 int CPlayer::GetTeam() { return functions->GetPlayerTeam(this->nPlayerId); }
@@ -255,12 +257,9 @@ SQChar * CPlayer::GetUniqueID()
 	return uid;
 }
 
-const Sqrat::string PlayerToString(CPlayer * p)
+Sqrat::string PlayerToString(CPlayer * p)
 {
-	std::basic_stringstream<SQChar> out;
-	out << p->GetName();
-
-	return out.str();
+	return p->GetName();;
 }
 
 void RegisterPlayer()
