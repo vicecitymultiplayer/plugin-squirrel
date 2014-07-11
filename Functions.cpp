@@ -178,6 +178,7 @@ void RegisterGlobals()
 		.Func( _SC( "GetVehicleModelFromName" ), GetVehicleModelFromName )
 		.Func( _SC( "GetVehicleNameFromModel" ), GetVehicleNameFromModel )
 
+		.Func(_SC("SetFallEnabled"), SetFallEnabled)
 		.Func( _SC( "GetTime" ), GetTime )
 		.Func( _SC( "GetFullTime" ), GetFullTime )
 		.Func( _SC( "LoadModule" ), LoadVCMPModule )

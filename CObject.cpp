@@ -9,31 +9,28 @@ int CObject::GetModel() { return functions->GetObjectModel( this->nObjectId ); }
 int CObject::GetAlpha() { return functions->GetObjectAlpha(this->nObjectId); }
 int CObject::GetWorld() { return functions->GetObjectWorld(this->nObjectId); }
 
-Vector CObject::GetPos()
+EntityVector CObject::GetPos()
 {
 	float x, y, z;
 	functions->GetObjectPos( this->nObjectId, &x, &y, &z );
 
-	Vector p(x, y, z);
-	return p;
+	return EntityVector(this->nObjectId, ENTITY_OBJECT, OBJVECTOR_POS, x, y, z);
 }
 
-Quaternion CObject::GetRotation()
+EntityQuaternion CObject::GetRotation()
 {
 	float w, x, y, z;
 	functions->GetObjectRot( this->nObjectId, &x, &y, &z, &w );
 
-	Quaternion q( w, x, y, z );
-	return q;
+	return EntityQuaternion(this->nObjectId, ENTITY_OBJECT, -1, x, y, z, w);
 }
 
-Vector CObject::GetRotationEuler()
+EntityVector CObject::GetRotationEuler()
 {
 	float x, y, z;
 	functions->GetObjectRotEuler( this->nObjectId, &x, &y, &z );
 
-	Vector e( x, y, z );
-	return e;
+	return EntityVector(this->nObjectId, ENTITY_OBJECT, OBJVECTOR_ROTATION, x, y, z);
 }
 
 void CObject::Delete()
@@ -89,7 +86,7 @@ bool CObject::GetReportingBumps() { return ( functions->IsObjectBumpReport( this
 
 void RegisterObject()
 {
-	Class<CObject> c(v);
+	Class<CObject> c(v, "CObject_INTERNAL");
 
 	// Read-write properties
 	c

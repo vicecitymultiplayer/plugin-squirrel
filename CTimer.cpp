@@ -114,7 +114,7 @@ bool CTimer::Pulse( float elapsedTime )
 
 void RegisterTimer()
 {
-	Class<CTimer> c(v);
+	Class<CTimer> c(v, "CTimer_INTERNAL");
 		
 	// Read-only properties
 	c

@@ -35,10 +35,10 @@ class CVehicle
 		int GetWorld();
 		int GetModel();
 		int GetImmunity();
-		Vector GetPosition();
-		Vector GetSpawnPos();
-		Quaternion GetSpawnAngle();
-		Vector GetSpawnAngleEuler();
+		EntityVector GetPosition();
+		EntityVector GetSpawnPos();
+		EntityQuaternion GetSpawnAngle();
+		EntityVector GetSpawnAngleEuler();
 		unsigned int GetIdleRespawnTimer();
 		float GetHealth();
 		int GetColour1();
@@ -52,12 +52,12 @@ class CVehicle
 		int GetSyncSource();
 		int GetSyncType();
 		bool GetWrecked();
-		Quaternion GetRotation();
-		Vector GetEulerRotation();
-		Vector GetSpeed();
-		Vector GetRelativeSpeed();
-		Vector GetTurnSpeed();
-		Vector GetRelativeTurnSpeed();
+		EntityQuaternion GetRotation();
+		EntityVector GetEulerRotation();
+		EntityVector GetSpeed();
+		EntityVector GetRelativeSpeed();
+		EntityVector GetTurnSpeed();
+		EntityVector GetRelativeTurnSpeed();
 		int GetRadio();
 		bool GetRadioLockStatus();
 

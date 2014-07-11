@@ -209,5 +209,6 @@ SQInteger InPoly( HSQUIRRELVM v );
 SQInteger NewTimer( HSQUIRRELVM v );
 
 // These functions are for compatibility, but will be deprecated
+void SetFallEnabled(bool unused);
 DWORD    GetTime         ( void );
 const SQChar * GetFullTime     ( void );
