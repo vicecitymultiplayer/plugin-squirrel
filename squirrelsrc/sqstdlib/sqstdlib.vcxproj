@@ -222,7 +222,7 @@
     </Bscmake>
     <Lib>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>..\lib\sqstdlib.lib</OutputFile>
+      <OutputFile>..\..\$(Platform)\$(Configuration)\sqstdlib.lib</OutputFile>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
