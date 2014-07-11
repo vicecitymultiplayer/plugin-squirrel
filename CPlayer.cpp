@@ -82,8 +82,8 @@ Vector * CPlayer::GetPosition()
 	float x, y, z;
 	functions->GetPlayerPos( this->nPlayerId, &x, &y, &z );
 
-	this->pos = Vector( x, y, z );
-	return &this->pos;
+	this->m_pos = Vector( x, y, z );
+	return &this->m_pos;
 }
 
 int CPlayer::GetClass() { return functions->GetPlayerClass(this->nPlayerId); }
@@ -92,8 +92,8 @@ bool CPlayer::Typing() { return Boolify(functions->IsPlayerTyping(this->nPlayerI
 
 SQChar * CPlayer::GetIP()
 {
-	functions->GetPlayerIP( this->nPlayerId, this->ip, 17 );
-	return this->ip;
+	functions->GetPlayerIP( this->nPlayerId, this->m_ip, 17 );
+	return this->m_ip;
 }
 
 bool CPlayer::GetSpawned() { return Boolify(functions->IsPlayerSpawned(this->nPlayerId) == 1); }
@@ -104,8 +104,8 @@ int CPlayer::GetState() { return functions->GetPlayerState(this->nPlayerId); }
 
 SQChar * CPlayer::GetName()
 {
-	functions->GetPlayerName(this->nPlayerId, this->name, 64);
-	return name;
+	functions->GetPlayerName(this->nPlayerId, this->m_name, 64);
+	return m_name;
 }
 
 int CPlayer::GetTeam() { return functions->GetPlayerTeam(this->nPlayerId); }
@@ -118,8 +118,8 @@ cRGB * CPlayer::GetColour()
 	unsigned char g     = (colour >> 8) & 0xff;
 	unsigned char b     = colour & 0xff;
 
-	this->rgb = cRGB(r, g, b);
-	return &this->rgb;
+	this->m_rgb = cRGB(r, g, b);
+	return &this->m_rgb;
 }
 
 int CPlayer::GetMoney() { return functions->GetPlayerMoney(this->nPlayerId); }
@@ -213,8 +213,8 @@ CObject * CPlayer::StandingOnObject()
 		return nullptr;
 	else
 	{
-		this->standingOn.nObjectId = obj;
-		return &this->standingOn;
+		this->m_standingOn.nObjectId = obj;
+		return &this->m_standingOn;
 	}
 }
 
@@ -251,8 +251,8 @@ void CPlayer::SetDrunkLevel(int visuals, int handling)
 
 SQChar * CPlayer::GetUniqueID()
 {
-	functions->GetPlayerUID(this->nPlayerId, this->uid, 40);
-	return uid;
+	functions->GetPlayerUID(this->nPlayerId, this->m_uid, 40);
+	return m_uid;
 }
 
 const Sqrat::string PlayerToString(CPlayer * p)

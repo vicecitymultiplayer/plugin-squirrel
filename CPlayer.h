@@ -113,12 +113,12 @@ class CPlayer
 		int nPlayerId;
 
 	private:
-		char name[65];
-		char ip[17];
-		char uid[41];
-		Vector pos;
-		CObject standingOn;
-		cRGB rgb;
+		char m_name[65];
+		char m_ip[17];
+		char m_uid[41];
+		Vector m_pos;
+		CObject m_standingOn;
+		cRGB m_rgb;
 };
 
 void RegisterPlayer();
