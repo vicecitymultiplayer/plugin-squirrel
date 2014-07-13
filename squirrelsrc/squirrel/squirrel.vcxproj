@@ -193,7 +193,7 @@
     </Bscmake>
     <Lib>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>..\lib\squirrel.lib</OutputFile>
+      <OutputFile>..\..\$(Platform)\$(Configuration)\squirrel.lib</OutputFile>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
