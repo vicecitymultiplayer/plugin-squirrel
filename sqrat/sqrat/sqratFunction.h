@@ -181,1012 +181,1843 @@ public:
             sq_resetobject(&env);
             sq_resetobject(&obj);
         }
-    }
+	}
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Runs the Function and returns its value as a SharedPtr
-    ///
-    /// \tparam R Type of return value (fails if return value is not of this type)
-    ///
-    /// \return SharedPtr containing the return value (or null if failed)
-    ///
-    /// \remarks
-    /// This function MUST have its Error handled if it occurred.
-    ///
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    template <class R>
-    SharedPtr<R> Evaluate() {
-        sq_pushobject(vm, obj);
-        sq_pushobject(vm, env);
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// Runs the Function and returns its value as a SharedPtr
+	///
+	/// \tparam R Type of return value (fails if return value is not of this type)
+	///
+	/// \return SharedPtr containing the return value (or null if failed)
+	///
+	/// \remarks
+	/// This function MUST have its Error handled if it occurred.
+	///
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	template <class R>
+	SharedPtr<R> Evaluate() {
+		sq_pushobject(vm, obj);
+		sq_pushobject(vm, env);
 
 #if !defined (SCRAT_NO_ERROR_CHECKING)
-        SQUnsignedInteger nparams;
-        SQUnsignedInteger nfreevars;
+		SQUnsignedInteger nparams;
+		SQUnsignedInteger nfreevars;
 
-        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 1)) {
-            sq_pop(vm, 2);
-            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
-            return SharedPtr<R>();
-        }
+		if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 1)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+			return SharedPtr<R>();
+		}
 
-        SQRESULT result = sq_call(vm, 1, true, ErrorHandling::IsEnabled());
+		SQRESULT result = sq_call(vm, 1, true, ErrorHandling::IsEnabled());
 
-        //handle an error: pop the stack and throw the exception
-        if(SQ_FAILED(result)) {
-            sq_pop(vm, 2);
-            Error::Instance().Throw(vm, LastErrorString(vm));
-            return SharedPtr<R>();
-        }
+		//handle an error: pop the stack and throw the exception
+		if (SQ_FAILED(result)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, LastErrorString(vm));
+			return SharedPtr<R>();
+		}
 #else
-        sq_call(vm, 1, true, ErrorHandling::IsEnabled());
+		sq_call(vm, 1, true, ErrorHandling::IsEnabled());
 #endif
 
-        SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
-        sq_pop(vm, 2);
-        return ret;
-    }
+		SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
+		sq_pop(vm, 2);
+		return ret;
+	}
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Runs the Function and returns its value as a SharedPtr
-    ///
-    /// \param a1 Argument 1 of the Function
-    ///
-    /// \tparam A1 Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam R Type of return value (fails if return value is not of this type)
-    ///
-    /// \return SharedPtr containing the return value (or null if failed)
-    ///
-    /// \remarks
-    /// This function MUST have its Error handled if it occurred.
-    ///
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    template <class R, class A1>
-    SharedPtr<R> Evaluate(A1 a1) {
-        sq_pushobject(vm, obj);
-        sq_pushobject(vm, env);
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// Runs the Function and returns its value as a SharedPtr
+	///
+	/// \param a1 Argument 1 of the Function
+	///
+	/// \tparam A1 Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam R Type of return value (fails if return value is not of this type)
+	///
+	/// \return SharedPtr containing the return value (or null if failed)
+	///
+	/// \remarks
+	/// This function MUST have its Error handled if it occurred.
+	///
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	template <class R, class A1>
+	SharedPtr<R> Evaluate(A1 a1) {
+		sq_pushobject(vm, obj);
+		sq_pushobject(vm, env);
 
 #if !defined (SCRAT_NO_ERROR_CHECKING)
-        SQUnsignedInteger nparams;
-        SQUnsignedInteger nfreevars;
+		SQUnsignedInteger nparams;
+		SQUnsignedInteger nfreevars;
 
-        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 2)) {
-            sq_pop(vm, 2);
-            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
-            return SharedPtr<R>();
-        }
+		if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 2)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+			return SharedPtr<R>();
+		}
 #endif
 
-        PushVar(vm, a1);
+		PushVar(vm, a1);
 
 #if !defined (SCRAT_NO_ERROR_CHECKING)
-        SQRESULT result = sq_call(vm, 2, true, ErrorHandling::IsEnabled());
+		SQRESULT result = sq_call(vm, 2, true, ErrorHandling::IsEnabled());
 
-        //handle an error: pop the stack and throw the exception
-        if(SQ_FAILED(result)) {
-            sq_pop(vm, 2);
-            Error::Instance().Throw(vm, LastErrorString(vm));
-            return SharedPtr<R>();
-        }
+		//handle an error: pop the stack and throw the exception
+		if (SQ_FAILED(result)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, LastErrorString(vm));
+			return SharedPtr<R>();
+		}
 #else
-        sq_call(vm, 2, true, ErrorHandling::IsEnabled());
+		sq_call(vm, 2, true, ErrorHandling::IsEnabled());
 #endif
 
-        SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
-        sq_pop(vm, 2);
-        return ret;
-    }
+		SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
+		sq_pop(vm, 2);
+		return ret;
+	}
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Runs the Function and returns its value as a SharedPtr
-    ///
-    /// \param a1 Argument 1 of the Function
-    /// \param a2 Argument 2 of the Function
-    ///
-    /// \tparam A1 Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A2 Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam R Type of return value (fails if return value is not of this type)
-    ///
-    /// \return SharedPtr containing the return value (or null if failed)
-    ///
-    /// \remarks
-    /// This function MUST have its Error handled if it occurred.
-    ///
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    template <class R, class A1, class A2>
-    SharedPtr<R> Evaluate(A1 a1, A2 a2) {
-        sq_pushobject(vm, obj);
-        sq_pushobject(vm, env);
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// Runs the Function and returns its value as a SharedPtr
+	///
+	/// \param a1 Argument 1 of the Function
+	/// \param a2 Argument 2 of the Function
+	///
+	/// \tparam A1 Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A2 Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam R Type of return value (fails if return value is not of this type)
+	///
+	/// \return SharedPtr containing the return value (or null if failed)
+	///
+	/// \remarks
+	/// This function MUST have its Error handled if it occurred.
+	///
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	template <class R, class A1, class A2>
+	SharedPtr<R> Evaluate(A1 a1, A2 a2) {
+		sq_pushobject(vm, obj);
+		sq_pushobject(vm, env);
 
 #if !defined (SCRAT_NO_ERROR_CHECKING)
-        SQUnsignedInteger nparams;
-        SQUnsignedInteger nfreevars;
+		SQUnsignedInteger nparams;
+		SQUnsignedInteger nfreevars;
 
-        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 3)) {
-            sq_pop(vm, 2);
-            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
-            return SharedPtr<R>();
-        }
+		if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 3)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+			return SharedPtr<R>();
+		}
 #endif
 
-        PushVar(vm, a1);
-        PushVar(vm, a2);
+		PushVar(vm, a1);
+		PushVar(vm, a2);
 
 #if !defined (SCRAT_NO_ERROR_CHECKING)
-        SQRESULT result = sq_call(vm, 3, true, ErrorHandling::IsEnabled());
+		SQRESULT result = sq_call(vm, 3, true, ErrorHandling::IsEnabled());
 
-        //handle an error: pop the stack and throw the exception
-        if(SQ_FAILED(result)) {
-            sq_pop(vm, 2);
-            Error::Instance().Throw(vm, LastErrorString(vm));
-            return SharedPtr<R>();
-        }
+		//handle an error: pop the stack and throw the exception
+		if (SQ_FAILED(result)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, LastErrorString(vm));
+			return SharedPtr<R>();
+		}
 #else
-        sq_call(vm, 3, true, ErrorHandling::IsEnabled());
+		sq_call(vm, 3, true, ErrorHandling::IsEnabled());
 #endif
 
-        SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
-        sq_pop(vm, 2);
-        return ret;
-    }
+		SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
+		sq_pop(vm, 2);
+		return ret;
+	}
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Runs the Function and returns its value as a SharedPtr
-    ///
-    /// \param a1 Argument 1 of the Function
-    /// \param a2 Argument 2 of the Function
-    /// \param a3 Argument 3 of the Function
-    ///
-    /// \tparam A1 Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A2 Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A3 Type of argument 3 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam R Type of return value (fails if return value is not of this type)
-    ///
-    /// \return SharedPtr containing the return value (or null if failed)
-    ///
-    /// \remarks
-    /// This function MUST have its Error handled if it occurred.
-    ///
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    template <class R, class A1, class A2, class A3>
-    SharedPtr<R> Evaluate(A1 a1, A2 a2, A3 a3) {
-        sq_pushobject(vm, obj);
-        sq_pushobject(vm, env);
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// Runs the Function and returns its value as a SharedPtr
+	///
+	/// \param a1 Argument 1 of the Function
+	/// \param a2 Argument 2 of the Function
+	/// \param a3 Argument 3 of the Function
+	///
+	/// \tparam A1 Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A2 Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A3 Type of argument 3 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam R Type of return value (fails if return value is not of this type)
+	///
+	/// \return SharedPtr containing the return value (or null if failed)
+	///
+	/// \remarks
+	/// This function MUST have its Error handled if it occurred.
+	///
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	template <class R, class A1, class A2, class A3>
+	SharedPtr<R> Evaluate(A1 a1, A2 a2, A3 a3) {
+		sq_pushobject(vm, obj);
+		sq_pushobject(vm, env);
 
 #if !defined (SCRAT_NO_ERROR_CHECKING)
-        SQUnsignedInteger nparams;
-        SQUnsignedInteger nfreevars;
-        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 4)) {
-            sq_pop(vm, 2);
-            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
-            return SharedPtr<R>();
-        }
+		SQUnsignedInteger nparams;
+		SQUnsignedInteger nfreevars;
+		if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 4)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+			return SharedPtr<R>();
+		}
 #endif
 
-        PushVar(vm, a1);
-        PushVar(vm, a2);
-        PushVar(vm, a3);
+		PushVar(vm, a1);
+		PushVar(vm, a2);
+		PushVar(vm, a3);
 
 #if !defined (SCRAT_NO_ERROR_CHECKING)
-        SQRESULT result = sq_call(vm, 4, true, ErrorHandling::IsEnabled());
+		SQRESULT result = sq_call(vm, 4, true, ErrorHandling::IsEnabled());
 
-        //handle an error: pop the stack and throw the exception
-        if(SQ_FAILED(result)) {
-            sq_pop(vm, 2);
-            Error::Instance().Throw(vm, LastErrorString(vm));
-            return SharedPtr<R>();
-        }
+		//handle an error: pop the stack and throw the exception
+		if (SQ_FAILED(result)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, LastErrorString(vm));
+			return SharedPtr<R>();
+		}
 #else
-        sq_call(vm, 4, true, ErrorHandling::IsEnabled());
+		sq_call(vm, 4, true, ErrorHandling::IsEnabled());
 #endif
 
-        SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
-        sq_pop(vm, 2);
-        return ret;
-    }
+		SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
+		sq_pop(vm, 2);
+		return ret;
+	}
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Runs the Function and returns its value as a SharedPtr
-    ///
-    /// \param a1 Argument 1 of the Function
-    /// \param a2 Argument 2 of the Function
-    /// \param a3 Argument 3 of the Function
-    /// \param a4 Argument 4 of the Function
-    ///
-    /// \tparam A1 Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A2 Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A3 Type of argument 3 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A4 Type of argument 4 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam R Type of return value (fails if return value is not of this type)
-    ///
-    /// \return SharedPtr containing the return value (or null if failed)
-    ///
-    /// \remarks
-    /// This function MUST have its Error handled if it occurred.
-    ///
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    template <class R, class A1, class A2, class A3, class A4>
-    SharedPtr<R> Evaluate(A1 a1, A2 a2, A3 a3, A4 a4) {
-        sq_pushobject(vm, obj);
-        sq_pushobject(vm, env);
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// Runs the Function and returns its value as a SharedPtr
+	///
+	/// \param a1 Argument 1 of the Function
+	/// \param a2 Argument 2 of the Function
+	/// \param a3 Argument 3 of the Function
+	/// \param a4 Argument 4 of the Function
+	///
+	/// \tparam A1 Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A2 Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A3 Type of argument 3 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A4 Type of argument 4 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam R Type of return value (fails if return value is not of this type)
+	///
+	/// \return SharedPtr containing the return value (or null if failed)
+	///
+	/// \remarks
+	/// This function MUST have its Error handled if it occurred.
+	///
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	template <class R, class A1, class A2, class A3, class A4>
+	SharedPtr<R> Evaluate(A1 a1, A2 a2, A3 a3, A4 a4) {
+		sq_pushobject(vm, obj);
+		sq_pushobject(vm, env);
 
 #if !defined (SCRAT_NO_ERROR_CHECKING)
-        SQUnsignedInteger nparams;
-        SQUnsignedInteger nfreevars;
-        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 5)) {
-            sq_pop(vm, 2);
-            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
-            return SharedPtr<R>();
-        }
+		SQUnsignedInteger nparams;
+		SQUnsignedInteger nfreevars;
+		if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 5)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+			return SharedPtr<R>();
+		}
 #endif
 
-        PushVar(vm, a1);
-        PushVar(vm, a2);
-        PushVar(vm, a3);
-        PushVar(vm, a4);
+		PushVar(vm, a1);
+		PushVar(vm, a2);
+		PushVar(vm, a3);
+		PushVar(vm, a4);
 
 #if !defined (SCRAT_NO_ERROR_CHECKING)
-        SQRESULT result = sq_call(vm, 5, true, ErrorHandling::IsEnabled());
+		SQRESULT result = sq_call(vm, 5, true, ErrorHandling::IsEnabled());
 
-        //handle an error: pop the stack and throw the exception
-        if(SQ_FAILED(result)) {
-            sq_pop(vm, 2);
-            Error::Instance().Throw(vm, LastErrorString(vm));
-            return SharedPtr<R>();
-        }
+		//handle an error: pop the stack and throw the exception
+		if (SQ_FAILED(result)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, LastErrorString(vm));
+			return SharedPtr<R>();
+		}
 #else
-        sq_call(vm, 5, true, ErrorHandling::IsEnabled());
+		sq_call(vm, 5, true, ErrorHandling::IsEnabled());
 #endif
 
-        SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
-        sq_pop(vm, 2);
-        return ret;
-    }
+		SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
+		sq_pop(vm, 2);
+		return ret;
+	}
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Runs the Function and returns its value as a SharedPtr
-    ///
-    /// \param a1 Argument 1 of the Function
-    /// \param a2 Argument 2 of the Function
-    /// \param a3 Argument 3 of the Function
-    /// \param a4 Argument 4 of the Function
-    /// \param a5 Argument 5 of the Function
-    ///
-    /// \tparam A1 Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A2 Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A3 Type of argument 3 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A4 Type of argument 4 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A5 Type of argument 5 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam R Type of return value (fails if return value is not of this type)
-    ///
-    /// \return SharedPtr containing the return value (or null if failed)
-    ///
-    /// \remarks
-    /// This function MUST have its Error handled if it occurred.
-    ///
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    template <class R, class A1, class A2, class A3, class A4, class A5>
-    SharedPtr<R> Evaluate(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5) {
-        sq_pushobject(vm, obj);
-        sq_pushobject(vm, env);
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// Runs the Function and returns its value as a SharedPtr
+	///
+	/// \param a1 Argument 1 of the Function
+	/// \param a2 Argument 2 of the Function
+	/// \param a3 Argument 3 of the Function
+	/// \param a4 Argument 4 of the Function
+	/// \param a5 Argument 5 of the Function
+	///
+	/// \tparam A1 Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A2 Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A3 Type of argument 3 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A4 Type of argument 4 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A5 Type of argument 5 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam R Type of return value (fails if return value is not of this type)
+	///
+	/// \return SharedPtr containing the return value (or null if failed)
+	///
+	/// \remarks
+	/// This function MUST have its Error handled if it occurred.
+	///
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	template <class R, class A1, class A2, class A3, class A4, class A5>
+	SharedPtr<R> Evaluate(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5) {
+		sq_pushobject(vm, obj);
+		sq_pushobject(vm, env);
 
 #if !defined (SCRAT_NO_ERROR_CHECKING)
-        SQUnsignedInteger nparams;
-        SQUnsignedInteger nfreevars;
-        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 6)) {
-            sq_pop(vm, 2);
-            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
-            return SharedPtr<R>();
-        }
+		SQUnsignedInteger nparams;
+		SQUnsignedInteger nfreevars;
+		if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 6)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+			return SharedPtr<R>();
+		}
 #endif
 
-        PushVar(vm, a1);
-        PushVar(vm, a2);
-        PushVar(vm, a3);
-        PushVar(vm, a4);
-        PushVar(vm, a5);
+		PushVar(vm, a1);
+		PushVar(vm, a2);
+		PushVar(vm, a3);
+		PushVar(vm, a4);
+		PushVar(vm, a5);
 
 #if !defined (SCRAT_NO_ERROR_CHECKING)
-        SQRESULT result = sq_call(vm, 6, true, ErrorHandling::IsEnabled());
+		SQRESULT result = sq_call(vm, 6, true, ErrorHandling::IsEnabled());
 
-        //handle an error: pop the stack and throw the exception
-        if(SQ_FAILED(result)) {
-            sq_pop(vm, 2);
-            Error::Instance().Throw(vm, LastErrorString(vm));
-            return SharedPtr<R>();
-        }
+		//handle an error: pop the stack and throw the exception
+		if (SQ_FAILED(result)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, LastErrorString(vm));
+			return SharedPtr<R>();
+		}
 #else
-        sq_call(vm, 6, true, ErrorHandling::IsEnabled());
+		sq_call(vm, 6, true, ErrorHandling::IsEnabled());
 #endif
 
-        SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
-        sq_pop(vm, 2);
-        return ret;
-    }
+		SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
+		sq_pop(vm, 2);
+		return ret;
+	}
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Runs the Function and returns its value as a SharedPtr
-    ///
-    /// \param a1 Argument 1 of the Function
-    /// \param a2 Argument 2 of the Function
-    /// \param a3 Argument 3 of the Function
-    /// \param a4 Argument 4 of the Function
-    /// \param a5 Argument 5 of the Function
-    /// \param a6 Argument 6 of the Function
-    ///
-    /// \tparam A1 Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A2 Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A3 Type of argument 3 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A4 Type of argument 4 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A5 Type of argument 5 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A6 Type of argument 6 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam R Type of return value (fails if return value is not of this type)
-    ///
-    /// \return SharedPtr containing the return value (or null if failed)
-    ///
-    /// \remarks
-    /// This function MUST have its Error handled if it occurred.
-    ///
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    template <class R, class A1, class A2, class A3, class A4, class A5, class A6>
-    SharedPtr<R> Evaluate(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6) {
-        sq_pushobject(vm, obj);
-        sq_pushobject(vm, env);
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// Runs the Function and returns its value as a SharedPtr
+	///
+	/// \param a1 Argument 1 of the Function
+	/// \param a2 Argument 2 of the Function
+	/// \param a3 Argument 3 of the Function
+	/// \param a4 Argument 4 of the Function
+	/// \param a5 Argument 5 of the Function
+	/// \param a6 Argument 6 of the Function
+	///
+	/// \tparam A1 Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A2 Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A3 Type of argument 3 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A4 Type of argument 4 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A5 Type of argument 5 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A6 Type of argument 6 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam R Type of return value (fails if return value is not of this type)
+	///
+	/// \return SharedPtr containing the return value (or null if failed)
+	///
+	/// \remarks
+	/// This function MUST have its Error handled if it occurred.
+	///
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	template <class R, class A1, class A2, class A3, class A4, class A5, class A6>
+	SharedPtr<R> Evaluate(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6) {
+		sq_pushobject(vm, obj);
+		sq_pushobject(vm, env);
 
 #if !defined (SCRAT_NO_ERROR_CHECKING)
 
-        SQUnsignedInteger nparams;
-        SQUnsignedInteger nfreevars;
-        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 7)) {
-            sq_pop(vm, 2);
-            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
-            return SharedPtr<R>();
-        }
+		SQUnsignedInteger nparams;
+		SQUnsignedInteger nfreevars;
+		if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 7)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+			return SharedPtr<R>();
+		}
 #endif
 
-        PushVar(vm, a1);
-        PushVar(vm, a2);
-        PushVar(vm, a3);
-        PushVar(vm, a4);
-        PushVar(vm, a5);
-        PushVar(vm, a6);
+		PushVar(vm, a1);
+		PushVar(vm, a2);
+		PushVar(vm, a3);
+		PushVar(vm, a4);
+		PushVar(vm, a5);
+		PushVar(vm, a6);
 
 #if !defined (SCRAT_NO_ERROR_CHECKING)
-        SQRESULT result = sq_call(vm, 7, true, ErrorHandling::IsEnabled());
+		SQRESULT result = sq_call(vm, 7, true, ErrorHandling::IsEnabled());
 
-        //handle an error: pop the stack and throw the exception
-        if(SQ_FAILED(result)) {
-            sq_pop(vm, 2);
-            Error::Instance().Throw(vm, LastErrorString(vm));
-            return SharedPtr<R>();
-        }
+		//handle an error: pop the stack and throw the exception
+		if (SQ_FAILED(result)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, LastErrorString(vm));
+			return SharedPtr<R>();
+		}
 #else
-        sq_call(vm, 7, true, ErrorHandling::IsEnabled());
+		sq_call(vm, 7, true, ErrorHandling::IsEnabled());
 #endif
 
-        SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
-        sq_pop(vm, 2);
-        return ret;
-    }
+		SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
+		sq_pop(vm, 2);
+		return ret;
+	}
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Runs the Function and returns its value as a SharedPtr
-    ///
-    /// \param a1 Argument 1 of the Function
-    /// \param a2 Argument 2 of the Function
-    /// \param a3 Argument 3 of the Function
-    /// \param a4 Argument 4 of the Function
-    /// \param a5 Argument 5 of the Function
-    /// \param a6 Argument 6 of the Function
-    /// \param a7 Argument 7 of the Function
-    ///
-    /// \tparam A1 Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A2 Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A3 Type of argument 3 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A4 Type of argument 4 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A5 Type of argument 5 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A6 Type of argument 6 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A7 Type of argument 7 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam R Type of return value (fails if return value is not of this type)
-    ///
-    /// \return SharedPtr containing the return value (or null if failed)
-    ///
-    /// \remarks
-    /// This function MUST have its Error handled if it occurred.
-    ///
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
-    SharedPtr<R> Evaluate(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7) {
-        sq_pushobject(vm, obj);
-        sq_pushobject(vm, env);
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// Runs the Function and returns its value as a SharedPtr
+	///
+	/// \param a1 Argument 1 of the Function
+	/// \param a2 Argument 2 of the Function
+	/// \param a3 Argument 3 of the Function
+	/// \param a4 Argument 4 of the Function
+	/// \param a5 Argument 5 of the Function
+	/// \param a6 Argument 6 of the Function
+	/// \param a7 Argument 7 of the Function
+	///
+	/// \tparam A1 Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A2 Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A3 Type of argument 3 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A4 Type of argument 4 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A5 Type of argument 5 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A6 Type of argument 6 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A7 Type of argument 7 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam R Type of return value (fails if return value is not of this type)
+	///
+	/// \return SharedPtr containing the return value (or null if failed)
+	///
+	/// \remarks
+	/// This function MUST have its Error handled if it occurred.
+	///
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
+	SharedPtr<R> Evaluate(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7) {
+		sq_pushobject(vm, obj);
+		sq_pushobject(vm, env);
 
 #if !defined (SCRAT_NO_ERROR_CHECKING)
-        SQUnsignedInteger nparams;
-        SQUnsignedInteger nfreevars;
-        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 8)) {
-            sq_pop(vm, 2);
-            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
-            return SharedPtr<R>();
-        }
+		SQUnsignedInteger nparams;
+		SQUnsignedInteger nfreevars;
+		if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 8)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+			return SharedPtr<R>();
+		}
 #endif
 
-        PushVar(vm, a1);
-        PushVar(vm, a2);
-        PushVar(vm, a3);
-        PushVar(vm, a4);
-        PushVar(vm, a5);
-        PushVar(vm, a6);
-        PushVar(vm, a7);
+		PushVar(vm, a1);
+		PushVar(vm, a2);
+		PushVar(vm, a3);
+		PushVar(vm, a4);
+		PushVar(vm, a5);
+		PushVar(vm, a6);
+		PushVar(vm, a7);
 
 #if !defined (SCRAT_NO_ERROR_CHECKING)
-        SQRESULT result = sq_call(vm, 8, true, ErrorHandling::IsEnabled());
+		SQRESULT result = sq_call(vm, 8, true, ErrorHandling::IsEnabled());
 
-        //handle an error: pop the stack and throw the exception
-        if(SQ_FAILED(result)) {
-            sq_pop(vm, 2);
-            Error::Instance().Throw(vm, LastErrorString(vm));
-            return SharedPtr<R>();
-        }
+		//handle an error: pop the stack and throw the exception
+		if (SQ_FAILED(result)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, LastErrorString(vm));
+			return SharedPtr<R>();
+		}
 #else
-        sq_call(vm, 8, true, ErrorHandling::IsEnabled());
+		sq_call(vm, 8, true, ErrorHandling::IsEnabled());
 #endif
 
-        SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
-        sq_pop(vm, 2);
-        return ret;
-    }
+		SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
+		sq_pop(vm, 2);
+		return ret;
+	}
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Runs the Function and returns its value as a SharedPtr
-    ///
-    /// \param a1 Argument 1 of the Function
-    /// \param a2 Argument 2 of the Function
-    /// \param a3 Argument 3 of the Function
-    /// \param a4 Argument 4 of the Function
-    /// \param a5 Argument 5 of the Function
-    /// \param a6 Argument 6 of the Function
-    /// \param a7 Argument 7 of the Function
-    /// \param a8 Argument 8 of the Function
-    ///
-    /// \tparam A1 Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A2 Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A3 Type of argument 3 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A4 Type of argument 4 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A5 Type of argument 5 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A6 Type of argument 6 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A7 Type of argument 7 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A8 Type of argument 8 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam R Type of return value (fails if return value is not of this type)
-    ///
-    /// \return SharedPtr containing the return value (or null if failed)
-    ///
-    /// \remarks
-    /// This function MUST have its Error handled if it occurred.
-    ///
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
-    SharedPtr<R> Evaluate(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8) {
-        sq_pushobject(vm, obj);
-        sq_pushobject(vm, env);
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// Runs the Function and returns its value as a SharedPtr
+	///
+	/// \param a1 Argument 1 of the Function
+	/// \param a2 Argument 2 of the Function
+	/// \param a3 Argument 3 of the Function
+	/// \param a4 Argument 4 of the Function
+	/// \param a5 Argument 5 of the Function
+	/// \param a6 Argument 6 of the Function
+	/// \param a7 Argument 7 of the Function
+	/// \param a8 Argument 8 of the Function
+	///
+	/// \tparam A1 Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A2 Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A3 Type of argument 3 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A4 Type of argument 4 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A5 Type of argument 5 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A6 Type of argument 6 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A7 Type of argument 7 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A8 Type of argument 8 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam R Type of return value (fails if return value is not of this type)
+	///
+	/// \return SharedPtr containing the return value (or null if failed)
+	///
+	/// \remarks
+	/// This function MUST have its Error handled if it occurred.
+	///
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
+	SharedPtr<R> Evaluate(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8) {
+		sq_pushobject(vm, obj);
+		sq_pushobject(vm, env);
 
 #if !defined (SCRAT_NO_ERROR_CHECKING)
-        SQUnsignedInteger nparams;
-        SQUnsignedInteger nfreevars;
-        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 9)) {
-            sq_pop(vm, 2);
-            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
-            return SharedPtr<R>();
-        }
+		SQUnsignedInteger nparams;
+		SQUnsignedInteger nfreevars;
+		if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 9)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+			return SharedPtr<R>();
+		}
 #endif
 
-        PushVar(vm, a1);
-        PushVar(vm, a2);
-        PushVar(vm, a3);
-        PushVar(vm, a4);
-        PushVar(vm, a5);
-        PushVar(vm, a6);
-        PushVar(vm, a7);
-        PushVar(vm, a8);
+		PushVar(vm, a1);
+		PushVar(vm, a2);
+		PushVar(vm, a3);
+		PushVar(vm, a4);
+		PushVar(vm, a5);
+		PushVar(vm, a6);
+		PushVar(vm, a7);
+		PushVar(vm, a8);
 
 #if !defined (SCRAT_NO_ERROR_CHECKING)
-        SQRESULT result = sq_call(vm, 9, true, ErrorHandling::IsEnabled());
+		SQRESULT result = sq_call(vm, 9, true, ErrorHandling::IsEnabled());
 
-        //handle an error: pop the stack and throw the exception
-        if(SQ_FAILED(result)) {
-            sq_pop(vm, 2);
-            Error::Instance().Throw(vm, LastErrorString(vm));
-            return SharedPtr<R>();
-        }
+		//handle an error: pop the stack and throw the exception
+		if (SQ_FAILED(result)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, LastErrorString(vm));
+			return SharedPtr<R>();
+		}
 #else
-        sq_call(vm, 9, true, ErrorHandling::IsEnabled());
+		sq_call(vm, 9, true, ErrorHandling::IsEnabled());
 #endif
 
-        SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
-        sq_pop(vm, 2);
-        return ret;
-    }
+		SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
+		sq_pop(vm, 2);
+		return ret;
+	}
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Runs the Function and returns its value as a SharedPtr
-    ///
-    /// \param a1 Argument 1 of the Function
-    /// \param a2 Argument 2 of the Function
-    /// \param a3 Argument 3 of the Function
-    /// \param a4 Argument 4 of the Function
-    /// \param a5 Argument 5 of the Function
-    /// \param a6 Argument 6 of the Function
-    /// \param a7 Argument 7 of the Function
-    /// \param a8 Argument 8 of the Function
-    /// \param a9 Argument 9 of the Function
-    ///
-    /// \tparam A1 Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A2 Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A3 Type of argument 3 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A4 Type of argument 4 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A5 Type of argument 5 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A6 Type of argument 6 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A7 Type of argument 7 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A8 Type of argument 8 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A9 Type of argument 9 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam R Type of return value (fails if return value is not of this type)
-    ///
-    /// \return SharedPtr containing the return value (or null if failed)
-    ///
-    /// \remarks
-    /// This function MUST have its Error handled if it occurred.
-    ///
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
-    SharedPtr<R> Evaluate(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9) {
-        sq_pushobject(vm, obj);
-        sq_pushobject(vm, env);
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// Runs the Function and returns its value as a SharedPtr
+	///
+	/// \param a1 Argument 1 of the Function
+	/// \param a2 Argument 2 of the Function
+	/// \param a3 Argument 3 of the Function
+	/// \param a4 Argument 4 of the Function
+	/// \param a5 Argument 5 of the Function
+	/// \param a6 Argument 6 of the Function
+	/// \param a7 Argument 7 of the Function
+	/// \param a8 Argument 8 of the Function
+	/// \param a9 Argument 9 of the Function
+	///
+	/// \tparam A1 Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A2 Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A3 Type of argument 3 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A4 Type of argument 4 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A5 Type of argument 5 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A6 Type of argument 6 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A7 Type of argument 7 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A8 Type of argument 8 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A9 Type of argument 9 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam R Type of return value (fails if return value is not of this type)
+	///
+	/// \return SharedPtr containing the return value (or null if failed)
+	///
+	/// \remarks
+	/// This function MUST have its Error handled if it occurred.
+	///
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
+	SharedPtr<R> Evaluate(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9) {
+		sq_pushobject(vm, obj);
+		sq_pushobject(vm, env);
 
 #if !defined (SCRAT_NO_ERROR_CHECKING)
-        SQUnsignedInteger nparams;
-        SQUnsignedInteger nfreevars;
-        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 10)) {
-            sq_pop(vm, 2);
-            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
-            return SharedPtr<R>();
-        }
+		SQUnsignedInteger nparams;
+		SQUnsignedInteger nfreevars;
+		if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 10)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+			return SharedPtr<R>();
+		}
 #endif
 
-        PushVar(vm, a1);
-        PushVar(vm, a2);
-        PushVar(vm, a3);
-        PushVar(vm, a4);
-        PushVar(vm, a5);
-        PushVar(vm, a6);
-        PushVar(vm, a7);
-        PushVar(vm, a8);
-        PushVar(vm, a9);
+		PushVar(vm, a1);
+		PushVar(vm, a2);
+		PushVar(vm, a3);
+		PushVar(vm, a4);
+		PushVar(vm, a5);
+		PushVar(vm, a6);
+		PushVar(vm, a7);
+		PushVar(vm, a8);
+		PushVar(vm, a9);
 
 #if !defined (SCRAT_NO_ERROR_CHECKING)
-        SQRESULT result = sq_call(vm, 10, true, ErrorHandling::IsEnabled());
+		SQRESULT result = sq_call(vm, 10, true, ErrorHandling::IsEnabled());
 
-        //handle an error: pop the stack and throw the exception
-        if(SQ_FAILED(result)) {
-            sq_pop(vm, 2);
-            Error::Instance().Throw(vm, LastErrorString(vm));
-            return SharedPtr<R>();
-        }
+		//handle an error: pop the stack and throw the exception
+		if (SQ_FAILED(result)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, LastErrorString(vm));
+			return SharedPtr<R>();
+		}
 #else
-        sq_call(vm, 10, true, ErrorHandling::IsEnabled());
+		sq_call(vm, 10, true, ErrorHandling::IsEnabled());
 #endif
 
-        SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
-        sq_pop(vm, 2);
-        return ret;
-    }
+		SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
+		sq_pop(vm, 2);
+		return ret;
+	}
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Runs the Function and returns its value as a SharedPtr
-    ///
-    /// \param a1  Argument 1 of the Function
-    /// \param a2  Argument 2 of the Function
-    /// \param a3  Argument 3 of the Function
-    /// \param a4  Argument 4 of the Function
-    /// \param a5  Argument 5 of the Function
-    /// \param a6  Argument 6 of the Function
-    /// \param a7  Argument 7 of the Function
-    /// \param a8  Argument 8 of the Function
-    /// \param a9  Argument 9 of the Function
-    /// \param a10 Argument 10 of the Function
-    ///
-    /// \tparam A1  Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A2  Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A3  Type of argument 3 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A4  Type of argument 4 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A5  Type of argument 5 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A6  Type of argument 6 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A7  Type of argument 7 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A8  Type of argument 8 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A9  Type of argument 9 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A10 Type of argument 10 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam R Type of return value (fails if return value is not of this type)
-    ///
-    /// \return SharedPtr containing the return value (or null if failed)
-    ///
-    /// \remarks
-    /// This function MUST have its Error handled if it occurred.
-    ///
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
-    SharedPtr<R> Evaluate(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10) {
-        sq_pushobject(vm, obj);
-        sq_pushobject(vm, env);
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// Runs the Function and returns its value as a SharedPtr
+	///
+	/// \param a1  Argument 1 of the Function
+	/// \param a2  Argument 2 of the Function
+	/// \param a3  Argument 3 of the Function
+	/// \param a4  Argument 4 of the Function
+	/// \param a5  Argument 5 of the Function
+	/// \param a6  Argument 6 of the Function
+	/// \param a7  Argument 7 of the Function
+	/// \param a8  Argument 8 of the Function
+	/// \param a9  Argument 9 of the Function
+	/// \param a10 Argument 10 of the Function
+	///
+	/// \tparam A1  Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A2  Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A3  Type of argument 3 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A4  Type of argument 4 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A5  Type of argument 5 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A6  Type of argument 6 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A7  Type of argument 7 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A8  Type of argument 8 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A9  Type of argument 9 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A10 Type of argument 10 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam R Type of return value (fails if return value is not of this type)
+	///
+	/// \return SharedPtr containing the return value (or null if failed)
+	///
+	/// \remarks
+	/// This function MUST have its Error handled if it occurred.
+	///
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
+	SharedPtr<R> Evaluate(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10) {
+		sq_pushobject(vm, obj);
+		sq_pushobject(vm, env);
 
 #if !defined (SCRAT_NO_ERROR_CHECKING)
-        SQUnsignedInteger nparams;
-        SQUnsignedInteger nfreevars;
-        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 11)) {
-            sq_pop(vm, 2);
-            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
-            return SharedPtr<R>();
-        }
+		SQUnsignedInteger nparams;
+		SQUnsignedInteger nfreevars;
+		if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 11)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+			return SharedPtr<R>();
+		}
 #endif
 
-        PushVar(vm, a1);
-        PushVar(vm, a2);
-        PushVar(vm, a3);
-        PushVar(vm, a4);
-        PushVar(vm, a5);
-        PushVar(vm, a6);
-        PushVar(vm, a7);
-        PushVar(vm, a8);
-        PushVar(vm, a9);
-        PushVar(vm, a10);
+		PushVar(vm, a1);
+		PushVar(vm, a2);
+		PushVar(vm, a3);
+		PushVar(vm, a4);
+		PushVar(vm, a5);
+		PushVar(vm, a6);
+		PushVar(vm, a7);
+		PushVar(vm, a8);
+		PushVar(vm, a9);
+		PushVar(vm, a10);
 
 #if !defined (SCRAT_NO_ERROR_CHECKING)
-        SQRESULT result = sq_call(vm, 11, true, ErrorHandling::IsEnabled());
+		SQRESULT result = sq_call(vm, 11, true, ErrorHandling::IsEnabled());
 
-        //handle an error: pop the stack and throw the exception
-        if(SQ_FAILED(result)) {
-            sq_pop(vm, 2);
-            Error::Instance().Throw(vm, LastErrorString(vm));
-            return SharedPtr<R>();
-        }
+		//handle an error: pop the stack and throw the exception
+		if (SQ_FAILED(result)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, LastErrorString(vm));
+			return SharedPtr<R>();
+		}
 #else
-        sq_call(vm, 11, true, ErrorHandling::IsEnabled());
+		sq_call(vm, 11, true, ErrorHandling::IsEnabled());
 #endif
 
-        SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
-        sq_pop(vm, 2);
-        return ret;
-    }
+		SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
+		sq_pop(vm, 2);
+		return ret;
+	}
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Runs the Function and returns its value as a SharedPtr
-    ///
-    /// \param a1  Argument 1 of the Function
-    /// \param a2  Argument 2 of the Function
-    /// \param a3  Argument 3 of the Function
-    /// \param a4  Argument 4 of the Function
-    /// \param a5  Argument 5 of the Function
-    /// \param a6  Argument 6 of the Function
-    /// \param a7  Argument 7 of the Function
-    /// \param a8  Argument 8 of the Function
-    /// \param a9  Argument 9 of the Function
-    /// \param a10 Argument 10 of the Function
-    /// \param a11 Argument 11 of the Function
-    ///
-    /// \tparam A1  Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A2  Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A3  Type of argument 3 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A4  Type of argument 4 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A5  Type of argument 5 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A6  Type of argument 6 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A7  Type of argument 7 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A8  Type of argument 8 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A9  Type of argument 9 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A10 Type of argument 10 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A11 Type of argument 11 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam R Type of return value (fails if return value is not of this type)
-    ///
-    /// \return SharedPtr containing the return value (or null if failed)
-    ///
-    /// \remarks
-    /// This function MUST have its Error handled if it occurred.
-    ///
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
-    SharedPtr<R> Evaluate(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11) {
-        sq_pushobject(vm, obj);
-        sq_pushobject(vm, env);
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// Runs the Function and returns its value as a SharedPtr
+	///
+	/// \param a1  Argument 1 of the Function
+	/// \param a2  Argument 2 of the Function
+	/// \param a3  Argument 3 of the Function
+	/// \param a4  Argument 4 of the Function
+	/// \param a5  Argument 5 of the Function
+	/// \param a6  Argument 6 of the Function
+	/// \param a7  Argument 7 of the Function
+	/// \param a8  Argument 8 of the Function
+	/// \param a9  Argument 9 of the Function
+	/// \param a10 Argument 10 of the Function
+	/// \param a11 Argument 11 of the Function
+	///
+	/// \tparam A1  Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A2  Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A3  Type of argument 3 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A4  Type of argument 4 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A5  Type of argument 5 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A6  Type of argument 6 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A7  Type of argument 7 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A8  Type of argument 8 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A9  Type of argument 9 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A10 Type of argument 10 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A11 Type of argument 11 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam R Type of return value (fails if return value is not of this type)
+	///
+	/// \return SharedPtr containing the return value (or null if failed)
+	///
+	/// \remarks
+	/// This function MUST have its Error handled if it occurred.
+	///
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
+	SharedPtr<R> Evaluate(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11) {
+		sq_pushobject(vm, obj);
+		sq_pushobject(vm, env);
 
 #if !defined (SCRAT_NO_ERROR_CHECKING)
-        SQUnsignedInteger nparams;
-        SQUnsignedInteger nfreevars;
-        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 12)) {
-            sq_pop(vm, 2);
-            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
-            return SharedPtr<R>();
-        }
+		SQUnsignedInteger nparams;
+		SQUnsignedInteger nfreevars;
+		if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 12)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+			return SharedPtr<R>();
+		}
 #endif
 
-        PushVar(vm, a1);
-        PushVar(vm, a2);
-        PushVar(vm, a3);
-        PushVar(vm, a4);
-        PushVar(vm, a5);
-        PushVar(vm, a6);
-        PushVar(vm, a7);
-        PushVar(vm, a8);
-        PushVar(vm, a9);
-        PushVar(vm, a10);
-        PushVar(vm, a11);
+		PushVar(vm, a1);
+		PushVar(vm, a2);
+		PushVar(vm, a3);
+		PushVar(vm, a4);
+		PushVar(vm, a5);
+		PushVar(vm, a6);
+		PushVar(vm, a7);
+		PushVar(vm, a8);
+		PushVar(vm, a9);
+		PushVar(vm, a10);
+		PushVar(vm, a11);
 
 #if !defined (SCRAT_NO_ERROR_CHECKING)
-        SQRESULT result = sq_call(vm, 12, true, ErrorHandling::IsEnabled());
+		SQRESULT result = sq_call(vm, 12, true, ErrorHandling::IsEnabled());
 
-        //handle an error: pop the stack and throw the exception
-        if(SQ_FAILED(result)) {
-            sq_pop(vm, 2);
-            Error::Instance().Throw(vm, LastErrorString(vm));
-            return SharedPtr<R>();
-        }
+		//handle an error: pop the stack and throw the exception
+		if (SQ_FAILED(result)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, LastErrorString(vm));
+			return SharedPtr<R>();
+		}
 #else
-        sq_call(vm, 12, true, ErrorHandling::IsEnabled());
+		sq_call(vm, 12, true, ErrorHandling::IsEnabled());
 #endif
 
-        SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
-        sq_pop(vm, 2);
-        return ret;
-    }
+		SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
+		sq_pop(vm, 2);
+		return ret;
+	}
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Runs the Function and returns its value as a SharedPtr
-    ///
-    /// \param a1  Argument 1 of the Function
-    /// \param a2  Argument 2 of the Function
-    /// \param a3  Argument 3 of the Function
-    /// \param a4  Argument 4 of the Function
-    /// \param a5  Argument 5 of the Function
-    /// \param a6  Argument 6 of the Function
-    /// \param a7  Argument 7 of the Function
-    /// \param a8  Argument 8 of the Function
-    /// \param a9  Argument 9 of the Function
-    /// \param a10 Argument 10 of the Function
-    /// \param a11 Argument 11 of the Function
-    /// \param a12 Argument 12 of the Function
-    ///
-    /// \tparam A1  Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A2  Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A3  Type of argument 3 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A4  Type of argument 4 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A5  Type of argument 5 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A6  Type of argument 6 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A7  Type of argument 7 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A8  Type of argument 8 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A9  Type of argument 9 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A10 Type of argument 10 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A11 Type of argument 11 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A12 Type of argument 12 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam R Type of return value (fails if return value is not of this type)
-    ///
-    /// \return SharedPtr containing the return value (or null if failed)
-    ///
-    /// \remarks
-    /// This function MUST have its Error handled if it occurred.
-    ///
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
-    SharedPtr<R> Evaluate(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12) {
-        sq_pushobject(vm, obj);
-        sq_pushobject(vm, env);
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// Runs the Function and returns its value as a SharedPtr
+	///
+	/// \param a1  Argument 1 of the Function
+	/// \param a2  Argument 2 of the Function
+	/// \param a3  Argument 3 of the Function
+	/// \param a4  Argument 4 of the Function
+	/// \param a5  Argument 5 of the Function
+	/// \param a6  Argument 6 of the Function
+	/// \param a7  Argument 7 of the Function
+	/// \param a8  Argument 8 of the Function
+	/// \param a9  Argument 9 of the Function
+	/// \param a10 Argument 10 of the Function
+	/// \param a11 Argument 11 of the Function
+	/// \param a12 Argument 12 of the Function
+	///
+	/// \tparam A1  Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A2  Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A3  Type of argument 3 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A4  Type of argument 4 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A5  Type of argument 5 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A6  Type of argument 6 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A7  Type of argument 7 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A8  Type of argument 8 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A9  Type of argument 9 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A10 Type of argument 10 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A11 Type of argument 11 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A12 Type of argument 12 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam R Type of return value (fails if return value is not of this type)
+	///
+	/// \return SharedPtr containing the return value (or null if failed)
+	///
+	/// \remarks
+	/// This function MUST have its Error handled if it occurred.
+	///
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
+	SharedPtr<R> Evaluate(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12) {
+		sq_pushobject(vm, obj);
+		sq_pushobject(vm, env);
 
 #if !defined (SCRAT_NO_ERROR_CHECKING)
-        SQUnsignedInteger nparams;
-        SQUnsignedInteger nfreevars;
-        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 13)) {
-            sq_pop(vm, 2);
-            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
-            return SharedPtr<R>();
-        }
+		SQUnsignedInteger nparams;
+		SQUnsignedInteger nfreevars;
+		if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 13)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+			return SharedPtr<R>();
+		}
 #endif
 
-        PushVar(vm, a1);
-        PushVar(vm, a2);
-        PushVar(vm, a3);
-        PushVar(vm, a4);
-        PushVar(vm, a5);
-        PushVar(vm, a6);
-        PushVar(vm, a7);
-        PushVar(vm, a8);
-        PushVar(vm, a9);
-        PushVar(vm, a10);
-        PushVar(vm, a11);
-        PushVar(vm, a12);
+		PushVar(vm, a1);
+		PushVar(vm, a2);
+		PushVar(vm, a3);
+		PushVar(vm, a4);
+		PushVar(vm, a5);
+		PushVar(vm, a6);
+		PushVar(vm, a7);
+		PushVar(vm, a8);
+		PushVar(vm, a9);
+		PushVar(vm, a10);
+		PushVar(vm, a11);
+		PushVar(vm, a12);
 
 #if !defined (SCRAT_NO_ERROR_CHECKING)
-        SQRESULT result = sq_call(vm, 13, true, ErrorHandling::IsEnabled());
+		SQRESULT result = sq_call(vm, 13, true, ErrorHandling::IsEnabled());
 
-        //handle an error: pop the stack and throw the exception
-        if(SQ_FAILED(result)) {
-            sq_pop(vm, 2);
-            Error::Instance().Throw(vm, LastErrorString(vm));
-            return SharedPtr<R>();
-        }
+		//handle an error: pop the stack and throw the exception
+		if (SQ_FAILED(result)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, LastErrorString(vm));
+			return SharedPtr<R>();
+		}
 #else
-        sq_call(vm, 13, true, ErrorHandling::IsEnabled());
+		sq_call(vm, 13, true, ErrorHandling::IsEnabled());
 #endif
 
-        SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
-        sq_pop(vm, 2);
-        return ret;
-    }
+		SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
+		sq_pop(vm, 2);
+		return ret;
+	}
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Runs the Function and returns its value as a SharedPtr
-    ///
-    /// \param a1  Argument 1 of the Function
-    /// \param a2  Argument 2 of the Function
-    /// \param a3  Argument 3 of the Function
-    /// \param a4  Argument 4 of the Function
-    /// \param a5  Argument 5 of the Function
-    /// \param a6  Argument 6 of the Function
-    /// \param a7  Argument 7 of the Function
-    /// \param a8  Argument 8 of the Function
-    /// \param a9  Argument 9 of the Function
-    /// \param a10 Argument 10 of the Function
-    /// \param a11 Argument 11 of the Function
-    /// \param a12 Argument 12 of the Function
-    /// \param a13 Argument 13 of the Function
-    ///
-    /// \tparam A1  Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A2  Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A3  Type of argument 3 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A4  Type of argument 4 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A5  Type of argument 5 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A6  Type of argument 6 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A7  Type of argument 7 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A8  Type of argument 8 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A9  Type of argument 9 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A10 Type of argument 10 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A11 Type of argument 11 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A12 Type of argument 12 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A13 Type of argument 13 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam R Type of return value (fails if return value is not of this type)
-    ///
-    /// \return SharedPtr containing the return value (or null if failed)
-    ///
-    /// \remarks
-    /// This function MUST have its Error handled if it occurred.
-    ///
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
-    SharedPtr<R> Evaluate(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13) {
-        sq_pushobject(vm, obj);
-        sq_pushobject(vm, env);
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// Runs the Function and returns its value as a SharedPtr
+	///
+	/// \param a1  Argument 1 of the Function
+	/// \param a2  Argument 2 of the Function
+	/// \param a3  Argument 3 of the Function
+	/// \param a4  Argument 4 of the Function
+	/// \param a5  Argument 5 of the Function
+	/// \param a6  Argument 6 of the Function
+	/// \param a7  Argument 7 of the Function
+	/// \param a8  Argument 8 of the Function
+	/// \param a9  Argument 9 of the Function
+	/// \param a10 Argument 10 of the Function
+	/// \param a11 Argument 11 of the Function
+	/// \param a12 Argument 12 of the Function
+	/// \param a13 Argument 13 of the Function
+	///
+	/// \tparam A1  Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A2  Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A3  Type of argument 3 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A4  Type of argument 4 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A5  Type of argument 5 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A6  Type of argument 6 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A7  Type of argument 7 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A8  Type of argument 8 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A9  Type of argument 9 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A10 Type of argument 10 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A11 Type of argument 11 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A12 Type of argument 12 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A13 Type of argument 13 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam R Type of return value (fails if return value is not of this type)
+	///
+	/// \return SharedPtr containing the return value (or null if failed)
+	///
+	/// \remarks
+	/// This function MUST have its Error handled if it occurred.
+	///
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
+	SharedPtr<R> Evaluate(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13) {
+		sq_pushobject(vm, obj);
+		sq_pushobject(vm, env);
 
 #if !defined (SCRAT_NO_ERROR_CHECKING)
-        SQUnsignedInteger nparams;
-        SQUnsignedInteger nfreevars;
-        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 14)) {
-            sq_pop(vm, 2);
-            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
-            return SharedPtr<R>();
-        }
+		SQUnsignedInteger nparams;
+		SQUnsignedInteger nfreevars;
+		if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 14)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+			return SharedPtr<R>();
+		}
 #endif
 
-        PushVar(vm, a1);
-        PushVar(vm, a2);
-        PushVar(vm, a3);
-        PushVar(vm, a4);
-        PushVar(vm, a5);
-        PushVar(vm, a6);
-        PushVar(vm, a7);
-        PushVar(vm, a8);
-        PushVar(vm, a9);
-        PushVar(vm, a10);
-        PushVar(vm, a11);
-        PushVar(vm, a12);
-        PushVar(vm, a13);
+		PushVar(vm, a1);
+		PushVar(vm, a2);
+		PushVar(vm, a3);
+		PushVar(vm, a4);
+		PushVar(vm, a5);
+		PushVar(vm, a6);
+		PushVar(vm, a7);
+		PushVar(vm, a8);
+		PushVar(vm, a9);
+		PushVar(vm, a10);
+		PushVar(vm, a11);
+		PushVar(vm, a12);
+		PushVar(vm, a13);
 
 #if !defined (SCRAT_NO_ERROR_CHECKING)
-        SQRESULT result = sq_call(vm, 14, true, ErrorHandling::IsEnabled());
+		SQRESULT result = sq_call(vm, 14, true, ErrorHandling::IsEnabled());
 
-        //handle an error: pop the stack and throw the exception
-        if(SQ_FAILED(result)) {
-            sq_pop(vm, 2);
-            Error::Instance().Throw(vm, LastErrorString(vm));
-            return SharedPtr<R>();
-        }
+		//handle an error: pop the stack and throw the exception
+		if (SQ_FAILED(result)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, LastErrorString(vm));
+			return SharedPtr<R>();
+		}
 #else
-        sq_call(vm, 14, true, ErrorHandling::IsEnabled());
+		sq_call(vm, 14, true, ErrorHandling::IsEnabled());
 #endif
 
-        SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
-        sq_pop(vm, 2);
-        return ret;
-    }
+		SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
+		sq_pop(vm, 2);
+		return ret;
+	}
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Runs the Function and returns its value as a SharedPtr
-    ///
-    /// \param a1  Argument 1 of the Function
-    /// \param a2  Argument 2 of the Function
-    /// \param a3  Argument 3 of the Function
-    /// \param a4  Argument 4 of the Function
-    /// \param a5  Argument 5 of the Function
-    /// \param a6  Argument 6 of the Function
-    /// \param a7  Argument 7 of the Function
-    /// \param a8  Argument 8 of the Function
-    /// \param a9  Argument 9 of the Function
-    /// \param a10 Argument 10 of the Function
-    /// \param a11 Argument 11 of the Function
-    /// \param a12 Argument 12 of the Function
-    /// \param a13 Argument 13 of the Function
-    /// \param a14 Argument 14 of the Function
-    ///
-    /// \tparam A1  Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A2  Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A3  Type of argument 3 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A4  Type of argument 4 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A5  Type of argument 5 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A6  Type of argument 6 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A7  Type of argument 7 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A8  Type of argument 8 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A9  Type of argument 9 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A10 Type of argument 10 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A11 Type of argument 11 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A12 Type of argument 12 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A13 Type of argument 13 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam A14 Type of argument 14 of the Function (usually doesnt need to be defined explicitly)
-    /// \tparam R Type of return value (fails if return value is not of this type)
-    ///
-    /// \return SharedPtr containing the return value (or null if failed)
-    ///
-    /// \remarks
-    /// This function MUST have its Error handled if it occurred.
-    ///
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
-    SharedPtr<R> Evaluate(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13, A14 a14) {
-        sq_pushobject(vm, obj);
-        sq_pushobject(vm, env);
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// Runs the Function and returns its value as a SharedPtr
+	///
+	/// \param a1  Argument 1 of the Function
+	/// \param a2  Argument 2 of the Function
+	/// \param a3  Argument 3 of the Function
+	/// \param a4  Argument 4 of the Function
+	/// \param a5  Argument 5 of the Function
+	/// \param a6  Argument 6 of the Function
+	/// \param a7  Argument 7 of the Function
+	/// \param a8  Argument 8 of the Function
+	/// \param a9  Argument 9 of the Function
+	/// \param a10 Argument 10 of the Function
+	/// \param a11 Argument 11 of the Function
+	/// \param a12 Argument 12 of the Function
+	/// \param a13 Argument 13 of the Function
+	/// \param a14 Argument 14 of the Function
+	///
+	/// \tparam A1  Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A2  Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A3  Type of argument 3 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A4  Type of argument 4 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A5  Type of argument 5 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A6  Type of argument 6 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A7  Type of argument 7 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A8  Type of argument 8 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A9  Type of argument 9 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A10 Type of argument 10 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A11 Type of argument 11 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A12 Type of argument 12 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A13 Type of argument 13 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A14 Type of argument 14 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam R Type of return value (fails if return value is not of this type)
+	///
+	/// \return SharedPtr containing the return value (or null if failed)
+	///
+	/// \remarks
+	/// This function MUST have its Error handled if it occurred.
+	///
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
+	SharedPtr<R> Evaluate(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13, A14 a14) {
+		sq_pushobject(vm, obj);
+		sq_pushobject(vm, env);
 
 #if !defined (SCRAT_NO_ERROR_CHECKING)
-        SQUnsignedInteger nparams;
-        SQUnsignedInteger nfreevars;
-        if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 15)) {
-            sq_pop(vm, 2);
-            Error::Instance().Throw(vm, _SC("wrong number of parameters"));
-            return SharedPtr<R>();
-        }
+		SQUnsignedInteger nparams;
+		SQUnsignedInteger nfreevars;
+		if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 15)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+			return SharedPtr<R>();
+		}
 #endif
 
-        PushVar(vm, a1);
-        PushVar(vm, a2);
-        PushVar(vm, a3);
-        PushVar(vm, a4);
-        PushVar(vm, a5);
-        PushVar(vm, a6);
-        PushVar(vm, a7);
-        PushVar(vm, a8);
-        PushVar(vm, a9);
-        PushVar(vm, a10);
-        PushVar(vm, a11);
-        PushVar(vm, a12);
-        PushVar(vm, a13);
-        PushVar(vm, a14);
+		PushVar(vm, a1);
+		PushVar(vm, a2);
+		PushVar(vm, a3);
+		PushVar(vm, a4);
+		PushVar(vm, a5);
+		PushVar(vm, a6);
+		PushVar(vm, a7);
+		PushVar(vm, a8);
+		PushVar(vm, a9);
+		PushVar(vm, a10);
+		PushVar(vm, a11);
+		PushVar(vm, a12);
+		PushVar(vm, a13);
+		PushVar(vm, a14);
 
 #if !defined (SCRAT_NO_ERROR_CHECKING)
-        SQRESULT result = sq_call(vm, 15, true, ErrorHandling::IsEnabled());
+		SQRESULT result = sq_call(vm, 15, true, ErrorHandling::IsEnabled());
 
-        //handle an error: pop the stack and throw the exception
-        if(SQ_FAILED(result)) {
-            sq_pop(vm, 2);
-            Error::Instance().Throw(vm, LastErrorString(vm));
-            return SharedPtr<R>();
-        }
+		//handle an error: pop the stack and throw the exception
+		if (SQ_FAILED(result)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, LastErrorString(vm));
+			return SharedPtr<R>();
+		}
 #else
-        sq_call(vm, 15, true, ErrorHandling::IsEnabled());
+		sq_call(vm, 15, true, ErrorHandling::IsEnabled());
 #endif
 
-        SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
-        sq_pop(vm, 2);
-        return ret;
-    }
+		SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
+		sq_pop(vm, 2);
+		return ret;
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// Runs the Function and returns its value as a SharedPtr
+	///
+	/// \tparam R Type of return value (fails if return value is not of this type)
+	///
+	/// \return SharedPtr containing the return value (or null if failed)
+	///
+	/// \remarks
+	/// This function MUST have its Error handled if it occurred.
+	///
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	template <class R>
+	SharedPtr<R> UnsafeEvaluate() {
+		sq_pushobject(vm, obj);
+		sq_pushobject(vm, env);
+
+		sq_call(vm, 1, true, ErrorHandling::IsEnabled());
+
+		SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
+		sq_pop(vm, 2);
+		return ret;
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// Runs the Function and returns its value as a SharedPtr
+	///
+	/// \param a1 Argument 1 of the Function
+	///
+	/// \tparam A1 Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam R Type of return value (fails if return value is not of this type)
+	///
+	/// \return SharedPtr containing the return value (or null if failed)
+	///
+	/// \remarks
+	/// This function MUST have its Error handled if it occurred.
+	///
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	template <class R, class A1>
+	SharedPtr<R> UnsafeEvaluate(A1 a1) {
+		sq_pushobject(vm, obj);
+		sq_pushobject(vm, env);
+
+#if !defined (SCRAT_NO_ERROR_CHECKING)
+		SQUnsignedInteger nparams;
+		SQUnsignedInteger nfreevars;
+
+		if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 2)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+			return SharedPtr<R>();
+		}
+#endif
+
+		PushVar(vm, a1);
+
+		sq_call(vm, 2, true, ErrorHandling::IsEnabled());
+
+		SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
+		sq_pop(vm, 2);
+		return ret;
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// Runs the Function and returns its value as a SharedPtr
+	///
+	/// \param a1 Argument 1 of the Function
+	/// \param a2 Argument 2 of the Function
+	///
+	/// \tparam A1 Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A2 Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam R Type of return value (fails if return value is not of this type)
+	///
+	/// \return SharedPtr containing the return value (or null if failed)
+	///
+	/// \remarks
+	/// This function MUST have its Error handled if it occurred.
+	///
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	template <class R, class A1, class A2>
+	SharedPtr<R> UnsafeEvaluate(A1 a1, A2 a2) {
+		sq_pushobject(vm, obj);
+		sq_pushobject(vm, env);
+
+#if !defined (SCRAT_NO_ERROR_CHECKING)
+		SQUnsignedInteger nparams;
+		SQUnsignedInteger nfreevars;
+
+		if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 3)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+			return SharedPtr<R>();
+		}
+#endif
+
+		PushVar(vm, a1);
+		PushVar(vm, a2);
+
+		sq_call(vm, 3, true, ErrorHandling::IsEnabled());
+
+		SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
+		sq_pop(vm, 2);
+		return ret;
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// Runs the Function and returns its value as a SharedPtr
+	///
+	/// \param a1 Argument 1 of the Function
+	/// \param a2 Argument 2 of the Function
+	/// \param a3 Argument 3 of the Function
+	///
+	/// \tparam A1 Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A2 Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A3 Type of argument 3 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam R Type of return value (fails if return value is not of this type)
+	///
+	/// \return SharedPtr containing the return value (or null if failed)
+	///
+	/// \remarks
+	/// This function MUST have its Error handled if it occurred.
+	///
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	template <class R, class A1, class A2, class A3>
+	SharedPtr<R> UnsafeEvaluate(A1 a1, A2 a2, A3 a3) {
+		sq_pushobject(vm, obj);
+		sq_pushobject(vm, env);
+
+#if !defined (SCRAT_NO_ERROR_CHECKING)
+		SQUnsignedInteger nparams;
+		SQUnsignedInteger nfreevars;
+		if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 4)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+			return SharedPtr<R>();
+		}
+#endif
+
+		PushVar(vm, a1);
+		PushVar(vm, a2);
+		PushVar(vm, a3);
+
+		sq_call(vm, 4, true, ErrorHandling::IsEnabled());
+
+		SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
+		sq_pop(vm, 2);
+		return ret;
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// Runs the Function and returns its value as a SharedPtr
+	///
+	/// \param a1 Argument 1 of the Function
+	/// \param a2 Argument 2 of the Function
+	/// \param a3 Argument 3 of the Function
+	/// \param a4 Argument 4 of the Function
+	///
+	/// \tparam A1 Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A2 Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A3 Type of argument 3 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A4 Type of argument 4 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam R Type of return value (fails if return value is not of this type)
+	///
+	/// \return SharedPtr containing the return value (or null if failed)
+	///
+	/// \remarks
+	/// This function MUST have its Error handled if it occurred.
+	///
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	template <class R, class A1, class A2, class A3, class A4>
+	SharedPtr<R> UnsafeEvaluate(A1 a1, A2 a2, A3 a3, A4 a4) {
+		sq_pushobject(vm, obj);
+		sq_pushobject(vm, env);
+
+#if !defined (SCRAT_NO_ERROR_CHECKING)
+		SQUnsignedInteger nparams;
+		SQUnsignedInteger nfreevars;
+		if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 5)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+			return SharedPtr<R>();
+		}
+#endif
+
+		PushVar(vm, a1);
+		PushVar(vm, a2);
+		PushVar(vm, a3);
+		PushVar(vm, a4);
+
+		sq_call(vm, 5, true, ErrorHandling::IsEnabled());
+
+		SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
+		sq_pop(vm, 2);
+		return ret;
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// Runs the Function and returns its value as a SharedPtr
+	///
+	/// \param a1 Argument 1 of the Function
+	/// \param a2 Argument 2 of the Function
+	/// \param a3 Argument 3 of the Function
+	/// \param a4 Argument 4 of the Function
+	/// \param a5 Argument 5 of the Function
+	///
+	/// \tparam A1 Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A2 Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A3 Type of argument 3 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A4 Type of argument 4 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A5 Type of argument 5 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam R Type of return value (fails if return value is not of this type)
+	///
+	/// \return SharedPtr containing the return value (or null if failed)
+	///
+	/// \remarks
+	/// This function MUST have its Error handled if it occurred.
+	///
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	template <class R, class A1, class A2, class A3, class A4, class A5>
+	SharedPtr<R> UnsafeEvaluate(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5) {
+		sq_pushobject(vm, obj);
+		sq_pushobject(vm, env);
+
+#if !defined (SCRAT_NO_ERROR_CHECKING)
+		SQUnsignedInteger nparams;
+		SQUnsignedInteger nfreevars;
+		if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 6)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+			return SharedPtr<R>();
+		}
+#endif
+
+		PushVar(vm, a1);
+		PushVar(vm, a2);
+		PushVar(vm, a3);
+		PushVar(vm, a4);
+		PushVar(vm, a5);
+
+		sq_call(vm, 6, true, ErrorHandling::IsEnabled());
+
+		SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
+		sq_pop(vm, 2);
+		return ret;
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// Runs the Function and returns its value as a SharedPtr
+	///
+	/// \param a1 Argument 1 of the Function
+	/// \param a2 Argument 2 of the Function
+	/// \param a3 Argument 3 of the Function
+	/// \param a4 Argument 4 of the Function
+	/// \param a5 Argument 5 of the Function
+	/// \param a6 Argument 6 of the Function
+	///
+	/// \tparam A1 Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A2 Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A3 Type of argument 3 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A4 Type of argument 4 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A5 Type of argument 5 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A6 Type of argument 6 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam R Type of return value (fails if return value is not of this type)
+	///
+	/// \return SharedPtr containing the return value (or null if failed)
+	///
+	/// \remarks
+	/// This function MUST have its Error handled if it occurred.
+	///
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	template <class R, class A1, class A2, class A3, class A4, class A5, class A6>
+	SharedPtr<R> UnsafeEvaluate(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6) {
+		sq_pushobject(vm, obj);
+		sq_pushobject(vm, env);
+
+#if !defined (SCRAT_NO_ERROR_CHECKING)
+
+		SQUnsignedInteger nparams;
+		SQUnsignedInteger nfreevars;
+		if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 7)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+			return SharedPtr<R>();
+		}
+#endif
+
+		PushVar(vm, a1);
+		PushVar(vm, a2);
+		PushVar(vm, a3);
+		PushVar(vm, a4);
+		PushVar(vm, a5);
+		PushVar(vm, a6);
+
+		sq_call(vm, 7, true, ErrorHandling::IsEnabled());
+
+		SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
+		sq_pop(vm, 2);
+		return ret;
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// Runs the Function and returns its value as a SharedPtr
+	///
+	/// \param a1 Argument 1 of the Function
+	/// \param a2 Argument 2 of the Function
+	/// \param a3 Argument 3 of the Function
+	/// \param a4 Argument 4 of the Function
+	/// \param a5 Argument 5 of the Function
+	/// \param a6 Argument 6 of the Function
+	/// \param a7 Argument 7 of the Function
+	///
+	/// \tparam A1 Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A2 Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A3 Type of argument 3 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A4 Type of argument 4 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A5 Type of argument 5 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A6 Type of argument 6 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A7 Type of argument 7 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam R Type of return value (fails if return value is not of this type)
+	///
+	/// \return SharedPtr containing the return value (or null if failed)
+	///
+	/// \remarks
+	/// This function MUST have its Error handled if it occurred.
+	///
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
+	SharedPtr<R> UnsafeEvaluate(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7) {
+		sq_pushobject(vm, obj);
+		sq_pushobject(vm, env);
+
+#if !defined (SCRAT_NO_ERROR_CHECKING)
+		SQUnsignedInteger nparams;
+		SQUnsignedInteger nfreevars;
+		if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 8)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+			return SharedPtr<R>();
+		}
+#endif
+
+		PushVar(vm, a1);
+		PushVar(vm, a2);
+		PushVar(vm, a3);
+		PushVar(vm, a4);
+		PushVar(vm, a5);
+		PushVar(vm, a6);
+		PushVar(vm, a7);
+
+		sq_call(vm, 8, true, ErrorHandling::IsEnabled());
+
+		SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
+		sq_pop(vm, 2);
+		return ret;
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// Runs the Function and returns its value as a SharedPtr
+	///
+	/// \param a1 Argument 1 of the Function
+	/// \param a2 Argument 2 of the Function
+	/// \param a3 Argument 3 of the Function
+	/// \param a4 Argument 4 of the Function
+	/// \param a5 Argument 5 of the Function
+	/// \param a6 Argument 6 of the Function
+	/// \param a7 Argument 7 of the Function
+	/// \param a8 Argument 8 of the Function
+	///
+	/// \tparam A1 Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A2 Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A3 Type of argument 3 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A4 Type of argument 4 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A5 Type of argument 5 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A6 Type of argument 6 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A7 Type of argument 7 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A8 Type of argument 8 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam R Type of return value (fails if return value is not of this type)
+	///
+	/// \return SharedPtr containing the return value (or null if failed)
+	///
+	/// \remarks
+	/// This function MUST have its Error handled if it occurred.
+	///
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
+	SharedPtr<R> UnsafeEvaluate(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8) {
+		sq_pushobject(vm, obj);
+		sq_pushobject(vm, env);
+
+#if !defined (SCRAT_NO_ERROR_CHECKING)
+		SQUnsignedInteger nparams;
+		SQUnsignedInteger nfreevars;
+		if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 9)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+			return SharedPtr<R>();
+		}
+#endif
+
+		PushVar(vm, a1);
+		PushVar(vm, a2);
+		PushVar(vm, a3);
+		PushVar(vm, a4);
+		PushVar(vm, a5);
+		PushVar(vm, a6);
+		PushVar(vm, a7);
+		PushVar(vm, a8);
+
+		sq_call(vm, 9, true, ErrorHandling::IsEnabled());
+
+		SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
+		sq_pop(vm, 2);
+		return ret;
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// Runs the Function and returns its value as a SharedPtr
+	///
+	/// \param a1 Argument 1 of the Function
+	/// \param a2 Argument 2 of the Function
+	/// \param a3 Argument 3 of the Function
+	/// \param a4 Argument 4 of the Function
+	/// \param a5 Argument 5 of the Function
+	/// \param a6 Argument 6 of the Function
+	/// \param a7 Argument 7 of the Function
+	/// \param a8 Argument 8 of the Function
+	/// \param a9 Argument 9 of the Function
+	///
+	/// \tparam A1 Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A2 Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A3 Type of argument 3 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A4 Type of argument 4 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A5 Type of argument 5 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A6 Type of argument 6 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A7 Type of argument 7 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A8 Type of argument 8 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A9 Type of argument 9 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam R Type of return value (fails if return value is not of this type)
+	///
+	/// \return SharedPtr containing the return value (or null if failed)
+	///
+	/// \remarks
+	/// This function MUST have its Error handled if it occurred.
+	///
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
+	SharedPtr<R> UnsafeEvaluate(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9) {
+		sq_pushobject(vm, obj);
+		sq_pushobject(vm, env);
+
+#if !defined (SCRAT_NO_ERROR_CHECKING)
+		SQUnsignedInteger nparams;
+		SQUnsignedInteger nfreevars;
+		if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 10)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+			return SharedPtr<R>();
+		}
+#endif
+
+		PushVar(vm, a1);
+		PushVar(vm, a2);
+		PushVar(vm, a3);
+		PushVar(vm, a4);
+		PushVar(vm, a5);
+		PushVar(vm, a6);
+		PushVar(vm, a7);
+		PushVar(vm, a8);
+		PushVar(vm, a9);
+
+		sq_call(vm, 10, true, ErrorHandling::IsEnabled());
+
+		SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
+		sq_pop(vm, 2);
+		return ret;
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// Runs the Function and returns its value as a SharedPtr
+	///
+	/// \param a1  Argument 1 of the Function
+	/// \param a2  Argument 2 of the Function
+	/// \param a3  Argument 3 of the Function
+	/// \param a4  Argument 4 of the Function
+	/// \param a5  Argument 5 of the Function
+	/// \param a6  Argument 6 of the Function
+	/// \param a7  Argument 7 of the Function
+	/// \param a8  Argument 8 of the Function
+	/// \param a9  Argument 9 of the Function
+	/// \param a10 Argument 10 of the Function
+	///
+	/// \tparam A1  Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A2  Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A3  Type of argument 3 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A4  Type of argument 4 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A5  Type of argument 5 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A6  Type of argument 6 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A7  Type of argument 7 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A8  Type of argument 8 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A9  Type of argument 9 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A10 Type of argument 10 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam R Type of return value (fails if return value is not of this type)
+	///
+	/// \return SharedPtr containing the return value (or null if failed)
+	///
+	/// \remarks
+	/// This function MUST have its Error handled if it occurred.
+	///
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
+	SharedPtr<R> UnsafeEvaluate(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10) {
+		sq_pushobject(vm, obj);
+		sq_pushobject(vm, env);
+
+#if !defined (SCRAT_NO_ERROR_CHECKING)
+		SQUnsignedInteger nparams;
+		SQUnsignedInteger nfreevars;
+		if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 11)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+			return SharedPtr<R>();
+		}
+#endif
+
+		PushVar(vm, a1);
+		PushVar(vm, a2);
+		PushVar(vm, a3);
+		PushVar(vm, a4);
+		PushVar(vm, a5);
+		PushVar(vm, a6);
+		PushVar(vm, a7);
+		PushVar(vm, a8);
+		PushVar(vm, a9);
+		PushVar(vm, a10);
+
+		sq_call(vm, 11, true, ErrorHandling::IsEnabled());
+
+		SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
+		sq_pop(vm, 2);
+		return ret;
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// Runs the Function and returns its value as a SharedPtr
+	///
+	/// \param a1  Argument 1 of the Function
+	/// \param a2  Argument 2 of the Function
+	/// \param a3  Argument 3 of the Function
+	/// \param a4  Argument 4 of the Function
+	/// \param a5  Argument 5 of the Function
+	/// \param a6  Argument 6 of the Function
+	/// \param a7  Argument 7 of the Function
+	/// \param a8  Argument 8 of the Function
+	/// \param a9  Argument 9 of the Function
+	/// \param a10 Argument 10 of the Function
+	/// \param a11 Argument 11 of the Function
+	///
+	/// \tparam A1  Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A2  Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A3  Type of argument 3 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A4  Type of argument 4 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A5  Type of argument 5 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A6  Type of argument 6 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A7  Type of argument 7 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A8  Type of argument 8 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A9  Type of argument 9 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A10 Type of argument 10 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A11 Type of argument 11 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam R Type of return value (fails if return value is not of this type)
+	///
+	/// \return SharedPtr containing the return value (or null if failed)
+	///
+	/// \remarks
+	/// This function MUST have its Error handled if it occurred.
+	///
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
+	SharedPtr<R> UnsafeEvaluate(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11) {
+		sq_pushobject(vm, obj);
+		sq_pushobject(vm, env);
+
+#if !defined (SCRAT_NO_ERROR_CHECKING)
+		SQUnsignedInteger nparams;
+		SQUnsignedInteger nfreevars;
+		if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 12)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+			return SharedPtr<R>();
+		}
+#endif
+
+		PushVar(vm, a1);
+		PushVar(vm, a2);
+		PushVar(vm, a3);
+		PushVar(vm, a4);
+		PushVar(vm, a5);
+		PushVar(vm, a6);
+		PushVar(vm, a7);
+		PushVar(vm, a8);
+		PushVar(vm, a9);
+		PushVar(vm, a10);
+		PushVar(vm, a11);
+
+		sq_call(vm, 12, true, ErrorHandling::IsEnabled());
+
+		SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
+		sq_pop(vm, 2);
+		return ret;
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// Runs the Function and returns its value as a SharedPtr
+	///
+	/// \param a1  Argument 1 of the Function
+	/// \param a2  Argument 2 of the Function
+	/// \param a3  Argument 3 of the Function
+	/// \param a4  Argument 4 of the Function
+	/// \param a5  Argument 5 of the Function
+	/// \param a6  Argument 6 of the Function
+	/// \param a7  Argument 7 of the Function
+	/// \param a8  Argument 8 of the Function
+	/// \param a9  Argument 9 of the Function
+	/// \param a10 Argument 10 of the Function
+	/// \param a11 Argument 11 of the Function
+	/// \param a12 Argument 12 of the Function
+	///
+	/// \tparam A1  Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A2  Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A3  Type of argument 3 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A4  Type of argument 4 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A5  Type of argument 5 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A6  Type of argument 6 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A7  Type of argument 7 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A8  Type of argument 8 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A9  Type of argument 9 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A10 Type of argument 10 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A11 Type of argument 11 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A12 Type of argument 12 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam R Type of return value (fails if return value is not of this type)
+	///
+	/// \return SharedPtr containing the return value (or null if failed)
+	///
+	/// \remarks
+	/// This function MUST have its Error handled if it occurred.
+	///
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
+	SharedPtr<R> UnsafeEvaluate(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12) {
+		sq_pushobject(vm, obj);
+		sq_pushobject(vm, env);
+
+#if !defined (SCRAT_NO_ERROR_CHECKING)
+		SQUnsignedInteger nparams;
+		SQUnsignedInteger nfreevars;
+		if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 13)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+			return SharedPtr<R>();
+		}
+#endif
+
+		PushVar(vm, a1);
+		PushVar(vm, a2);
+		PushVar(vm, a3);
+		PushVar(vm, a4);
+		PushVar(vm, a5);
+		PushVar(vm, a6);
+		PushVar(vm, a7);
+		PushVar(vm, a8);
+		PushVar(vm, a9);
+		PushVar(vm, a10);
+		PushVar(vm, a11);
+		PushVar(vm, a12);
+
+		sq_call(vm, 13, true, ErrorHandling::IsEnabled());
+
+		SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
+		sq_pop(vm, 2);
+		return ret;
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// Runs the Function and returns its value as a SharedPtr
+	///
+	/// \param a1  Argument 1 of the Function
+	/// \param a2  Argument 2 of the Function
+	/// \param a3  Argument 3 of the Function
+	/// \param a4  Argument 4 of the Function
+	/// \param a5  Argument 5 of the Function
+	/// \param a6  Argument 6 of the Function
+	/// \param a7  Argument 7 of the Function
+	/// \param a8  Argument 8 of the Function
+	/// \param a9  Argument 9 of the Function
+	/// \param a10 Argument 10 of the Function
+	/// \param a11 Argument 11 of the Function
+	/// \param a12 Argument 12 of the Function
+	/// \param a13 Argument 13 of the Function
+	///
+	/// \tparam A1  Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A2  Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A3  Type of argument 3 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A4  Type of argument 4 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A5  Type of argument 5 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A6  Type of argument 6 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A7  Type of argument 7 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A8  Type of argument 8 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A9  Type of argument 9 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A10 Type of argument 10 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A11 Type of argument 11 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A12 Type of argument 12 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A13 Type of argument 13 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam R Type of return value (fails if return value is not of this type)
+	///
+	/// \return SharedPtr containing the return value (or null if failed)
+	///
+	/// \remarks
+	/// This function MUST have its Error handled if it occurred.
+	///
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
+	SharedPtr<R> UnsafeEvaluate(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13) {
+		sq_pushobject(vm, obj);
+		sq_pushobject(vm, env);
+
+#if !defined (SCRAT_NO_ERROR_CHECKING)
+		SQUnsignedInteger nparams;
+		SQUnsignedInteger nfreevars;
+		if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 14)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+			return SharedPtr<R>();
+		}
+#endif
+
+		PushVar(vm, a1);
+		PushVar(vm, a2);
+		PushVar(vm, a3);
+		PushVar(vm, a4);
+		PushVar(vm, a5);
+		PushVar(vm, a6);
+		PushVar(vm, a7);
+		PushVar(vm, a8);
+		PushVar(vm, a9);
+		PushVar(vm, a10);
+		PushVar(vm, a11);
+		PushVar(vm, a12);
+		PushVar(vm, a13);
+
+		sq_call(vm, 14, true, ErrorHandling::IsEnabled());
+
+		SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
+		sq_pop(vm, 2);
+		return ret;
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// Runs the Function and returns its value as a SharedPtr
+	///
+	/// \param a1  Argument 1 of the Function
+	/// \param a2  Argument 2 of the Function
+	/// \param a3  Argument 3 of the Function
+	/// \param a4  Argument 4 of the Function
+	/// \param a5  Argument 5 of the Function
+	/// \param a6  Argument 6 of the Function
+	/// \param a7  Argument 7 of the Function
+	/// \param a8  Argument 8 of the Function
+	/// \param a9  Argument 9 of the Function
+	/// \param a10 Argument 10 of the Function
+	/// \param a11 Argument 11 of the Function
+	/// \param a12 Argument 12 of the Function
+	/// \param a13 Argument 13 of the Function
+	/// \param a14 Argument 14 of the Function
+	///
+	/// \tparam A1  Type of argument 1 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A2  Type of argument 2 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A3  Type of argument 3 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A4  Type of argument 4 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A5  Type of argument 5 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A6  Type of argument 6 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A7  Type of argument 7 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A8  Type of argument 8 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A9  Type of argument 9 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A10 Type of argument 10 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A11 Type of argument 11 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A12 Type of argument 12 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A13 Type of argument 13 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam A14 Type of argument 14 of the Function (usually doesnt need to be defined explicitly)
+	/// \tparam R Type of return value (fails if return value is not of this type)
+	///
+	/// \return SharedPtr containing the return value (or null if failed)
+	///
+	/// \remarks
+	/// This function MUST have its Error handled if it occurred.
+	///
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
+	SharedPtr<R> UnsafeEvaluate(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12, A13 a13, A14 a14) {
+		sq_pushobject(vm, obj);
+		sq_pushobject(vm, env);
+
+#if !defined (SCRAT_NO_ERROR_CHECKING)
+		SQUnsignedInteger nparams;
+		SQUnsignedInteger nfreevars;
+		if (SQ_SUCCEEDED(sq_getclosureinfo(vm, -2, &nparams, &nfreevars)) && (nparams != 15)) {
+			sq_pop(vm, 2);
+			Error::Instance().Throw(vm, _SC("wrong number of parameters"));
+			return SharedPtr<R>();
+		}
+#endif
+
+		PushVar(vm, a1);
+		PushVar(vm, a2);
+		PushVar(vm, a3);
+		PushVar(vm, a4);
+		PushVar(vm, a5);
+		PushVar(vm, a6);
+		PushVar(vm, a7);
+		PushVar(vm, a8);
+		PushVar(vm, a9);
+		PushVar(vm, a10);
+		PushVar(vm, a11);
+		PushVar(vm, a12);
+		PushVar(vm, a13);
+		PushVar(vm, a14);
+
+		sq_call(vm, 15, true, ErrorHandling::IsEnabled());
+
+		SharedPtr<R> ret = Var<SharedPtr<R> >(vm, -1).value;
+		sq_pop(vm, 2);
+		return ret;
+	}
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Runs the Function
