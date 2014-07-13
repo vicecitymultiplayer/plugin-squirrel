@@ -1863,6 +1863,7 @@ SQInteger NewTimer( HSQUIRRELVM v )
 
 						case OT_TABLE:
 							pTempParam.pData = new Sqrat::Var<Sqrat::Table>(v, i);
+							break;
 
 						case OT_ARRAY:
 							pTempParam.pData = new Sqrat::Var<Sqrat::Array>(v, i);
