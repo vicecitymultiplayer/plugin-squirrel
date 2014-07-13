@@ -33,7 +33,50 @@ class CTimer
 			for (unsigned int i = 0; i < params.size(); i++)
 			{
 				if (this->params[i].pData != nullptr)
-					delete this->params[i].pData;
+				{
+					switch (this->params[i].datatype)
+					{
+						case OT_INTEGER:
+							delete static_cast<Sqrat::Var<SQInteger> *>(this->params[i].pData);
+							break;
+
+						case OT_FLOAT:
+							delete static_cast<Sqrat::Var<SQFloat> *>(this->params[i].pData);
+							break;
+
+						case OT_BOOL:
+							delete static_cast<Sqrat::Var<bool> *>(this->params[i].pData);
+							break;
+
+						case OT_STRING:
+							delete static_cast<Sqrat::Var<string> *>(this->params[i].pData);
+							break;
+
+						case OT_TABLE:
+							delete static_cast<Sqrat::Var<Sqrat::Table> *>(this->params[i].pData);
+							break;
+
+						case OT_ARRAY:
+							delete static_cast<Sqrat::Var<Sqrat::Array> *>(this->params[i].pData);
+							break;
+
+						case OT_USERDATA:
+						case OT_USERPOINTER:
+						case OT_CLASS:
+						case OT_INSTANCE:
+							delete static_cast<Sqrat::Var<Sqrat::Object> *>(this->params[i].pData);
+							break;
+
+						case OT_CLOSURE:
+						case OT_NATIVECLOSURE:
+							delete static_cast<Sqrat::Var<Sqrat::Function> *>(this->params[i].pData);
+							break;
+
+						case OT_NULL:
+						default:
+							break;
+					}
+				}
 			}
 
 			if( this->params.size() > 0 )
