@@ -148,7 +148,7 @@ int OnPlayerRequestClass( int nPlayerId, int nOffset )
 		{
 			if (!callback.IsNull())
 			{
-				SharedPtr<int> pValue = callback.Evaluate<int, CPlayer *, int>(playerInstance, nOffset);
+				SharedPtr<int> pValue = callback.UnsafeEvaluate<int, CPlayer *, int>(playerInstance, nOffset);
 				if (pValue != nullptr)
 					returnValue = *pValue;
 			}
@@ -177,7 +177,7 @@ int OnPlayerRequestSpawn( int nPlayerId )
 		{
 			if (!callback.IsNull())
 			{
-				SharedPtr<int> pValue = callback.Evaluate<int, CPlayer *>(playerInstance).Get();
+				SharedPtr<int> pValue = callback.UnsafeEvaluate<int, CPlayer *>(playerInstance).Get();
 				if (pValue != nullptr)
 					returnValue = *pValue;
 			}
@@ -275,7 +275,7 @@ int OnPlayerRequestEnter( int nPlayerId, int nVehicleId, int nSlotId )
 		{
 			if (!callback.IsNull() && playerInstance != nullptr && vehicleInstance != nullptr)
 			{
-				SharedPtr<int> pValue = callback.Evaluate<int, CPlayer *, CVehicle *, int>(playerInstance, vehicleInstance, nSlotId).Get();
+				SharedPtr<int> pValue = callback.UnsafeEvaluate<int, CPlayer *, CVehicle *, int>(playerInstance, vehicleInstance, nSlotId).Get();
 				if (pValue != nullptr)
 					returnValue = *pValue;
 			}
@@ -349,7 +349,7 @@ int OnPickupClaimPicked( int nPickupId, int nPlayerId )
 		{
 			if (!callback.IsNull())
 			{
-				SharedPtr<int> pValue = callback.Evaluate<int, CPlayer *, CPickup *>(playerInstance, pickupInstance).Get();
+				SharedPtr<int> pValue = callback.UnsafeEvaluate<int, CPlayer *, CPickup *>(playerInstance, pickupInstance).Get();
 				if (pValue != nullptr)
 					returnValue = *pValue;
 			}
@@ -463,7 +463,7 @@ int OnPublicMessage( int nPlayerId, const char* pszText )
 		{
 			if (!callback.IsNull())
 			{
-				SharedPtr<int> pValue = callback.Evaluate<int, CPlayer *, const char *>(playerInstance, pszText).Get();
+				SharedPtr<int> pValue = callback.UnsafeEvaluate<int, CPlayer *, const char *>(playerInstance, pszText).Get();
 				if (pValue != nullptr)
 					returnValue = *pValue;
 			}
@@ -530,7 +530,7 @@ int OnPrivateMessage( int nPlayerId, int nTargetId, const char* pszText )
 		{
 			if (!callback.IsNull())
 			{
-				SharedPtr<int> pValue = callback.Evaluate<int, CPlayer *, CPlayer *, const char *>(playerInstance, targetInstance, pszText).Get();
+				SharedPtr<int> pValue = callback.UnsafeEvaluate<int, CPlayer *, CPlayer *, const char *>(playerInstance, targetInstance, pszText).Get();
 				if (pValue != nullptr)
 					returnValue = *pValue;
 			}
@@ -598,7 +598,7 @@ int OnLoginAttempt( char* playerName, const char* password, const char* pszIpAdd
 		{
 			if (!callback.IsNull())
 			{
-				SharedPtr<int> pValue = callback.Evaluate<int, char *, const char *, const char *>(playerName, password, pszIpAddress).Get();
+				SharedPtr<int> pValue = callback.UnsafeEvaluate<int, char *, const char *, const char *>(playerName, password, pszIpAddress).Get();
 				if (pValue != nullptr)
 					returnValue = *pValue;
 			}
