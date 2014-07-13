@@ -260,16 +260,16 @@ void EntityRGB::SetB(int nB)
 
 void RegisterStructures()
 {
-	Sqrat::Class<Vector> a;
-	Sqrat::Class<Quaternion> b;
-	Sqrat::Class<RGBa> c;
-	Sqrat::Class<cRGB> d;
-	Sqrat::Class<Bounds> e;
-	Sqrat::Class<WastedSettings> f;
-	Sqrat::Class<ARGB> g;
-	Sqrat::Class<EntityVector> h;
-	Sqrat::Class<EntityQuaternion> j;
-	Sqrat::Class<EntityRGB> k;
+	Sqrat::ImprovedClass<Vector> a;
+	Sqrat::ImprovedClass<Quaternion> b;
+	Sqrat::ImprovedClass<RGBa> c;
+	Sqrat::ImprovedClass<cRGB> d;
+	Sqrat::ImprovedClass<Bounds> e;
+	Sqrat::ImprovedClass<WastedSettings> f;
+	Sqrat::ImprovedClass<ARGB> g;
+	Sqrat::ImprovedClass<EntityVector> h;
+	Sqrat::ImprovedClass<EntityQuaternion> j;
+	Sqrat::ImprovedClass<EntityRGB> k;
 
 	a.Ctor<float, float, float>();
 	a.Ctor<int, int, int>();
