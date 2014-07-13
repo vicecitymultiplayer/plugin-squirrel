@@ -30,7 +30,7 @@ class CTimer
 
 		~CTimer()
 		{
-			for (int i = 0; i < params.size(); i++)
+			for (unsigned int i = 0; i < params.size(); i++)
 			{
 				if (this->params[i].pData != nullptr)
 					delete this->params[i].pData;
