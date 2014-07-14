@@ -177,6 +177,7 @@ void RegisterGlobals()
 
 		.Func(_SC("GetVehicleModelFromName"), GetVehicleModelFromName, 2, _SC("ts"))
 		.Func(_SC("GetVehicleNameFromModel"), GetVehicleNameFromModel, 2, _SC("ti"))
+		.Func(_SC("IsNum"), IsNum, 2, _SC("ts"))
 
 		.Func(_SC("SetFallEnabled"), SetFallEnabled, 1, _SC("t"))
 		.Func(_SC("GetTime"), GetTime, 1, _SC("t"))

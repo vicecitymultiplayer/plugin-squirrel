@@ -203,6 +203,7 @@ void ReloadScripts      ( void );
 int GetVehicleModelFromName ( SQChar * name );
 const SQChar * GetVehicleNameFromModel ( int model );
 void LoadVCMPModule( const SQChar * name );
+bool IsNum(const SQChar * line);
 
 SQInteger FindPlayer( HSQUIRRELVM v );
 SQInteger InPoly( HSQUIRRELVM v );

@@ -1658,6 +1658,8 @@ bool IsWeaponDataModified ( int weaponID, int fieldID ) { return (functions->IsW
 bool ResetWeaponData      ( int weaponID ) { return (functions->ResetWeaponData( weaponID ) ? true : false); }
 bool ResetAllWeaponData   () { return (functions->ResetAllWeaponData() ? true : false); }
 
+bool IsNum (const SQChar * line) { char* p; strtol(line, &p, 10); return *p == 0; }
+
 SQInteger release_hook( SQUserPointer p, SQInteger size ) { return 1; }
 SQInteger FindPlayer( HSQUIRRELVM v )
 {
