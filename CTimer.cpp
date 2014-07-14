@@ -29,7 +29,6 @@ bool CTimer::Pulse( float elapsedTime )
 
 			if( this->paramCount > 0 )
 			{
-				// for(int i = paramCount - 1; i > 0; i--)
 				void * pData;
 				SQObjectType type;
 
@@ -40,39 +39,37 @@ bool CTimer::Pulse( float elapsedTime )
 					switch (type)
 					{
 						case OT_INTEGER:
-							Sqrat::PushVar(v, *(Sqrat::Var<SQInteger> *)(pData));
+							sq_pushinteger(v, *(SQInteger *)pData);
 							break;
 
 						case OT_FLOAT:
-							Sqrat::PushVar(v, *(Sqrat::Var<SQFloat> *)(pData));
+							sq_pushfloat(v, *(SQFloat *)pData);
 							break;
 
 						case OT_BOOL:
-							Sqrat::PushVar(v, *(Sqrat::Var<bool> *)(pData));
+							sq_pushbool(v, *(SQBool *)pData);
 							break;
 
 						case OT_STRING:
-							Sqrat::PushVar(v, *(Sqrat::Var<string> *)(pData));
+						{
+							Sqrat::string * pString = (Sqrat::string *)pData;
+							sq_pushstring(v, pString->c_str(), -1);
 							break;
+						}
 
-						case OT_TABLE:
-							Sqrat::PushVar(v, *(Sqrat::Var<Sqrat::Table> *)(pData));
-
+						/*case OT_TABLE:
 						case OT_ARRAY:
-							Sqrat::PushVar(v, *(Sqrat::Var<Sqrat::Array> *)(pData));
-							break;
-
+						case OT_CLASS:*/
 						case OT_USERDATA:
 						case OT_USERPOINTER:
-						case OT_CLASS:
 						case OT_INSTANCE:
-							Sqrat::PushVar(v, *(Sqrat::Var<Sqrat::Object> *)(pData));
-							break;
-
 						case OT_CLOSURE:
 						case OT_NATIVECLOSURE:
-							Sqrat::PushVar(v, *(Sqrat::Var<Sqrat::Function> *)(pData));
+						{
+							HSQOBJECT * o = (HSQOBJECT *)pData;
+							sq_pushobject(v, *o);
 							break;
+						}
 
 						case OT_NULL:
 							sq_pushnull(v);

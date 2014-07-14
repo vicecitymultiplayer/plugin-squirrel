@@ -1846,40 +1846,44 @@ SQInteger NewTimer( HSQUIRRELVM v )
 					switch( pTempParam.datatype )
 					{
 						case OT_INTEGER:
-							pTempParam.pData = new Sqrat::Var<SQInteger>(v, i);
+							pTempParam.pData = new SQInteger();
+							sq_getinteger(v, i, (SQInteger *)pTempParam.pData);
 							break;
 
 						case OT_FLOAT:
-							pTempParam.pData = new Sqrat::Var<SQFloat>(v, i);
+							pTempParam.pData = new SQFloat();
+							sq_getfloat(v, i, (SQFloat *)pTempParam.pData);
 							break;
 
 						case OT_BOOL:
-							pTempParam.pData = new Sqrat::Var<bool>(v, i);
+							pTempParam.pData = new SQBool();
+							sq_getbool(v, i, (SQBool *)pTempParam.pData);
 							break;
 
 						case OT_STRING:
-							pTempParam.pData = new Sqrat::Var<string>(v, i);
-							break;
+						{
+							const SQChar * pString = NULL;
+							sq_getstring(v, i, &pString);
 
-						case OT_TABLE:
-							pTempParam.pData = new Sqrat::Var<Sqrat::Table>(v, i);
+							Sqrat::string * pStringData = new Sqrat::string(pString);
+							pTempParam.pData = pStringData;
 							break;
+						}
 
+						/*case OT_TABLE:
 						case OT_ARRAY:
-							pTempParam.pData = new Sqrat::Var<Sqrat::Array>(v, i);
-							break;
-
+						case OT_CLASS:*/
 						case OT_USERDATA:
 						case OT_USERPOINTER:
-						case OT_CLASS:
 						case OT_INSTANCE:
-							pTempParam.pData = new Sqrat::Var<Sqrat::Object>(v, i);
-							break;
-
 						case OT_CLOSURE:
 						case OT_NATIVECLOSURE:
-							pTempParam.pData = new Sqrat::Var<Sqrat::Function>(v, i);
+						{
+							HSQOBJECT * o = new HSQOBJECT();
+							sq_getstackobj(v, i, o);
+							pTempParam.pData = o;
 							break;
+						}
 
 						case OT_NULL:
 						default:

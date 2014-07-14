@@ -30,22 +30,22 @@ class CTimer
 
 		~CTimer()
 		{
-			for (unsigned int i = 0; i < params.size(); i++)
+/*			for (unsigned int i = 0; i < params.size(); i++)
 			{
 				if (this->params[i].pData != nullptr)
 				{
 					switch (this->params[i].datatype)
 					{
 						case OT_INTEGER:
-							delete static_cast<Sqrat::Var<SQInteger> *>(this->params[i].pData);
+							delete static_cast<SQInteger *>(this->params[i].pData);
 							break;
 
 						case OT_FLOAT:
-							delete static_cast<Sqrat::Var<SQFloat> *>(this->params[i].pData);
+							delete static_cast<SQFloat *>(this->params[i].pData);
 							break;
 
 						case OT_BOOL:
-							delete static_cast<Sqrat::Var<bool> *>(this->params[i].pData);
+							delete static_cast<SQBool *>(this->params[i].pData);
 							break;
 
 						case OT_STRING:
@@ -77,7 +77,7 @@ class CTimer
 							break;
 					}
 				}
-			}
+			}*/
 
 			if( this->params.size() > 0 )
 				this->params.clear();
