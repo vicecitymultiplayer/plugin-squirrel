@@ -1696,7 +1696,7 @@ SQInteger FindPlayer( HSQUIRRELVM v )
 					functions->GetPlayerName( i, nameBuf, 64 );
 					szlower( nameBuf );
 
-					if( strstr( nameBuf, lowerName ) )
+					if( strstr( nameBuf, lowerName ) != nullptr )
 					{
 						pID = i;
 						break;
