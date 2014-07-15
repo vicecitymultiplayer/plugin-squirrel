@@ -463,7 +463,7 @@ void MessageAllExcept   ( const SQChar * message, CPlayer * player )
 	{
 		for( int i = 0; i < MAX_PLAYERS; i++ )
 		{
-			if( functions->IsPlayerConnected( i ) )
+			if( functions->IsPlayerConnected( i ) && i != player->GetID() )
 				functions->SendClientMessage( i, 0x0b5fa5ff, "%s", message );
 		}
 	}
