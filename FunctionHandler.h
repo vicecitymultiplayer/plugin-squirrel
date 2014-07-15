@@ -205,6 +205,10 @@ const SQChar * GetVehicleNameFromModel ( int model );
 void LoadVCMPModule( const SQChar * name );
 bool IsNum(const SQChar * line);
 
+int GetVehicleCount(void);
+int GetPickupCount(void);
+int GetPlayers(void);
+
 SQInteger FindPlayer( HSQUIRRELVM v );
 SQInteger InPoly( HSQUIRRELVM v );
 SQInteger NewTimer( HSQUIRRELVM v );

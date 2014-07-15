@@ -179,6 +179,10 @@ void RegisterGlobals()
 		.Func(_SC("GetVehicleNameFromModel"), GetVehicleNameFromModel, 2, _SC("ti"))
 		.Func(_SC("IsNum"), IsNum, 2, _SC("ts"))
 
+		.Func(_SC("GetVehicleCount"), GetVehicleCount, 1, _SC("t"))
+		.Func(_SC("GetPickupCount"), GetVehicleCount, 1, _SC("t"))
+		.Func(_SC("GetPlayers"), GetPlayers, 1, _SC("t"))
+
 		.Func(_SC("SetFallEnabled"), SetFallEnabled, 1, _SC("t"))
 		.Func(_SC("GetTime"), GetTime, 1, _SC("t"))
 		.Func(_SC("GetFullTime"), GetFullTime, 1, _SC("t"))

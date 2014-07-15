@@ -111,18 +111,6 @@ float        GetGamespeed()  { return ( functions->GetGamespeed() != 0 );  }
 float        GetWaterLevel() { return ( functions->GetWaterLevel() != 0 ); }
 float        GetMaxHeight()  { return ( functions->GetMaxHeight() != 0 );  }
 
-int GetPlayers()
-{
-	int count = 0;
-	for (int i = 0; i < functions->GetMaxPlayers(); i++)
-	{
-		if (functions->IsPlayerConnected(i))
-			count++;
-	}
-
-	return count;
-}
-
 void ToggleSyncFrameLimiter ( bool toggle ) { functions->ToggleSyncFrameLimiter( ( toggle ? 1 : 0 ) ); }
 void ToggleFrameLimiter     ( bool toggle ) { functions->ToggleFrameLimiter( ( toggle ? 1 : 0 ) );     }
 void ToggleTaxiBoostJump    ( bool toggle ) { functions->ToggleTaxiBoostJump( ( toggle ? 1 : 0 ) );    }
@@ -1658,7 +1646,45 @@ bool IsWeaponDataModified ( int weaponID, int fieldID ) { return (functions->IsW
 bool ResetWeaponData      ( int weaponID ) { return (functions->ResetWeaponData( weaponID ) ? true : false); }
 bool ResetAllWeaponData   () { return (functions->ResetAllWeaponData() ? true : false); }
 
-bool IsNum (const SQChar * line) { char* p; strtol(line, &p, 10); return *p == 0; }
+bool IsNum(const SQChar * line)
+{
+	if (strlen(line) < 1)
+		return false;
+	
+	char* p;
+	strtol(line, &p, 10);
+	return *p == 0;
+}
+
+int GetVehicleCount()
+{
+	int count = 0;
+	for (int i = 0; i < MAX_VEHICLES; i++)
+	if (functions->GetVehicleModel(i) > 0)
+		count++;
+
+	return count;
+}
+
+int GetPickupCount()
+{
+	int count = 0;
+	for (int i = 0; i < MAX_PICKUPS; i++)
+	if (functions->PickupGetModel(i) > 0)
+		count++;
+
+	return count;
+}
+
+int GetPlayers()
+{
+	int count = 0;
+	for (int i = 0; i < functions->GetMaxPlayers(); i++)
+	if (functions->IsPlayerConnected(i))
+		count++;
+
+	return count;
+}
 
 SQInteger release_hook( SQUserPointer p, SQInteger size ) { return 1; }
 SQInteger FindPlayer( HSQUIRRELVM v )
