@@ -2030,13 +2030,13 @@ bool GetDeathmatchScoreboard(void)
 }
 
 void SetDeathmatchScoreboard(bool isDmScoreboard) { OutputWarning("GetDeathmatchScoreboard has no effect. Use scripts to implement it."); }
-bool GetWeaponSync(void)
+bool GetWeaponSync(int weapon)
 {
 	OutputWarning("GetWeaponSync does not exist in 0.4. Rely on the server's anti-hack system and callbacks instead.");
 	return false;
 }
 
-void SetWeaponSync(bool isSynced) { OutputWarning("GetWeaponSync does not exist in 0.4. Rely on the server's anti-hack system and callbacks instead."); }
+void SetWeaponSync(int weapon, bool isSynced) { OutputWarning("GetWeaponSync does not exist in 0.4. Rely on the server's anti-hack system and callbacks instead."); }
 bool GetWeatherLock(void)
 {
 	OutputWarning("GetWeatherLock has no effect.");
