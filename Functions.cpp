@@ -188,7 +188,7 @@ void RegisterGlobals()
 		.Func(_SC("GetDeathmatchScoreBoard"), GetDeathmatchScoreboard, 1, _SC("t"))
 		.Func(_SC("SetDeathmatchScoreBoard"), SetDeathmatchScoreboard, 2, _SC("tb"))
 		.Func(_SC("GetWeaponSync"), GetWeaponSync, 2, _SC("ti"))
-		.Func(_SC("SetWeaponSync"), SetWeaponSync, 3, _SC("tbi"))
+		.Func(_SC("SetWeaponSync"), SetWeaponSync, 3, _SC("tib"))
 
 		.Func(_SC("GetTime"), GetTime, 1, _SC("t"))
 		.Func(_SC("GetFullTime"), GetFullTime, 1, _SC("t"))
