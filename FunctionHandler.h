@@ -18,7 +18,7 @@ void ClientMessage               ( const SQChar * message, CPlayer * player, int
 void ClientMessageWithAlpha      ( const SQChar * message, CPlayer * player, int r, int g, int b, int a );
 void ClientMessageToAll          ( const SQChar* message, int r, int g, int b );
 void ClientMessageToAllWithAlpha ( const SQChar* message, int r, int g, int b, int a );
-void GameMessage                 ( CPlayer * player, const SQChar* message, int type = 0 );
+void GameMessage                 ( const SQChar* message, CPlayer * player, int type = 0 );
 void GameMessageToAll            ( const SQChar * message, int type = 0 );
 
 void SetServerName      ( const SQChar* message );

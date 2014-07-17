@@ -43,7 +43,7 @@ void ClientMessageToAllWithAlpha(const SQChar* message, int r, int g, int b, int
 	}
 }
 
-void GameMessage   ( CPlayer * player, const SQChar* message, int type )
+void GameMessage   ( const SQChar* message, CPlayer * player, int type )
 {
 	if( player != nullptr )
 		functions->SendGameMessage( player->nPlayerId, type, const_cast<char *>( message ) );

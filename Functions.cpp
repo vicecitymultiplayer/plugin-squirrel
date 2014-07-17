@@ -10,7 +10,7 @@ void RegisterGlobals()
 		.Overload(_SC("ClientMessage"), ClientMessageWithAlpha)
 		.Overload(_SC("ClientMessageToAll"), ClientMessageToAll)
 		.Overload(_SC("ClientMessageToAll"), ClientMessageToAllWithAlpha)
-		.Func(_SC("Announce"), GameMessage, -3, _SC("txsi"))
+		.Func(_SC("Announce"), GameMessage, -3, _SC("tsxi"))
 		.Func(_SC("AnnounceAll"), GameMessageToAll, -2, _SC("tsi"))
 
 		.Func(_SC("SetServerName"), SetServerName, 2, _SC("ts"))
