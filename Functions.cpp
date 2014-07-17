@@ -183,7 +183,13 @@ void RegisterGlobals()
 		.Func(_SC("GetPickupCount"), GetVehicleCount, 1, _SC("t"))
 		.Func(_SC("GetPlayers"), GetPlayers, 1, _SC("t"))
 
-		.Func(_SC("SetFallEnabled"), SetFallEnabled, 1, _SC("t"))
+		.Func(_SC("GetFallEnabled"), GetFallEnabled, 1, _SC("t"))
+		.Func(_SC("SetFallEnabled"), SetFallEnabled, 2, _SC("tb"))
+		.Func(_SC("GetDeathmatchScoreBoard"), GetDeathmatchScoreboard, 1, _SC("t"))
+		.Func(_SC("SetDeathmatchScoreBoard"), SetDeathmatchScoreboard, 2, _SC("tb"))
+		.Func(_SC("GetWeaponSync"), GetWeaponSync, 1, _SC("t"))
+		.Func(_SC("SetWeaponSync"), SetWeaponSync, 2, _SC("tb"))
+
 		.Func(_SC("GetTime"), GetTime, 1, _SC("t"))
 		.Func(_SC("GetFullTime"), GetFullTime, 1, _SC("t"))
 		.Func(_SC("LoadModule"), LoadVCMPModule, 2, _SC("ts"))
@@ -191,6 +197,10 @@ void RegisterGlobals()
 		.SquirrelFunc(_SC("FindPlayer"), FindPlayer)
 		.SquirrelFunc(_SC("NewTimer"), NewTimer)
 		.SquirrelFunc(_SC("InPoly"), InPoly)
+
+		.SquirrelFunc(_SC("SetAmmuWeapon"), SetAmmuWeapon)
+		.SquirrelFunc(_SC("IsAmmuWeaponEnabled"), IsAmmuWeaponEnabled)
+		.SquirrelFunc(_SC("SetAmmuWeaponEnabled"), SetAmmuWeaponEnabled)
 
 		.Func(_SC("BindKey"), BindKey, -3, _SC("tbi"));
 }

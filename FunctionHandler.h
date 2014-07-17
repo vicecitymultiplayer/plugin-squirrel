@@ -214,6 +214,20 @@ SQInteger InPoly( HSQUIRRELVM v );
 SQInteger NewTimer( HSQUIRRELVM v );
 
 // These functions are for compatibility, but will be deprecated
-void SetFallEnabled(bool unused);
+SQInteger SetAmmuWeapon(HSQUIRRELVM v);
+SQInteger IsAmmuWeaponEnabled(HSQUIRRELVM v);
+SQInteger SetAmmuWeaponEnabled(HSQUIRRELVM v);
+
 DWORD    GetTime         ( void );
-const SQChar * GetFullTime     ( void );
+const SQChar * GetFullTime(void);
+
+bool GetFallEnabled(void);
+void SetFallEnabled(bool unused);
+bool GetDeathmatchScoreboard(void);
+void SetDeathmatchScoreboard(bool isDmScoreboard);
+bool GetWeaponSync(void);
+void SetWeaponSync(bool isSynced);
+bool GetWeatherLock(void);
+void SetWeatherLock(bool isLocked);
+const SQChar * GetMapName(void);
+void SetMapName(const SQChar * mapName);

@@ -3,6 +3,7 @@
 #include "ConsoleUtils.h"
 #include "CCore.h"
 #include "main.h"
+#include "SQModule.h"
 
 inline void szlower( char * string )
 {
@@ -1986,11 +1987,6 @@ SQInteger NewTimer( HSQUIRRELVM v )
 }
 
 // These functions are for compatibility, but will be deprecated
-void SetFallEnabled(bool unused)
-{
-	OutputWarning("SetFallEnabled has no effect in 0.4 and will be removed in the future.");
-}
-
 DWORD GetTime( void )
 {
 	OutputWarning( "GetTime is deprecated and may be removed in the future.\n"
@@ -2015,10 +2011,43 @@ const SQChar * GetFullTime( void )
 }
 
 // These functions do nothing and exist for the sole purpose of avoiding compiler errors
+extern HSQAPI sq;
 SQInteger SetAmmuWeapon( HSQUIRRELVM v ) { OutputWarning( "SetAmmuWeapon does not exist in 0.4. Ammunations must be scripted." ); return 0; }
-SQInteger IsAmmuWeaponEnabled( HSQUIRRELVM v ) { OutputWarning( "IsAmmuWeaponEnabled does not exist in 0.4. Ammunations must be scripted." ); return 0; }
+SQInteger IsAmmuWeaponEnabled(HSQUIRRELVM v) { OutputWarning("IsAmmuWeaponEnabled does not exist in 0.4. Ammunations must be scripted."); sq->pushbool(v, false);  return 1; }
 SQInteger SetAmmuWeaponEnabled( HSQUIRRELVM v ) { OutputWarning( "SetAmmuWeaponEnabled does not exist in 0.4. Ammunations must be scripted." ); return 0; }
-SQInteger GetWeaponSync( HSQUIRRELVM v ) { OutputWarning( "GetWeaponSync does not exist in 0.4. Rely on the server's anti-hack system instead." ); return 0; }
-SQInteger SetWeaponSync( HSQUIRRELVM v ) { OutputWarning( "SetWeaponSync does not exist in 0.4. Rely on the server's anti-hack system instead." ); return 0; }
-SQInteger GetFallEnabled( HSQUIRRELVM v ) { OutputWarning( "GetFallEnabled has no effect." ); return 0; }
-SQInteger SetFallEnabled( HSQUIRRELVM v ) { OutputWarning( "SetFallEnabled has no effect." ); return 0; }
+
+bool GetFallEnabled(void)
+{
+	OutputWarning("GetFallEnabled has no effect.");
+	return false;
+}
+
+void SetFallEnabled(bool unused) { OutputWarning("SetFallEnabled has no effect."); }
+bool GetDeathmatchScoreboard(void)
+{
+	OutputWarning("GetDeathmatchScoreboard has no effect. Use scripts to implement it.");
+	return false;
+}
+
+void SetDeathmatchScoreboard(bool isDmScoreboard) { OutputWarning("GetDeathmatchScoreboard has no effect. Use scripts to implement it."); }
+bool GetWeaponSync(void)
+{
+	OutputWarning("GetWeaponSync does not exist in 0.4. Rely on the server's anti-hack system and callbacks instead.");
+	return false;
+}
+
+void SetWeaponSync(bool isSynced) { OutputWarning("GetWeaponSync does not exist in 0.4. Rely on the server's anti-hack system and callbacks instead."); }
+bool GetWeatherLock(void)
+{
+	OutputWarning("GetWeatherLock has no effect.");
+	return true;
+}
+
+void SetWeatherLock(bool isLocked) { OutputWarning("SetWeatherLock has no effect."); }
+const SQChar * GetMapName(void)
+{
+	OutputWarning("GetMapName has no effect.");
+	return "Vice-City";
+}
+
+void SetMapName(const SQChar * mapName) { OutputWarning("SetMapName has no effect."); }
