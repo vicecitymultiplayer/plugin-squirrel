@@ -1763,50 +1763,101 @@ SQInteger FindPlayer( HSQUIRRELVM v )
 		return sq_throwerror( v, "Unexpected number of parameters for FindPlayer [integer or string]" );
 }
 
-SQInteger InPoly( HSQUIRRELVM v )
+struct AreaPoints
 {
-	if( sq_gettop( v ) >= 9 )
+	float x, y;
+
+	AreaPoints(void) : x(0.0f), y(0.0f) {};
+	AreaPoints(float fX, float fY) : x(fX), y(fY) {};
+};
+
+inline bool Internal_InPoly(float fX, float fY,
+	const unsigned int uiPoints, const AreaPoints fPoints[])
+{
+	// http://sidvind.com/wiki/Point-in-polygon:_Jordan_Curve_Theorem
+
+	// The points creating the polygon
+	float x1, x2;
+
+	// How many times the ray crosses a line segment
+	int crossings = 0;
+
+	// Iterate through each line
+	for (unsigned int i = 0; i < uiPoints; i++)
 	{
-		if( sq_gettop( v ) % 2 == 1 )
+		// This is done to ensure that we get the same result when
+		// the line goes from left to right and right to left.
+		if (fPoints[i].x < fPoints[(i + 1) % uiPoints].x)
 		{
-			int paramCount = sq_gettop( v );
-			int i;
-			for( i = 2; i < paramCount; i++ )
-			{
-				if( sq_gettype( v, i ) != OT_FLOAT )
-					return sq_throwerror( v, "Unexpected non-float in InPoly: ALL arguments must be floats" );
-			}
-
-			int vertexCount = ( paramCount - 3 ) / 2;
-			float * xVertices = new float[vertexCount];
-			float * yVertices = new float[vertexCount];
-			for( i = 4; i < paramCount; i += 2 )
-			{
-				sq_getfloat( v, i, &xVertices[i] );
-				sq_getfloat( v, i + 1, &yVertices[i] );
-			}
-
-			float x, y;
-			sq_getfloat( v, 2, &x );
-			sq_getfloat( v, 3, &y );
-
-			// http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
-			// (adapted)
-			bool isInPath = false;
-			int j;
-
-			for( i = 0, j = vertexCount - 1; i < vertexCount; j = i++ )
-			{
-				if( ( ( yVertices[i] > y ) != ( yVertices[j] > y ) )
-					&& ( x < xVertices[j] - xVertices[i] ) * ( y - yVertices[i] ) / ( yVertices[j] - yVertices[i] + xVertices[i] ) )
-					isInPath = !isInPath;
-			}
-
-			sq_pushbool( v, isInPath );
-			return 1;
+			x1 = fPoints[i].x;
+			x2 = fPoints[(i + 1) % uiPoints].x;
 		}
 		else
-			return sq_throwerror( v, "Unexpected number of parameters for InPoly: all X vertices must be accompanied by a Y vertex" );
+		{
+			x1 = fPoints[(i + 1) % uiPoints].x;
+			x2 = fPoints[i].x;
+		}
+
+		// First check if the ray is able to cross the line
+		if (fX > x1 && fX <= x2 && (fY < fPoints[i].y || fY <= fPoints[(i + 1) % uiPoints].y))
+		{
+			static const float eps = 0.000001f;
+
+			// Calculate the equation of the line
+			float dx = fPoints[(i + 1) % uiPoints].x - fPoints[i].x;
+			float dy = fPoints[(i + 1) % uiPoints].y - fPoints[i].y;
+			float k;
+
+			if (fabs(dx) < eps)
+				k = 0xffffffff;
+			else
+				k = dy / dx;
+
+			float m = fPoints[i].y - k * fPoints[i].x;
+
+			// Find if the ray crosses the line
+			float y2 = k * fX + m;
+			if (fY <= y2)
+				crossings++;
+		}
+	}
+
+	if (crossings % 2 == 1)
+		return true;
+
+	return false;
+}
+
+SQInteger InPoly( HSQUIRRELVM v )
+{
+	SQInteger iArgs = sq_gettop(v);
+
+	if(iArgs >= 9 && (iArgs - 1) % 2 == 0 )
+	{
+		SQFloat fX = 0.0f, fY = 0.0f;
+		sq_getfloat(v, 2, &fX);
+		sq_getfloat(v, 3, &fY);
+
+		AreaPoints areaPoints[128];
+		SQFloat fPointX = 0.0f, fPointY = 0.0f;
+		const unsigned int uiPoints = (iArgs - 3);
+
+		unsigned int uiThing = 4; // todo: better name
+		for (unsigned int ui = 0; ui < uiPoints; ui++)
+		{
+			sq_getfloat(v, uiThing, &fPointX);
+			sq_getfloat(v, uiThing + 1, &fPointY);
+
+			areaPoints[ui].x = (float)fPointX;
+			areaPoints[ui].y = (float)fPointY;
+
+			uiThing += 2;
+		}
+
+		bool bRet = Internal_InPoly((float)fX, (float)fY, uiPoints, areaPoints);
+
+		sq_pushbool(v, bRet);
+		return 1;
 	}
 	else
 		return sq_throwerror( v, "Unexpected number of parameters for InPoly [float, float, float, float, float, float, float, float, [...]]" );
