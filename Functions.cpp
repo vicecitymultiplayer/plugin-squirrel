@@ -257,6 +257,7 @@ void RegisterConstants()
 		.Const(_SC("WEP_FALL"), 44)
 		.Const(_SC("WEP_EXPLOSION"), 51)
 		.Const(_SC("WEP_SUICIDE"), 70)
+
 		.Const(_SC("WEATHER_MOSTLYCLEAR"), 0)
 		.Const(_SC("WEATHER_OVERCAST"), 1)
 		.Const(_SC("WEATHER_THUNDERSTORM"), 2)
@@ -421,8 +422,8 @@ void RegisterConstants()
 		.Const(_SC("BODYPART_RLEG"), 5)
 		.Const(_SC("BODYPART_HEAD"), 6)
 
-		.Const(_SC("PARTREASON_QUIT"), 0)
-		.Const(_SC("PARTREASON_TIMEOUT"), 1)
+		.Const(_SC("PARTREASON_QUIT"), 1)
+		.Const(_SC("PARTREASON_TIMEOUT"), 0)
 		.Const(_SC("PARTREASON_KICKEDBANNED"), 2)
 		.Const(_SC("PARTREASON_CRASHED"), 3);
 }
