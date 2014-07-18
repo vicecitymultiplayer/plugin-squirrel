@@ -116,7 +116,8 @@ CPlayer * CVehicle::GetDriver()
 	{
 		if( functions->IsPlayerConnected( i ) )
 		{
-			if( functions->GetPlayerVehicleID( i ) == this->nVehicleId )
+			if( functions->GetPlayerVehicleID( i ) == this->nVehicleId
+				&& functions->GetPlayerInVehicleSlot(i) == 0 )
 			{
 				driver = i;
 				break;
