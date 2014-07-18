@@ -212,13 +212,19 @@ void OnPlayerDeath( int nPlayerId, int nKillerId, int nReason, int nBodyPart )
 	if (pCore != nullptr)
 	{
 		CPlayer * playerInstance = pCore->RetrievePlayer(nPlayerId);
-		if (nReason == 70 || !functions->IsPlayerConnected(nKillerId))
+		if (!functions->IsPlayerConnected(nKillerId))
 		{
 			Function callback = RootTable().GetFunction(_SC("onPlayerDeath"));
 			try
 			{
-				if (nReason >= 0 && nReason != 255 && nBodyPart >= 0 && nBodyPart != 255)
-					nReason = 39; // vehkill
+				if (nReason == 43 || nReason == 50)
+					nReason = 43; // drowned
+
+				if (nReason == 49 && nBodyPart == 7)
+					nReason = 39; // car crash
+
+				if (nReason == 39 || nReason == 40 || nReason == 44)
+					nReason = 44; // fell
 
 				if (!callback.IsNull())
 					callback.Execute<CPlayer *, int>(playerInstance, nReason);
