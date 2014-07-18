@@ -147,7 +147,8 @@ int OnPlayerRequestClass( int nPlayerId, int nOffset )
 		try
 		{
 			if (!callback.IsNull())
-				returnValue = callback.Evaluate<int, CPlayer *, int>(playerInstance, nOffset);
+				returnValue = callback.Evaluate<int, CPlayer *, int, int, int>(
+					playerInstance, nOffset, playerInstance->GetTeam(), playerInstance->GetSkin());
 		}
 		catch (Sqrat::Exception e)
 		{
