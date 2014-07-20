@@ -563,6 +563,24 @@ const SQChar * GetWeaponName   ( int weaponID )
 			return "M60";
 		case 33:
 			return "Minigun";
+		case 34:
+			return "Explosion";
+		case 35:
+			return "Helicannon";
+		case 36:
+			return "Camera";
+		case 39:
+			return "Vehicle";
+		case 42:
+			return "Driveby";
+		case 43:
+			return "Drowned";
+		case 44:
+			return "Fall";
+		case 51:
+			return "Explosion";
+		case 70:
+			return "Suicide";
 		default:
 			return "Unknown";
 	}
