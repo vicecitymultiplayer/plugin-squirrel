@@ -6,6 +6,7 @@
 
 // Script and VM core
 #include "CCore.h"
+#include "SQModule.h"
 
 // Create arrays for several structures.
 savedVehicleData lastVehInfo[MAX_VEHICLES];
@@ -467,38 +468,61 @@ int OnPublicMessage( int nPlayerId, const char* pszText )
 		return 1;
 }
 
+extern HSQAPI sq;
 int OnCommandMessage( int nPlayerId, const char* pszText )
 {
 	if (pCore != nullptr)
 	{
+		// Unlike the other callbacks here, onPlayerCommand is bound by some weird
+		// 0.3-era conventions: the arguments of a command can be null when passed
+		// to the script. Because Sqrat does not let us push nulls (they just turn
+		// into empty strings), we call the Squirrel API directly to use null when
+		// the arguments are empty.
+		//
+		// (this comment formed a rectangle -- isn't that pretty neat?)
 		CPlayer * playerInstance = pCore->RetrievePlayer(nPlayerId);
-		Function callback = RootTable().GetFunction(_SC("onPlayerCommand"));
 
-		if (!callback.IsNull())
+		// Save the current stack position of the VM
+		SQInteger top = sq->gettop(v);
+
+		// Push the root table
+		sq->pushroottable(v);
+
+		// Get the field "onPlayerCommand" from the root table
+		sq->pushstring(v, _SC("onPlayerCommand"), -1);
+
+		// Get the function "onPlayerCommand" itself from the root table if we can
+		if (SQ_SUCCEEDED(sq->get(v, -2)))
 		{
-			char * szText = strdup(pszText);
-			char * szSpacePos = strchr(szText, ' ');
+			SQChar * szText = strdup(pszText);
+			SQChar * szSpacePos = strchr(szText, ' ');
 
 			if (szSpacePos) {
 				szSpacePos[0] = '\0';
 			}
 
-			const char * szArguments = szSpacePos ? &szSpacePos[1] : "";
+			SQChar * szArguments = szSpacePos ? &szSpacePos[1] : "";
 
-			try
-			{
-				if (!callback.IsNull())
-					callback.Execute(playerInstance, szText, szArguments);
-			}
-			catch (Sqrat::Exception e)
-			{
-				OutputWarning("onPlayerCommand failed to execute -- check the console for more details.");
-			}
+			// Push "this" which is the root table since onPlayerCommand is
+			// expected to be a global function.
+			sq->pushroottable(v);
 
-			free(szText);
+			// Push a CPlayer instance.
+			Var<CPlayer *>::push(v, playerInstance);
+
+			// Push our string arguments
+			sq->pushstring(v, _SC(szText), -1);
+			if (strlen(szArguments) <= 0)
+				sq->pushnull(v);
+			else
+				sq->pushstring(v, _SC(szArguments), -1);
+
+			// Call the function
+			sq->call(v, 4, 0, 1);
 		}
 
-		callback.Release();
+		// Restore the stack
+		sq->settop(v, top);
 	}
 	
 	return 1;
