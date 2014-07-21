@@ -381,7 +381,7 @@ void ShowMapObject( int nModelId, float x, float y, float z )
 {
 	int x2 = static_cast<int>(floor( ( x * 10.0f ) + 0.5f ));
 	int y2 = static_cast<int>(floor( ( y * 10.0f ) + 0.5f ));
-	int z2 = static_cast<int>(floor( ( y * 10.0f ) + 0.5f ));
+	int z2 = static_cast<int>(floor( ( z * 10.0f ) + 0.5f ));
 
 	functions->ShowMapObject( nModelId, x2, y2, z2 );
 }
@@ -2068,4 +2068,4 @@ const SQChar * GetMapName(void)
 	return "Vice-City";
 }
 
-void SetMapName(const SQChar * mapName) { OutputWarning("SetMapName has no effect."); }
+void SetMapName(const SQChar * mapName) { OutputWarning("SetMapName has no effect."); }	
