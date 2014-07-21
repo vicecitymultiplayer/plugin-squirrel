@@ -319,7 +319,7 @@ void OnPlayerExitVehicle( int nPlayerId, int nVehicleId )
 
 		try
 		{
-			if (!callback.IsNull())
+			if (!callback.IsNull() && vehicleInstance)
 				callback.Execute<CPlayer *, CVehicle *>(playerInstance, vehicleInstance);
 		}
 		catch (Sqrat::Exception e)
