@@ -483,7 +483,7 @@ int OnCommandMessage( int nPlayerId, const char* pszText )
 				szSpacePos[0] = '\0';
 			}
 
-			const char * szArguments = szSpacePos ? &szSpacePos[1] : "";
+			const char * szArguments = szSpacePos ? &szSpacePos[1] : nullptr;
 
 			try
 			{
