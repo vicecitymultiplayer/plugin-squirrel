@@ -180,7 +180,7 @@ void RegisterGlobals()
 		.Func(_SC("IsNum"), IsNum, 2, _SC("ts"))
 
 		.Func(_SC("GetVehicleCount"), GetVehicleCount, 1, _SC("t"))
-		.Func(_SC("GetPickupCount"), GetVehicleCount, 1, _SC("t"))
+		.Func(_SC("GetPickupCount"), GetPickupCount, 1, _SC("t"))
 		.Func(_SC("GetPlayers"), GetPlayers, 1, _SC("t"))
 
 		.Func(_SC("GetFallEnabled"), GetFallEnabled, 1, _SC("t"))
