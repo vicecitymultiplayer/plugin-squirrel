@@ -193,16 +193,16 @@ void CCore::CleanWorld()
 
 	for( i = 0; i < MAX_PICKUPS; i++ )
 	{
-		if( pickupMap[i] != nullptr && vehicleMap[i]->isOurs )
+		if( pickupMap[i] != nullptr && pickupMap[i]->isOurs )
 		{
 			pickupMap[i]->Delete();
-			vehicleMap[i] = nullptr;
+			pickupMap[i] = nullptr;
 		}
 	}
 
 	for( i = 0; i < MAX_OBJECTS; i++ )
 	{
-		if( objectMap[i] != nullptr && vehicleMap[i]->isOurs )
+		if( objectMap[i] != nullptr && objectMap[i]->isOurs )
 		{
 			objectMap[i]->Delete();
 			objectMap[i] = nullptr;
