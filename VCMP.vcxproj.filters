@@ -81,15 +81,6 @@
     <ClInclude Include="CTextdraw.h">
       <Filter>Header Files\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="sqrat\sqmodule.h">
-      <Filter>Header Files\Sqrat</Filter>
-    </ClInclude>
-    <ClInclude Include="sqrat\sqrat.h">
-      <Filter>Header Files\Sqrat</Filter>
-    </ClInclude>
-    <ClInclude Include="sqrat\sqratimport.h">
-      <Filter>Header Files\Sqrat</Filter>
-    </ClInclude>
     <ClInclude Include="sqrat\sqrat\sqratAllocator.h">
       <Filter>Header Files\Sqrat</Filter>
     </ClInclude>
@@ -103,6 +94,9 @@
       <Filter>Header Files\Sqrat</Filter>
     </ClInclude>
     <ClInclude Include="sqrat\sqrat\sqratConst.h">
+      <Filter>Header Files\Sqrat</Filter>
+    </ClInclude>
+    <ClInclude Include="sqrat\sqrat\sqratext_Ref.h">
       <Filter>Header Files\Sqrat</Filter>
     </ClInclude>
     <ClInclude Include="sqrat\sqrat\sqratFunction.h">
@@ -135,10 +129,25 @@
     <ClInclude Include="sqrat\sqrat\sqratVM.h">
       <Filter>Header Files\Sqrat</Filter>
     </ClInclude>
+    <ClInclude Include="sqrat\sqmodule.h">
+      <Filter>Header Files\Sqrat</Filter>
+    </ClInclude>
+    <ClInclude Include="sqrat\sqrat.h">
+      <Filter>Header Files\Sqrat</Filter>
+    </ClInclude>
+    <ClInclude Include="sqrat\sqratimport.h">
+      <Filter>Header Files\Sqrat</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CVehicle.cpp">
+      <Filter>Source Files\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="CCore.cpp">
+      <Filter>Source Files\Objects</Filter>
     </ClCompile>
     <ClCompile Include="CObject.cpp">
       <Filter>Source Files\Objects</Filter>
@@ -149,38 +158,32 @@
     <ClCompile Include="CPlayer.cpp">
       <Filter>Source Files\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="CVehicle.cpp">
-      <Filter>Source Files\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="CTimer.cpp">
-      <Filter>Source Files\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="CCore.cpp">
-      <Filter>Source Files\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="ConsoleUtils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Exports.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Functions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FunctionHandler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CallbackHandler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UtilStructs.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CSprite.cpp">
       <Filter>Source Files\Objects</Filter>
     </ClCompile>
     <ClCompile Include="CTextdraw.cpp">
       <Filter>Source Files\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="CTimer.cpp">
+      <Filter>Source Files\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="ConsoleUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UtilStructs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CallbackHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Exports.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FunctionHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Functions.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
