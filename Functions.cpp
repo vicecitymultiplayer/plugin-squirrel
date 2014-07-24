@@ -109,6 +109,7 @@ void RegisterGlobals()
 		.Func(_SC("CreateSprite"), CreateSprite, 8, _SC("tsiiiini"))
 		.Func(_SC("CreateTextdraw"), CreateTextdraw, 5, _SC("tsiii"))
 
+		.Overload<CVehicle * (*)(int, Vector *, float, int, int)>(_SC("CreateVehicle"), CreateVehicleCompat)
 		.Overload<CVehicle * (*)(int, int, Vector *, float, int, int)>(_SC("CreateVehicle"), CreateVehicle)
 		.Overload<CVehicle * (*)(int, int, float, float, float, float, int, int)>(_SC("CreateVehicle"), CreateVehicleExpanded)
 
