@@ -231,6 +231,15 @@ CPickup * CreatePickupCompat(int model, Vector * pos)
 		return pCore->AllocatePickup(pId);
 }
 
+CVehicle * CreateVehicleCompat(int model, Vector * pos, float angle, int col1, int col2)
+{
+	int vId = functions->CreateVehicle(model, 1, pos->x, pos->y, pos->z, angle, col1, col2);
+	if (vId < 1)
+		return nullptr;
+	else
+		return pCore->AllocateVehicle(vId);
+}
+
 CObject * CreateObject( int model, int world, Vector * pos, int alpha )
 {
 	int oId = functions->CreateObject( model, world, pos->x, pos->y, pos->z, alpha );

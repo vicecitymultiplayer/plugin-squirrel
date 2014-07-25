@@ -131,6 +131,8 @@ int GetPlayerIDFromName          ( const SQChar* name );
 bool IsWorldCompatibleWithPlayer ( CPlayer * player, int world );
 
 CPickup * CreatePickupCompat (int model, Vector * pos);
+CVehicle * CreateVehicleCompat ( int model, Vector * pos, float angle, int col1, int col2 );
+
 CVehicle * CreateVehicle ( int model, int world, Vector * pos, float angle, int col1, int col2 );
 CPickup * CreatePickup   ( int model, int world, int quantity, Vector * pos, int alpha, bool isAuto );
 CObject * CreateObject   ( int model, int world, Vector * pos, int alpha );

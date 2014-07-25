@@ -109,6 +109,7 @@ void RegisterGlobals()
 		.Func(_SC("CreateSprite"), CreateSprite)
 		.Func(_SC("CreateTextdraw"), CreateTextdraw)
 
+		.Overload(_SC("CreateVehicle"), CreateVehicleCompat)
 		.Overload(_SC("CreateVehicle"), CreateVehicle)
 		.Overload(_SC("CreateVehicle"), CreateVehicleExpanded)
 
@@ -423,6 +424,7 @@ void RegisterConstants()
 		.Const(_SC("BODYPART_HEAD"), 6)
 
 		.Const(_SC("PARTREASON_QUIT"), 1)
+		.Const(_SC("PARTREASON_DISCONNECTED"), 1)
 		.Const(_SC("PARTREASON_TIMEOUT"), 0)
 		.Const(_SC("PARTREASON_KICKEDBANNED"), 2)
 		.Const(_SC("PARTREASON_KICKED"), 2)
