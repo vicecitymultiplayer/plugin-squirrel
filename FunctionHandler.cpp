@@ -2026,6 +2026,9 @@ SQInteger NewTimer( HSQUIRRELVM v )
 	}
 }
 
+void SetVehiclesForcedRespawnHeight(SQFloat height) { functions->SetVehiclesForcedRespawnHeight(height); }
+SQFloat GetVehiclesForcedRespawnHeight(void) { return functions->GetVehiclesForcedRespawnHeight(); }
+
 // These functions are for compatibility, but will be deprecated
 DWORD GetTime( void )
 {

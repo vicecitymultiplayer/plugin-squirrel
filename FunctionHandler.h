@@ -213,6 +213,9 @@ int GetVehicleCount(void);
 int GetPickupCount(void);
 int GetPlayers(void);
 
+void SetVehiclesForcedRespawnHeight(SQFloat height);
+SQFloat GetVehiclesForcedRespawnHeight(void);
+
 SQInteger FindPlayer( HSQUIRRELVM v );
 SQInteger InPoly( HSQUIRRELVM v );
 SQInteger NewTimer( HSQUIRRELVM v );
