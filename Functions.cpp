@@ -425,5 +425,7 @@ void RegisterConstants()
 		.Const(_SC("PARTREASON_QUIT"), 1)
 		.Const(_SC("PARTREASON_TIMEOUT"), 0)
 		.Const(_SC("PARTREASON_KICKEDBANNED"), 2)
+		.Const(_SC("PARTREASON_KICKED"), 2)
+		.Const(_SC("PARTREASON_BANNED"), 2)
 		.Const(_SC("PARTREASON_CRASHED"), 3);
 }
