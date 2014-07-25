@@ -26,6 +26,7 @@ class CPickup
 
 	public:
 		void Delete();
+		void Respawn();
 		bool StreamedToPlayer( CPlayer * player );
 			
 	public:

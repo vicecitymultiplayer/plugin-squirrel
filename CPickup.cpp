@@ -34,6 +34,7 @@ void CPickup::Delete()
 
 int CPickup::GetID() { return this->nPickupId; }
 bool CPickup::StreamedToPlayer(CPlayer * player) { return (functions->IsPickupStreamedForPlayer(this->nPickupId, player->nPlayerId) == 1 ? true : false); }
+void CPickup::Respawn() { functions->PickupRefresh(this->nPickupId); };
 
 void RegisterPickup()
 {
@@ -45,6 +46,7 @@ void RegisterPickup()
 		.Prop( _SC("Alpha"), &CPickup::GetAlpha, &CPickup::SetAlpha )
 		.Prop( _SC("Automatic"), &CPickup::GetAuto, &CPickup::SetAuto )
 		.Prop( _SC("Timer"), &CPickup::GetAutoTimer, &CPickup::SetAutoTimer )
+		.Prop( _SC("RespawnTime"), &CPickup::GetAutoTimer, &CPickup::SetAutoTimer )
 		.Prop( _SC("Pos"), &CPickup::GetPos, &CPickup::SetPos );
 
 	// Read-only properties
@@ -56,6 +58,7 @@ void RegisterPickup()
 	// Functions
 	c
 		.Func( _SC("Remove"), &CPickup::Delete )
+		.Func( _SC("Respawn"), &CPickup::Respawn )
 		.Func( _SC("StreamedToPlayer"), &CPickup::StreamedToPlayer );
 
 	RootTable(v).Bind( _SC("CPickup"), c );
