@@ -591,6 +591,8 @@ const SQChar * GetWeaponName   ( int weaponID )
 			return "Camera";
 		case 39:
 			return "Vehicle";
+		case 41:
+			return "Explosion";
 		case 42:
 			return "Driveby";
 		case 43:
