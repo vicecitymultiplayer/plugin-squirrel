@@ -12,6 +12,7 @@ class CPlayer
 		~CPlayer() { delete pos; }
 
 	public:
+		void SetName(Sqrat::string newName);
 		void SetPosition( Vector pos );
 		void SetHealth( float health );
 		void SetArmour( float armour );

@@ -109,6 +109,8 @@ Sqrat::string CPlayer::GetName()
 	return m_name;
 }
 
+void CPlayer::SetName(Sqrat::string newName) { functions->SetPlayerName(this->nPlayerId, newName.c_str()); }
+
 int CPlayer::GetTeam() { return functions->GetPlayerTeam(this->nPlayerId); }
 int CPlayer::GetSkin() { return functions->GetPlayerSkin(this->nPlayerId); }
 
@@ -290,6 +292,7 @@ void RegisterPlayer()
 		.Prop(_SC("IsOnRadar"), &CPlayer::GetOnRadar, &CPlayer::SetOnRadar)
 		.Prop(_SC("IsWeaponSyncBlocked"), &CPlayer::GetCanAttack, &CPlayer::SetCanAttack)
 		.Prop(_SC("Money"), &CPlayer::GetMoney, &CPlayer::SetMoney)
+		.Prop(_SC("Name"), &CPlayer::GetName, &CPlayer::SetName)
 		.Prop(_SC("Pos"), &CPlayer::GetPosition, &CPlayer::SetPosition)
 		.Prop(_SC("Score"), &CPlayer::GetScore, &CPlayer::SetScore)
 		.Prop(_SC("SecWorld"), &CPlayer::GetSecWorld, &CPlayer::SetSecWorld)
@@ -315,7 +318,6 @@ void RegisterPlayer()
 		.Prop(_SC("IP"), &CPlayer::GetIP)
 		.Prop(_SC("IsSpawned"), &CPlayer::GetSpawned)
 		.Prop(_SC("Key"), &CPlayer::GetKey)
-		.Prop(_SC("Name"), &CPlayer::GetName)
 		.Prop(_SC("Ping"), &CPlayer::GetPing)
 		.Prop(_SC("Spawned"), &CPlayer::GetSpawned)
 		.Prop(_SC("StandingOnObject"), &CPlayer::StandingOnObject)
