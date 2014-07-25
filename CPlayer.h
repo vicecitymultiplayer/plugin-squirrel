@@ -12,7 +12,7 @@ class CPlayer
 		~CPlayer() { delete pos; }
 
 	public:
-		void SetPosition( Vector * pos );
+		void SetPosition( Vector pos );
 		void SetHealth( float health );
 		void SetArmour( float armour );
 		void SetAdmin( bool toSetAdmin );
@@ -20,7 +20,7 @@ class CPlayer
 		void SetSecWorld( int world );
 		void SetTeam( int team );
 		void SetSkin( int skin );
-		void SetColour( cRGB * colour );
+		void SetColour( cRGB colour );
 		void SetMoney( int money );
 		void SetScore( int score );
 		void SetImmunity( unsigned int immunity );
@@ -41,7 +41,7 @@ class CPlayer
 		void SetDrunkStatus( bool isDrunk );
 
 	public:
-		Vector * GetPosition();
+		EntityVector GetPosition();
 		int GetClass();
 		bool GetAdmin();
 		SQChar * GetIP();
@@ -53,7 +53,7 @@ class CPlayer
 		Sqrat::string GetName();
 		int GetTeam();
 		int GetSkin();
-		cRGB * GetColour();
+		EntityRGB GetColour();
 		int GetMoney();
 		int GetScore();
 		int GetPing();
@@ -118,34 +118,14 @@ class CPlayer
 
 	public:
 		int nPlayerId;
-		void Process()
-		{
-			if (m_lastRGB.r != m_rgb.r
-				|| m_lastRGB.g != m_rgb.g
-				|| m_lastRGB.b != m_rgb.b)
-			{
-				m_lastRGB = m_rgb;
-				functions->SetPlayerColour(this->nPlayerId, m_rgb.toUInt());
-			}
-
-			if (!(m_lastPos == m_pos))
-				functions->SetPlayerPos(this->nPlayerId, m_pos.x, m_pos.y, m_pos.z);
-
-			functions->GetPlayerPos(this->nPlayerId, &m_pos.x, &m_pos.y, &m_pos.z);
-			m_lastPos = m_pos;
-		}
 
 	private:
 		char m_name[65];
 		char m_ip[17];
 		char m_uid[41];
-		CObject m_standingOn;
-
-		cRGB m_rgb;
-		cRGB m_lastRGB;
-
 		Vector m_pos;
-		Vector m_lastPos;
+		CObject m_standingOn;
+		cRGB m_rgb;
 };
 
 void RegisterPlayer();
