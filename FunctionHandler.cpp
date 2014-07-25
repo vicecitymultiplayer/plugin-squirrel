@@ -49,9 +49,20 @@ void GameMessage   ( const SQChar* message, CPlayer * player, int type )
 		functions->SendGameMessage( player->nPlayerId, type, const_cast<char *>( message ) );
 }
 
+void GameMessageAlternate(const SQChar * message, CPlayer * player)
+{
+	if (player != nullptr)
+		functions->SendGameMessage(player->nPlayerId, 1, const_cast<char *>(message));
+}
+
 void GameMessageToAll( const SQChar * message, int type )
 {
 	functions->SendGameMessage( -1, type, const_cast<char *>( message ) );
+}
+
+void GameMessageToAllAlternate(const SQChar * message)
+{
+	functions->SendGameMessage(-1, 1, const_cast<char *>(message));
 }
 
 void SetServerName ( const SQChar* message )       { functions->SetServerName( const_cast<char *>( message ) ); }

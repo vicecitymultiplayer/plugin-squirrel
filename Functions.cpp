@@ -10,8 +10,11 @@ void RegisterGlobals()
 		.Overload(_SC("ClientMessage"), ClientMessageWithAlpha)
 		.Overload(_SC("ClientMessageToAll"), ClientMessageToAll)
 		.Overload(_SC("ClientMessageToAll"), ClientMessageToAllWithAlpha)
-		.Func(_SC("Announce"), GameMessage)
-		.Func(_SC("AnnounceAll"), GameMessageToAll)
+
+		.Overload(_SC("Announce"), GameMessage)
+		.Overload(_SC("Announce"), GameMessageAlternate)
+		.Overload(_SC("AnnounceAll"), GameMessageToAll)
+		.Overload(_SC("AnnounceAll"), GameMessageToAllAlternate)
 
 		.Func(_SC("SetServerName"), SetServerName)
 		.Func(_SC("SetMaxPlayers"), SetMaxPlayers)
