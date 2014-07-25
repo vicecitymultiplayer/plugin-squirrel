@@ -357,13 +357,13 @@ bool CCore::ParseConfigLine( char * lineBuffer )
 			this->script->CompileFile( gamemodeSearch );
 			this->script->Run();
 		}
-		catch( Sqrat::Exception e )
+		catch( Sqrat::Error e )
 		{
 			char buf[145];
 			sprintf( buf, "Could not load script '%s'", gamemodeSearch );
 
 			OutputWarning( buf );
-			OutputWarning( e.Message().c_str() );
+			OutputWarning( e.Message(v).c_str() );
 
 			return false;
 		}
@@ -376,7 +376,7 @@ bool CCore::ParseConfigLine( char * lineBuffer )
 
 			callback.Release();
 		}
-		catch (Sqrat::Exception e)
+		catch (Sqrat::Error e)
 		{
 			OutputWarning("onScriptLoad failed to execute -- check the console for more details.");
 		}
