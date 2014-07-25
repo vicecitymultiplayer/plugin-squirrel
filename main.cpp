@@ -11,6 +11,7 @@
 #include "CVehicle.h"
 
 #include <string>
+
 SquirrelExports *	pExp;
 PluginFuncs		*	functions;
 PluginInfo		* 	information;
@@ -50,7 +51,7 @@ void printfunc(HSQUIRRELVM v, const SQChar *s, ...)
 			OutputScriptInfo(szInitBuffer);
 	}
 	va_end(arglist);
-}
+} 
 
 // Squirrel's error function
 void errorfunc(HSQUIRRELVM v, const SQChar *s, ...) 

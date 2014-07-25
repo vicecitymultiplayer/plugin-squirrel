@@ -1,11 +1,5 @@
 #include "main.h"
 
-SCRAT_MAKE_NONREFERENCABLE(Vector)
-SCRAT_MAKE_NONREFERENCABLE(Quaternion)
-SCRAT_MAKE_NONREFERENCABLE(RGBa)
-SCRAT_MAKE_NONREFERENCABLE(ARGB)
-SCRAT_MAKE_NONREFERENCABLE(cRGB)
-
 // Convert a Vector to string
 const std::string Vector::ToString()
 {
@@ -266,16 +260,16 @@ void EntityRGB::SetB(int nB)
 
 void RegisterStructures()
 {
-	Sqrat::Class<Vector> a(v, _SC("Vector"));
-	Sqrat::Class<Quaternion> b(v, _SC("Quaternion"));
-	Sqrat::Class<RGBa> c(v, _SC("RGBA"));
-	Sqrat::Class<cRGB> d(v, _SC("RGB"));
-	Sqrat::Class<Bounds> e(v, _SC("Bounds"));
-	Sqrat::Class<WastedSettings> f(v, _SC("WastedSettings"));
-	Sqrat::Class<ARGB> g(v, _SC("ARGB"));
-	Sqrat::Class<EntityVector> h(v, _SC("EntityVector"));
-	Sqrat::Class<EntityQuaternion> j(v, _SC("EntityQuaternion"));
-	Sqrat::Class<EntityRGB> k(v, _SC("EntityRGB"));
+	Sqrat::ImprovedClass<Vector> a;
+	Sqrat::ImprovedClass<Quaternion> b;
+	Sqrat::ImprovedClass<RGBa> c;
+	Sqrat::ImprovedClass<cRGB> d;
+	Sqrat::ImprovedClass<Bounds> e;
+	Sqrat::ImprovedClass<WastedSettings> f;
+	Sqrat::ImprovedClass<ARGB> g;
+	Sqrat::ImprovedClass<EntityVector> h;
+	Sqrat::ImprovedClass<EntityQuaternion> j;
+	Sqrat::ImprovedClass<EntityRGB> k;
 
 	a.Ctor<float, float, float>();
 	a.Ctor<int, int, int>();

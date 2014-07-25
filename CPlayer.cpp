@@ -245,7 +245,7 @@ Sqrat::string PlayerToString(CPlayer * p)
 
 void RegisterPlayer()
 {
-	Class<CPlayer> c(v, "Player");
+	Class<CPlayer> c(v, "CPlayer_INTERNAL");
 
 	// Read-write properties
 	c
