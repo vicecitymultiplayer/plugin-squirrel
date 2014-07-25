@@ -376,6 +376,9 @@ typedef int (*SDK_SetObjectShotReport) (int nObjectId, unsigned int bToggle);
 typedef unsigned int (*SDK_IsObjectShotReport) (int nObjectId);
 typedef int (*SDK_SetObjectBumpReport) (int nObjectId, unsigned int bToggle);
 typedef unsigned int (*SDK_IsObjectBumpReport) (int nObjectId);
+typedef int (*SDK_SetVehiclesForcedRespawnHeight) (float fHeight);
+typedef float (*SDK_GetVehiclesForcedRespawnHeight) (void);
+typedef unsigned int (*SDK_SetPlayerName) (int nPlayerId, const char* pszName);
 typedef int (*SDK_OnInitServer) (void);
 typedef void (*SDK_OnShutdownServer) (void);
 typedef void (*SDK_OnFrame) (float fElapsedTime);
@@ -411,6 +414,7 @@ typedef void (*SDK_OnPlayerAwayChange) (int nPlayerId, unsigned int bNewStatus);
 typedef void (*SDK_OnPlayerSpectate) (int nPlayerId, int nTargetId);
 typedef void (*SDK_OnPlayerCrashReport) (int nPlayerId, const char* pszReport);
 typedef void (*SDK_OnServerPerformanceReport) (int nNumStats, const char** ppszDescription, unsigned long long* pnMillisecsSpent);
+typedef void (*SDK_OnPlayerNameChange) (int nPlayerId, const char* pszOldName, const char* pszNewName);
 
 typedef struct {
 	unsigned int						uStructSize;
@@ -802,6 +806,12 @@ typedef struct {
 	SDK_IsObjectShotReport IsObjectShotReport;
 	SDK_SetObjectBumpReport SetObjectBumpReport;
 	SDK_IsObjectBumpReport IsObjectBumpReport;
+
+	//FIXME: move on major update, currently keeping compatibility
+	SDK_SetVehiclesForcedRespawnHeight SetVehiclesForcedRespawnHeight;
+	SDK_GetVehiclesForcedRespawnHeight GetVehiclesForcedRespawnHeight;
+
+	SDK_SetPlayerName SetPlayerName;
 } PluginFuncs;
 
 typedef struct {
@@ -842,5 +852,8 @@ typedef struct {
 	SDK_OnPlayerSpectate OnPlayerSpectate;
 	SDK_OnPlayerCrashReport OnPlayerCrashReport;
 	SDK_OnServerPerformanceReport OnServerPerformanceReport;
+
+	//FIXME: move on major update, currently keeping compatibility
+	SDK_OnPlayerNameChange OnPlayerNameChange;
 
 } PluginCallbacks;
