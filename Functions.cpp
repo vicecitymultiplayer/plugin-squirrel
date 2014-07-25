@@ -200,6 +200,9 @@ void RegisterGlobals()
 		.Func(_SC("GetFullTime"), GetFullTime, 1, _SC("t"))
 		.Func(_SC("LoadModule"), LoadVCMPModule, 2, _SC("ts"))
 
+		.Func(_SC("GetVehiclesForcedRespawnHeight"), GetVehiclesForcedRespawnHeight, 1, _SC("t"))
+		.Func(_SC("SetVehiclesForcedRespawnHeight"), SetVehiclesForcedRespawnHeight, 2, _SC("tn"))
+
 		.SquirrelFunc(_SC("FindPlayer"), FindPlayer)
 		.SquirrelFunc(_SC("NewTimer"), NewTimer)
 		.SquirrelFunc(_SC("InPoly"), InPoly)
@@ -432,5 +435,7 @@ void RegisterConstants()
 		.Const(_SC("PARTREASON_KICKEDBANNED"), 2)
 		.Const(_SC("PARTREASON_KICKED"), 2)
 		.Const(_SC("PARTREASON_BANNED"), 2)
-		.Const(_SC("PARTREASON_CRASHED"), 3);
+		.Const(_SC("PARTREASON_CRASHED"), 3)
+		
+		.Const(_SC("SQUIRREL_VERSION"), 399); // 0.4-squirrel version 3.99 (up to 4.00 on final release)
 }

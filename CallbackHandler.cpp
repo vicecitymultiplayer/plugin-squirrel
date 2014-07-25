@@ -964,3 +964,22 @@ void OnPlayerCrashDump(int nPlayerId, const char * szCrashReport)
 		callback.Release();
 	}
 }
+
+void OnPlayerNameChange(int nPlayerId, const char * oldName, const char * newName)
+{
+	if (pCore != nullptr)
+	{
+		Function callback = RootTable().GetFunction(_SC("onPlayerNameChange"));
+		try
+		{
+			if (!callback.IsNull())
+				callback.Execute<CPlayer *, const SQChar *, const SQChar *>(pCore->RetrievePlayer(nPlayerId), oldName, newName);
+		}
+		catch (Sqrat::Exception e)
+		{
+			OutputWarning("onPlayerNameChange failed to execute -- check the console for more details.");
+		}
+
+		callback.Release();
+	}
+}
