@@ -1040,11 +1040,12 @@ DWORD SQGetTickCount( void )
 	#ifdef WIN32
 		return GetTickCount();
 	#else
-		struct timespec ts;
-		if( clock_gettime( CLOCK_MONOTONIC, &ts ) != 0 )
+		struct timespec now;
+
+		if (clock_gettime(CLOCK_MONOTONIC, &now))
 			return 0;
-		else
-			return ts.tv_nsec;
+
+		return now.tv_sec * 1000.0 + now.tv_nsec / 1000000.0;
 	#endif
 }
 
