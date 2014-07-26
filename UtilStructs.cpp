@@ -272,19 +272,10 @@ void RegisterStructures()
 	Sqrat::ImprovedClass<EntityRGB> k;
 
 	a.Ctor<float, float, float>();
-	a.Ctor<int, int, int>();
-
 	b.Ctor<float, float, float, float>();
-	b.Ctor<int, int, int, int>();
-
 	e.Ctor<float, float, float, float>();
-	e.Ctor<int, int, int, int>();
-
 	h.Ctor<int, int, int, float, float, float>();
-	h.Ctor<int, int, int, int, int, int>();
-
 	j.Ctor<int, int, int, float, float, float, float>();
-	j.Ctor<int, int, int, int, int, int, int>();
 
 	// Because an unsigned char is crashy
 	c.Ctor<int, int, int, int>();
