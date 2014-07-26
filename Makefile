@@ -7,7 +7,7 @@ INCDIRS = -I. -I./squirrel
 LIBDIRS = -L./squirrelsrc/lib
 
 STCLIBS = -lsquirrel$(BITCOUNT) -lsqstdlib$(BITCOUNT)
-DYNLIBS = -ldl -lpthread
+DYNLIBS = -ldl -lpthread -lrt
 BASEOBJDIR = objdir
 
 CFLAGS  = -fpermissive -Wall -O2 -lm -fPIC -c -D_WCHAR_T_EXISTS -DLINUX -D_SQ$(BITCOUNT) -DNDEBUG $(INCDIRS) -std=c++11
