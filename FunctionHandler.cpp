@@ -15,12 +15,7 @@ inline void szlower( char * string )
 // Tha core
 extern CCore * pCore;
 
-void ClientMessage(const SQChar * message, CPlayer * player, int r, int g, int b)
-{
-	ClientMessageWithAlpha(message, player, r, g, b, 255);
-}
-
-void ClientMessageWithAlpha(const SQChar * message, CPlayer * player, int r, int g, int b, int a)
+void ClientMessage(const SQChar * message, CPlayer * player, int r, int g, int b, int a)
 {
 	if (player != nullptr)
 	{
@@ -29,30 +24,19 @@ void ClientMessageWithAlpha(const SQChar * message, CPlayer * player, int r, int
 	}
 }
 
-void ClientMessageToAll(const SQChar* message, int r, int g, int b)
-{
-	ClientMessageToAllWithAlpha(message, r, g, b, 255);
-}
-
-void ClientMessageToAllWithAlpha(const SQChar* message, int r, int g, int b, int a)
+void ClientMessageToAll(const SQChar* message, int r, int g, int b, int a)
 {
 	for (int i = 0; i < functions->GetMaxPlayers(); i++)
 	{
 		if (functions->IsPlayerConnected(i))
-			ClientMessageWithAlpha(message, pCore->RetrievePlayer(i), r, g, b, a);
+			ClientMessage(message, pCore->RetrievePlayer(i), r, g, b, a);
 	}
 }
 
-void GameMessage   ( const SQChar* message, CPlayer * player, int type )
+void GameMessage   ( const SQChar* message, CPlayer * player, int type = 1 )
 {
 	if( player != nullptr )
 		functions->SendGameMessage( player->nPlayerId, type, const_cast<char *>( message ) );
-}
-
-void GameMessageAlternate(const SQChar * message, CPlayer * player)
-{
-	if (player != nullptr)
-		functions->SendGameMessage(player->nPlayerId, 1, const_cast<char *>(message));
 }
 
 void GameMessageToAll( const SQChar * message, int type )
@@ -60,13 +44,7 @@ void GameMessageToAll( const SQChar * message, int type )
 	functions->SendGameMessage( -1, type, const_cast<char *>( message ) );
 }
 
-void GameMessageToAllAlternate(const SQChar * message)
-{
-	functions->SendGameMessage(-1, 1, const_cast<char *>(message));
-}
-
 void SetServerName ( const SQChar* message )       { functions->SetServerName( const_cast<char *>( message ) ); }
-
 void SetMaxPlayers( int newMaxPlayers )            { functions->SetMaxPlayers( newMaxPlayers ); }
 void SetServerPassword( const SQChar* password )   { functions->SetServerPassword( const_cast<char *>( password ) ); }
 void SetGameModeText( const SQChar* gamemodeName ) { functions->SetGameModeText( const_cast<char *>( gamemodeName ) ); }
