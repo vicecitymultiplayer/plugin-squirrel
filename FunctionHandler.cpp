@@ -390,18 +390,18 @@ void RawHideMapObject( int nModelId, int x, int y, int z )
 
 void HideMapObject( int nModelId, float x, float y, float z )
 {
-	int x2 = static_cast<int>(floor( ( x * 10.0f ) + 0.5f ));
-	int y2 = static_cast<int>(floor( ( y * 10.0f ) + 0.5f ));
-	int z2 = static_cast<int>(floor( ( z * 10.0f ) + 0.5f ));
+	int x2 = static_cast<int>(floor( ( x + 0.5f ) * 10.0f ));
+	int y2 = static_cast<int>(floor( ( y + 0.5f ) * 10.0f ));
+	int z2 = static_cast<int>(floor( ( z + 0.5f ) * 10.0f ));
 
 	functions->HideMapObject( nModelId, x2, y2, z2 );
 }
 
 void ShowMapObject( int nModelId, float x, float y, float z )
 {
-	int x2 = static_cast<int>(floor( ( x * 10.0f ) + 0.5f ));
-	int y2 = static_cast<int>(floor( ( y * 10.0f ) + 0.5f ));
-	int z2 = static_cast<int>(floor( ( z * 10.0f ) + 0.5f ));
+	int x2 = static_cast<int>(floor( ( x + 0.5f ) * 10.0f ));
+	int y2 = static_cast<int>(floor( ( y + 0.5f ) * 10.0f ));
+	int z2 = static_cast<int>(floor( ( z + 0.5f ) * 10.0f ));
 
 	functions->ShowMapObject( nModelId, x2, y2, z2 );
 }
