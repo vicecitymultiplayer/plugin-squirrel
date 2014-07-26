@@ -33,7 +33,7 @@ void ClientMessageToAll(const SQChar* message, int r, int g, int b, int a)
 	}
 }
 
-void GameMessage   ( const SQChar* message, CPlayer * player, int type = 1 )
+void GameMessage   ( const SQChar* message, CPlayer * player, int type )
 {
 	if( player != nullptr )
 		functions->SendGameMessage( player->nPlayerId, type, const_cast<char *>( message ) );
