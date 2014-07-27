@@ -10,7 +10,7 @@ STCLIBS = -lsquirrel$(BITCOUNT) -lsqstdlib$(BITCOUNT)
 DYNLIBS = -ldl -lpthread -lrt
 BASEOBJDIR = objdir
 
-CFLAGS  = -fpermissive -Wall -O2 -lm -fPIC -c -D_WCHAR_T_EXISTS -DLINUX -D_SQ$(BITCOUNT) -DNDEBUG $(INCDIRS) -std=c++11
+CFLAGS  = -fpermissive -Wall -O2 -lm -fPIC -c -D_WCHAR_T_EXISTS -DLINUX -D_SQ$(BITCOUNT) -DNDEBUG $(INCDIRS) -std=gnu++0x
 
 SOURCES = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.$(EXT)))
 OBJDIR = $(BASEOBJDIR)/$(BUILDTYPE)$(BITCOUNT)
