@@ -15,7 +15,7 @@ void CPlayer::SetArmour( float armour ) { functions->SetPlayerArmour( this->nPla
 
 bool CPlayer::StreamedToPlayer( CPlayer * player )
 {
-	if( player != nullptr )
+	if( player != NULL )
 		return Boolify( functions->IsPlayerStreamedForPlayer( player->nPlayerId, this->nPlayerId ) );
 
 	return false;
@@ -58,7 +58,7 @@ void CPlayer::SetVehicle( CVehicle * vehiclePointer )
 	// <TODO>
 	// Need to get this and other classes to derive from a base class so I can
 	// check the entity type properly.
-	if( vehiclePointer != nullptr )
+	if( vehiclePointer != NULL )
 	{
 		Function callback = RootTable().GetFunction( _SC("onPlayerEnterVehicle") );
 		if( !callback.IsNull() )
@@ -161,7 +161,7 @@ bool CPlayer::ShowingMarkers() { return Boolify(functions->EnabledPlayerShowMark
 
 void CPlayer::SetSpectateTarget(CPlayer * pTarget)
 {
-	if (pTarget == nullptr)
+	if (pTarget == NULL)
 		functions->SetPlayerSpectateTarget(this->nPlayerId, -1);
 	else
 		functions->SetPlayerSpectateTarget(this->nPlayerId, pTarget->nPlayerId);
@@ -213,7 +213,7 @@ CObject * CPlayer::StandingOnObject()
 {
 	int obj = functions->GetPlayerStandingOnObject( this->nPlayerId );
 	if( obj < 1 )
-		return nullptr;
+		return NULL;
 	else
 	{
 		this->m_standingOn.nObjectId = obj;

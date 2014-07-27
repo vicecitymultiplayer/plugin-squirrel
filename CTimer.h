@@ -22,7 +22,7 @@ class CTimer
 
 			this->maxNumberOfPulses = 0;
 			this->intervalInTicks = 0.0f;
-			this->pFunc = nullptr;
+			this->pFunc = NULL;
 			this->paramCount = 0;
 
 			this->params.clear();
@@ -32,7 +32,7 @@ class CTimer
 		{
 /*			for (unsigned int i = 0; i < params.size(); i++)
 			{
-				if (this->params[i].pData != nullptr)
+				if (this->params[i].pData != NULL)
 				{
 					switch (this->params[i].datatype)
 					{

@@ -34,7 +34,7 @@ void printfunc(HSQUIRRELVM v, const SQChar *s, ...)
 		if (nChars > sizeof(szInitBuffer) - 1)
 		{
 			char * szBuffer = new char[nChars + 1];
-			if (szBuffer == nullptr)
+			if (szBuffer == NULL)
 			{
 				sprintf(szInitBuffer, "Error could not be printed: failed to malloc the buffer at %d nChars.", nChars + 1);
 				pCore->rawprint(szInitBuffer);
@@ -65,7 +65,7 @@ void errorfunc(HSQUIRRELVM v, const SQChar *s, ...)
 		if (nChars > sizeof(szInitBuffer) - 1)
 		{
 			char * szBuffer = new char[nChars + 1];
-			if (szBuffer == nullptr)
+			if (szBuffer == NULL)
 			{
 				sprintf(szInitBuffer, "Error could not be printed: failed to malloc the buffer at %d nChars.", nChars + 1);
 				pCore->rawprint(szInitBuffer);
@@ -96,7 +96,7 @@ extern "C" EXPORT unsigned int VcmpPluginInit( PluginFuncs* givenPluginFuncs, Pl
 	strcpy( information->szName, "SQHost2" );
 
 	// Define our exports
-	sq = nullptr;
+	sq = NULL;
 	InitSQAPI();
 
 	pExp                 = new SquirrelExports;

@@ -22,7 +22,7 @@ void ClientMessage(const SQChar * message, CPlayer * player, int r, int g, int b
 
 void ClientMessageWithAlpha(const SQChar * message, CPlayer * player, int r, int g, int b, int a)
 {
-	if (player != nullptr)
+	if (player != NULL)
 	{
 		RGBa colour(r, g, b, a);
 		functions->SendClientMessage(player->nPlayerId, colour.toUInt(), "%s", message);
@@ -45,13 +45,13 @@ void ClientMessageToAllWithAlpha(const SQChar* message, int r, int g, int b, int
 
 void GameMessage   ( const SQChar* message, CPlayer * player, int type )
 {
-	if( player != nullptr )
+	if( player != NULL )
 		functions->SendGameMessage( player->nPlayerId, type, const_cast<char *>( message ) );
 }
 
 void GameMessageAlternate(const SQChar * message, CPlayer * player)
 {
-	if (player != nullptr)
+	if (player != NULL)
 		functions->SendGameMessage(player->nPlayerId, 1, const_cast<char *>(message));
 }
 
@@ -207,7 +207,7 @@ bool IsIPBanned( const SQChar* ip ) { return ( functions->IsIPBanned( const_cast
 
 bool IsWorldCompatibleWithPlayer( CPlayer * cPlayer, int world )
 {
-	if( cPlayer != nullptr )
+	if( cPlayer != NULL )
 		return ( functions->IsPlayerWorldCompatible( cPlayer->nPlayerId, world ) != 0 );
 
 	return false;
@@ -219,7 +219,7 @@ CVehicle * CreateVehicle( int model, int world, Vector * pos, float angle, int c
 {
 	int vId = functions->CreateVehicle( model, world, pos->x, pos->y, pos->z, angle, col1, col2 );
 	if (vId < 1)
-		return nullptr;
+		return NULL;
 	else
 		return pCore->AllocateVehicle(vId);
 }
@@ -228,7 +228,7 @@ CPickup * CreatePickup( int model, int world, int quantity, Vector * pos, int al
 {
 	int pId = functions->CreatePickup(model, world, quantity, pos->x, pos->y, pos->z, alpha, isAuto);
 	if (pId < 0)
-		return nullptr;
+		return NULL;
 	else
 		return pCore->AllocatePickup(pId);
 }
@@ -237,7 +237,7 @@ CPickup * CreatePickupCompat(int model, Vector * pos)
 {
 	int pId = functions->CreatePickup(model, 1, 0, pos->x, pos->y, pos->z, 255, 0);
 	if (pId < 0)
-		return nullptr;
+		return NULL;
 	else
 		return pCore->AllocatePickup(pId);
 }
@@ -246,7 +246,7 @@ CVehicle * CreateVehicleCompat(int model, Vector * pos, float angle, int col1, i
 {
 	int vId = functions->CreateVehicle(model, 1, pos->x, pos->y, pos->z, angle, col1, col2);
 	if (vId < 1)
-		return nullptr;
+		return NULL;
 	else
 		return pCore->AllocateVehicle(vId);
 }
@@ -255,7 +255,7 @@ CObject * CreateObject( int model, int world, Vector * pos, int alpha )
 {
 	int oId = functions->CreateObject( model, world, pos->x, pos->y, pos->z, alpha );
 	if (oId < 0)
-		return nullptr;
+		return NULL;
 	else
 		return pCore->AllocateObject(oId);
 }
@@ -264,7 +264,7 @@ CSprite * CreateSprite(const SQChar * filename, uint16_t x, uint16_t y, uint16_t
 {
 	int sId = functions->CreateSprite(-1, filename, x, y, rX, rY, rot, alpha);
 	if (sId < 0)
-		return nullptr;
+		return NULL;
 	else
 	{
 		CSprite * pSprite = new CSprite();
@@ -278,7 +278,7 @@ CTextdraw * CreateTextdraw(const SQChar * text, int x, int y, unsigned int colou
 {
 	int sId = functions->CreateTextdraw(-1, text, x, y, colour);
 	if (sId < 0)
-		return nullptr;
+		return NULL;
 	else
 	{
 		CTextdraw * pTextdraw = new CTextdraw();
@@ -419,7 +419,7 @@ void ResetVehicleHandling( int model ) { functions->ResetHandling( model ); }
 // All of these functions exist for compatibility
 bool GetCinematicBorder ( CPlayer * player )
 { 
-	if( player != nullptr )
+	if( player != NULL )
 		return ( functions->EnabledPlayerWidescreen( player->nPlayerId ) != 0 );
 	
 	return false;
@@ -427,7 +427,7 @@ bool GetCinematicBorder ( CPlayer * player )
 
 bool GetGreenScanLines  ( CPlayer * player )
 {
-	if( player != nullptr )
+	if( player != NULL )
 		return ( functions->EnabledPlayerGreenScanlines( player->nPlayerId ) != 0 );
 
 	return false;
@@ -435,7 +435,7 @@ bool GetGreenScanLines  ( CPlayer * player )
 
 bool GetWhiteScanLines  ( CPlayer * player )
 {
-	if( player != nullptr )
+	if( player != NULL )
 		return ( functions->EnabledPlayerWhiteScanlines( player->nPlayerId ) != 0 );
 
 	return false;
@@ -443,44 +443,44 @@ bool GetWhiteScanLines  ( CPlayer * player )
 
 void SetCinematicBorder ( CPlayer * player, bool toEnable )
 {
-	if( player != nullptr )
+	if( player != NULL )
 		functions->TogglePlayerWidescreen( player->nPlayerId, toEnable );
 }
 
 void SetGreenScanLines  ( CPlayer * player, bool toEnable )
 {
-	if( player != nullptr )
+	if( player != NULL )
 		functions->TogglePlayerGreenScanlines( player->nPlayerId, toEnable );
 }
 
 void SetWhiteScanLines  ( CPlayer * player, bool toEnable )
 {
-	if( player != nullptr )
+	if( player != NULL )
 		functions->TogglePlayerWhiteScanlines( player->nPlayerId, toEnable );
 }
 
 void KickPlayer         ( CPlayer * player )
 {
-	if( player != nullptr )
+	if( player != NULL )
 		functions->KickPlayer( player->nPlayerId );
 }
 
 void BanPlayer          ( CPlayer * player )
 {
-	if( player != nullptr )
+	if( player != NULL )
 		functions->BanPlayer( player->nPlayerId );
 }
 
 void Message            ( const SQChar * message ) { functions->SendClientMessage( -1, 0x0b5fa5ff, "%s", message ); }
 void MessagePlayer      ( const SQChar * message, CPlayer * player )
 {
-	if( player != nullptr )
+	if( player != NULL )
 		functions->SendClientMessage( player->nPlayerId, 0x0b5fa5ff, "%s", message );
 }
 
 void MessageAllExcept   ( const SQChar * message, CPlayer * player )
 {
-	if( player != nullptr )
+	if( player != NULL )
 	{
 		for( int i = 0; i < MAX_PLAYERS; i++ )
 		{
@@ -492,7 +492,7 @@ void MessageAllExcept   ( const SQChar * message, CPlayer * player )
 
 void PrivMessage        ( CPlayer * player, const SQChar * message )
 {
-	if( player != nullptr )
+	if( player != NULL )
 		functions->SendClientMessage( player->nPlayerId, 0x007f16ff, "** pm >> %s", message );
 }
 
@@ -507,7 +507,7 @@ void PrivMessageAll     ( const SQChar * message )
 
 void SendPlayerMessage  ( CPlayer * playerToFake, CPlayer * playerTo, const SQChar * message )
 {
-	if( playerToFake != nullptr && playerTo != nullptr )
+	if( playerToFake != NULL && playerTo != NULL )
 		functions->SendClientMessage( playerTo->nPlayerId, 0x007f16ff, "** pm from %s >> %s", playerToFake->GetName().c_str(), message );
 }
 
@@ -650,7 +650,7 @@ const SQChar * GetSkinName     ( int skinID )
 		case 5:   return "Paramedic";
 		case 6:   return "Firefighter";
 		case 7:   return "Golf Guy #1";
-		case 8:   return nullptr;
+		case 8:   return NULL;
 		case 9:   return "Bum Lady #1";
 		case 10:  return "Bum Lady #2";
 		case 11:  return "Punk #1";
@@ -802,7 +802,7 @@ const SQChar * GetSkinName     ( int skinID )
 		case 157: return "Stripper #2";
 		case 158: return "Stripper #3";
 		case 159: return "Store Clerk";
-		default:  return nullptr;
+		default:  return NULL;
 	}
 }
 
@@ -813,7 +813,7 @@ void LoadVCMPModule( const SQChar * name )
 
 int GetWeaponID( const SQChar * name )
 {
-	if( name == nullptr || strlen(name) < 1 )
+	if( name == NULL || strlen(name) < 1 )
 		return 0;
 	
 	// Get characters we might need
@@ -1658,7 +1658,7 @@ const SQChar * GetVehicleNameFromModel ( int model )
 		case 234: return "Bloodring Banger #1";
 		case 235: return "Bloodring Banger #2";
 		case 236: return "Vice Squad Cheetah";
-		default:  return nullptr;
+		default:  return NULL;
 	}
 }
 
@@ -1733,7 +1733,7 @@ SQInteger FindPlayer( HSQUIRRELVM v )
 {
 	if( sq_gettop( v ) >= 2 )
 	{
-		CPlayer * pPlayer = nullptr;
+		CPlayer * pPlayer = NULL;
 		if( sq_gettype( v, 2 ) == OT_INTEGER )
 		{
 			SQInteger playerID;
@@ -1766,7 +1766,7 @@ SQInteger FindPlayer( HSQUIRRELVM v )
 					functions->GetPlayerName( i, nameBuf, 64 );
 					szlower( nameBuf );
 
-					if( strstr( nameBuf, lowerName ) != nullptr )
+					if( strstr( nameBuf, lowerName ) != NULL )
 					{
 						pID = i;
 						break;
@@ -1775,7 +1775,7 @@ SQInteger FindPlayer( HSQUIRRELVM v )
 			}
 
 			delete [] nameBuf;
-			nameBuf = nullptr;
+			nameBuf = NULL;
 			free( lowerName );
 
 			if (pID == 255)
@@ -1789,7 +1789,7 @@ SQInteger FindPlayer( HSQUIRRELVM v )
 		else
 			return sq_throwerror( v, "Unexpected argument in FindPlayer: must be integer or string" );
 
-		if( pPlayer == nullptr )
+		if( pPlayer == NULL )
 		{
 			sq_pushnull( v );
 			return 1;

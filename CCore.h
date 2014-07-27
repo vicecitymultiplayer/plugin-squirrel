@@ -25,7 +25,7 @@ class CCore
 	public:
 		static CCore * GetInstance()
 		{
-			if( pCoreInstance == nullptr )
+			if( pCoreInstance == NULL )
 			{
 				// Create a new instance
 				pCoreInstance = new CCore();

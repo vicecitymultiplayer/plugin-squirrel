@@ -8,7 +8,7 @@ extern HSQUIRRELVM v;
 
 void InitSQAPI()
 {
-	if (sq == nullptr)
+	if (sq == NULL)
 		sq = new sq_api();
 
 	// VM management
