@@ -6,10 +6,15 @@ void RegisterGlobals()
 	RootTable(v)
 
 		// Negative parameter counts check if the count is "at least" instead of "exactly equal."
-		.Func(_SC("ClientMessage"), ClientMessage, -6, _SC("tsxiiii"))
-		.Func(_SC("ClientMessageToAll"), ClientMessageToAll, -5, _SC("tsiiii"))
-		.Func(_SC("Announce"), GameMessage, -3, _SC("txsi"))
-		.Func(_SC("AnnounceAll"), GameMessageToAll, -2, _SC("tsi"))
+		.Overload(_SC("ClientMessage"), ClientMessage)
+		.Overload(_SC("ClientMessage"), ClientMessageWithAlpha)
+		.Overload(_SC("ClientMessageToAll"), ClientMessageToAll)
+		.Overload(_SC("ClientMessageToAll"), ClientMessageToAllWithAlpha)
+
+		.Overload(_SC("Announce"), GameMessage)
+		.Overload(_SC("Announce"), GameMessageAlternate)
+		.Overload(_SC("AnnounceAll"), GameMessageToAll)
+		.Overload(_SC("AnnounceAll"), GameMessageToAllAlternate)
 
 		.Func(_SC("SetServerName"), SetServerName, 2, _SC("ts"))
 		.Func(_SC("SetMaxPlayers"), SetMaxPlayers, 2, _SC("ti"))
