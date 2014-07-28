@@ -352,8 +352,9 @@ void RegisterPlayer()
 		.Func(_SC("SetWantedLevel"), &CPlayer::SetWantedLevel, 2, "xi")
 		.Func(_SC("SetWeapon"), &CPlayer::SetWeapon, 3, "xii")
 		.Func(_SC("Spawn"), &CPlayer::Spawn, 1, "x")
-		.Func(_SC("StreamedToPlayer"), &CPlayer::StreamedToPlayer);
+		.Func(_SC("StreamedToPlayer"), &CPlayer::StreamedToPlayer, 2, "xx");
 
 	c.GlobalFunc(_SC("_tostring"), &PlayerToString);
 	RootTable(v).Bind( _SC("CPlayer"), c );
 }
+
