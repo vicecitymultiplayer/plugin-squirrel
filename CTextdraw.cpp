@@ -40,15 +40,15 @@ void RegisterTextdraw()
 {
 	Class<CTextdraw> c(v, "CTextdraw_INTERNAL");
 	c
-		.Func(_SC("ShowForAll"), &CTextdraw::ShowForAll)
-		.Func(_SC("ShowForPlayer"), &CTextdraw::ShowForPlayer)
-		.Func(_SC("HideFromAll"), &CTextdraw::HideFromAll)
-		.Func(_SC("HideFromPlayer"), &CTextdraw::HideFromPlayer)
-		.Func(_SC("SetPosForAll"), &CTextdraw::SetPositionForAll)
-		.Func(_SC("SetPosForPlayer"), &CTextdraw::SetPositionForPlayer)
-		.Func(_SC("SetColourForAll"), &CTextdraw::SetColourForAll)
-		.Func(_SC("SetColourForPlayer"), &CTextdraw::SetColourForPlayer)
-		.Func(_SC("Delete"), &CTextdraw::Delete);
+		.Func(_SC("ShowForAll"), &CTextdraw::ShowForAll, 1, "x")
+		.Func(_SC("ShowForPlayer"), &CTextdraw::ShowForPlayer, 2, "xx")
+		.Func(_SC("HideFromAll"), &CTextdraw::HideFromAll, 1, "x")
+		.Func(_SC("HideFromPlayer"), &CTextdraw::HideFromPlayer, 2, "xx")
+		.Func(_SC("SetPosForAll"), &CTextdraw::SetPositionForAll, 3, "xii")
+		.Func(_SC("SetPosForPlayer"), &CTextdraw::SetPositionForPlayer, 4, "xxii")
+		.Func(_SC("SetColourForAll"), &CTextdraw::SetColourForAll, 2, "xi")
+		.Func(_SC("SetColourForPlayer"), &CTextdraw::SetColourForPlayer, 3, "xxi")
+		.Func(_SC("Delete"), &CTextdraw::Delete, 1, "x");
 
 	RootTable(v).Bind(_SC("CTextdraw"), c);
 }

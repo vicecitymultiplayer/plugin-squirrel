@@ -63,6 +63,7 @@ class CVehicle
 
 	public:
 		void Delete();
+		void Fix();
 		void Respawn();
 		void Kill();
 		void SetFlatTyres( bool isFlat );

@@ -105,14 +105,14 @@ void RegisterObject()
 
 	// Functions
 	c
-		.Func( _SC("Delete"), &CObject::Delete )
-		.Func( _SC("MoveTo"), &CObject::MoveTo )
-		.Func( _SC("MoveBy"), &CObject::MoveBy )
-		.Func( _SC("RotateTo"), &CObject::RotateTo )
-		.Func( _SC("RotateBy"), &CObject::RotateBy )
-		.Func( _SC("RotateToEuler"), &CObject::RotateToEuler )
-		.Func( _SC("RotateByEuler"), &CObject::RotateByEuler )
-		.Func( _SC("SetAlpha"), &CObject::SetAlpha );
+		.Func( _SC("Delete"), &CObject::Delete, 1, "x" )
+		.Func( _SC("MoveTo"), &CObject::MoveTo, 3, "xxi" )
+		.Func( _SC("MoveBy"), &CObject::MoveBy, 3, "xxi" )
+		.Func( _SC("RotateTo"), &CObject::RotateTo, 3, "xxi" )
+		.Func( _SC("RotateBy"), &CObject::RotateBy, 3, "xxi" )
+		.Func( _SC("RotateToEuler"), &CObject::RotateToEuler, 3, "xxi" )
+		.Func( _SC("RotateByEuler"), &CObject::RotateByEuler, 3, "xxi" )
+		.Func( _SC("SetAlpha"), &CObject::SetAlpha, 3, "xii" );
 
 	RootTable(v).Bind( _SC("CObject"), c );
 }

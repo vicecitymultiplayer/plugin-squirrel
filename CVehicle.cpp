@@ -134,6 +134,12 @@ void CVehicle::Delete()
 	functions->DeleteVehicle( this->nVehicleId );
 }
 
+void CVehicle::Fix()
+{
+	functions->SetVehicleHealth( this->nVehicleId, 1000 );
+	functions->SetVehicleDamageData( this->nVehicleId, 0 );
+}
+
 void CVehicle::Respawn() { functions->RespawnVehicle( this->nVehicleId ); }
 void CVehicle::Kill() { functions->KillVehicle( this->nVehicleId ); }
 int CVehicle::GetPartStatus( int part ) { return functions->GetVehiclePartStatus( this->nVehicleId, part ); }
@@ -289,7 +295,7 @@ void RegisterVehicle()
 		.Prop( _SC("RelativeTurnSpeed"), &CVehicle::GetRelativeTurnSpeed, &CVehicle::SetRelativeTurnSpeed )
 		.Prop( _SC("Radio"), &CVehicle::GetRadio, &CVehicle::SetRadio )
 		.Prop( _SC("RadioLocked"), &CVehicle::GetRadioLockStatus, &CVehicle::SetRadioLocked );
-	
+
 	// Read-only properties
 	c
 		.Prop( _SC("Model"), &CVehicle::GetModel )
@@ -301,28 +307,29 @@ void RegisterVehicle()
 
 	// Functions
 	c
-		.Func( _SC("Delete"), &CVehicle::Delete )
-		.Func( _SC("Remove"), &CVehicle::Delete )
-		.Func( _SC("Respawn"), &CVehicle::Respawn )
-		.Func( _SC("Kill"), &CVehicle::Kill )
-		.Func( _SC("KillEngine"), &CVehicle::Kill )
-		.Func( _SC("GetPart"), &CVehicle::GetPartStatus )
-		.Func( _SC("SetPart"), &CVehicle::SetPartStatus )
-		.Func( _SC("GetTyre"), &CVehicle::GetTyreStatus )
-		.Func( _SC("SetTyre"), &CVehicle::SetTyreStatus )
-		.Func( _SC("GetTire"), &CVehicle::GetTyreStatus )
-		.Func( _SC("SetTire"), &CVehicle::SetTyreStatus )
-		.Func( _SC("SetFlatTyres"), &CVehicle::SetFlatTyres )
-		.Func( _SC("StreamedForPlayer"), &CVehicle::GetStreamedForPlayer )
-		.Func( _SC("GetOccupant"), &CVehicle::GetOccupant )
-		.Func( _SC("SetHandlingData"), &CVehicle::SetHandlingData )
-		.Func( _SC("GetHandlingData"), &CVehicle::GetHandlingData )
-		.Func( _SC("ResetHandlingData"), &CVehicle::ResetHandlingData )
-		.Func( _SC("ResetAllHandling"), &CVehicle::ResetAllHandling )
-		.Func( _SC("IsHandlingSet"), &CVehicle::IsHandlingSet )
-		.Func( _SC("AddSpeed"), &CVehicle::AddVehicleSpeed )
-		.Func( _SC("AddTurnSpeed"), &CVehicle::AddVehicleTurnSpeed )
-		.Func( _SC("AddRelTurnSpeed"), &CVehicle::AddVehicleRelTurnSpeed );
+		.Func( _SC("Delete"), &CVehicle::Delete, 1, "x" )
+		.Func( _SC("Remove"), &CVehicle::Delete, 1, "x" )
+		.Func( _SC("Respawn"), &CVehicle::Respawn, 1, "x" )
+		.Func( _SC("Kill"), &CVehicle::Kill, 1, "x" )
+		.Func( _SC("KillEngine"), &CVehicle::Kill, 1, "x" )
+		.Func( _SC("Fix"), &CVehicle::Fix, 1, "x")
+		.Func( _SC("GetPart"), &CVehicle::GetPartStatus, 2, "xi" )
+		.Func( _SC("SetPart"), &CVehicle::SetPartStatus, 3, "xii" )
+		.Func( _SC("GetTyre"), &CVehicle::GetTyreStatus, 2 ,"xi" )
+		.Func( _SC("SetTyre"), &CVehicle::SetTyreStatus, 3, "xii" )
+		.Func( _SC("GetTire"), &CVehicle::GetTyreStatus, 2, "xi" )
+		.Func( _SC("SetTire"), &CVehicle::SetTyreStatus, 3, "xii" )
+		.Func( _SC("SetFlatTyres"), &CVehicle::SetFlatTyres, 2, "xb" )
+		.Func( _SC("StreamedForPlayer"), &CVehicle::GetStreamedForPlayer, 2, "xx" )
+		.Func( _SC("GetOccupant"), &CVehicle::GetOccupant, 2, "xi" )
+		.Func( _SC("SetHandlingData"), &CVehicle::SetHandlingData, 3, "xin" )
+		.Func( _SC("GetHandlingData"), &CVehicle::GetHandlingData, 2, "xi" )
+		.Func( _SC("ResetHandlingData"), &CVehicle::ResetHandlingData, 2, "xi" )
+		.Func( _SC("ResetAllHandling"), &CVehicle::ResetAllHandling, 1, "x" )
+		.Func( _SC("IsHandlingSet"), &CVehicle::IsHandlingSet, 2, "xi" )
+		.Func( _SC("AddSpeed"), &CVehicle::AddVehicleSpeed, 2, "xx" )
+		.Func( _SC("AddTurnSpeed"), &CVehicle::AddVehicleTurnSpeed, 2, "xx" )
+		.Func( _SC("AddRelTurnSpeed"), &CVehicle::AddVehicleRelTurnSpeed, 2, "xx" );
 
 	RootTable(v).Bind( _SC("CVehicle"), c );
 }

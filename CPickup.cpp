@@ -57,9 +57,9 @@ void RegisterPickup()
 
 	// Functions
 	c
-		.Func( _SC("Remove"), &CPickup::Delete )
-		.Func( _SC("Respawn"), &CPickup::Respawn )
-		.Func( _SC("StreamedToPlayer"), &CPickup::StreamedToPlayer );
+		.Func( _SC("Remove"), &CPickup::Delete, 1, "x" )
+		.Func( _SC("Respawn"), &CPickup::Respawn, 1, "x" )
+		.Func( _SC("StreamedToPlayer"), &CPickup::StreamedToPlayer, 2, "xx" );
 
 	RootTable(v).Bind( _SC("CPickup"), c );
 }
