@@ -11,6 +11,7 @@
 // Create arrays for several structures.
 savedVehicleData lastVehInfo[MAX_VEHICLES];
 savedPlayerData  lastPlrInfo[MAX_PLAYERS];
+savedServerData  lastSrvInfo;
 
 // Externalize the core instance and other critical variables
 extern CCore * pCore;
@@ -90,6 +91,24 @@ void OnFrame( float fElapsedTime )
 {
 	// Process any timers we have
 	pCore->ProcessTimers(fElapsedTime);
+
+	int lastHour            = lastSrvInfo.lastHour;
+	int lastMinute          = lastSrvInfo.lastMinute;
+
+	int hour                = functions->GetHour();
+	int minute              = functions->GetMinute();
+
+	// Check for onTimeChange triggers
+	if( lastHour != hour || lastMinute != minute )
+	{
+		Function callback = RootTable().GetFunction( _SC("onTimeChange") );
+		if( !callback.IsNull() )
+			callback( lastHour, lastMinute, hour, minute );
+
+		callback.Release();
+		lastSrvInfo.lastHour   = hour;
+		lastSrvInfo.lastMinute = minute;
+	}
 }
 
 void OnPlayerConnect( int nPlayerId )

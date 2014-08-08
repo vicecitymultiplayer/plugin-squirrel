@@ -69,3 +69,8 @@ struct savedVehicleData
 	float lastHP;
 	float lastX, lastY, lastZ;
 };
+
+struct savedServerData
+{
+	unsigned int lastHour, lastMinute;
+};
