@@ -1108,30 +1108,11 @@ void ReloadScripts( void )
 		// Release the old root table to free old binds
 		Sqrat::RootTable(v).Release();
 
-		// Push a new root table
-		sq_pushroottable(v);
+		// Reload the VM and all entities
+		pCore->LoadVM();
 
-		// Set the default internal error handlers up
-		sqstd_seterrorhandlers( v );
-
-		// Set up our print and error functions
-		sq_setprintfunc( v, printfunc, errorfunc );
-
-		// Reload all global module entities
-		pCore->RegisterEntities();
-
-		// Re-run the script
-		pCore->GetScript()->Run();
-
-		// Trigger the onScriptLoad event
-		Function callback = RootTable( v ).GetFunction( _SC( "onScriptLoad" ) );
-		if( !callback.IsNull() )
-			callback();
-
-		callback.Release();
-
-		// You are now free to move about the cabin
-		pCore->ChangeReloadPermission(true);
+		// Re-parse the config and reload the script
+		pCore->LoadScript();
 
 		// And now we dance
 		OutputMessage( "Scripts reloaded." );
