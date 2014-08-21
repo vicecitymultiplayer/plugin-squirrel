@@ -265,6 +265,9 @@ void CVehicle::SetRadio(const int nRadioId) { functions->SetVehicleRadio(this->n
 bool CVehicle::GetRadioLockStatus() { return functions->IsVehicleRadioLocked(this->nVehicleId) == 1; }
 void CVehicle::SetRadioLocked(const bool isLocked) { functions->SetVehicleRadioLocked(this->nVehicleId, isLocked); }
 
+bool CVehicle::GetGhost() { return functions->GetVehicleGhostState(this->nVehicleId) == 1; }
+void CVehicle::SetGhost(const bool isGhost) { functions->SetVehicleGhostState(this->nVehicleId, isGhost); }
+
 void RegisterVehicle()
 {
 	Class <CVehicle> c(v, "CVehicle_INTERNAL");
@@ -294,7 +297,8 @@ void RegisterVehicle()
 		.Prop( _SC("TurnSpeed"), &CVehicle::GetTurnSpeed, &CVehicle::SetTurnSpeed )
 		.Prop( _SC("RelativeTurnSpeed"), &CVehicle::GetRelativeTurnSpeed, &CVehicle::SetRelativeTurnSpeed )
 		.Prop( _SC("Radio"), &CVehicle::GetRadio, &CVehicle::SetRadio )
-		.Prop( _SC("RadioLocked"), &CVehicle::GetRadioLockStatus, &CVehicle::SetRadioLocked );
+		.Prop( _SC("RadioLocked"), &CVehicle::GetRadioLockStatus, &CVehicle::SetRadioLocked )
+		.Prop( _SC("IsGhost"), &CVehicle::GetGhost, &CVehicle::SetGhost );
 
 	// Read-only properties
 	c
