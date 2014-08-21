@@ -379,6 +379,8 @@ typedef unsigned int (*SDK_IsObjectBumpReport) (int nObjectId);
 typedef int (*SDK_SetVehiclesForcedRespawnHeight) (float fHeight);
 typedef float (*SDK_GetVehiclesForcedRespawnHeight) (void);
 typedef unsigned int (*SDK_SetPlayerName) (int nPlayerId, const char* pszName);
+typedef int (*SDK_SetVehicleGhostState) (int nVehicleId, unsigned int bToggle);
+typedef unsigned int (*SDK_GetVehicleGhostState) (int nVehicleId);
 typedef int (*SDK_OnInitServer) (void);
 typedef void (*SDK_OnShutdownServer) (void);
 typedef void (*SDK_OnFrame) (float fElapsedTime);
@@ -812,6 +814,8 @@ typedef struct {
 	SDK_GetVehiclesForcedRespawnHeight GetVehiclesForcedRespawnHeight;
 
 	SDK_SetPlayerName SetPlayerName;
+	SDK_SetVehicleGhostState SetVehicleGhostState;
+	SDK_GetVehicleGhostState GetVehicleGhostState;
 } PluginFuncs;
 
 typedef struct {
