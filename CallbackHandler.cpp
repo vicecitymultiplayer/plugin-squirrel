@@ -241,11 +241,11 @@ void OnPlayerDeath( int nPlayerId, int nKillerId, int nReason, int nBodyPart )
 				if (nReason == 43 || nReason == 50)
 					nReason = 43; // drowned
 
-				else if (nReason == 39 || nReason == 40 || nReason == 44)
-					nReason = 44; // fell
-
 				else if (nReason == 39 && nBodyPart == 7)
 					nReason = 39; // car crash
+
+				else if (nReason == 39 || nReason == 40 || nReason == 44)
+					nReason = 44; // fell
 
 				if (!callback.IsNull())
 					callback.Execute<CPlayer *, int>(playerInstance, nReason);

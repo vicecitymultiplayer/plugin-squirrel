@@ -30,6 +30,7 @@ class CVehicle
 		void SetRelativeTurnSpeed( Vector speed );
 		void SetRadio( int nRadioId );
 		void SetRadioLocked( bool isRadioLocked );
+		void SetGhost( bool isGhost );
 
 	public:
 		int GetWorld();
@@ -60,6 +61,7 @@ class CVehicle
 		EntityVector GetRelativeTurnSpeed();
 		int GetRadio();
 		bool GetRadioLockStatus();
+		bool GetGhost();
 
 	public:
 		void Delete();
