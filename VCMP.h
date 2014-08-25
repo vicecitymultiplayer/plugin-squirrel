@@ -82,6 +82,8 @@ typedef int (*SDK_SetMaxHeight) (float fHeight);
 typedef float (*SDK_GetMaxHeight) (void);
 typedef int (*SDK_SetKillCmdDelay) (int nDelay);
 typedef int (*SDK_GetKillCmdDelay) (void);
+typedef int (*SDK_SetVehiclesForcedRespawnHeight) (float fHeight);
+typedef float (*SDK_GetVehiclesForcedRespawnHeight) (void);
 typedef int (*SDK_ToggleSyncFrameLimiter) (unsigned int bToggle);
 typedef unsigned int (*SDK_EnabledSyncFrameLimiter) (void);
 typedef int (*SDK_ToggleFrameLimiter) (unsigned int bToggle);
@@ -137,28 +139,18 @@ typedef void (*SDK_DestroyCoordBlip) (int nIndex);
 typedef unsigned int (*SDK_GetCoordBlipInfo) (int nIndex, int* pnWorld, float* pfX, float* pfY, float* pfZ, int* pnScale, unsigned int* puColour, int* pnSprite);
 typedef int (*SDK_CreateSprite) (int nIndex, const char * pszFilename, int fX, int fY, int fRotX, int fRotY, float fRotation, unsigned char byAlpha);
 typedef void (*SDK_DestroySprite) (int nIndex);
-typedef void (*SDK_ShowSpriteToAll) (int nIndex);
-typedef void (*SDK_ShowSpriteToPlayer) (int nIndex, int nPlayerId);
-typedef void (*SDK_HideSpriteFromAll) (int nIndex);
-typedef void (*SDK_HideSpriteFromPlayer) (int nIndex, int nPlayerId);
-typedef void (*SDK_MoveSpriteForAll) (int nIndex, unsigned int fX, unsigned int fY);
-typedef void (*SDK_MoveSpriteForPlayer) (int nIndex, int nPlayerId, unsigned int fX, unsigned int fY);
-typedef void (*SDK_SetSpriteCenterForAll) (int nIndex, unsigned int fX, unsigned int fY);
-typedef void (*SDK_SetSpriteCenterForPlayer) (int nIndex, int nPlayerId, unsigned int fX, unsigned int fY);
-typedef void (*SDK_RotateSpriteForAll) (int nIndex, float fRotation);
-typedef void (*SDK_RotateSpriteForPlayer) (int nIndex, int nPlayerId, float fRotation);
-typedef void (*SDK_SetSpriteAlphaForAll) (int nIndex, unsigned char byAlpha);
-typedef void (*SDK_SetSpriteAlphaForPlayer) (int nIndex, int nPlayerId, unsigned char byAlpha);
+typedef void (*SDK_ShowSprite) (int nIndex, int nPlayerId);
+typedef void (*SDK_HideSprite) (int nIndex, int nPlayerId);
+typedef void (*SDK_MoveSprite) (int nIndex, int nPlayerId, unsigned int fX, unsigned int fY);
+typedef void (*SDK_SetSpriteCenter) (int nIndex, int nPlayerId, unsigned int fX, unsigned int fY);
+typedef void (*SDK_RotateSprite) (int nIndex, int nPlayerId, float fRotation);
+typedef void (*SDK_SetSpriteAlpha) (int nIndex, int nPlayerId, unsigned char byAlpha);
 typedef int (*SDK_CreateTextdraw) (int nIndex, const char * pszText, int lX, int lY, unsigned int dwColour);
 typedef void (*SDK_DestroyTextdraw) (int nIndex);
-typedef void (*SDK_ShowTextdrawToAll) (int nIndex);
-typedef void (*SDK_ShowTextdrawToPlayer) (int nIndex, int nPlayerId);
-typedef void (*SDK_HideTextdrawFromAll) (int nIndex);
-typedef void (*SDK_HideTextdrawFromPlayer) (int nIndex, int nPlayerId);
-typedef void (*SDK_MoveTextdrawForAll) (int nIndex, int lX, int lY);
-typedef void (*SDK_MoveTextdrawForPlayer) (int nIndex, int nPlayerId, int lX, int lY);
-typedef void (*SDK_SetTextdrawColourForAll) (int nIndex, unsigned int dwColour);
-typedef void (*SDK_SetTextdrawColourForPlayer) (int nIndex, int nPlayerId, unsigned int dwColour);
+typedef void (*SDK_ShowTextdraw) (int nIndex, int nPlayerId);
+typedef void (*SDK_HideTextdraw) (int nIndex, int nPlayerId);
+typedef void (*SDK_MoveTextdraw) (int nIndex, int nPlayerId, int lX, int lY);
+typedef void (*SDK_SetTextdrawColour) (int nIndex, int nPlayerId, unsigned int dwColour);
 typedef int (*SDK_AddRadioStream) (int nRadioId, const char* pszRadioName, const char* pszRadioURL, unsigned int bIsListed);
 typedef int (*SDK_RemoveRadioStream) (int nRadioId);
 typedef int (*SDK_SetUseClasses) (unsigned int bToggle);
@@ -189,6 +181,7 @@ typedef int (*SDK_GetPlayerUniqueWorld) (int nPlayerId);
 typedef unsigned int (*SDK_IsPlayerWorldCompatible) (int nPlayerId, int nWorld);
 typedef int (*SDK_GetPlayerState) (int nPlayerId);
 typedef int (*SDK_GetPlayerName) (int nPlayerId, char* szBuffer, int nBufferLen);
+typedef unsigned int (*SDK_SetPlayerName) (int nPlayerId, const char* pszName);
 typedef int (*SDK_SetPlayerTeam) (int nPlayerId, int nTeamId);
 typedef int (*SDK_GetPlayerTeam) (int nPlayerId);
 typedef int (*SDK_SetPlayerSkin) (int nPlayerId, int nSkinId);
@@ -327,6 +320,8 @@ typedef int (*SDK_SetVehicleRadio) (int nVehicleId, int nRadioId);
 typedef int (*SDK_GetVehicleRadio) (int nVehicleId);
 typedef int (*SDK_SetVehicleRadioLocked) (int nVehicleId, unsigned int bToggle);
 typedef unsigned int (*SDK_IsVehicleRadioLocked) (int nVehicleId);
+typedef unsigned int (*SDK_GetVehicleGhostState) (int nVehicleId);
+typedef int (*SDK_SetVehicleGhostState) (int nVehicleId, unsigned int bToggle);
 typedef int (*SDK_ResetAllVehicleHandlings) (void);
 typedef unsigned int (*SDK_ExistsHandlingRule) (int nModelIndex, int nRuleIndex);
 typedef int (*SDK_SetHandlingRule) (int nModelIndex, int nRuleIndex, double fValue);
@@ -376,9 +371,6 @@ typedef int (*SDK_SetObjectShotReport) (int nObjectId, unsigned int bToggle);
 typedef unsigned int (*SDK_IsObjectShotReport) (int nObjectId);
 typedef int (*SDK_SetObjectBumpReport) (int nObjectId, unsigned int bToggle);
 typedef unsigned int (*SDK_IsObjectBumpReport) (int nObjectId);
-typedef int (*SDK_SetVehiclesForcedRespawnHeight) (float fHeight);
-typedef float (*SDK_GetVehiclesForcedRespawnHeight) (void);
-typedef unsigned int (*SDK_SetPlayerName) (int nPlayerId, const char* pszName);
 typedef int (*SDK_OnInitServer) (void);
 typedef void (*SDK_OnShutdownServer) (void);
 typedef void (*SDK_OnFrame) (float fElapsedTime);
@@ -468,6 +460,8 @@ typedef struct {
 	SDK_GetMaxHeight GetMaxHeight;
 	SDK_SetKillCmdDelay SetKillCmdDelay;
 	SDK_GetKillCmdDelay GetKillCmdDelay;
+	SDK_SetVehiclesForcedRespawnHeight SetVehiclesForcedRespawnHeight;
+	SDK_GetVehiclesForcedRespawnHeight GetVehiclesForcedRespawnHeight;
 
 	//WORLD: toggles
 	SDK_ToggleSyncFrameLimiter ToggleSyncFrameLimiter;
@@ -535,30 +529,20 @@ typedef struct {
 	//SPRITES
 	SDK_CreateSprite CreateSprite;
 	SDK_DestroySprite DestroySprite;
-	SDK_ShowSpriteToAll ShowSpriteToAll;
-	SDK_ShowSpriteToPlayer ShowSpriteToPlayer;
-	SDK_HideSpriteFromAll HideSpriteFromAll;
-	SDK_HideSpriteFromPlayer HideSpriteFromPlayer;
-	SDK_MoveSpriteForAll MoveSpriteForAll;
-	SDK_MoveSpriteForPlayer MoveSpriteForPlayer;
-	SDK_SetSpriteCenterForAll SetSpriteCenterForAll;
-	SDK_SetSpriteCenterForPlayer SetSpriteCenterForPlayer;
-	SDK_RotateSpriteForAll RotateSpriteForAll;
-	SDK_RotateSpriteForPlayer RotateSpriteForPlayer;
-	SDK_SetSpriteAlphaForAll SetSpriteAlphaForAll;
-	SDK_SetSpriteAlphaForPlayer SetSpriteAlphaForPlayer;
+	SDK_ShowSprite ShowSprite;
+	SDK_HideSprite HideSprite;
+	SDK_MoveSprite MoveSprite;
+	SDK_SetSpriteCenter SetSpriteCenter;
+	SDK_RotateSprite RotateSprite;
+	SDK_SetSpriteAlpha SetSpriteAlpha;
 
 	//TEXTDRAWS
 	SDK_CreateTextdraw CreateTextdraw;
 	SDK_DestroyTextdraw DestroyTextdraw;
-	SDK_ShowTextdrawToAll ShowTextdrawToAll;
-	SDK_ShowTextdrawToPlayer ShowTextdrawToPlayer;
-	SDK_HideTextdrawFromAll HideTextdrawFromAll;
-	SDK_HideTextdrawFromPlayer HideTextdrawFromPlayer;
-	SDK_MoveTextdrawForAll MoveTextdrawForAll;
-	SDK_MoveTextdrawForPlayer MoveTextdrawForPlayer;
-	SDK_SetTextdrawColourForAll SetTextdrawColourForAll;
-	SDK_SetTextdrawColourForPlayer SetTextdrawColourForPlayer;
+	SDK_ShowTextdraw ShowTextdraw;
+	SDK_HideTextdraw HideTextdraw;
+	SDK_MoveTextdraw MoveTextdraw;
+	SDK_SetTextdrawColour SetTextdrawColour;
 
 	//RADIOS
 	SDK_AddRadioStream AddRadioStream;
@@ -597,6 +581,7 @@ typedef struct {
 	SDK_IsPlayerWorldCompatible IsPlayerWorldCompatible;
 	SDK_GetPlayerState GetPlayerState;
 	SDK_GetPlayerName GetPlayerName;
+	SDK_SetPlayerName SetPlayerName;
 	SDK_SetPlayerTeam SetPlayerTeam;
 	SDK_GetPlayerTeam GetPlayerTeam;
 	SDK_SetPlayerSkin SetPlayerSkin;
@@ -751,6 +736,8 @@ typedef struct {
 	SDK_GetVehicleRadio GetVehicleRadio;
 	SDK_SetVehicleRadioLocked SetVehicleRadioLocked;
 	SDK_IsVehicleRadioLocked IsVehicleRadioLocked;
+	SDK_GetVehicleGhostState GetVehicleGhostState;
+	SDK_SetVehicleGhostState SetVehicleGhostState;
 
 	//VEHICLES: handling
 	SDK_ResetAllVehicleHandlings ResetAllVehicleHandlings;
@@ -806,12 +793,6 @@ typedef struct {
 	SDK_IsObjectShotReport IsObjectShotReport;
 	SDK_SetObjectBumpReport SetObjectBumpReport;
 	SDK_IsObjectBumpReport IsObjectBumpReport;
-
-	//FIXME: move on major update, currently keeping compatibility
-	SDK_SetVehiclesForcedRespawnHeight SetVehiclesForcedRespawnHeight;
-	SDK_GetVehiclesForcedRespawnHeight GetVehiclesForcedRespawnHeight;
-
-	SDK_SetPlayerName SetPlayerName;
 } PluginFuncs;
 
 typedef struct {
