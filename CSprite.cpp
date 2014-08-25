@@ -1,50 +1,50 @@
 #include "CSprite.h"
 void CSprite::ShowForAll(void) {
-	functions->ShowSpriteToAll(this->nSpriteId);
+	functions->ShowSprite(this->nSpriteId, -1);
 }
 
 void CSprite::ShowForPlayer(CPlayer * pPlayer) {
-	functions->ShowSpriteToPlayer(this->nSpriteId, pPlayer->GetID());
+	functions->ShowSprite(this->nSpriteId, pPlayer->GetID());
 }
 
 void CSprite::HideFromAll(void) {
-	functions->HideSpriteFromAll(this->nSpriteId);
+	functions->HideSprite(this->nSpriteId, -1);
 }
 
 void CSprite::HideFromPlayer(CPlayer * pPlayer) {
-	functions->HideSpriteFromPlayer(this->nSpriteId, pPlayer->GetID());
+	functions->HideSprite(this->nSpriteId, pPlayer->GetID());
 }
 
 void CSprite::SetPositionForAll(int x, int y) {
-	functions->MoveSpriteForAll(this->nSpriteId, x, y);
+	functions->MoveSprite(this->nSpriteId, -1, x, y);
 }
 
 void CSprite::SetPositionForPlayer(CPlayer * pPlayer, int x, int y) {
-	functions->MoveSpriteForPlayer(this->nSpriteId, pPlayer->GetID(), x, y);
+	functions->MoveSprite(this->nSpriteId, pPlayer->GetID(), x, y);
 }
 
 void CSprite::SetRotationCenterForAll(int x, int y) {
-	functions->SetSpriteCenterForAll(this->nSpriteId, x, y);
+	functions->SetSpriteCenter(this->nSpriteId, -1, x, y);
 }
 
 void CSprite::SetRotationCenterForPlayer(CPlayer * pPlayer, int x, int y) {
-	functions->SetSpriteCenterForPlayer(this->nSpriteId, pPlayer->GetID(), x, y);
+	functions->SetSpriteCenter(this->nSpriteId, pPlayer->GetID(), x, y);
 }
 
 void CSprite::SetRotationForAll(float rotation) {
-	functions->RotateSpriteForAll(this->nSpriteId, rotation);
+	functions->RotateSprite(this->nSpriteId, -1, rotation);
 }
 
 void CSprite::SetRotationForPlayer(CPlayer * pPlayer, float rotation) {
-	functions->RotateSpriteForPlayer(this->nSpriteId, pPlayer->GetID(), rotation);
+	functions->RotateSprite(this->nSpriteId, pPlayer->GetID(), rotation);
 }
 
 void CSprite::SetAlphaForAll(unsigned int alpha) {
-	functions->SetSpriteAlphaForAll(this->nSpriteId, (alpha > 255 ? 255 : alpha));
+	functions->SetSpriteAlpha(this->nSpriteId, -1, (alpha > 255 ? 255 : alpha));
 }
 
 void CSprite::SetAlphaForPlayer(CPlayer * pPlayer, unsigned int alpha) {
-	functions->SetSpriteAlphaForPlayer(this->nSpriteId, pPlayer->GetID(), (alpha > 255 ? 255 : alpha));
+	functions->SetSpriteAlpha(this->nSpriteId, pPlayer->GetID(), (alpha > 255 ? 255 : alpha));
 }
 
 void CSprite::Delete() {

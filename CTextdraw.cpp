@@ -1,34 +1,34 @@
 #include "CTextdraw.h"
 void CTextdraw::ShowForAll(void) {
-	functions->ShowTextdrawToAll(this->nTextdrawId);
+	functions->ShowTextdraw(this->nTextdrawId, -1);
 }
 
 void CTextdraw::ShowForPlayer(CPlayer * pPlayer) {
-	functions->ShowTextdrawToPlayer(this->nTextdrawId, pPlayer->GetID());
+	functions->ShowTextdraw(this->nTextdrawId, pPlayer->GetID());
 }
 
 void CTextdraw::HideFromAll(void) {
-	functions->HideTextdrawFromAll(this->nTextdrawId);
+	functions->HideTextdraw(this->nTextdrawId, -1);
 }
 
 void CTextdraw::HideFromPlayer(CPlayer * pPlayer) {
-	functions->HideTextdrawFromPlayer(this->nTextdrawId, pPlayer->GetID());
+	functions->HideTextdraw(this->nTextdrawId, pPlayer->GetID());
 }
 
 void CTextdraw::SetPositionForAll(int x, int y) {
-	functions->MoveTextdrawForAll(this->nTextdrawId, x, y);
+	functions->MoveTextdraw(this->nTextdrawId, -1, x, y);
 }
 
 void CTextdraw::SetPositionForPlayer(CPlayer * pPlayer, int x, int y) {
-	functions->MoveTextdrawForPlayer(this->nTextdrawId, pPlayer->GetID(), x, y);
+	functions->MoveTextdraw(this->nTextdrawId, pPlayer->GetID(), x, y);
 }
 
 void CTextdraw::SetColourForAll(unsigned int colour) {
-	functions->SetTextdrawColourForAll(this->nTextdrawId, colour);
+	functions->SetTextdrawColour(this->nTextdrawId, -1, colour);
 }
 
 void CTextdraw::SetColourForPlayer(CPlayer * pPlayer, unsigned int colour) {
-	functions->SetTextdrawColourForPlayer(this->nTextdrawId, pPlayer->GetID(), colour);
+	functions->SetTextdrawColour(this->nTextdrawId, pPlayer->GetID(), colour);
 }
 
 void CTextdraw::Delete() {
