@@ -1794,6 +1794,28 @@ struct AreaPoints
 	AreaPoints(float fX, float fY) : x(fX), y(fY) {};
 };
 
+inline size_t Internal_NumTok(const char* szText, const char cDelimiter)
+{
+	if (!*szText) return 0;
+
+	size_t iCounter = 1;
+	char* p = (char*)szText;
+
+	if (*p == cDelimiter)
+		iCounter = 0;
+
+	while (*p)
+	{
+		if (*p == cDelimiter)
+		{
+			if ((*++p) && (*p != cDelimiter)) iCounter++;
+		}
+		else *p++;
+	}
+
+	return iCounter;
+}
+
 inline bool Internal_InPoly(float fX, float fY,
 	const unsigned int uiPoints, const AreaPoints fPoints[])
 {
@@ -1882,8 +1904,74 @@ SQInteger InPoly( HSQUIRRELVM v )
 		sq_pushbool(v, bRet);
 		return 1;
 	}
-	else
-		return sq_throwerror( v, "Unexpected number of parameters for InPoly [float, float, float, float, float, float, float, float, [...]]" );
+	else if (iArgs == 4)
+	{
+		if (sq_gettype(v, 4) == OT_STRING)
+		{
+			SQFloat fX = 0.0f, fY = 0.0f;
+			sq_getfloat(v, 2, &fX);
+			sq_getfloat(v, 3, &fY);
+
+			const SQChar* szSqParams = 0;
+			sq_getstring(v, 4, &szSqParams);
+
+			char szParams[512] = { 0 };
+			memcpy(szParams, &szSqParams, 512);
+
+			AreaPoints areaPoints[128];
+
+			size_t uiPoints = Internal_NumTok(szParams, ',');
+
+			uiPoints /= 2;
+
+			if (uiPoints >= 3)
+			{
+				areaPoints[0].x = (float)atof(strtok(szParams, ","));
+				areaPoints[0].y = (float)atof(strtok(0, ","));
+
+				for (unsigned int ui = 1; ui < uiPoints; ui++)
+				{
+					areaPoints[ui].x = (float)atof(strtok(0, ","));
+					areaPoints[ui].y = (float)atof(strtok(0, ","));
+				}
+
+				bool bRet = Internal_InPoly((float)fX, (float)fY, uiPoints, areaPoints);
+
+				sq_pushbool(v, bRet);
+				return 1;
+			}
+		}
+		else if (sq_gettype(v, 4) == OT_ARRAY)
+		{
+			SQFloat fX = 0.0f, fY = 0.0f;
+			sq_getfloat(v, 2, &fX);
+			sq_getfloat(v, 3, &fY);
+
+			SQObject obj;
+			sq_getstackobj(v, 4, &obj);
+
+			Sqrat::Array arr(Sqrat::Object(obj, v));
+			AreaPoints areaPoints[128];
+
+			const size_t uiPoints = arr.GetSize() / 2;
+
+			if (uiPoints >= 3)
+			{
+				for (unsigned int ui = 0; ui < uiPoints; ui++)
+				{
+					areaPoints[ui].x = arr[2 * ui].Cast<float>();
+					areaPoints[ui].y = arr[2 * ui + 1].Cast<float>();
+				}
+
+				bool bRet = Internal_InPoly((float)fX, (float)fY, uiPoints, areaPoints);
+
+				sq_pushbool(v, bRet);
+				return 1;
+			}
+		}
+	}
+	
+	return sq_throwerror( v, "Unexpected number or types of parameters for InPoly" );
 }
 
 // This function is so convoluted, we have to tiptoe around Sqrat.
