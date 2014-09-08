@@ -2335,6 +2335,9 @@ int GetSkinID(const SQChar* name)
 	// Verify that the name is valid and could actually represent a skin name
 	if (name == NULL || strlen(name) < 1) return SKIN_ID_UNKNOWN;
 
+	// Create a temporary variable that will hold the actual ID
+	int id = SKIN_ID_UNKNOWN;
+
 	// Allocate memory for an editable version of the string
 	char *str = (char*)malloc(strlen(name) + 1);
 
@@ -2354,10 +2357,15 @@ int GetSkinID(const SQChar* name)
 		// Add the null character to the final string
         str[j] = '\0';
 		// Make sure the string had any valid characters
-		if (strlen(str) < 1) return SKIN_ID_UNKNOWN;
+		if (strlen(str) < 1) {
+			// Free the previously allocated resources
+			free(str);
+			// Return the found ID
+			return id;
+		}
 	}
 	// No point in going forward
-	else return SKIN_ID_UNKNOWN;
+	else return id;
 
 	// Grab the actual length of the string
 	int len = strlen(str);
@@ -2393,18 +2401,19 @@ int GetSkinID(const SQChar* name)
 				// [Al]ex [S]rub
 				case 'l':
 				case 's':
-					return SKIN_ID_ALEX_SRUB;
+					id = SKIN_ID_ALEX_SRUB;
+				break;
 				// [A]rabic [g]uy
 				case 'g':
-					return SKIN_ID_ARABIC_GUY;
+					id = SKIN_ID_ARABIC_GUY;
+				break;
 				// [Ara]bic guy, [Arm]y
 				case 'r':
-					if (c && c == 'a') return SKIN_ID_ARABIC_GUY;
-					else if (c && c == 'm') return SKIN_ID_ARMY;
-				default:
-					return SKIN_ID_UNKNOWN;
+					if (c && c == 'a') id = SKIN_ID_ARABIC_GUY;
+					else if (c && c == 'm') id = SKIN_ID_ARMY;
+				break;
 			}
-
+		break;
 		// [B]each guy (#1|A)/(#2|B)/(#3|C)/(#4|D)/(#5|E)/(#6|F)/(#7|G)/(#8|H)
 		// [B]each lady (#1|A)/(#2|B)/(#3|C)/(#4|D)/(#5|E)/(#6|F)/(#7|G)
 		// [B]iker (#1|A)/(#2|B)
@@ -2419,30 +2428,36 @@ int GetSkinID(const SQChar* name)
 				{
 					case '1':
 					case 'a':
-						return SKIN_ID_BEACH_GUY_A;
+						id = SKIN_ID_BEACH_GUY_A;
+					break;
 					case '2':
 					case 'b':
-						return SKIN_ID_BEACH_GUY_B;
+						id = SKIN_ID_BEACH_GUY_B;
+					break;
 					case '3':
 					case 'c':
-						return SKIN_ID_BEACH_GUY_C;
+						id = SKIN_ID_BEACH_GUY_C;
+					break;
 					case '4':
 					case 'd':
-						return SKIN_ID_BEACH_GUY_D;
+						id = SKIN_ID_BEACH_GUY_D;
+					break;
 					case '5':
 					case 'e':
-						return SKIN_ID_BEACH_GUY_E;
+						id = SKIN_ID_BEACH_GUY_E;
+					break;
 					case '6':
 					case 'f':
-						return SKIN_ID_BEACH_GUY_F;
+						id = SKIN_ID_BEACH_GUY_F;
+					break;
 					case '7':
 					case 'g':
-						return SKIN_ID_BEACH_GUY_G;
+						id = SKIN_ID_BEACH_GUY_G;
+					break;
 					case '8':
 					case 'h':
-						return SKIN_ID_BEACH_GUY_H;
-					default:
-						return SKIN_ID_UNKNOWN;
+						id = SKIN_ID_BEACH_GUY_H;
+					break;
 				}
 			}
 			// [Be]ach [l]ady (#1|A)/(#2|B)/(#3|C)/(#4|D)/(#5|E)/(#6|F)/(#7|G)
@@ -2452,32 +2467,37 @@ int GetSkinID(const SQChar* name)
 				{
 					case '1':
 					case 'a':
-						return SKIN_ID_BEACH_LADY_A;
+						id = SKIN_ID_BEACH_LADY_A;
+					break;
 					case '2':
 					case 'b':
-						return SKIN_ID_BEACH_LADY_B;
+						id = SKIN_ID_BEACH_LADY_B;
+					break;
 					case '3':
 					case 'c':
-						return SKIN_ID_BEACH_LADY_C;
+						id = SKIN_ID_BEACH_LADY_C;
+					break;
 					case '4':
 					case 'd':
-						return SKIN_ID_BEACH_LADY_D;
+						id = SKIN_ID_BEACH_LADY_D;
+					break;
 					case '5':
 					case 'e':
-						return SKIN_ID_BEACH_LADY_E;
+						id = SKIN_ID_BEACH_LADY_E;
+					break;
 					case '6':
 					case 'f':
-						return SKIN_ID_BEACH_LADY_F;
+						id = SKIN_ID_BEACH_LADY_F;
+					break;
 					case '7':
 					case 'g':
-						return SKIN_ID_BEACH_LADY_G;
-					default:
-						return SKIN_ID_UNKNOWN;
+						id = SKIN_ID_BEACH_LADY_G;
+					break;
 				}
 			}
 			// [Bi]ker (#1|A)/(#2|B)
-			else if (b && b == 'i' && (d == '1' || d == 'a')) return SKIN_ID_BIKER_A;
-			else if (b && b == 'i' && (d == '2' || d == 'b')) return SKIN_ID_BIKER_B;
+			else if (b && b == 'i' && (d == '1' || d == 'a')) id = SKIN_ID_BIKER_A;
+			else if (b && b == 'i' && (d == '2' || d == 'b')) id = SKIN_ID_BIKER_B;
 			// [Bum] [g]uy (#1|A)/(#2|B)/(#3|C)
 			// [Bum] [l]ady (#1|A)/(#2|B)/(#2|C)/(#3|D)/(#4|E)
 			else if (b && b == 'u' && (c && (c == 'm' || c == 'g' || c == 'l')))
@@ -2485,20 +2505,19 @@ int GetSkinID(const SQChar* name)
 				// [Bum] [g]uy (#1|A)/(#2|B)/(#3|C)
 				if (c == 'g' || (len >= 4 && str[3] == 'g'))
 				{
-					if (d == '1' || d == 'a') return SKIN_ID_BUM_GUY_A;
-					else if (d == '2' || d == 'b') return SKIN_ID_BUM_GUY_B;
-					else if (d == '3' || d == 'c') return SKIN_ID_BUM_GUY_C;
+					if (d == '1' || d == 'a') id = SKIN_ID_BUM_GUY_A;
+					else if (d == '2' || d == 'b') id = SKIN_ID_BUM_GUY_B;
+					else if (d == '3' || d == 'c') id = SKIN_ID_BUM_GUY_C;
 				}
 				// [Bum] [l]ady (#1|A)/(#2|B)/(#2|C)/(#3|D)/(#4|E)
 				else if (c == 'l' || (len >= 4 && str[3] == 'l'))
 				{
-					if (d == '1' || d == 'a') return SKIN_ID_BUM_LADY_A;
-					else if (d == '2' || d == 'b') return SKIN_ID_BUM_LADY_B;
-					else if (d == '2' || d == 'c') return SKIN_ID_BUM_LADY_C;
-					else if (d == '3' || d == 'd') return SKIN_ID_BUM_LADY_D;
-					else if (d == '4' || d == 'e') return SKIN_ID_BUM_LADY_E;
+					if (d == '1' || d == 'a') id = SKIN_ID_BUM_LADY_A;
+					else if (d == '2' || d == 'b') id = SKIN_ID_BUM_LADY_B;
+					else if (d == '2' || d == 'c') id = SKIN_ID_BUM_LADY_C;
+					else if (d == '3' || d == 'd') id = SKIN_ID_BUM_LADY_D;
+					else if (d == '4' || d == 'e') id = SKIN_ID_BUM_LADY_E;
 				}
-				return SKIN_ID_UNKNOWN;
 			}
 			// [Bus]iness [m]an (#1|A)/(#2|B)/(#3|C)/(#4|D)/(#5|E)/(#6|F)
 			else if (b && b == 'u' && ((c && c == 's') || (len >= 10 && str[9] == 'm')))
@@ -2507,28 +2526,31 @@ int GetSkinID(const SQChar* name)
 				{
 					case '1':
 					case 'a':
-						return SKIN_ID_BUSINESS_MAN_A;
+						id = SKIN_ID_BUSINESS_MAN_A;
+					break;
 					case '2':
 					case 'b':
-						return SKIN_ID_BUSINESS_MAN_B;
+						id = SKIN_ID_BUSINESS_MAN_B;
+					break;
 					case '3':
 					case 'c':
-						return SKIN_ID_BUSINESS_MAN_C;
+						id = SKIN_ID_BUSINESS_MAN_C;
+					break;
 					case '4':
 					case 'd':
-						return SKIN_ID_BUSINESS_MAN_D;
+						id = SKIN_ID_BUSINESS_MAN_D;
+					break;
 					case '5':
 					case 'e':
-						return SKIN_ID_BUSINESS_MAN_E;
+						id = SKIN_ID_BUSINESS_MAN_E;
+					break;
 					case '6':
 					case 'f':
-						return SKIN_ID_BUSINESS_MAN_F;
-					default:
-						return SKIN_ID_UNKNOWN;
+						id = SKIN_ID_BUSINESS_MAN_F;
+					break;
 				}
 			}
-			else return SKIN_ID_UNKNOWN;
-
+		break;
 		// [C]am, [C]am (Robber), [C]andy Suxx, [C]hef
 		// [C]hurch guy, [C]hurch lady, [C]lub lady
 		// [C]olumbian guy (#1|A)/(#2|B),
@@ -2542,28 +2564,26 @@ int GetSkinID(const SQChar* name)
 			if (b && b == 'a')
 			{
 				// [Cam] ([R]obbe[r])
-				if (c && (c == 'm' || c == 'r') && d == 'r') return SKIN_ID_CAM_ROBBER;
+				if (c && (c == 'm' || c == 'r') && d == 'r') id = SKIN_ID_CAM_ROBBER;
 				// [Cam]
-				else if (c && c == 'm') return SKIN_ID_CAM;
+				else if (c && c == 'm') id = SKIN_ID_CAM;
 				// [Can]dy [S]ux[x]
-				else if (c && (c == 'n' || c == 's' || d == 'x')) return SKIN_ID_CANDY_SUXX;
-				else return SKIN_ID_UNKNOWN;
+				else if (c && (c == 'n' || c == 's' || d == 'x')) id = SKIN_ID_CANDY_SUXX;
 			}
 			// [Ch]ef, [Ch]urch guy, [Ch]urch lady
 			else if (b && b == 'h')
 			{
 				// [Che][f]
-				if (c && (c == 'e' || d == 'f')) return SKIN_ID_CHEF;
+				if (c && (c == 'e' || d == 'f')) id = SKIN_ID_CHEF;
 				// [Chu]rch [g]uy
 				else if (c && ((c == 'u' && len >= 7 && str[6] == 'g') || (c == 'g')))
-					return SKIN_ID_CHURCH_GUY;
+					id = SKIN_ID_CHURCH_GUY;
 				// [Chu]rch [l]ady
 				else if (c && ((c == 'u' && len >= 7 && str[6] == 'l') || (c == 'l')))
-					return SKIN_ID_CHURCH_LADY;
-				else return SKIN_ID_UNKNOWN;
+					id = SKIN_ID_CHURCH_LADY;
 			}
 			// [Cl]ub [l]ady
-			else if (b && b == 'l') return SKIN_ID_CLUB_LADY;
+			else if (b && b == 'l') id = SKIN_ID_CLUB_LADY;
 			// [Co]lumbian guy (#1|A)/(#2|B)
 			// [Co]nstruction worker (#1|A)/(#2|B)
 			// [Co]ol guy (#1|A)/(#2|B)/(#3|C)/(#4|D)
@@ -2573,16 +2593,14 @@ int GetSkinID(const SQChar* name)
 				// [Col]umbian [g]uy (#1|A)/(#2|B)
 				if (c && ((c == 'l' && len >= 10 && str[9] == 'g') || (c == 'g')))
 				{
-					if (d == '1' || d == 'a') return SKIN_ID_COLUMBIAN_GUY_A;
-					else if (d == '2' || d == 'b') return SKIN_ID_COLUMBIAN_GUY_B;
-					else return SKIN_ID_UNKNOWN;
+					if (d == '1' || d == 'a') id = SKIN_ID_COLUMBIAN_GUY_A;
+					else if (d == '2' || d == 'b') id = SKIN_ID_COLUMBIAN_GUY_B;
 				}
 				// [Con]struction [w]orker (#1|A)/(#2|B)
 				else if (c && (c == 'n' || (len >= 13 && str[12] == 'g')))
 				{
-					if (d == '1' || d == 'a') return SKIN_ID_CONSTRUCTION_WORKER_A;
-					else if (d == '2' || d == 'b') return SKIN_ID_CONSTRUCTION_WORKER_B;
-					else return SKIN_ID_UNKNOWN;
+					if (d == '1' || d == 'a') id = SKIN_ID_CONSTRUCTION_WORKER_A;
+					else if (d == '2' || d == 'b') id = SKIN_ID_CONSTRUCTION_WORKER_B;
 				}
 				// [Coo]l guy (#1|A)/(#2|B)/(#3|C)/(#4|D)
 				else if (c && c == 'o')
@@ -2591,33 +2609,34 @@ int GetSkinID(const SQChar* name)
 					{
 						case '1':
 						case 'a':
-							return SKIN_ID_COOL_GUY_A;
+							id = SKIN_ID_COOL_GUY_A;
+						break;
 						case '2':
 						case 'b':
-							return SKIN_ID_COOL_GUY_B;
+							id = SKIN_ID_COOL_GUY_B;
+						break;
 						case '3':
 						case 'c':
-							return SKIN_ID_COOL_GUY_C;
+							id = SKIN_ID_COOL_GUY_C;
+						break;
 						case '4':
 						case 'd':
-							return SKIN_ID_COOL_GUY_D;
-						default:
-							return SKIN_ID_UNKNOWN;
+							id = SKIN_ID_COOL_GUY_D;
+						break;
 					}
 				}
 				// [Cop]
-				else if (c && c == 'p') return SKIN_ID_COP;
+				else if (c && c == 'p') id = SKIN_ID_COP;
 				// [Cor]te[z]
-				else if (c && (c == 'r' || c == 'z' || d == 'z')) return SKIN_ID_CORTEZ;
-				else return SKIN_ID_UNKNOWN;
+				else if (c && (c == 'r' || c == 'z' || d == 'z')) id = SKIN_ID_CORTEZ;
 			}
 			// [Cr]iminal (#1|A)/(#2|B)
-			else if (b && b == 'r' && (d == '1' || d == 'a')) return SKIN_ID_CRIMINAL_A;
-			else if (b && b == 'r' && (d == '2' || d == 'b')) return SKIN_ID_CRIMINAL_B;
+			else if (b && b == 'r' && (d == '1' || d == 'a')) id = SKIN_ID_CRIMINAL_A;
+			else if (b && b == 'r' && (d == '2' || d == 'b')) id = SKIN_ID_CRIMINAL_B;
 			// [Cu]ban (#1|A)/(#2|B)
-			else if (b && b == 'u' && (d == '1' || d == 'a')) return SKIN_ID_CUBAN_A;
-			else if (b && b == 'u' && (d == '2' || d == 'b')) return SKIN_ID_CUBAN_B;
-			else return SKIN_ID_UNKNOWN;
+			else if (b && b == 'u' && (d == '1' || d == 'a')) id = SKIN_ID_CUBAN_A;
+			else if (b && b == 'u' && (d == '2' || d == 'b')) id = SKIN_ID_CUBAN_B;
+		break;
 		// [D]BP security (#1|A)/(#2|B)
 		// [D]iaz guy (#1|A)/(#2|B)
 		case 'd':
@@ -2626,39 +2645,43 @@ int GetSkinID(const SQChar* name)
 				// [DB]P [s]ecurity (#1|A)/(#2|B)
 				case 'b':
 				case 's':
-					if (d == '1' || d == 'a') return SKIN_ID_DBP_SECURITY_A;
-					else if (d == '2' || d == 'b') return SKIN_ID_DBP_SECURITY_B;
+					if (d == '1' || d == 'a') id = SKIN_ID_DBP_SECURITY_A;
+					else if (d == '2' || d == 'b') id = SKIN_ID_DBP_SECURITY_B;
+				break;
 				// [Di]a[z] [g]uy (#1|A)/(#2|B)
 				case 'i':
 				case 'z':
 				case 'g':
-					if (d == '1' || d == 'a') return SKIN_ID_DIAZ_GUY_A;
-					else if (d == '2' || d == 'b') return SKIN_ID_DIAZ_GUY_B;
-				default:
-					return SKIN_ID_UNKNOWN;
+					if (d == '1' || d == 'a') id = SKIN_ID_DIAZ_GUY_A;
+					else if (d == '2' || d == 'b') id = SKIN_ID_DIAZ_GUY_B;
+				break;
 			}
+		break;
 		// [F]BI, [F]ireman, [F]ood lady, [F]rench guy
 		case 'f':
 			switch (b)
 			{
 				// [FB]I
 				case 'b':
-					return SKIN_ID_FBI;
+					id = SKIN_ID_FBI;
+				break;
 				// [Fi]re[m]an
 				case 'i':
 				case 'm':
-					return SKIN_ID_FIREMAN;
+					id = SKIN_ID_FIREMAN;
+				break;
 				// [Fo]od [l]ady
 				case 'o':
 				case 'l':
-					return SKIN_ID_FOOD_LADY;
+					id = SKIN_ID_FOOD_LADY;
+				break;
 				// [Fr]ench [g]uy
 				case 'r':
 				case 'g':
-					return SKIN_ID_FRENCH_GUY;
-				default:
-					return SKIN_ID_UNKNOWN;
+					id = SKIN_ID_FRENCH_GUY;
+				break;
 			}
+		break;
 		// [G]arbageman (#1|A)/(#2|B)/(#3|C)/(#4|D)/(#5|E)
 		// [G]olf guy (#1|A)/(#2|B)/(#3|C)
 		// [G]olf lady
@@ -2672,21 +2695,24 @@ int GetSkinID(const SQChar* name)
 				{
 					case '1':
 					case 'a':
-						return SKIN_ID_GARBAGEMAN_A;
+						id = SKIN_ID_GARBAGEMAN_A;
+					break;
 					case '2':
 					case 'b':
-						return SKIN_ID_GARBAGEMAN_B;
+						id = SKIN_ID_GARBAGEMAN_B;
+					break;
 					case '3':
 					case 'c':
-						return SKIN_ID_GARBAGEMAN_C;
+						id = SKIN_ID_GARBAGEMAN_C;
+					break;
 					case '4':
 					case 'd':
-						return SKIN_ID_GARBAGEMAN_D;
+						id = SKIN_ID_GARBAGEMAN_D;
+					break;
 					case '5':
 					case 'e':
-						return SKIN_ID_GARBAGEMAN_E;
-					default:
-						return SKIN_ID_UNKNOWN;
+						id = SKIN_ID_GARBAGEMAN_E;
+					break;
 				}
 			}
 			// [Go]lf [g]uy (#1|A)/(#2|B)/(#3|C)
@@ -2696,34 +2722,34 @@ int GetSkinID(const SQChar* name)
 				{
 					case '1':
 					case 'a':
-						return SKIN_ID_GOLF_GUY_A;
+						id = SKIN_ID_GOLF_GUY_A;
+					break;
 					case '2':
 					case 'b':
-						return SKIN_ID_GOLF_GUY_B;
+						id = SKIN_ID_GOLF_GUY_B;
+					break;
 					case '3':
 					case 'c':
-						return SKIN_ID_GOLF_GUY_C;
-					default:
-						return SKIN_ID_UNKNOWN;
+						id = SKIN_ID_GOLF_GUY_C;
+					break;
 				}
 			}
 			// [Go]lf [l]ady
 			else if (b && b == 'o' && ((c && c == 'l') || (len >= 5 && str[4] == 'l')))
-				return SKIN_ID_GOLF_LADY;
+				id = SKIN_ID_GOLF_LADY;
 			// [Gr]anny (#1|A)/(#2|B)
 			else if (b && b == 'r')
 			{
-				if (d == '1' || d == 'a') return SKIN_ID_GRANNY_A;
-				else if (d == '2' || d == 'b') return SKIN_ID_GRANNY_B;
-				else return SKIN_ID_UNKNOWN;
+				if (d == '1' || d == 'a') id = SKIN_ID_GRANNY_A;
+				else if (d == '2' || d == 'b') id = SKIN_ID_GRANNY_B;
 			}
 			// [Gy]m [g]uy
 			else if (b && (b == 'g' || (b == 'y' && len >= 4 && str[3] == 'g')))
-				return SKIN_ID_GYM_GUY;
+				id = SKIN_ID_GYM_GUY;
 			// [Gy]m [l]ady
 			else if (b && (b == 'l' || (b == 'y' && len >= 4 && str[3] == 'l')))
-				return SKIN_ID_GYM_LADY;
-			else return SKIN_ID_UNKNOWN;
+				id = SKIN_ID_GYM_LADY;
+		break;
 		// [H]atian (#1|A)/(#2|B)/(#3|C)/(#4|D)/(#5|E)
 		// [H]ilary, [H]ilary (Robber), [H]ood lady
 		case 'h':
@@ -2734,33 +2760,37 @@ int GetSkinID(const SQChar* name)
 				{
 					case '1':
 					case 'a':
-						return SKIN_ID_HATIAN_A;
+						id = SKIN_ID_HATIAN_A;
+					break;
 					case '2':
 					case 'b':
-						return SKIN_ID_HATIAN_B;
+						id = SKIN_ID_HATIAN_B;
+					break;
 					case '3':
 					case 'c':
-						return SKIN_ID_HATIAN_C;
+						id = SKIN_ID_HATIAN_C;
+					break;
 					case '4':
 					case 'd':
-						return SKIN_ID_HATIAN_D;
+						id = SKIN_ID_HATIAN_D;
+					break;
 					case '5':
 					case 'e':
-						return SKIN_ID_HATIAN_E;
-					default:
-						return SKIN_ID_UNKNOWN;
+						id = SKIN_ID_HATIAN_E;
+					break;
 				}
 			}
 			// [Hi]lary ([R]obbe[r])
-			else if (b && (b == 'i' || b == 'r') && d == 'r') return SKIN_ID_HILARY_ROBBER;
+			else if (b && (b == 'i' || b == 'r') && d == 'r') id = SKIN_ID_HILARY_ROBBER;
 			// [Hi]lary
-			else if (b && b == 'i') return SKIN_ID_HILARY;
+			else if (b && b == 'i') id = SKIN_ID_HILARY;
 			// [Ho]od [l]ady
-			if (b && (b == 'o' || b == 'l')) return SKIN_ID_HOOD_LADY;
-			else return SKIN_ID_UNKNOWN;
+			if (b && (b == 'o' || b == 'l')) id = SKIN_ID_HOOD_LADY;
+		break;
 		// [K]en Rosenburg
 		case 'k':
-			return SKIN_ID_KEN_ROSENBURG;
+			id = SKIN_ID_KEN_ROSENBURG;
+		break;
 		// [L]ance (#1|A)/(#1|B)
 		// [L]ance (Cop)
 		// [L]awyer
@@ -2768,18 +2798,17 @@ int GetSkinID(const SQChar* name)
 		case 'l':
 			//[Lan]ce ([C]o[p])
 			if ((b && b == 'a') && (c && c == 'n') && ((len >= 6 && str[5] == 'c') || d == 'p'))
-				return SKIN_ID_LANCE_COP;
+				id = SKIN_ID_LANCE_COP;
 			else if (b && (b == 'c' ||  (b == 'a' && (c && c == 'n'))))
-				return SKIN_ID_LANCE_COP;
+				id = SKIN_ID_LANCE_COP;
 			// [La]nce (#1|A)/(#1|B)
 			else if (b && b == 'a' && c && c == 'n')
 			{
-				if (d == '1' || d == 'a') return SKIN_ID_LANCE_A;
-				else if (d == '2' || d == 'b') return SKIN_ID_LANCE_B;
-				else return SKIN_ID_UNKNOWN;
+				if (d == '1' || d == 'a') id = SKIN_ID_LANCE_A;
+				else if (d == '2' || d == 'b') id = SKIN_ID_LANCE_B;
 			}
 			// [Law]yer
-			else if (b && (b == 'w' || (b == 'a' && c && c == 'w'))) return SKIN_ID_LAWYER;
+			else if (b && (b == 'w' || (b == 'a' && c && c == 'w'))) id = SKIN_ID_LAWYER;
 			// [Lo]ve [F]ist (#1|A)/(#2|B)/(#3|C)/(#3|D)
 			else if (b && (b == 'o' || b == 'f'))
 			{
@@ -2787,53 +2816,55 @@ int GetSkinID(const SQChar* name)
 				{
 					case '1':
 					case 'a':
-						return SKIN_ID_LOVE_FIST_A;
+						id = SKIN_ID_LOVE_FIST_A;
+					break;
 					case '2':
 					case 'b':
-						return SKIN_ID_LOVE_FIST_B;
+						id = SKIN_ID_LOVE_FIST_B;
+					break;
 					case '3':
 					case 'c':
-						return SKIN_ID_LOVE_FIST_C;
+						id = SKIN_ID_LOVE_FIST_C;
+					break;
 					case 'd':
-						return SKIN_ID_LOVE_FIST_D;
-					default:
-						return SKIN_ID_UNKNOWN;
+						id = SKIN_ID_LOVE_FIST_D;
+					break;
 				}
 			}
-			else return SKIN_ID_UNKNOWN;
+		break;
 		// [M]ercades
 		case 'm':
-			if (d == 'b') return SKIN_ID_MERCADES_B;
-			else return SKIN_ID_MERCADES_A;
+			if (d == 'b') id = SKIN_ID_MERCADES_B;
+			else id = SKIN_ID_MERCADES_A;
+		break;
 		// [O]ffice lady (#1|A)/(#2|B)
 		case 'o':
-			if (d == '1' || d == 'a') return SKIN_ID_OFFICE_LADY_A;
-			else if (d == '2' || d == 'b') return SKIN_ID_OFFICE_LADY_B;
-			else return SKIN_ID_UNKNOWN;
+			if (d == '1' || d == 'a') id = SKIN_ID_OFFICE_LADY_A;
+			else if (d == '2' || d == 'b') id = SKIN_ID_OFFICE_LADY_B;
+		break;
 		// [P]aramedic, [P]hil,  [P]hil (One arm), [P]hil (Robber)
 		// [P]imp, [P]izzaman
 		// [P]rostitute (#1|A)/(#2|B)/(#2|C)/(#2|D)/(#3|D)/(#4|D)
 		// [P]unk (#1|A)/(#2|B)/(#3|C)
 		case 'p':
 			// [Pa]ramedic
-			if (b && b == 'a') return SKIN_ID_PARAMEDIC;
+			if (b && b == 'a') id = SKIN_ID_PARAMEDIC;
 			// [Ph]il (One arm), [Ph]il (Robber)
 			else if (b && b == 'h')
 			{
 				// [Ph]il ([O]ne ar[m])
 				if (b == 'o' || (c && c == 'o') || (len >= 5 && str[4] == 'o') || d == 'm')
-					return SKIN_ID_PHIL_ONE_ARM;
+					id = SKIN_ID_PHIL_ONE_ARM;
 				// [Ph]il ([R]obbe[r])
 				else if (c && (c == 'r' || d == 'r' || (len >= 5 && str[4] == 'r')))
-					return SKIN_ID_PHIL_ROBBER;
+					id = SKIN_ID_PHIL_ROBBER;
 				// [Phi]l
-				else if (c && c == 'i') return SKIN_ID_PHIL;
-				else return SKIN_ID_UNKNOWN;
+				else if (c && c == 'i') id = SKIN_ID_PHIL;
 			}
 			// [Pim][p]
-			else if (b && b == 'i' && ((c && c == 'm') || d == 'p')) return SKIN_ID_PIMP;
+			else if (b && b == 'i' && ((c && c == 'm') || d == 'p')) id = SKIN_ID_PIMP;
 			// [Piz]zama[n]
-			else if (b && b == 'i' && ((c && c == 'z') || d == 'n')) return SKIN_ID_PIZZAMAN;
+			else if (b && b == 'i' && ((c && c == 'z') || d == 'n')) id = SKIN_ID_PIZZAMAN;
 			// [Pr]ostitute (#1|A)/(#2|B)/(#2|C)/(#2|D)/(#3|D)/(#4|D)
 			else if (b && b == 'r')
 			{
@@ -2841,22 +2872,26 @@ int GetSkinID(const SQChar* name)
 				{
 					case '1':
 					case 'a':
-						return SKIN_ID_PROSTITUTE_A;
+						id = SKIN_ID_PROSTITUTE_A;
+					break;
 					case '2':
 					case 'b':
-						return SKIN_ID_PROSTITUTE_B;
+						id = SKIN_ID_PROSTITUTE_B;
+					break;
 					case 'c':
-						return SKIN_ID_PROSTITUTE_C;
+						id = SKIN_ID_PROSTITUTE_C;
+					break;
 					case 'd':
-						return SKIN_ID_PROSTITUTE_D;
+						id = SKIN_ID_PROSTITUTE_D;
+					break;
 					case '3':
 					case 'e':
-						return SKIN_ID_PROSTITUTE_E;
+						id = SKIN_ID_PROSTITUTE_E;
+					break;
 					case '4':
 					case 'f':
-						return SKIN_ID_PROSTITUTE_F;
-					default:
-						return SKIN_ID_UNKNOWN;
+						id = SKIN_ID_PROSTITUTE_F;
+					break;
 				}
 			}
 			// [Pu]nk (#1|A)/(#2|B)/(#3|C)
@@ -2866,25 +2901,26 @@ int GetSkinID(const SQChar* name)
 				{
 					case '1':
 					case 'a':
-						return SKIN_ID_PUNK_A;
+						id = SKIN_ID_PUNK_A;
+					break;
 					case '2':
 					case 'b':
-						return SKIN_ID_PUNK_B;
+						id = SKIN_ID_PUNK_B;
+					break;
 					case '3':
 					case 'c':
-						return SKIN_ID_PUNK_C;
-					default:
-						return SKIN_ID_UNKNOWN;
+						id = SKIN_ID_PUNK_C;
+					break;
 				}
 			}
-			else return SKIN_ID_UNKNOWN;
+		break;
 		// [R]ich guy, [R]ockstar guy
 		case 'r':
 			// [Ri]ch guy
-			if (b && b == 'i') return SKIN_ID_RICH_GUY;
+			if (b && b == 'i') id = SKIN_ID_RICH_GUY;
 			// [Ro]ckstar guy
-			else if (b && b == 'o') return SKIN_ID_ROCKSTAR_GUY;
-			else return SKIN_ID_UNKNOWN;
+			else if (b && b == 'o') id = SKIN_ID_ROCKSTAR_GUY;
+		break;
 		// [S]ailor (#1|A)/(#2|B)/(#3|C)
 		// [S]hark (#1|A)/(#2|B)
 		// [S]hopper (#1|A)/(#2|B)
@@ -2904,15 +2940,16 @@ int GetSkinID(const SQChar* name)
 				{
 					case '1':
 					case 'a':
-						return SKIN_ID_SAILOR_A;
+						id = SKIN_ID_SAILOR_A;
+					break;
 					case '2':
 					case 'b':
-						return SKIN_ID_SAILOR_B;
+						id = SKIN_ID_SAILOR_B;
+					break;
 					case '3':
 					case 'c':
-						return SKIN_ID_SAILOR_C;
-					default:
-						return SKIN_ID_UNKNOWN;
+						id = SKIN_ID_SAILOR_C;
+					break;
 				}
 			}
 			// [S]hark (#1|A)/(#2|B)
@@ -2922,12 +2959,12 @@ int GetSkinID(const SQChar* name)
 				{
 					case '1':
 					case 'a':
-						return SKIN_ID_SHARK_A;
+						id = SKIN_ID_SHARK_A;
+					break;
 					case '2':
 					case 'b':
-						return SKIN_ID_SHARK_B;
-					default:
-						return SKIN_ID_UNKNOWN;
+						id = SKIN_ID_SHARK_B;
+					break;
 				}
 			}
 			// [S]hopper (#1|A)/(#2|B)
@@ -2937,20 +2974,20 @@ int GetSkinID(const SQChar* name)
 				{
 					case '1':
 					case 'a':
-						return SKIN_ID_SHOPPER_A;
+						id = SKIN_ID_SHOPPER_A;
+					break;
 					case '2':
 					case 'b':
-						return SKIN_ID_SHOPPER_B;
-					default:
-						return SKIN_ID_UNKNOWN;
+						id = SKIN_ID_SHOPPER_B;
+					break;
 				}
 			}
 			// [Sk]ate [g]uy
 			else if (b && b == 'k' && ((c && c == 'g') || (len >= 6 && str[5] == 'g')))
-				return SKIN_ID_SKATE_GUY;
+				id = SKIN_ID_SKATE_GUY;
 			// [Sk]ate [l]ady
 			else if (b && b == 'k' && ((c && c == 'l') || (len >= 6 && str[5] == 'l')))
-				return SKIN_ID_SKATE_LADY;
+				id = SKIN_ID_SKATE_LADY;
 			// [So]nny
 			// [So]nny guy (#1|A)/(#2|B)/(#3|C)
 			else if (b && b == 'o')
@@ -2959,15 +2996,16 @@ int GetSkinID(const SQChar* name)
 				{
 					case '1':
 					case 'a':
-						return SKIN_ID_SONNY_GUY_A;
+						id = SKIN_ID_SONNY_GUY_A;
+					break;
 					case '2':
 					case 'b':
-						return SKIN_ID_SONNY_GUY_B;
+						id = SKIN_ID_SONNY_GUY_B;
+					break;
 					case '3':
 					case 'c':
-						return SKIN_ID_SONNY_GUY_C;
-					default:
-						return SKIN_ID_SONNY;
+						id = SKIN_ID_SONNY_GUY_C;
+					break;
 				}
 			}
 			else if (b && b == 'g')
@@ -2976,15 +3014,16 @@ int GetSkinID(const SQChar* name)
 				{
 					case '1':
 					case 'a':
-						return SKIN_ID_SONNY_GUY_A;
+						id = SKIN_ID_SONNY_GUY_A;
+					break;
 					case '2':
 					case 'b':
-						return SKIN_ID_SONNY_GUY_B;
+						id = SKIN_ID_SONNY_GUY_B;
+					break;
 					case '3':
 					case 'c':
-						return SKIN_ID_SONNY_GUY_C;
-					default:
-						return SKIN_ID_UNKNOWN;
+						id = SKIN_ID_SONNY_GUY_C;
+					break;
 				}
 			}
 			// [Sp]andE[x] (#1|A)/(#2|B)
@@ -2994,17 +3033,17 @@ int GetSkinID(const SQChar* name)
 				{
 					case '1':
 					case 'a':
-						return SKIN_ID_SPANDEX_GUY_A;
+						id = SKIN_ID_SPANDEX_GUY_A;
+					break;
 					case '2':
 					case 'b':
-						return SKIN_ID_SPANDEX_GUY_B;
-					default:
-						return SKIN_ID_UNKNOWN;
+						id = SKIN_ID_SPANDEX_GUY_B;
+					break;
 				}
 			}
 			// [Sp]anish [g]uy
 			else if (b && b == 'p' && ((c && c == 'g') || (len >= 8 && str[7] == 'g')))
-				return SKIN_ID_SPANISH_GUY;
+				id = SKIN_ID_SPANISH_GUY;
 			// [Sp]anish [l]ady (#1|A)/(#2|B)/(#3|C)/(#4|D)
 			else if (b && b == 'p' && ((c && c == 'l') || (len >= 8 && str[7] == 'l')))
 			{
@@ -3012,22 +3051,24 @@ int GetSkinID(const SQChar* name)
 				{
 					case '1':
 					case 'a':
-						return SKIN_ID_SPANISH_LADY_A;
+						id = SKIN_ID_SPANISH_LADY_A;
+					break;
 					case '2':
 					case 'b':
-						return SKIN_ID_SPANISH_LADY_B;
+						id = SKIN_ID_SPANISH_LADY_B;
+					break;
 					case '3':
 					case 'c':
-						return SKIN_ID_SPANISH_LADY_C;
+						id = SKIN_ID_SPANISH_LADY_C;
+					break;
 					case '4':
 					case 'd':
-						return SKIN_ID_SPANISH_LADY_D;
-					default:
-						return SKIN_ID_UNKNOWN;
+						id = SKIN_ID_SPANISH_LADY_D;
+					break;
 				}
 			}
 			// [Sto]re clerk
-			else if ((b && b == 't') && (c && c == 'o')) return SKIN_ID_STORE_CLERK;
+			else if ((b && b == 't') && (c && c == 'o')) id = SKIN_ID_STORE_CLERK;
 			// [Str]ipper (#1|A)/(#2|B)/(#3|C)
 			else if ((b && b == 't') && (c && c == 'r'))
 			{
@@ -3035,20 +3076,21 @@ int GetSkinID(const SQChar* name)
 				{
 					case '1':
 					case 'a':
-						return SKIN_ID_STRIPPER_A;
+						id = SKIN_ID_STRIPPER_A;
+					break;
 					case '2':
 					case 'b':
-						return SKIN_ID_STRIPPER_B;
+						id = SKIN_ID_STRIPPER_B;
+					break;
 					case '3':
 					case 'c':
-						return SKIN_ID_STRIPPER_C;
-					default:
-						return SKIN_ID_UNKNOWN;
+						id = SKIN_ID_STRIPPER_C;
+					break;
 				}
 			}
 			// [Sw]at
-			else if (b && b == 'w') return SKIN_ID_SWAT;
-			else return SKIN_ID_UNKNOWN;
+			else if (b && b == 'w') id = SKIN_ID_SWAT;
+		break;
 		// [T]axi driver (#1|A)/(#1|B)/(#2|C)/(#2|D)
 		// [T]hug (#1|A)/(#2|B)
 		// [T]ommy Vercetti
@@ -3063,96 +3105,110 @@ int GetSkinID(const SQChar* name)
 					{
 						case '1':
 						case 'a':
-							return SKIN_ID_TAXI_DRIVER_A;
+							id = SKIN_ID_TAXI_DRIVER_A;
+						break;
 						case '2':
 						case 'b':
-							return SKIN_ID_TAXI_DRIVER_B;
+							id = SKIN_ID_TAXI_DRIVER_B;
+						break;
 						case 'c':
-							return SKIN_ID_TAXI_DRIVER_C;
+							id = SKIN_ID_TAXI_DRIVER_C;
+						break;
 						case 'd':
-							return SKIN_ID_TAXI_DRIVER_D;
-						default:
-							return SKIN_ID_UNKNOWN;
+							id = SKIN_ID_TAXI_DRIVER_D;
+						break;
 					}
+				break;
 				// [Th]ug (#1|A)/(#2|B)
 				case 'h':
 					switch (d)
 					{
 						case '1':
 						case 'a':
-							return SKIN_ID_THUG_A;
+							id = SKIN_ID_THUG_A;
+						break;
 						case '5':
 						case 'b':
-							return SKIN_ID_THUG_B;
-						default:
-							return SKIN_ID_UNKNOWN;
+							id = SKIN_ID_THUG_B;
+						break;
 					}
+				break;
 				// [To]mmy [V]ercetti
 				// [To]urist (#1|A)/(#2|B)
 				case 'v':
-					return SKIN_ID_TOMMY_VERCETTI;
+					id = SKIN_ID_TOMMY_VERCETTI;
+				break;
 				case 'o':
-					if (c && c == 'm') return SKIN_ID_TOMMY_VERCETTI;
-					else if (c && c == 'u' && (d == '1' || d == 'a')) return SKIN_ID_TOURIST_A;
-					else if (c && c == 'u' && (d == '2' || d == 'b')) return SKIN_ID_TOURIST_B;
-					else return SKIN_ID_UNKNOWN;
+					if (c && c == 'm') id = SKIN_ID_TOMMY_VERCETTI;
+					else if (c && c == 'u' && (d == '1' || d == 'a')) id = SKIN_ID_TOURIST_A;
+					else if (c && c == 'u' && (d == '2' || d == 'b')) id = SKIN_ID_TOURIST_B;
+				break;
 				case 'r':
-					return SKIN_ID_TRANNY;
-				default:
-					return SKIN_ID_UNKNOWN;
+					id = SKIN_ID_TRANNY;
+				break;
 			}
+		break;
 		// [U]ndercover cop (#1|A)/(#2|B)/(#3|C)/(#4|D)/(#5|E)/(#6|F)
 		case 'u':
 			switch (d)
 			{
 				case '1':
 				case 'a':
-					return SKIN_ID_UNDERCOVER_COP_A;
+					id = SKIN_ID_UNDERCOVER_COP_A;
+				break;
 				case '2':
 				case 'b':
-					return SKIN_ID_UNDERCOVER_COP_B;
+					id = SKIN_ID_UNDERCOVER_COP_B;
+				break;
 				case '3':
 				case 'c':
-					return SKIN_ID_UNDERCOVER_COP_C;
+					id = SKIN_ID_UNDERCOVER_COP_C;
+				break;
 				case '4':
 				case 'd':
-					return SKIN_ID_UNDERCOVER_COP_D;
+					id = SKIN_ID_UNDERCOVER_COP_D;
+				break;
 				case '5':
 				case 'e':
-					return SKIN_ID_UNDERCOVER_COP_E;
+					id = SKIN_ID_UNDERCOVER_COP_E;
+				break;
 				case '6':
 				case 'f':
-					return SKIN_ID_UNDERCOVER_COP_F;
-				default:
-					return SKIN_ID_UNKNOWN;
+					id = SKIN_ID_UNDERCOVER_COP_F;
+				break;
 			}
+		break;
 		// [V]ercetti guy (#1|A)/(#2|B)
 		case 'v':
 			switch (d)
 			{
 				case '1':
 				case 'a':
-					return SKIN_ID_VERCETTI_GUY_A;
+					id = SKIN_ID_VERCETTI_GUY_A;
+				break;
 				case '2':
 				case 'b':
-					return SKIN_ID_VERCETTI_GUY_B;
-				default:
-					return SKIN_ID_UNKNOWN;
+					id = SKIN_ID_VERCETTI_GUY_B;
+				break;
 			}
+		break;
 		// [W]aitress (#1|A)/(#2|B)
 		case 'w':
 			switch (d)
 			{
 				case '1':
 				case 'a':
-					return SKIN_ID_WAITRESS_A;
+					id = SKIN_ID_WAITRESS_A;
+				break;
 				case '2':
 				case 'b':
-					return SKIN_ID_WAITRESS_B;
-				default:
-					return SKIN_ID_UNKNOWN;
+					id = SKIN_ID_WAITRESS_B;
+				break;
 			}
-		default:
-			return SKIN_ID_UNKNOWN;
+		break;
 	}
+	// Free the previously allocated resources
+	free(str);
+	// Return the found ID
+	return id;
 }
