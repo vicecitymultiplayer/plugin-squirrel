@@ -2372,13 +2372,10 @@ int GetSkinID(const SQChar* name)
 
 	// Get the most significant characters used to identify a skin
 	char a, b, c, d;
-	a = 0;
+	a = tolower(name[0]);
 	b = 0;
 	c = 0;
 	d = tolower(str[len-1]);
-
-	// Get the primary skin identifier
-	a = tolower(name[0]);
 
 	// Look for deeper specifiers
 	if (strlen(name) >= 3)
