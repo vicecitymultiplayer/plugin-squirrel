@@ -1126,6 +1126,7 @@ int GetVehicleModelFromName( SQChar * name )
 	char * lowername = strdup( name );
 	szlower( lowername );
 
+	int res = -1;
 	if( lowername )
 	{
 		switch( lowername[0] )
@@ -1135,18 +1136,18 @@ int GetVehicleModelFromName( SQChar * name )
 				if( strlen( lowername ) >= 2 )
 				{
 					if( lowername[1] == 'a' )
-						return 130; // landstalker
+						res = 130; // landstalker
 					else if( lowername[1] == 'i' )
-						return 133; // linerunner
+						res = 133; // linerunner
 					else if( lowername[1] == 'o' )
-						return 201; // love fist
+						res = 201; // love fist
 				}
 
 				break;
 			}
 
 			case 'i':
-				return 131; // idaho
+				res = 131; // idaho
 
 			case 's':
 			{
@@ -1155,42 +1156,42 @@ int GetVehicleModelFromName( SQChar * name )
 					if( lowername[1] == 't' )
 					{
 						if( lowername[2] == 'i' )
-							return 132; // stinger
+							res = 132; // stinger
 						else if( lowername[2] == 'r' )
-							return 139; // stretch
+							res = 139; // stretch
 						else if( lowername[2] == 'a' )
-							return 169; // stallion
+							res = 169; // stallion
 					}
 					else if( lowername[1] == 'e' )
 					{
 						if( lowername[2] == 'c' )
-							return 158; // securicar
+							res = 158; // securicar
 						else if( lowername[2] == 'a' )
-							return 177; // sea sparrow
+							res = 177; // sea sparrow
 						else if( strlen( lowername ) > 8 )
-							return 174; // sentinel xs
+							res = 174; // sentinel xs
 						else
-							return 135; // sentinel
+							res = 135; // sentinel
 					}
 					else if( lowername[1] == 'q' )
-						return 176; // squalo
+						res = 176; // squalo
 					else if( lowername[1] == 'p' )
 					{
 						if( lowername[2] == 'e' )
-							return 182; // speeder
+							res = 182; // speeder
 						else if( lowername[2] == 'a' )
 						{
 							if( strlen( lowername ) >= 4 )
 							{
 								if( lowername[3] == 'r' )
-									return 199; // sparrow
+									res = 199; // sparrow
 								else if( lowername[3] == 'n' )
-									return 213; // spand express
+									res = 213; // spand express
 							}
 						}
 					}
 					else if( lowername[1] == 'k' )
-						return 190; // skimmer
+						res = 190; // skimmer
 					else if( lowername[1] == 'a' )
 					{
 						if( lowername[2] == 'n' )
@@ -1198,15 +1199,15 @@ int GetVehicleModelFromName( SQChar * name )
 							if( strlen( lowername ) >= 4 )
 							{
 								if( lowername[3] == 'c' )
-									return 198; // sanchez
+									res = 198; // sanchez
 								else if( lowername[3] == 'd' )
-									return 225; // sandking
+									res = 225; // sandking
 							}
 						}
 						else if( lowername[2] == 'b' && strlen(lowername) > 5 )
-							return 206; // sabre turbo
+							res = 206; // sabre turbo
 						else if( lowername[2] == 'b' )
-							return 205; // sabre
+							res = 205; // sabre
 					}
 				}
 
@@ -1216,30 +1217,30 @@ int GetVehicleModelFromName( SQChar * name )
 			case 'p':
 			{
 				if( lowername[1] == 'e' )
-					return 134; // perennial
+					res = 134; // perennial
 				else if( lowername[1] == 'o' )
 				{
 					if( strlen( lowername ) > 6 )
-						return 227; // police maverick
+						res = 227; // police maverick
 					else
-						return 156; // police
+						res = 156; // police
 				}
 				else if( lowername[1] == 'r' )
-					return 160; // predator
+					res = 160; // predator
 				else if( lowername[1] == 'a' )
 				{
 					if( strlen( lowername ) >= 3 )
 					{
 						if( lowername[2] == 'c' )
-							return 173; // packer
+							res = 173; // packer
 						else if( lowername[2] == 't' )
-							return 200; // patriot
+							res = 200; // patriot
 					}
 				}
 				else if( lowername[1] == 'i' )
-					return 178; // pizza boy
+					res = 178; // pizza boy
 				else if( lowername[1] == 'c' )
-					return 191; // pcj-600
+					res = 191; // pcj-600
 
 				break;
 			}
@@ -1247,11 +1248,11 @@ int GetVehicleModelFromName( SQChar * name )
 			case 'r':
 			{
 				if( lowername[1] == 'i' )
-					return 136; // rio
+					res = 136; // rio
 				else if( lowername[1] == 'h' )
-					return 162; // rhino
+					res = 162; // rhino
 				else if( lowername[1] == 'u' )
-					return 170; // rumpo
+					res = 170; // rumpo
 				else if( lowername[1] == 'c' )
 				{
 					if( lowername[2] == 'b' )
@@ -1259,30 +1260,30 @@ int GetVehicleModelFromName( SQChar * name )
 						if( strlen( lowername ) >= 5 )
 						{
 							if( lowername[4] == 'n' )
-								return 171; // rcbandit
+								res = 171; // rcbandit
 							else if( lowername[4] == 'r' )
-								return 194; // rcbaron
+								res = 194; // rcbaron
 						}
 					}
 					else if( lowername[2] == 'r' )
-						return 195; // rcraider
+						res = 195; // rcraider
 					else if( lowername[2] == 'g' )
-						return 231;
+						res = 231;
 				}
 				else if( lowername[1] == 'o' )
-					return 172; // romero's hearse
+					res = 172; // romero's hearse
 				else if( lowername[1] == 'e' )
 				{
 					if( strlen( lowername ) >= 3 )
 					{
 						if( lowername[2] == 'e' )
-							return 183; // reefer
+							res = 183; // reefer
 						else if( lowername[2] == 'g' )
-							return 209; // regina
+							res = 209; // regina
 					}
 				}
 				else if( lowername[1] == 'a' )
-					return 219;
+					res = 219;
 
 				break;
 			}
@@ -1290,23 +1291,23 @@ int GetVehicleModelFromName( SQChar * name )
 			case 'f':
 			{
 				if( lowername[1] == 'i' )
-					return 137; // firetruck
+					res = 137; // firetruck
 				else if( lowername[1] == 'b' )
 				{
 					if( strlen( lowername ) >= 5 )
 					{
 						if( lowername[4] == 'w' )
-							return 147; // fbi washington
+							res = 147; // fbi washington
 						else if( lowername[4] == 'r' )
-							return 220; // fbi rancher
+							res = 220; // fbi rancher
 					}
 				}
 				else if( lowername[1] == 'l' )
-					return 185; // flatbed
+					res = 185; // flatbed
 				else if( lowername[1] == 'a' )
-					return 192; // faggio
+					res = 192; // faggio
 				else if( lowername[1] == 'r' )
-					return 193; // freeway
+					res = 193; // freeway
 
 				break;
 			}
@@ -1318,13 +1319,13 @@ int GetVehicleModelFromName( SQChar * name )
 					if( strlen( lowername ) >= 3 )
 					{
 						if( lowername[2] == 'a' )
-							return 138; // trashmaster
+							res = 138; // trashmaster
 						else if( lowername[2] == 'o' )
-							return 184; // tropic
+							res = 184; // tropic
 					}
 				}
 				else if( lowername[1] == 'o' )
-					return 189; // top fun
+					res = 189; // top fun
 
 				break;
 			}
@@ -1336,19 +1337,19 @@ int GetVehicleModelFromName( SQChar * name )
 					if( strlen( lowername ) >= 3 )
 					{
 						if( lowername[2] == 'n' )
-							return 140; // manana
+							res = 140; // manana
 						else if( lowername[2] == 'r' )
-							return 214; // marquis
+							res = 214; // marquis
 						else if( lowername[2] == 'v' )
-							return 217; // maverick
+							res = 217; // maverick
 					}
 				}
 				else if( lowername[1] == 'u' )
-					return 144; // mule
+					res = 144; // mule
 				else if( lowername[1] == 'r' )
-					return 153; // mr. whoopee
+					res = 153; // mr. whoopee
 				else if( lowername[1] == 'e' )
-					return 230; // mesa grande
+					res = 230; // mesa grande
 
 				break;
 			}
@@ -1356,15 +1357,15 @@ int GetVehicleModelFromName( SQChar * name )
 			case 'c':
 			{
 				if( lowername[1] == 'h' )
-					return 145; // cheetah
+					res = 145; // cheetah
 				else if( lowername[1] == 'u' )
 				{
 					if( strlen( lowername ) >= 7 )
 					{
 						if( lowername[6] == 'h' )
-							return 164; // cuban hermes
+							res = 164; // cuban hermes
 						else if( lowername[6] == 'j' )
-							return 223; // cuban jetmax
+							res = 223; // cuban jetmax
 					}
 				}
 				else if( lowername[1] == 'o' )
@@ -1372,21 +1373,21 @@ int GetVehicleModelFromName( SQChar * name )
 					if( strlen( lowername ) >= 4 )
 					{
 						if( lowername[3] == 'c' )
-							return 167; // coach
+							res = 167; // coach
 						else if( lowername[3] == 's' )
-							return 202; // coast guard
+							res = 202; // coast guard
 					}
 					else if( strlen( lowername ) >= 3 && lowername[2] == 'm' )
-						return 210; // comet
+						res = 210; // comet
 				}
 				else if( lowername[1] == 'a' )
 				{
 					if( strlen( lowername ) >= 3 )
 					{
 						if( lowername[2] == 'b' )
-							return 168; // cabbie
+							res = 168; // cabbie
 						else if( lowername[2] == 'd' )
-							return 187; // caddy
+							res = 187; // caddy
 					}
 				}
 
@@ -1396,13 +1397,13 @@ int GetVehicleModelFromName( SQChar * name )
 			case 'a':
 			{
 				if( lowername[1] == 'm' )
-					return 146; // ambulance
+					res = 146; // ambulance
 				else if( lowername[1] == 'n' )
-					return 166; // angel
+					res = 166; // angel
 				else if( lowername[1] == 'd' )
-					return 175; // admiral
+					res = 175; // admiral
 				else if( lowername[1] == 'i' )
-					return 180; // airtrain
+					res = 180; // airtrain
 
 				break;
 			}
@@ -1410,9 +1411,9 @@ int GetVehicleModelFromName( SQChar * name )
 			case 'e':
 			{
 				if( lowername[1] == 's' )
-					return 149; // esperanto
+					res = 149; // esperanto
 				else if( lowername[1] == 'n' )
-					return 157; // enforcer
+					res = 157; // enforcer
 
 				break;
 			}
@@ -1422,9 +1423,9 @@ int GetVehicleModelFromName( SQChar * name )
 				if( strlen( lowername ) >= 3 )
 				{
 					if( lowername[2] == 's' )
-						return 151; // washington
+						res = 151; // washington
 					else if( lowername[2] == 'l' )
-						return 208; // walton
+						res = 208; // walton
 				}
 
 				break;
@@ -1437,9 +1438,9 @@ int GetVehicleModelFromName( SQChar * name )
 					if( strlen( lowername ) >= 3 )
 					{
 						if( lowername[2] == 'b' )
-							return 152; // bobcat
+							res = 152; // bobcat
 						else if( lowername[2] == 'x' )
-							return 228; // boxville
+							res = 228; // boxville
 					}
 				}
 				else if( lowername[1] == 'a' )
@@ -1447,15 +1448,15 @@ int GetVehicleModelFromName( SQChar * name )
 					if( strlen( lowername ) >= 3 )
 					{
 						if( lowername[2] == 'r' )
-							return 163; // barracks ol
+							res = 163; // barracks ol
 						else if( lowername[2] == 'g' )
-							return 215; // baggage handler
+							res = 215; // baggage handler
 					}
 				}
 				else if( lowername[1] == 'l' )
-					return 226; // blista compact
+					res = 226; // blista compact
 				else if( lowername[1] == 'e' )
-					return 229; // benson
+					res = 229; // benson
 
 				break;
 			}
@@ -1463,11 +1464,11 @@ int GetVehicleModelFromName( SQChar * name )
 			case 'h':
 			{
 				if( lowername[1] == 'u' )
-					return 155; // hunter
+					res = 155; // hunter
 				else if( lowername[1] == 'e' )
-					return 165; // helicopter
+					res = 165; // helicopter
 				else if( lowername[1] == 'o' )
-					return 224; // hotring racer
+					res = 224; // hotring racer
 
 				break;
 			}
@@ -1475,11 +1476,11 @@ int GetVehicleModelFromName( SQChar * name )
 			case 'g':
 			{
 				if( lowername[1] == 'a' )
-					return 179; // gang burrito
+					res = 179; // gang burrito
 				else if( lowername[1] == 'l' )
-					return 196; // glendale
+					res = 196; // glendale
 				else if( lowername[1] == 'r' )
-					return 222; // greenwood
+					res = 222; // greenwood
 
 				break;
 			}
@@ -1487,34 +1488,34 @@ int GetVehicleModelFromName( SQChar * name )
 			case 'd':
 			{
 				if( lowername[1] == 'e' )
-					return 211; // deluxo
+					res = 211; // deluxo
 				else if( lowername[1] == 'i' )
-					return 203; // dinghy
+					res = 203; // dinghy
 
 				break;
 			}
 
 			case 'y':
-				return 186; // yankee
+				res = 186; // yankee
 
 			case 'z':
-				return 188; // zebra cab
+				res = 188; // zebra cab
 
 			case 'k':
-				return 216; // kaufman cab
+				res = 216; // kaufman cab
 
 			case 'v':
 			{
 				if( lowername[1] == 'c' )
-					return 218; // vcn maverick
+					res = 218; // vcn maverick
 				else if( lowername[1] == 'i' )
 				{
 					if( strlen( lowername ) >= 3 )
 					{
 						if( lowername[2] == 'r' )
-							return 221; // virgo
+							res = 221; // virgo
 						else if( lowername[2] == 'c' )
-							return 236; // vicechee
+							res = 236; // vicechee
 					}
 				}
 
@@ -1522,10 +1523,10 @@ int GetVehicleModelFromName( SQChar * name )
 			}
 		}
 
-		free( lowername );
+		free(lowername);
 	}
-	
-	return -1;
+
+	return res;
 }
 
 const SQChar * GetVehicleNameFromModel ( int model )
