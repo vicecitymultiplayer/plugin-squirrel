@@ -167,6 +167,7 @@ void RegisterGlobals()
 		.Func(_SC("GetDistrictName"), GetDistrictName, 3, _SC("tff"))
 		.Func(_SC("GetSkinName"), GetSkinName, 2, _SC("ti"))
 		.Func(_SC("GetWeaponID"), GetWeaponID, 2, _SC("ts"))
+		.Func(_SC("GetSkinID"), GetSkinID, 2, _SC("ts"))
 		.Func(_SC("GetTickCount"), SQGetTickCount, 1, _SC("t"))
 
 		.Func(_SC("SetWeaponDataValue"), SetWeaponDataValue, 4, _SC("tiin"))

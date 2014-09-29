@@ -238,3 +238,4 @@ bool GetWeatherLock(void);
 void SetWeatherLock(bool isLocked);
 const SQChar * GetMapName(void);
 void SetMapName(const SQChar * mapName);
+int GetSkinID(const SQChar* name);
