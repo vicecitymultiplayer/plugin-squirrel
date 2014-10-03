@@ -107,6 +107,9 @@ void CCore::LoadVM()
 
 	// Register our entities so they're accessible by scripts
 	this->RegisterEntities();
+
+	// Signal outside plugins to register whatever the hell they want
+	functions->SendCustomCommand(0x7D6E22D8, "");
 }
 
 // Look for entities such as vehicles and objects that were created by other plugins
