@@ -118,14 +118,14 @@ const SQChar * GetGameModeText()
 	return gamemode;
 }
 
-unsigned int GetTimeRate()   { return ( functions->GetTimeRate() != 0 );   }
-int          GetHour()       { return ( functions->GetHour() != 0 );       }
-int          GetMinute()     { return ( functions->GetMinute() != 0 );     }
-int          GetWeather()    { return ( functions->GetWeather() != 0 );    }
-float        GetGravity()    { return ( functions->GetGravity() != 0 );    }
-float        GetGamespeed()  { return ( functions->GetGamespeed() != 0 );  }
-float        GetWaterLevel() { return ( functions->GetWaterLevel() != 0 ); }
-float        GetMaxHeight()  { return ( functions->GetMaxHeight() != 0 );  }
+unsigned int GetTimeRate()   { return ( functions->GetTimeRate() );   }
+int          GetHour()       { return ( functions->GetHour() );       }
+int          GetMinute()     { return ( functions->GetMinute() );     }
+int          GetWeather()    { return ( functions->GetWeather() );    }
+float        GetGravity()    { return ( functions->GetGravity() );    }
+float        GetGamespeed()  { return ( functions->GetGamespeed() );  }
+float        GetWaterLevel() { return ( functions->GetWaterLevel() ); }
+float        GetMaxHeight()  { return ( functions->GetMaxHeight() );  }
 
 void ToggleSyncFrameLimiter ( bool toggle ) { functions->ToggleSyncFrameLimiter( ( toggle ? 1 : 0 ) ); }
 void ToggleFrameLimiter     ( bool toggle ) { functions->ToggleFrameLimiter( ( toggle ? 1 : 0 ) );     }
