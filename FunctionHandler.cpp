@@ -1108,7 +1108,7 @@ void ReloadScripts( void )
 
 		// Clean the world up
 		pCore->CleanWorld();
-		
+
 		// Release the old root table to free old binds
 		Sqrat::RootTable(v).Release();
 

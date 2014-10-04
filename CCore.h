@@ -37,7 +37,7 @@ class CCore
 			// Return the instance
 			return pCoreInstance;
 		}
-		
+
 		~CCore();
 		void AddTimer( CTimer * pTimer );
 		void CleanWorld();

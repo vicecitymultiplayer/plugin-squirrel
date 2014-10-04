@@ -24,6 +24,9 @@ int OnInitServer()
 	printf("\n");
 	OutputMessage("Loaded SqVCMP 0.4 frontend by Stormeus. (v1.0)");
 
+	// Reload the VM
+	pCore->LoadVM();
+
 	// Load the script
 	pCore->LoadScript();
 
