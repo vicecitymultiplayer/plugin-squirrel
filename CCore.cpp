@@ -29,10 +29,9 @@ CCore::CCore()
 	unsigned int i;
 	for( i = 0; i < this->maxTimers; i++ )
 		this->pTimerArray[i] = NULL;
-	
+
 	canReload = false;
 	pLogFile = fopen("server_log.txt", "a");
-	this->LoadVM();
 }
 
 CCore::~CCore()
