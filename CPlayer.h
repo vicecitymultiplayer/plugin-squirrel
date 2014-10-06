@@ -86,6 +86,12 @@ class CPlayer
 		bool GetDrunkStatus();
 		double GetFPS();
 		SQChar * GetUniqueID();
+		bool GetPlayerOnFireStatus(void);
+		bool GetPlayerCrouchStatus(void);
+		int GetPlayerAction(void);
+		int GetPlayerGameKeys(void);
+		Vector GetPlayerAimPos(void);
+		Vector GetPlayerAimDir(void);
 
 	public:
 		void Kick();
@@ -115,7 +121,8 @@ class CPlayer
 		void RestoreCamera();
 		void RemoveMarker();
 		void SetMarker( int nDummy );
-		void SetDrunkLevel( int visuals, int handling );
+		void SetDrunkLevel(int visuals, int handling);
+		bool RedirectPlayerToServer(const char* szIP, unsigned int usPort, const char* szNickname, const char* szServerPass, const char* szUserPass);
 
 	public:
 		int nPlayerId;

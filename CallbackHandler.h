@@ -55,6 +55,9 @@ void OnPlayerCrashDump     ( int nPlayerId, const char * szCrashReport );
 
 int  OnInternalCommand     ( unsigned int uCmdType, const char* pszText );
 void OnPlayerNameChange    ( int nPlayerId, const char * oldName, const char * newName );
+void OnPlayerOnFireChange  ( int nPlayerId, unsigned int bIsOnFireNow );
+void OnPlayerCrouchChange  ( int nPlayerId, unsigned int bIsCrouchingNow );
+void OnPlayerGameKeysChange ( int nPlayerId, int nOldKeys, int nNewKeys );
 
 // Define some structures for tracking player data
 struct savedPlayerData

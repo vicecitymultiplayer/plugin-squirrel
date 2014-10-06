@@ -371,6 +371,13 @@ typedef int (*SDK_SetObjectShotReport) (int nObjectId, unsigned int bToggle);
 typedef unsigned int (*SDK_IsObjectShotReport) (int nObjectId);
 typedef int (*SDK_SetObjectBumpReport) (int nObjectId, unsigned int bToggle);
 typedef unsigned int (*SDK_IsObjectBumpReport) (int nObjectId);
+typedef unsigned int (*SDK_RedirectPlayerToServer) (int nPlayerId, const char* szIP, unsigned int usPort, const char* szNickname, const char* szServerPass, const char* szUserPass);
+typedef unsigned int (*SDK_GetPlayerOnFireStatus) (int nPlayerId);
+typedef unsigned int (*SDK_GetPlayerCrouchStatus) (int nPlayerId);
+typedef int (*SDK_GetPlayerAction) (int nPlayerId);
+typedef int (*SDK_GetPlayerGameKeys) (int nPlayerId);
+typedef unsigned int (*SDK_GetPlayerAimPos) (int nPlayerId, float* pfX, float* pfY, float* pfZ);
+typedef unsigned int (*SDK_GetPlayerAimDir) (int nPlayerId, float* pfX, float* pfY, float* pfZ);
 typedef int (*SDK_OnInitServer) (void);
 typedef void (*SDK_OnShutdownServer) (void);
 typedef void (*SDK_OnFrame) (float fElapsedTime);
@@ -407,6 +414,11 @@ typedef void (*SDK_OnPlayerSpectate) (int nPlayerId, int nTargetId);
 typedef void (*SDK_OnPlayerCrashReport) (int nPlayerId, const char* pszReport);
 typedef void (*SDK_OnServerPerformanceReport) (int nNumStats, const char** ppszDescription, unsigned long long* pnMillisecsSpent);
 typedef void (*SDK_OnPlayerNameChange) (int nPlayerId, const char* pszOldName, const char* pszNewName);
+typedef void (*SDK_OnPlayerStateChange) (int nPlayerId, int nOldState, int nNewState);
+typedef void (*SDK_OnPlayerActionChange) (int nPlayerId, int nOldAction, int nNewAction);
+typedef void (*SDK_OnPlayerOnFireChange) (int nPlayerId, unsigned int bIsOnFireNow);
+typedef void (*SDK_OnPlayerCrouchChange) (int nPlayerId, unsigned int bIsCrouchingNow);
+typedef void (*SDK_OnPlayerGameKeysChange) (int nPlayerId, int nOldKeys, int nNewKeys);
 
 typedef struct {
 	unsigned int						uStructSize;
@@ -793,6 +805,15 @@ typedef struct {
 	SDK_IsObjectShotReport IsObjectShotReport;
 	SDK_SetObjectBumpReport SetObjectBumpReport;
 	SDK_IsObjectBumpReport IsObjectBumpReport;
+
+	//FIXME: move on major update, currently keeping compatibility
+	SDK_RedirectPlayerToServer RedirectPlayerToServer;
+	SDK_GetPlayerOnFireStatus GetPlayerOnFireStatus;
+	SDK_GetPlayerCrouchStatus GetPlayerCrouchStatus;
+	SDK_GetPlayerAction GetPlayerAction;
+	SDK_GetPlayerGameKeys GetPlayerGameKeys;
+	SDK_GetPlayerAimPos GetPlayerAimPos;
+	SDK_GetPlayerAimDir GetPlayerAimDir;
 } PluginFuncs;
 
 typedef struct {
@@ -836,5 +857,10 @@ typedef struct {
 
 	//FIXME: move on major update, currently keeping compatibility
 	SDK_OnPlayerNameChange OnPlayerNameChange;
+	SDK_OnPlayerStateChange OnPlayerStateChange;
+	SDK_OnPlayerActionChange OnPlayerActionChange;
+	SDK_OnPlayerOnFireChange OnPlayerOnFireChange;
+	SDK_OnPlayerCrouchChange OnPlayerCrouchChange;
+	SDK_OnPlayerGameKeysChange OnPlayerGameKeysChange;
 
 } PluginCallbacks;

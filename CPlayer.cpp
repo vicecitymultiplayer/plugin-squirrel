@@ -151,6 +151,26 @@ int CPlayer::GetWeaponSlot() { return functions->GetPlayerWeaponSlot(this->nPlay
 int CPlayer::GetWeapon() { return functions->GetPlayerWeapon(this->nPlayerId); }
 int CPlayer::GetWeaponAmmo() { return functions->GetPlayerWeaponAmmo(this->nPlayerId); }
 
+bool CPlayer::GetPlayerOnFireStatus(void) { return Boolify(functions->GetPlayerOnFireStatus(this->nPlayerId)); }
+bool CPlayer::GetPlayerCrouchStatus(void) { return Boolify(functions->GetPlayerCrouchStatus(this->nPlayerId)); }
+int CPlayer::GetPlayerAction(void) { return functions->GetPlayerAction(this->nPlayerId); }
+int CPlayer::GetPlayerGameKeys(void) { return functions->GetPlayerGameKeys(this->nPlayerId); }
+Vector CPlayer::GetPlayerAimPos(void)
+{
+	float x, y, z;
+	functions->GetPlayerAimPos(this->nPlayerId, &x, &y, &z);
+
+	return Vector(x, y, z);
+}
+
+Vector CPlayer::GetPlayerAimDir(void)
+{
+	float x, y, z;
+	functions->GetPlayerAimDir(this->nPlayerId, &x, &y, &z);
+
+	return Vector(x, y, z);
+}
+
 void CPlayer::Kick() { functions->KickPlayer( this->nPlayerId ); }
 void CPlayer::Ban() { functions->BanPlayer( this->nPlayerId ); }
 void CPlayer::Spawn() { functions->ForcePlayerSpawn(this->nPlayerId); }
@@ -258,6 +278,12 @@ SQChar * CPlayer::GetUniqueID()
 	return m_uid;
 }
 
+bool CPlayer::RedirectPlayerToServer(const char* szIP, unsigned int usPort, const char* szNickname, const char* szServerPass, const char* szUserPass)
+{
+	printf("%p %p %s %s", szServerPass, szUserPass, szServerPass, szUserPass);
+	return Boolify(functions->RedirectPlayerToServer(this->nPlayerId, szIP, usPort, szNickname, szServerPass, szUserPass));
+}
+
 Sqrat::string PlayerToString(CPlayer * p)
 {
 	return p->GetName();;
@@ -308,14 +334,20 @@ void RegisterPlayer()
 
 	// Read-only properties
 	c
+		.Prop(_SC("Action"), &CPlayer::GetPlayerAction)
+		.Prop(_SC("AimDir"), &CPlayer::GetPlayerAimDir)
+		.Prop(_SC("AimPos"), &CPlayer::GetPlayerAimPos)
 		.Prop(_SC("Alpha"), &CPlayer::GetAlpha)
 		.Prop(_SC("Ammo"), &CPlayer::GetWeaponAmmo)
 		.Prop(_SC("Away"), &CPlayer::GetAwayStatus)
 		.Prop(_SC("CameraLocked"), &CPlayer::GetCameraLocked)
 		.Prop(_SC("Class"), &CPlayer::GetClass)
 		.Prop(_SC("FPS"), &CPlayer::GetFPS)
+		.Prop(_SC("GameKeys"), &CPlayer::GetPlayerGameKeys)
 		.Prop(_SC("ID"), &CPlayer::GetID)
 		.Prop(_SC("IP"), &CPlayer::GetIP)
+		.Prop(_SC("IsCrouching"), &CPlayer::GetPlayerCrouchStatus)
+		.Prop(_SC("IsOnFire"), &CPlayer::GetPlayerOnFireStatus)
 		.Prop(_SC("IsSpawned"), &CPlayer::GetSpawned)
 		.Prop(_SC("Key"), &CPlayer::GetKey)
 		.Prop(_SC("Ping"), &CPlayer::GetPing)
@@ -338,6 +370,7 @@ void RegisterPlayer()
 		.Func(_SC("GiveMoney"), &CPlayer::GiveMoney, 2, "xi")
 		.Func(_SC("GiveWeapon"), &CPlayer::GiveWeapon, 3, "xii")
 		.Func(_SC("Kick"), &CPlayer::Kick, 1, "x")
+		.Func(_SC("Redirect"), &CPlayer::RedirectPlayerToServer, 6, "xsis|os|os|o")
 		.Func(_SC("RemoveWeapon"), &CPlayer::RemoveWeapon, 2, "xi")
 		.Func(_SC("RemoveMarker"), &CPlayer::RemoveMarker, 1, "x")
 		.Func(_SC("RestoreCamera"), &CPlayer::RestoreCamera, 1, "x")

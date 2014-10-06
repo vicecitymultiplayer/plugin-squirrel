@@ -999,3 +999,60 @@ void OnPlayerNameChange(int nPlayerId, const char * oldName, const char * newNam
 		callback.Release();
 	}
 }
+
+void OnPlayerOnFireChange(int nPlayerId, unsigned int bIsOnFireNow)
+{
+	if (pCore != NULL)
+	{
+		Function callback = RootTable().GetFunction(_SC("onPlayerOnFireChange"));
+		try
+		{
+			if (!callback.IsNull())
+				callback.Execute<CPlayer *, bool>(pCore->RetrievePlayer(nPlayerId), bIsOnFireNow == 1);
+		}
+		catch (Sqrat::Exception e)
+		{
+			OutputWarning("onPlayerOnFireChange failed to execute -- check the console for more details.");
+		}
+
+		callback.Release();
+	}
+}
+
+void OnPlayerCrouchChange(int nPlayerId, unsigned int bIsCrouchingNow)
+{
+	if (pCore != NULL)
+	{
+		Function callback = RootTable().GetFunction(_SC("onPlayerCrouchChange"));
+		try
+		{
+			if (!callback.IsNull())
+				callback.Execute<CPlayer *, bool>(pCore->RetrievePlayer(nPlayerId), bIsCrouchingNow == 1);
+		}
+		catch (Sqrat::Exception e)
+		{
+			OutputWarning("onPlayerCrouchChange failed to execute -- check the console for more details.");
+		}
+
+		callback.Release();
+	}
+}
+
+void OnPlayerGameKeysChange(int nPlayerId, int nOldKeys, int nNewKeys)
+{
+	if (pCore != NULL)
+	{
+		Function callback = RootTable().GetFunction(_SC("onPlayerGameKeysChange"));
+		try
+		{
+			if (!callback.IsNull())
+				callback.Execute<CPlayer *, int, int>(pCore->RetrievePlayer(nPlayerId), nOldKeys, nNewKeys);
+		}
+		catch (Sqrat::Exception e)
+		{
+			OutputWarning("onPlayerGameKeysChange failed to execute -- check the console for more details.");
+		}
+
+		callback.Release();
+	}
+}
