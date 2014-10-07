@@ -520,7 +520,7 @@ int OnCommandMessage( int nPlayerId, const char* pszText )
 				szSpacePos[0] = '\0';
 			}
 
-			SQChar * szArguments = szSpacePos ? &szSpacePos[1] : "";
+			SQChar * szArguments = szSpacePos ? &szSpacePos[1] : NULL;
 
 			// Push "this" which is the root table since onPlayerCommand is
 			// expected to be a global function.
@@ -531,7 +531,7 @@ int OnCommandMessage( int nPlayerId, const char* pszText )
 
 			// Push our string arguments
 			sq->pushstring(v, _SC(szText), -1);
-			if (strlen(szArguments) <= 0)
+			if (szArguments == NULL || strlen(szArguments) <= 0)
 				sq->pushnull(v);
 			else
 				sq->pushstring(v, _SC(szArguments), -1);
