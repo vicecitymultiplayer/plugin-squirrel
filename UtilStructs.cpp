@@ -64,7 +64,12 @@ void EntityVector::SetX(float fX)
 	switch (this->m_nEntityType)
 	{
 		case ENTITY_PLAYER:
-			functions->SetPlayerPos(this->m_nEntityId, fX, this->y, this->z); break;
+			switch (m_nFlags)
+			{
+				case PLRVECTOR_POS: functions->SetPlayerPos(this->m_nEntityId, fX, this->y, this->z); break;
+				case PLRVECTOR_SPEED: functions->SetPlayerSpeed(this->m_nEntityId, fX, this->y, this->z); break;
+			}
+			break;
 
 		case ENTITY_VEHICLE:
 			switch (m_nFlags)
@@ -97,7 +102,12 @@ void EntityVector::SetY(float fY)
 	switch (this->m_nEntityType)
 	{
 		case ENTITY_PLAYER:
-			functions->SetPlayerPos(this->m_nEntityId, this->x, fY, this->z); break;
+			switch (m_nFlags)
+			{
+				case PLRVECTOR_POS: functions->SetPlayerPos(this->m_nEntityId, this->x, fY, this->z); break;
+				case PLRVECTOR_SPEED: functions->SetPlayerSpeed(this->m_nEntityId, this->x, fY, this->z); break;
+			}
+			break;
 
 		case ENTITY_VEHICLE:
 			switch (m_nFlags)
@@ -130,7 +140,12 @@ void EntityVector::SetZ(float fZ)
 	switch (this->m_nEntityType)
 	{
 		case ENTITY_PLAYER:
-			functions->SetPlayerPos(this->m_nEntityId, this->x, this->y, fZ); break;
+			switch (m_nFlags)
+			{
+				case PLRVECTOR_POS: functions->SetPlayerPos(this->m_nEntityId, this->x, this->y, fZ); break;
+				case PLRVECTOR_SPEED: functions->SetPlayerSpeed(this->m_nEntityId, this->x, this->y, fZ); break;
+			}
+			break;
 
 		case ENTITY_VEHICLE:
 			switch (m_nFlags)

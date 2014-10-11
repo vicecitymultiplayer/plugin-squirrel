@@ -6,7 +6,7 @@ class CPlayer
 {
 	private:
 		Vector * pos;
-	
+
 	public:
 		CPlayer() { pos = new Vector(); }
 		~CPlayer() { delete pos; }
@@ -81,6 +81,7 @@ class CPlayer
 		int GetKey();
 		bool GetAwayStatus();
 		CPlayer * GetSpectateTarget();
+		EntityVector GetSpeed();
 		bool GetCanUseColors();
 		bool GetMarkerVisible();
 		bool GetDrunkStatus();
@@ -99,6 +100,7 @@ class CPlayer
 		void Spawn();
 		void GiveMoney( int money );
 		void AddSpeed( Vector speed );
+		void SetSpeed( Vector speed );
 		void SetInterior( int interior );
 		void Eject();
 		void SetWantedLevel( int wantedLevel );
