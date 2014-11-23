@@ -1151,7 +1151,17 @@ int GetVehicleModelFromName( SQChar * name )
 			}
 
 			case 'i':
-				res = 131; // idaho
+			{
+				if (strlen(lowername) >= 2)
+				{
+					if (lowername[1] == 'd')
+						res = 131;
+					else if (lowername[1] == 'n')
+						res = 141;
+				}
+
+				break;
+			}
 
 			case 's':
 			{
