@@ -1003,6 +1003,44 @@ void OnPlayerNameChange(int nPlayerId, const char * oldName, const char * newNam
 	}
 }
 
+void OnPlayerActionChange(int nPlayerId, int nOldAction, int nNewAction)
+{
+	if (pCore != NULL)
+	{
+		Function callback = RootTable().GetFunction(_SC("onPlayerActionChange"));
+		try
+		{
+			if (!callback.IsNull())
+				callback.Execute<CPlayer *, int, int>(pCore->RetrievePlayer(nPlayerId), nOldAction, nNewAction);
+		}
+		catch (Sqrat::Exception e)
+		{
+			OutputWarning("onPlayerActionChange failed to execute -- check the console for more details.");
+		}
+
+		callback.Release();
+	}
+}
+
+void OnPlayerStateChange(int nPlayerId, int nOldState, int nNewState)
+{
+	if (pCore != NULL)
+	{
+		Function callback = RootTable().GetFunction(_SC("onPlayerStateChange"));
+		try
+		{
+			if (!callback.IsNull())
+				callback.Execute<CPlayer *, int, int>(pCore->RetrievePlayer(nPlayerId), nOldState, nNewState);
+		}
+		catch (Sqrat::Exception e)
+		{
+			OutputWarning("onPlayerStateChange failed to execute -- check the console for more details.");
+		}
+
+		callback.Release();
+	}
+}
+
 void OnPlayerOnFireChange(int nPlayerId, unsigned int bIsOnFireNow)
 {
 	if (pCore != NULL)

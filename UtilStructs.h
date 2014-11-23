@@ -11,6 +11,12 @@ typedef enum
 
 typedef enum
 {
+	PLRVECTOR_POS = 0,
+	PLRVECTOR_SPEED
+} PlayerVectorFlags;
+
+typedef enum
+{
 	VEHVECTOR_POS = 0,
 	VEHVECTOR_SPAWNPOS,
 	VEHVECTOR_ANGLE,

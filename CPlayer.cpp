@@ -82,7 +82,7 @@ EntityVector CPlayer::GetPosition()
 	float x, y, z;
 	functions->GetPlayerPos(this->nPlayerId, &x, &y, &z);
 
-	return EntityVector(this->nPlayerId, ENTITY_PLAYER, -1, x, y, z);
+	return EntityVector(this->nPlayerId, ENTITY_PLAYER, PLRVECTOR_POS, x, y, z);
 }
 
 int CPlayer::GetClass() { return functions->GetPlayerClass(this->nPlayerId); }
@@ -193,6 +193,14 @@ CPlayer * CPlayer::GetSpectateTarget()
 	return pCore->RetrievePlayer(target);
 }
 
+EntityVector CPlayer::GetSpeed()
+{
+	float x, y, z;
+	functions->GetPlayerSpeed( this->nPlayerId, &x, &y, &z );
+
+	return EntityVector( this->nPlayerId, ENTITY_PLAYER, PLRVECTOR_SPEED, x, y, z );
+}
+
 void CPlayer::AddSpeed( Vector speed )
 {
 	float x = speed.x;
@@ -202,6 +210,7 @@ void CPlayer::AddSpeed( Vector speed )
 	functions->AddPlayerSpeed( this->nPlayerId, x, y, z );
 }
 
+void CPlayer::SetSpeed( Vector speed ) { functions->SetPlayerSpeed( this->nPlayerId, speed.x, speed.y, speed.z ); }
 void CPlayer::SetInterior( int interior ) { OutputWarning( "Player.SetInterior is deprecated. Teleport them to the interior loc instead." ); }
 void CPlayer::Eject() { functions->RemovePlayerFromVehicle(this->nPlayerId); }
 void CPlayer::SetWantedLevel( int wantedLevel ) { functions->SetPlayerWantedLevel( this->nPlayerId, wantedLevel ); }
@@ -326,6 +335,7 @@ void RegisterPlayer()
 		.Prop(_SC("Slot"), &CPlayer::GetWeaponSlot, &CPlayer::SetWeaponSlot)
 		.Prop(_SC("Skin"), &CPlayer::GetSkin, &CPlayer::SetSkin)
 		.Prop(_SC("SpectateTarget"), &CPlayer::GetSpectateTarget, &CPlayer::SetSpectateTarget)
+		.Prop(_SC("Speed"), &CPlayer::GetSpeed, &CPlayer::SetSpeed )
 		.Prop(_SC("Team"), &CPlayer::GetTeam, &CPlayer::SetTeam)
 		.Prop(_SC("Vehicle"), &CPlayer::GetVehicle, &CPlayer::SetVehicle)
 		.Prop(_SC("WhiteScanlines"), &CPlayer::GetWhiteScanlines, &CPlayer::SetWhiteScanlines)

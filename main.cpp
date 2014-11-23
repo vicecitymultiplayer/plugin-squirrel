@@ -148,7 +148,7 @@ extern "C" EXPORT unsigned int VcmpPluginInit( PluginFuncs* givenPluginFuncs, Pl
 	callbacks->OnCommandMessage     = OnCommandMessage;
 	callbacks->OnPrivateMessage     = OnPrivateMessage;
 	callbacks->OnInternalCommand    = OnInternalCommand;
-	
+
 	callbacks->OnObjectShot         = OnObjectShot;
 	callbacks->OnObjectBump         = OnObjectBump;
 
@@ -157,8 +157,10 @@ extern "C" EXPORT unsigned int VcmpPluginInit( PluginFuncs* givenPluginFuncs, Pl
 	callbacks->OnKeyBindUp          = OnKeyBindUp;
 
 	callbacks->OnPlayerNameChange   = OnPlayerNameChange;
-	callbacks->OnPlayerCrouchChange = OnPlayerCrouchChange;
+	callbacks->OnPlayerStateChange  = OnPlayerStateChange;
+	callbacks->OnPlayerActionChange = OnPlayerActionChange;
 	callbacks->OnPlayerOnFireChange = OnPlayerOnFireChange;
+	callbacks->OnPlayerCrouchChange = OnPlayerCrouchChange;
 	callbacks->OnPlayerGameKeysChange = OnPlayerGameKeysChange;
 
 	// Done!
