@@ -157,6 +157,9 @@ extern "C" EXPORT unsigned int VcmpPluginInit( PluginFuncs* givenPluginFuncs, Pl
 	callbacks->OnKeyBindUp          = OnKeyBindUp;
 
 	callbacks->OnPlayerNameChange   = OnPlayerNameChange;
+	callbacks->OnPlayerCrouchChange = OnPlayerCrouchChange;
+	callbacks->OnPlayerOnFireChange = OnPlayerOnFireChange;
+	callbacks->OnPlayerGameKeysChange = OnPlayerGameKeysChange;
 
 	// Done!
 	return 1;
