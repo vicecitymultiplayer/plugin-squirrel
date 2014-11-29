@@ -82,6 +82,7 @@ class CVehicle
 		bool IsHandlingSet( int rule );
 
 		void AddVehicleSpeed( Vector speed );
+		void AddVehicleRelSpeed( Vector speed );
 		void AddVehicleTurnSpeed( Vector speed );
 		void AddVehicleRelTurnSpeed( Vector speed );
 

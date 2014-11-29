@@ -70,6 +70,8 @@ class CPlayer
 		bool GetWidescreen();
 		bool GetOnRadar();
 		bool GetCanAttack();
+		int GetVehicleSlot();
+		int GetVehicleStatus();
 		int GetWeaponSlot();
 		int GetWeapon();
 		int GetWeaponAmmo();

@@ -249,6 +249,11 @@ void CVehicle::AddVehicleSpeed( Vector speed )
 	functions->AddVehicleSpeed( this->nVehicleId, speed.x, speed.y, speed.z );
 }
 
+void CVehicle::AddVehicleRelSpeed( Vector speed )
+{
+	functions->AddVehicleRelSpeed( this->nVehicleId, speed.x, speed.y, speed.z );
+}
+
 void CVehicle::AddVehicleTurnSpeed( Vector speed )
 {
 	functions->AddVehicleTurnSpeed( this->nVehicleId, speed.x, speed.y, speed.z );
@@ -332,6 +337,7 @@ void RegisterVehicle()
 		.Func( _SC("ResetAllHandling"), &CVehicle::ResetAllHandling, 1, "x" )
 		.Func( _SC("IsHandlingSet"), &CVehicle::IsHandlingSet, 2, "xi" )
 		.Func( _SC("AddSpeed"), &CVehicle::AddVehicleSpeed, 2, "xx" )
+		.Func( _SC("AddRelSpeed"), &CVehicle::AddVehicleRelSpeed, 2, "xx" )
 		.Func( _SC("AddTurnSpeed"), &CVehicle::AddVehicleTurnSpeed, 2, "xx" )
 		.Func( _SC("AddRelTurnSpeed"), &CVehicle::AddVehicleRelTurnSpeed, 2, "xx" );
 

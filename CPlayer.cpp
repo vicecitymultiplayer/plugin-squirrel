@@ -287,6 +287,9 @@ SQChar * CPlayer::GetUniqueID()
 	return m_uid;
 }
 
+int CPlayer::GetVehicleSlot()   { return functions->GetPlayerInVehicleSlot(this->nPlayerId);   }
+int CPlayer::GetVehicleStatus() { return functions->GetPlayerInVehicleStatus(this->nPlayerId); }
+
 bool CPlayer::RedirectPlayerToServer(const char* szIP, unsigned int usPort, const char* szNickname, const char* szServerPass, const char* szUserPass)
 {
 	printf("%p %p %s %s", szServerPass, szUserPass, szServerPass, szUserPass);
@@ -295,7 +298,7 @@ bool CPlayer::RedirectPlayerToServer(const char* szIP, unsigned int usPort, cons
 
 Sqrat::string PlayerToString(CPlayer * p)
 {
-	return p->GetName();;
+	return p->GetName();
 }
 
 void RegisterPlayer()
@@ -368,6 +371,8 @@ void RegisterPlayer()
 		.Prop(_SC("Typing"), &CPlayer::Typing)
 		.Prop(_SC("UniqueWorld"), &CPlayer::GetUniqueWorld)
 		.Prop(_SC("UniqueID"), &CPlayer::GetUniqueID)
+		.Prop(_SC("VehicleSlot"), &CPlayer::GetVehicleSlot)
+		.Prop(_SC("VehicleStatus"), &CPlayer::GetVehicleStatus)
 		.Prop(_SC("Weapon"), &CPlayer::GetWeapon);
 
 	// Functions
