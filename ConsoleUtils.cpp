@@ -38,7 +38,7 @@ void OutputMessage( const char * msg )
 		GetConsoleScreenBufferInfo( hstdout, &csbBefore );
 		SetConsoleTextAttribute( hstdout, FOREGROUND_GREEN );
 		pCore->rawprint("[MODULE]  ");
-		
+
 		SetConsoleTextAttribute( hstdout, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY );
 		pCore->rawprint(msg);
 
@@ -58,7 +58,7 @@ void OutputWarning( const char * msg )
 		GetConsoleScreenBufferInfo( hstdout, &csbBefore );
 		SetConsoleTextAttribute( hstdout, FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY );
 		pCore->rawprint("[WARNING] ");
-		
+
 		SetConsoleTextAttribute( hstdout, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY );
 		pCore->rawprint(msg);
 
@@ -78,7 +78,7 @@ void OutputError( const char * msg )
 		GetConsoleScreenBufferInfo( hstdout, &csbBefore );
 		SetConsoleTextAttribute( hstdout, FOREGROUND_RED | FOREGROUND_INTENSITY );
 		pCore->rawprint("[ERROR]   ");
-		
+
 		SetConsoleTextAttribute( hstdout, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY );
 		pCore->rawprint(msg);
 

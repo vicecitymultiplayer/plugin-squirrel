@@ -422,10 +422,10 @@ void ResetVehicleHandling( int model ) { functions->ResetHandling( model ); }
 
 // All of these functions exist for compatibility
 bool GetCinematicBorder ( CPlayer * player )
-{ 
+{
 	if( player != NULL )
 		return ( functions->EnabledPlayerWidescreen( player->nPlayerId ) != 0 );
-	
+
 	return false;
 }
 
@@ -1688,7 +1688,7 @@ bool IsNum(const SQChar * line)
 {
 	if (strlen(line) < 1)
 		return false;
-	
+
 	char* p;
 	strtol(line, &p, 10);
 	return *p == 0;
@@ -1753,7 +1753,7 @@ SQInteger FindPlayer( HSQUIRRELVM v )
 
 			char * lowerName = strdup( pName );
 			szlower( lowerName );
-			
+
 			char * nameBuf = new char[64];
 			for( i = 0; i < functions->GetMaxPlayers(); i++ )
 			{
@@ -1985,7 +1985,7 @@ SQInteger InPoly( HSQUIRRELVM v )
 			}
 		}
 	}
-	
+
 	return sq_throwerror( v, "Unexpected number or types of parameters for InPoly" );
 }
 
@@ -2029,7 +2029,7 @@ SQInteger NewTimer( HSQUIRRELVM v )
 			}
 			else
 				sq_getinteger( v, 4, &maxPulses );
-		}	
+		}
 
 		if( RootTable(v).GetFunction( pFuncName ).IsNull() )
 			return sq_throwerror( v, "The given timer callback does not exist." );
@@ -2127,7 +2127,7 @@ const SQChar * GetFullTime( void )
 {
 	OutputWarning( "GetFullTime is deprecated and may be removed in the future.\n"
 		"          Please use Squirrel's date() function instead." );
-	
+
 	static char date[96];
 	time_t rawtime;
 	time( &rawtime );

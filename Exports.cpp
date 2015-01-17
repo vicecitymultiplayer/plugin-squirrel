@@ -49,14 +49,14 @@ void InitSQAPI()
 	SQAPI(newclosure);
 	SQAPI(setparamscheck);
 	SQAPI(bindenv);
-	
+
 	SQAPI(pushstring);
 	SQAPI(pushfloat);
 	SQAPI(pushinteger);
 	SQAPI(pushbool);
 	SQAPI(pushuserpointer);
 	SQAPI(pushnull);
-	
+
 	SQAPI(gettype);
 	SQAPI(getsize);
 	SQAPI(getbase);
@@ -102,7 +102,7 @@ void InitSQAPI()
 	SQAPI(rawget);
 	SQAPI(rawset);
 	SQAPI(rawdeleteslot);
-	
+
 	SQAPI(arrayappend);
 	SQAPI(arraypop);
 	SQAPI(arrayresize);
