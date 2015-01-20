@@ -186,6 +186,7 @@ void RegisterGlobals()
 
 		.Func(_SC("GetVehicleCount"), GetVehicleCount, 1, _SC("t"))
 		.Func(_SC("GetPickupCount"), GetVehicleCount, 1, _SC("t"))
+		.Func(_SC("GetObjectCount"), GetObjectCount, 1, _SC("t"))
 		.Func(_SC("GetPlayers"), GetPlayers, 1, _SC("t"))
 
 		.Func(_SC("GetFallEnabled"), GetFallEnabled, 1, _SC("t"))

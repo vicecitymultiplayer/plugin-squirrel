@@ -1714,6 +1714,16 @@ int GetPickupCount()
 	return count;
 }
 
+int GetObjectCount()
+{
+	int count = 0;
+	for (int i = 0; i < MAX_OBJECTS; i++)
+	if (functions->GetObjectModel(i) > 0)
+		count++;
+
+	return count;
+}
+
 int GetPlayers()
 {
 	int count = 0;

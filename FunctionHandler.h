@@ -211,6 +211,7 @@ bool IsNum(const SQChar * line);
 
 int GetVehicleCount(void);
 int GetPickupCount(void);
+int GetObjectCount(void);
 int GetPlayers(void);
 
 void SetVehiclesForcedRespawnHeight(SQFloat height);
