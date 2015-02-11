@@ -177,7 +177,7 @@ EntityQuaternion CVehicle::GetRotation()
 	float w, x, y, z;
 	functions->GetVehicleRot( this->nVehicleId, &x, &y, &z, &w );
 
-	return EntityQuaternion(this->nVehicleId, ENTITY_VEHICLE, VEHQUAT_ANGLE, w, x, y, z);
+	return EntityQuaternion(this->nVehicleId, ENTITY_VEHICLE, VEHQUAT_ANGLE, x, y, z, w);
 }
 
 EntityVector CVehicle::GetEulerRotation()
