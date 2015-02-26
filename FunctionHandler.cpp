@@ -1340,6 +1340,8 @@ int GetVehicleModelFromName( SQChar * name )
 				}
 				else if( lowername[1] == 'o' )
 					res = 189; // top fun
+				else if( lowername[1] == 'a' )
+					res = 150; // taxi
 
 				break;
 			}
