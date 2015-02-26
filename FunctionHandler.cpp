@@ -1511,12 +1511,15 @@ int GetVehicleModelFromName( SQChar * name )
 
 			case 'y':
 				res = 186; // yankee
+				break;
 
 			case 'z':
 				res = 188; // zebra cab
+				break;
 
 			case 'k':
 				res = 216; // kaufman cab
+				break;
 
 			case 'v':
 			{
