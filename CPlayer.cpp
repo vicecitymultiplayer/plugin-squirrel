@@ -64,7 +64,18 @@ void CPlayer::SetVehicle( CVehicle * vehiclePointer )
 		if( !callback.IsNull() )
 			callback( pCore->RetrievePlayer(this->nPlayerId), vehiclePointer );
 
-		functions->PutPlayerInVehicle( this->nPlayerId, vehiclePointer->nVehicleId, 0, 1, 1 );
+		functions->PutPlayerInVehicle( this->nPlayerId, vehiclePointer->nVehicleId, 0, 0, 1 );
+	}
+}
+void CPlayer::SetVehicleSlot( CVehicle * vehiclePointer, int slot )
+{
+	if( vehiclePointer != NULL )
+	{
+		Function callback = RootTable().GetFunction( _SC("onPlayerEnterVehicle") );
+		if( !callback.IsNull() )
+			callback( pCore->RetrievePlayer(this->nPlayerId), vehiclePointer );
+
+		functions->PutPlayerInVehicle( this->nPlayerId, vehiclePointer->nVehicleId, slot, 1, 0 );
 	}
 }
 
@@ -400,7 +411,8 @@ void RegisterPlayer()
 		.Func(_SC("SetWantedLevel"), &CPlayer::SetWantedLevel, 2, "xi")
 		.Func(_SC("SetWeapon"), &CPlayer::SetWeapon, 3, "xii")
 		.Func(_SC("Spawn"), &CPlayer::Spawn, 1, "x")
-		.Func(_SC("StreamedToPlayer"), &CPlayer::StreamedToPlayer, 2, "xx");
+		.Func(_SC("StreamedToPlayer"), &CPlayer::StreamedToPlayer, 2, "xx")
+		.Func(_SC("VehicleSlot"), &CPlayer::SetVehicleSlot, 3, "xxi" );
 
 	c.GlobalFunc(_SC("_tostring"), &PlayerToString);
 	RootTable(v).Bind( _SC("CPlayer"), c );

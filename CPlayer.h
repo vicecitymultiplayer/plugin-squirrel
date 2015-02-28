@@ -121,6 +121,7 @@ class CPlayer
 		int GetAmmoAtSlot( int slot );
 		void SetAlpha( int alpha, int fadeTime );
 		bool StreamedToPlayer( CPlayer * player );
+		void SetVehicleSlot( CVehicle * vehiclePointer, int slot );
 		void Select();
 		void RestoreCamera();
 		void RemoveMarker();
