@@ -412,7 +412,7 @@ void RegisterPlayer()
 		.Func(_SC("SetWeapon"), &CPlayer::SetWeapon, 3, "xii")
 		.Func(_SC("Spawn"), &CPlayer::Spawn, 1, "x")
 		.Func(_SC("StreamedToPlayer"), &CPlayer::StreamedToPlayer, 2, "xx")
-		.Func(_SC("VehicleSlot"), &CPlayer::SetVehicleSlot, 3, "xxi" );
+		.Func(_SC("PutInVehicleSlot"), &CPlayer::SetVehicleSlot, 3, "xxi" );
 
 	c.GlobalFunc(_SC("_tostring"), &PlayerToString);
 	RootTable(v).Bind( _SC("CPlayer"), c );
