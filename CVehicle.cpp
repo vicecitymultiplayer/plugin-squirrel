@@ -85,6 +85,14 @@ EntityVector CVehicle::GetSpawnAngleEuler()
 	return EntityVector(this->nVehicleId, ENTITY_VEHICLE, VEHVECTOR_SPAWNANGLE, x, y, z);
 }
 
+Vector CVehicle::GetTurretRotation()
+{
+	float x, y;
+	functions->GetVehicleTurretRotation(this->nVehicleId, &x, &y);
+
+	return Vector(x, y, 0.0f);
+}
+
 unsigned int CVehicle::GetIdleRespawnTimer() { return functions->GetVehicleIdleRespawnTimer(this->nVehicleId); }
 float CVehicle::GetHealth() { return functions->GetVehicleHealth(this->nVehicleId); }
 
@@ -312,6 +320,7 @@ void RegisterVehicle()
 		.Prop( _SC("ID"), &CVehicle::GetID )
 		.Prop( _SC("SyncSource"), &CVehicle::GetSyncSource )
 		.Prop( _SC("SyncType"), &CVehicle::GetSyncType )
+		.Prop(_SC("TurretRotation"), &CVehicle::GetTurretRotation)
 		.Prop( _SC("Wrecked"), &CVehicle::GetWrecked );
 
 	// Functions

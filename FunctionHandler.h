@@ -23,6 +23,7 @@ void GameMessageAlternate        ( const SQChar* message, CPlayer * player );
 void GameMessageToAll            ( const SQChar * message, int type );
 void GameMessageToAllAlternate   ( const SQChar * message );
 
+void ShutdownServer     ( void );
 void SetServerName      ( const SQChar* message );
 void SetMaxPlayers      ( int newMaxPlayers );
 void SetServerPassword  ( const SQChar* password );
@@ -71,6 +72,7 @@ void ToggleShowNametags     ( bool toggle );
 void ToggleJoinMessages     ( bool toggle );
 void ToggleDeathMessages    ( bool toggle );
 void ToggleChatTagDefault   ( bool toggle );
+void ToggleShowOnlyTeamMarkers(bool toggle);
 
 bool EnabledSyncFrameLimiter ( void );
 bool EnabledFrameLimiter     ( void );
@@ -89,6 +91,7 @@ bool EnabledShowNametags     ( void );
 bool EnabledJoinMessages     ( void );
 bool EnabledDeathMessages    ( void );
 bool EnabledChatTagDefault   ( void );
+bool EnabledShowOnlyTeamMarkers(void);
 
 int CreateBlip( int world, Vector * pos, int scale, RGBa color, int nSpriteId );
 void DestroyBlip( int blipID );

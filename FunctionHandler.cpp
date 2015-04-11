@@ -144,6 +144,7 @@ void ToggleShowNametags     ( bool toggle ) { functions->ToggleShowNametags( ( t
 void ToggleJoinMessages     ( bool toggle ) { functions->ToggleJoinMessages( ( toggle ? 1 : 0 ) );     }
 void ToggleDeathMessages    ( bool toggle ) { functions->ToggleDeathMessages( ( toggle ? 1 : 0 ) );    }
 void ToggleChatTagDefault   ( bool toggle ) { functions->ToggleChatTagsByDefaultEnabled( ( toggle ? 1 : 0 ) ); }
+void ToggleShowOnlyTeamMarkers(bool toggle) { functions->ToggleOnlyShowTeamMarkers(toggle); }
 
 bool EnabledSyncFrameLimiter() { return ( functions->EnabledSyncFrameLimiter() != 0 );  }
 bool EnabledFrameLimiter()     { return ( functions->EnabledFrameLimiter() != 0 );      }
@@ -162,6 +163,7 @@ bool EnabledShowNametags()     { return ( functions->EnabledShowNametags() != 0 
 bool EnabledJoinMessages()     { return ( functions->EnabledJoinMessages() != 0 );      }
 bool EnabledDeathMessages()    { return ( functions->EnabledDeathMessages() != 0 );     }
 bool EnabledChatTagDefault()   { return ( functions->EnabledChatTagsByDefault() != 0 ); }
+bool EnabledShowOnlyTeamMarkers() { return functions->EnabledOnlyShowTeamMarkers() != 0; }
 
 void CreateExplosion( int world, int type, Vector * pos, int playerCaused, bool onGround )
 {
