@@ -1,5 +1,5 @@
 /*
-   Project: Vice City Multiplayer 0.4 Server / Plugin kit
+   Project: Vice City Multiplayer 0.4 Server / Plugin Kit
    File: plugin.h
 
    Copyright 2011 Ago Allikmaa (maxorator)
@@ -40,6 +40,42 @@ typedef struct {
 	unsigned int uPluginVer;
 } PluginInfo;
 
+#define SDK_ENTPOOL_VEHICLE     1
+#define SDK_ENTPOOL_OBJECT      2
+#define SDK_ENTPOOL_PICKUP      3
+#define SDK_ENTPOOL_RADIO       4
+#define SDK_ENTPOOL_SPRITE      5
+#define SDK_ENTPOOL_TEXTDRAW    6
+#define SDK_ENTPOOL_BLIP        7
+
+#define SDK_PSTATE_NONE         0
+#define SDK_PSTATE_NORMAL       1
+#define SDK_PSTATE_AIM          2
+#define SDK_PSTATE_DRIVER       3
+#define SDK_PSTATE_PASSENGER    4
+#define SDK_PSTATE_ENTER_DRIVER 5
+#define SDK_PSTATE_ENTER_PASS   6
+#define SDK_PSTATE_EXIT         7
+#define SDK_PSTATE_UNSPAWNED    8
+
+#define SDK_PLAYERUPD_NORMAL    0
+#define SDK_PLAYERUPD_AIMING    1
+#define SDK_PLAYERUPD_DRIVER    2
+#define SDK_PLAYERUPD_PASSENGER 3
+
+#define SDK_VSYNCTYPE_NONE      0
+#define SDK_VSYNCTYPE_DRIVER    1
+#define SDK_VSYNCTYPE_DRIVEREX  2
+#define SDK_VSYNCTYPE_PASSENGER 3
+#define SDK_VSYNCTYPE_NEAR      4
+
+#define SDK_VUPDATE_DRIVERSYNC  0
+#define SDK_VUPDATE_OTHERSYNC   1
+#define SDK_VUPDATE_POSITION    2
+#define SDK_VUPDATE_HEALTH      4
+#define SDK_VUPDATE_COLOUR      5
+#define SDK_VUPDDATE_ROTATION   6
+
 typedef unsigned int (*SDK_GetServerVersion) (void);
 typedef unsigned int (*SDK_GetServerSettings) (ServerSettings* pstSettings);
 typedef unsigned int (*SDK_ExportFunctions) (int nPluginId, void** ppFunctionList, unsigned int uSize);
@@ -60,6 +96,7 @@ typedef int (*SDK_SetServerPassword) (char* pszBuffer);
 typedef int (*SDK_GetServerPassword) (char* pszBuffer, int nBufferLen);
 typedef int (*SDK_SetGameModeText) (const char* pszText);
 typedef int (*SDK_GetGameModeText) (char* pszBuffer, int nBufferLen);
+typedef int (*SDK_ShutdownServer) (void);
 typedef int (*SDK_SetWorldBounds) (float fMaxX, float fMinX, float fMaxY, float fMinY);
 typedef int (*SDK_GetWorldBounds) (float* pfMaxX, float* pfMinX, float* pfMaxY, float* pfMinY);
 typedef int (*SDK_SetWastedSettings) (unsigned int dwDeathTimer, unsigned int dwFadeTimer, float fFadeInSpeed, float fFadeOutSpeed, unsigned int dwFadeColour, unsigned int dwCorpseFadeStart, unsigned int dwCorpseFadeTime);
@@ -106,6 +143,8 @@ typedef int (*SDK_ToggleJumpSwitch) (unsigned int bToggle);
 typedef unsigned int (*SDK_EnabledJumpSwitch) (void);
 typedef int (*SDK_ToggleShowMarkers) (unsigned int bToggle);
 typedef unsigned int (*SDK_EnabledShowMarkers) (void);
+typedef int (*SDK_ToggleOnlyShowTeamMarkers) (unsigned int bToggle);
+typedef unsigned int (*SDK_EnabledOnlyShowTeamMarkers) (void);
 typedef int (*SDK_ToggleStuntBike) (unsigned int bToggle);
 typedef unsigned int (*SDK_EnabledStuntBike) (void);
 typedef int (*SDK_ToggleShootInAir) (unsigned int bToggle);
@@ -137,20 +176,22 @@ typedef void (*SDK_RemoveAllKeyBinds) (void);
 typedef int (*SDK_CreateCoordBlip) (int nIndex, int nWorld, float fX, float fY, float fZ, int nScale, unsigned int uColour, int nSprite);
 typedef void (*SDK_DestroyCoordBlip) (int nIndex);
 typedef unsigned int (*SDK_GetCoordBlipInfo) (int nIndex, int* pnWorld, float* pfX, float* pfY, float* pfZ, int* pnScale, unsigned int* puColour, int* pnSprite);
-typedef int (*SDK_CreateSprite) (int nIndex, const char * pszFilename, int fX, int fY, int fRotX, int fRotY, float fRotation, unsigned char byAlpha);
+typedef int (*SDK_CreateSprite) (int nIndex, const char * pszFilename, int fX, int fY, int fRotX, int fRotY, float fRotation, unsigned char byAlpha, unsigned int isRelative);
 typedef void (*SDK_DestroySprite) (int nIndex);
 typedef void (*SDK_ShowSprite) (int nIndex, int nPlayerId);
 typedef void (*SDK_HideSprite) (int nIndex, int nPlayerId);
-typedef void (*SDK_MoveSprite) (int nIndex, int nPlayerId, unsigned int fX, unsigned int fY);
-typedef void (*SDK_SetSpriteCenter) (int nIndex, int nPlayerId, unsigned int fX, unsigned int fY);
+typedef void (*SDK_MoveSprite) (int nIndex, int nPlayerId, int fX, int fY);
+typedef void (*SDK_SetSpriteCenter) (int nIndex, int nPlayerId, int fX, int fY);
 typedef void (*SDK_RotateSprite) (int nIndex, int nPlayerId, float fRotation);
 typedef void (*SDK_SetSpriteAlpha) (int nIndex, int nPlayerId, unsigned char byAlpha);
-typedef int (*SDK_CreateTextdraw) (int nIndex, const char * pszText, int lX, int lY, unsigned int dwColour);
+typedef void (*SDK_SetSpriteRelativity) (int nIndex, int nPlayerId, unsigned int isRelative);
+typedef int (*SDK_CreateTextdraw) (int nIndex, const char * pszText, int lX, int lY, unsigned int dwColour, unsigned int isRelative);
 typedef void (*SDK_DestroyTextdraw) (int nIndex);
 typedef void (*SDK_ShowTextdraw) (int nIndex, int nPlayerId);
 typedef void (*SDK_HideTextdraw) (int nIndex, int nPlayerId);
 typedef void (*SDK_MoveTextdraw) (int nIndex, int nPlayerId, int lX, int lY);
 typedef void (*SDK_SetTextdrawColour) (int nIndex, int nPlayerId, unsigned int dwColour);
+typedef void (*SDK_SetTextdrawRelativity) (int nIndex, int nPlayerId, unsigned int isRelative);
 typedef int (*SDK_AddRadioStream) (int nRadioId, const char* pszRadioName, const char* pszRadioURL, unsigned int bIsListed);
 typedef int (*SDK_RemoveRadioStream) (int nRadioId);
 typedef int (*SDK_SetUseClasses) (unsigned int bToggle);
@@ -200,6 +241,7 @@ typedef int (*SDK_GetPlayerPing) (int nPlayerId);
 typedef unsigned int (*SDK_IsPlayerTyping) (int nPlayerId);
 typedef double (*SDK_GetPlayerFPS) (int nPlayerId);
 typedef int (*SDK_GetPlayerUID) (int nPlayerId, char* szBuffer, int nBufferLen);
+typedef int (*SDK_GetPlayerWantedLevel) (int nPlayerId);
 typedef int (*SDK_SetPlayerHealth) (int nPlayerId, float fHealth);
 typedef float (*SDK_GetPlayerHealth) (int nPlayerId);
 typedef int (*SDK_SetPlayerArmour) (int nPlayerId, float fArmour);
@@ -215,6 +257,12 @@ typedef int (*SDK_SetPlayerHeading) (int nPlayerId, float fAngleZ);
 typedef float (*SDK_GetPlayerHeading) (int nPlayerId);
 typedef int (*SDK_SetPlayerAlpha) (int nPlayerId, int nAlpha, int nFadeTime);
 typedef int (*SDK_GetPlayerAlpha) (int nPlayerId);
+typedef unsigned int (*SDK_GetPlayerOnFireStatus) (int nPlayerId);
+typedef unsigned int (*SDK_GetPlayerCrouchStatus) (int nPlayerId);
+typedef int (*SDK_GetPlayerAction) (int nPlayerId);
+typedef int (*SDK_GetPlayerGameKeys) (int nPlayerId);
+typedef unsigned int (*SDK_GetPlayerAimPos) (int nPlayerId, float* pfX, float* pfY, float* pfZ);
+typedef unsigned int (*SDK_GetPlayerAimDir) (int nPlayerId, float* pfX, float* pfY, float* pfZ);
 typedef int (*SDK_PutPlayerInVehicle) (int nPlayerId, int nVehicleId, int nSlot, unsigned int bMakeRoom, unsigned int bWarp);
 typedef int (*SDK_RemovePlayerFromVehicle) (int nPlayerId);
 typedef int (*SDK_GetPlayerInVehicleStatus) (int nPlayerId);
@@ -260,6 +308,7 @@ typedef int (*SDK_GetPlayerStandingOnObject) (int nPlayerId);
 typedef unsigned int (*SDK_IsPlayerAway) (int nPlayerId);
 typedef int (*SDK_GetPlayerSpectateTarget) (int nPlayerId);
 typedef int (*SDK_SetPlayerSpectateTarget) (int nPlayerId, int nTargetId);
+typedef unsigned int (*SDK_RedirectPlayerToServer) (int nPlayerId, const char* szIP, unsigned int usPort, const char* szNickname, const char* szServerPass, const char* szUserPass);
 typedef int (*SDK_CreateVehicle) (int nModelId, int nWorld, float fPosX, float fPosY, float fPosZ, float fAngleZ, int nColour1, int nColour2);
 typedef int (*SDK_DeleteVehicle) (int nVehicleId);
 typedef int (*SDK_GetVehicleSyncSource) (int nVehicleId);
@@ -322,6 +371,7 @@ typedef int (*SDK_SetVehicleRadioLocked) (int nVehicleId, unsigned int bToggle);
 typedef unsigned int (*SDK_IsVehicleRadioLocked) (int nVehicleId);
 typedef unsigned int (*SDK_GetVehicleGhostState) (int nVehicleId);
 typedef int (*SDK_SetVehicleGhostState) (int nVehicleId, unsigned int bToggle);
+typedef unsigned int (*SDK_GetVehicleTurretRotation) (int nVehicleId, float* pfH, float* pfV);
 typedef int (*SDK_ResetAllVehicleHandlings) (void);
 typedef unsigned int (*SDK_ExistsHandlingRule) (int nModelIndex, int nRuleIndex);
 typedef int (*SDK_SetHandlingRule) (int nModelIndex, int nRuleIndex, double fValue);
@@ -371,13 +421,6 @@ typedef int (*SDK_SetObjectShotReport) (int nObjectId, unsigned int bToggle);
 typedef unsigned int (*SDK_IsObjectShotReport) (int nObjectId);
 typedef int (*SDK_SetObjectBumpReport) (int nObjectId, unsigned int bToggle);
 typedef unsigned int (*SDK_IsObjectBumpReport) (int nObjectId);
-typedef unsigned int (*SDK_RedirectPlayerToServer) (int nPlayerId, const char* szIP, unsigned int usPort, const char* szNickname, const char* szServerPass, const char* szUserPass);
-typedef unsigned int (*SDK_GetPlayerOnFireStatus) (int nPlayerId);
-typedef unsigned int (*SDK_GetPlayerCrouchStatus) (int nPlayerId);
-typedef int (*SDK_GetPlayerAction) (int nPlayerId);
-typedef int (*SDK_GetPlayerGameKeys) (int nPlayerId);
-typedef unsigned int (*SDK_GetPlayerAimPos) (int nPlayerId, float* pfX, float* pfY, float* pfZ);
-typedef unsigned int (*SDK_GetPlayerAimDir) (int nPlayerId, float* pfX, float* pfY, float* pfZ);
 typedef int (*SDK_OnInitServer) (void);
 typedef void (*SDK_OnShutdownServer) (void);
 typedef void (*SDK_OnFrame) (float fElapsedTime);
@@ -393,6 +436,12 @@ typedef void (*SDK_OnPlayerUpdate) (int nPlayerId, int nUpdateType);
 typedef int (*SDK_OnPlayerRequestEnter) (int nPlayerId, int nVehicleId, int nSlotId);
 typedef void (*SDK_OnPlayerEnterVehicle) (int nPlayerId, int nVehicleId, int nSlotId);
 typedef void (*SDK_OnPlayerExitVehicle) (int nPlayerId, int nVehicleId);
+typedef void (*SDK_OnPlayerNameChange) (int nPlayerId, const char* pszOldName, const char* pszNewName);
+typedef void (*SDK_OnPlayerStateChange) (int nPlayerId, int nOldState, int nNewState);
+typedef void (*SDK_OnPlayerActionChange) (int nPlayerId, int nOldAction, int nNewAction);
+typedef void (*SDK_OnPlayerOnFireChange) (int nPlayerId, unsigned int bIsOnFireNow);
+typedef void (*SDK_OnPlayerCrouchChange) (int nPlayerId, unsigned int bIsCrouchingNow);
+typedef void (*SDK_OnPlayerGameKeysChange) (int nPlayerId, int nOldKeys, int nNewKeys);
 typedef int (*SDK_OnPickupClaimPicked) (int nPickupId, int nPlayerId);
 typedef void (*SDK_OnPickupPickedUp) (int nPickupId, int nPlayerId);
 typedef void (*SDK_OnPickupRespawn) (int nPickupId);
@@ -413,12 +462,6 @@ typedef void (*SDK_OnPlayerAwayChange) (int nPlayerId, unsigned int bNewStatus);
 typedef void (*SDK_OnPlayerSpectate) (int nPlayerId, int nTargetId);
 typedef void (*SDK_OnPlayerCrashReport) (int nPlayerId, const char* pszReport);
 typedef void (*SDK_OnServerPerformanceReport) (int nNumStats, const char** ppszDescription, unsigned long long* pnMillisecsSpent);
-typedef void (*SDK_OnPlayerNameChange) (int nPlayerId, const char* pszOldName, const char* pszNewName);
-typedef void (*SDK_OnPlayerStateChange) (int nPlayerId, int nOldState, int nNewState);
-typedef void (*SDK_OnPlayerActionChange) (int nPlayerId, int nOldAction, int nNewAction);
-typedef void (*SDK_OnPlayerOnFireChange) (int nPlayerId, unsigned int bIsOnFireNow);
-typedef void (*SDK_OnPlayerCrouchChange) (int nPlayerId, unsigned int bIsCrouchingNow);
-typedef void (*SDK_OnPlayerGameKeysChange) (int nPlayerId, int nOldKeys, int nNewKeys);
 
 typedef struct {
 	unsigned int						uStructSize;
@@ -448,6 +491,7 @@ typedef struct {
 	SDK_GetServerPassword GetServerPassword;
 	SDK_SetGameModeText SetGameModeText;
 	SDK_GetGameModeText GetGameModeText;
+	SDK_ShutdownServer ShutdownServer;
 
 	//WORLD: settings
 	SDK_SetWorldBounds SetWorldBounds;
@@ -498,6 +542,8 @@ typedef struct {
 	SDK_EnabledJumpSwitch EnabledJumpSwitch;
 	SDK_ToggleShowMarkers ToggleShowMarkers;
 	SDK_EnabledShowMarkers EnabledShowMarkers;
+	SDK_ToggleOnlyShowTeamMarkers ToggleOnlyShowTeamMarkers;
+	SDK_EnabledOnlyShowTeamMarkers EnabledOnlyShowTeamMarkers;
 	SDK_ToggleStuntBike ToggleStuntBike;
 	SDK_EnabledStuntBike EnabledStuntBike;
 	SDK_ToggleShootInAir ToggleShootInAir;
@@ -547,6 +593,7 @@ typedef struct {
 	SDK_SetSpriteCenter SetSpriteCenter;
 	SDK_RotateSprite RotateSprite;
 	SDK_SetSpriteAlpha SetSpriteAlpha;
+	SDK_SetSpriteRelativity SetSpriteRelativity;
 
 	//TEXTDRAWS
 	SDK_CreateTextdraw CreateTextdraw;
@@ -555,6 +602,7 @@ typedef struct {
 	SDK_HideTextdraw HideTextdraw;
 	SDK_MoveTextdraw MoveTextdraw;
 	SDK_SetTextdrawColour SetTextdrawColour;
+	SDK_SetTextdrawRelativity SetTextdrawRelativity;
 
 	//RADIOS
 	SDK_AddRadioStream AddRadioStream;
@@ -614,6 +662,7 @@ typedef struct {
 	SDK_IsPlayerTyping IsPlayerTyping;
 	SDK_GetPlayerFPS GetPlayerFPS;
 	SDK_GetPlayerUID GetPlayerUID;
+	SDK_GetPlayerWantedLevel GetPlayerWantedLevel;
 
 	//PLAYERS: health and location
 	SDK_SetPlayerHealth SetPlayerHealth;
@@ -631,6 +680,12 @@ typedef struct {
 	SDK_GetPlayerHeading GetPlayerHeading;
 	SDK_SetPlayerAlpha SetPlayerAlpha;
 	SDK_GetPlayerAlpha GetPlayerAlpha;
+	SDK_GetPlayerOnFireStatus GetPlayerOnFireStatus;
+	SDK_GetPlayerCrouchStatus GetPlayerCrouchStatus;
+	SDK_GetPlayerAction GetPlayerAction;
+	SDK_GetPlayerGameKeys GetPlayerGameKeys;
+	SDK_GetPlayerAimPos GetPlayerAimPos;
+	SDK_GetPlayerAimDir GetPlayerAimDir;
 
 	//PLAYERS: vehicle
 	SDK_PutPlayerInVehicle PutPlayerInVehicle;
@@ -686,6 +741,7 @@ typedef struct {
 	SDK_IsPlayerAway IsPlayerAway;
 	SDK_GetPlayerSpectateTarget GetPlayerSpectateTarget;
 	SDK_SetPlayerSpectateTarget SetPlayerSpectateTarget;
+	SDK_RedirectPlayerToServer RedirectPlayerToServer;
 
 	//VEHICLES
 	SDK_CreateVehicle CreateVehicle;
@@ -750,6 +806,7 @@ typedef struct {
 	SDK_IsVehicleRadioLocked IsVehicleRadioLocked;
 	SDK_GetVehicleGhostState GetVehicleGhostState;
 	SDK_SetVehicleGhostState SetVehicleGhostState;
+	SDK_GetVehicleTurretRotation GetVehicleTurretRotation;
 
 	//VEHICLES: handling
 	SDK_ResetAllVehicleHandlings ResetAllVehicleHandlings;
@@ -805,15 +862,6 @@ typedef struct {
 	SDK_IsObjectShotReport IsObjectShotReport;
 	SDK_SetObjectBumpReport SetObjectBumpReport;
 	SDK_IsObjectBumpReport IsObjectBumpReport;
-
-	//FIXME: move on major update, currently keeping compatibility
-	SDK_RedirectPlayerToServer RedirectPlayerToServer;
-	SDK_GetPlayerOnFireStatus GetPlayerOnFireStatus;
-	SDK_GetPlayerCrouchStatus GetPlayerCrouchStatus;
-	SDK_GetPlayerAction GetPlayerAction;
-	SDK_GetPlayerGameKeys GetPlayerGameKeys;
-	SDK_GetPlayerAimPos GetPlayerAimPos;
-	SDK_GetPlayerAimDir GetPlayerAimDir;
 } PluginFuncs;
 
 typedef struct {
@@ -834,6 +882,12 @@ typedef struct {
 	SDK_OnPlayerRequestEnter OnPlayerRequestEnter;
 	SDK_OnPlayerEnterVehicle OnPlayerEnterVehicle;
 	SDK_OnPlayerExitVehicle OnPlayerExitVehicle;
+	SDK_OnPlayerNameChange OnPlayerNameChange;
+	SDK_OnPlayerStateChange OnPlayerStateChange;
+	SDK_OnPlayerActionChange OnPlayerActionChange;
+	SDK_OnPlayerOnFireChange OnPlayerOnFireChange;
+	SDK_OnPlayerCrouchChange OnPlayerCrouchChange;
+	SDK_OnPlayerGameKeysChange OnPlayerGameKeysChange;
 	SDK_OnPickupClaimPicked OnPickupClaimPicked;
 	SDK_OnPickupPickedUp OnPickupPickedUp;
 	SDK_OnPickupRespawn OnPickupRespawn;
@@ -854,13 +908,5 @@ typedef struct {
 	SDK_OnPlayerSpectate OnPlayerSpectate;
 	SDK_OnPlayerCrashReport OnPlayerCrashReport;
 	SDK_OnServerPerformanceReport OnServerPerformanceReport;
-
-	//FIXME: move on major update, currently keeping compatibility
-	SDK_OnPlayerNameChange OnPlayerNameChange;
-	SDK_OnPlayerStateChange OnPlayerStateChange;
-	SDK_OnPlayerActionChange OnPlayerActionChange;
-	SDK_OnPlayerOnFireChange OnPlayerOnFireChange;
-	SDK_OnPlayerCrouchChange OnPlayerCrouchChange;
-	SDK_OnPlayerGameKeysChange OnPlayerGameKeysChange;
 
 } PluginCallbacks;
