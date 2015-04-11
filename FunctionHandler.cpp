@@ -266,7 +266,7 @@ CObject * CreateObject( int model, int world, Vector * pos, int alpha )
 
 CSprite * CreateSprite(const SQChar * filename, uint16_t x, uint16_t y, uint16_t rX, uint16_t rY, float rot, uint16_t alpha)
 {
-	int sId = functions->CreateSprite(-1, filename, x, y, rX, rY, rot, alpha);
+	int sId = functions->CreateSprite(-1, filename, x, y, rX, rY, rot, alpha, 0);
 	if (sId < 0)
 		return NULL;
 	else
@@ -280,7 +280,7 @@ CSprite * CreateSprite(const SQChar * filename, uint16_t x, uint16_t y, uint16_t
 
 CTextdraw * CreateTextdraw(const SQChar * text, int x, int y, unsigned int colour)
 {
-	int sId = functions->CreateTextdraw(-1, text, x, y, colour);
+	int sId = functions->CreateTextdraw(-1, text, x, y, colour, 0);
 	if (sId < 0)
 		return NULL;
 	else
