@@ -31,6 +31,14 @@ void CTextdraw::SetColourForPlayer(CPlayer * pPlayer, unsigned int colour) {
 	functions->SetTextdrawColour(this->nTextdrawId, pPlayer->GetID(), colour);
 }
 
+void CTextdraw::SetRelativityForAll(bool bIsRelative) {
+	functions->SetTextdrawRelativity(this->nTextdrawId, -1, bIsRelative);
+}
+
+void CTextdraw::SetRelativityForPlayer(CPlayer * pPlayer, bool bIsRelative) {
+	functions->SetTextdrawRelativity(this->nTextdrawId, pPlayer->GetID(), bIsRelative);
+}
+
 void CTextdraw::Delete() {
 	functions->DestroyTextdraw(this->nTextdrawId);
 	delete this;
@@ -48,6 +56,8 @@ void RegisterTextdraw()
 		.Func(_SC("SetPosForPlayer"), &CTextdraw::SetPositionForPlayer, 4, "xxii")
 		.Func(_SC("SetColourForAll"), &CTextdraw::SetColourForAll, 2, "xi")
 		.Func(_SC("SetColourForPlayer"), &CTextdraw::SetColourForPlayer, 3, "xxi")
+		.Func(_SC("SetRelativeForAll"), &CTextdraw::SetRelativityForAll, 2, "xb")
+		.Func(_SC("SetRelativeForPlayer"), &CTextdraw::SetRelativityForPlayer, 3, "xxb")
 		.Func(_SC("Delete"), &CTextdraw::Delete, 1, "x");
 
 	RootTable(v).Bind(_SC("CTextdraw"), c);

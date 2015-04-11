@@ -47,6 +47,14 @@ void CSprite::SetAlphaForPlayer(CPlayer * pPlayer, unsigned int alpha) {
 	functions->SetSpriteAlpha(this->nSpriteId, pPlayer->GetID(), (alpha > 255 ? 255 : alpha));
 }
 
+void CSprite::SetRelativityForAll(bool bIsRelative) {
+	functions->SetSpriteRelativity(this->nSpriteId, -1, bIsRelative);
+}
+
+void CSprite::SetRelativityForPlayer(CPlayer * pPlayer, bool bIsRelative) {
+	functions->SetSpriteRelativity(this->nSpriteId, pPlayer->GetID(), bIsRelative);
+}
+
 void CSprite::Delete() {
 	functions->DestroySprite(this->nSpriteId);
 	delete this;
@@ -68,6 +76,8 @@ void RegisterSprite()
 		.Func(_SC("RotateForPlayer"), &CSprite::SetRotationForPlayer, 3, "xxn")
 		.Func(_SC("SetAlphaForAll"), &CSprite::SetAlphaForAll, 2, "xi")
 		.Func(_SC("SetAlphaForPlayer"), &CSprite::SetAlphaForPlayer, 3, "xxi")
+		.Func(_SC("SetRelativeForAll"), &CSprite::SetRelativityForAll, 2, "xb")
+		.Func(_SC("SetRelativeForPlayer"), &CSprite::SetRelativityForPlayer, 3, "xxb")
 		.Func(_SC("Delete"), &CSprite::Delete, 1, "x");
 
 	RootTable(v).Bind(_SC("CSprite"), c);

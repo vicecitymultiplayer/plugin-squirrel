@@ -62,6 +62,7 @@ class CVehicle
 		int GetRadio();
 		bool GetRadioLockStatus();
 		bool GetGhost();
+		Vector GetTurretRotation();
 
 	public:
 		void Delete();

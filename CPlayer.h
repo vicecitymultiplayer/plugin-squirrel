@@ -40,6 +40,7 @@ class CPlayer
 		void SetMarkerVisible( bool isMarkerVisible );
 		void SetCanUseColors( bool canUseColors );
 		void SetDrunkStatus( bool isDrunk );
+		void SetWantedLevel(int wantedLevel);
 
 	public:
 		EntityVector GetPosition();
@@ -95,6 +96,7 @@ class CPlayer
 		int GetPlayerGameKeys(void);
 		Vector GetPlayerAimPos(void);
 		Vector GetPlayerAimDir(void);
+		int GetWantedLevel(void);
 
 	public:
 		void Kick();
@@ -105,7 +107,6 @@ class CPlayer
 		void SetSpeed( Vector speed );
 		void SetInterior( int interior );
 		void Eject();
-		void SetWantedLevel( int wantedLevel );
 		void LaySpike();
 		void SetCameraPos( Vector pos, Vector look );
 		void SetCameraFollow( bool toFollow );

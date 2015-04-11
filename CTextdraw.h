@@ -17,6 +17,9 @@ class CTextdraw
 		void SetColourForAll(unsigned int alpha);
 		void SetColourForPlayer(CPlayer * pPlayer, unsigned int colour);
 		
+		void SetRelativityForAll(bool bIsRelative);
+		void SetRelativityForPlayer(CPlayer * pPlayer, bool bIsRelative);
+
 		void Delete(void);
 
 	public:

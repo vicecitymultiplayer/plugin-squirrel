@@ -23,6 +23,9 @@ class CSprite
 		void SetAlphaForAll(unsigned int alpha);
 		void SetAlphaForPlayer(CPlayer * pPlayer, unsigned int alpha);
 		
+		void SetRelativityForAll(bool bIsRelative);
+		void SetRelativityForPlayer(CPlayer * pPlayer, bool bIsRelative);
+
 		void Delete(void);
 
 	public:

@@ -162,6 +162,7 @@ int CPlayer::GetWeaponSlot() { return functions->GetPlayerWeaponSlot(this->nPlay
 int CPlayer::GetWeapon() { return functions->GetPlayerWeapon(this->nPlayerId); }
 int CPlayer::GetWeaponAmmo() { return functions->GetPlayerWeaponAmmo(this->nPlayerId); }
 
+int CPlayer::GetWantedLevel(void) { return functions->GetPlayerWantedLevel(this->nPlayerId); }
 bool CPlayer::GetPlayerOnFireStatus(void) { return Boolify(functions->GetPlayerOnFireStatus(this->nPlayerId)); }
 bool CPlayer::GetPlayerCrouchStatus(void) { return Boolify(functions->GetPlayerCrouchStatus(this->nPlayerId)); }
 int CPlayer::GetPlayerAction(void) { return functions->GetPlayerAction(this->nPlayerId); }
@@ -352,6 +353,7 @@ void RegisterPlayer()
 		.Prop(_SC("Speed"), &CPlayer::GetSpeed, &CPlayer::SetSpeed )
 		.Prop(_SC("Team"), &CPlayer::GetTeam, &CPlayer::SetTeam)
 		.Prop(_SC("Vehicle"), &CPlayer::GetVehicle, &CPlayer::SetVehicle)
+		.Prop(_SC("WantedLevel"), &CPlayer::GetWantedLevel, &CPlayer::SetWantedLevel)
 		.Prop(_SC("WhiteScanlines"), &CPlayer::GetWhiteScanlines, &CPlayer::SetWhiteScanlines)
 		.Prop(_SC("Widescreen"), &CPlayer::GetWidescreen, &CPlayer::SetWidescreen)
 		.Prop(_SC("World"), &CPlayer::GetWorld, &CPlayer::SetWorld);
