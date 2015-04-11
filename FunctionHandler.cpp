@@ -1340,6 +1340,8 @@ int GetVehicleModelFromName( SQChar * name )
 				}
 				else if( lowername[1] == 'o' )
 					res = 189; // top fun
+				else if( lowername[1] == 'a' )
+					res = 150; // taxi
 
 				break;
 			}
@@ -1511,12 +1513,15 @@ int GetVehicleModelFromName( SQChar * name )
 
 			case 'y':
 				res = 186; // yankee
+				break;
 
 			case 'z':
 				res = 188; // zebra cab
+				break;
 
 			case 'k':
 				res = 216; // kaufman cab
+				break;
 
 			case 'v':
 			{
@@ -1678,7 +1683,7 @@ void CreateRadioStreamWithID(int streamID, const char * radioName, const char * 
 }
 
 bool SetWeaponDataValue   ( int weaponID, int fieldID, double value ) { return (functions->SetWeaponDataValue( weaponID, fieldID, value ) ? true : false); }
-double GetWeaponDataValue ( int weaponID, int fieldID ) { return (functions->GetWeaponDataValue( weaponID, fieldID ) ? true : false); }
+double GetWeaponDataValue ( int weaponID, int fieldID ) { return functions->GetWeaponDataValue( weaponID, fieldID ); }
 bool ResetWeaponDataValue ( int weaponID, int fieldID ) { return (functions->ResetWeaponDataValue( weaponID, fieldID ) ? true : false); }
 bool IsWeaponDataModified ( int weaponID, int fieldID ) { return (functions->IsWeaponDataValueModified( weaponID, fieldID ) ? true : false); }
 bool ResetWeaponData      ( int weaponID ) { return (functions->ResetWeaponData( weaponID ) ? true : false); }

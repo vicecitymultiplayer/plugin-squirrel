@@ -1067,8 +1067,10 @@ void OnPlayerCrouchChange(int nPlayerId, unsigned int bIsCrouchingNow)
 		Function callback = RootTable().GetFunction(_SC("onPlayerCrouchChange"));
 		try
 		{
+			bool isCrouching = functions->GetPlayerCrouchStatus(nPlayerId);
 			if (!callback.IsNull())
-				callback.Execute<CPlayer *, bool>(pCore->RetrievePlayer(nPlayerId), bIsCrouchingNow == 1);
+				callback.Execute<CPlayer *, bool>(pCore->RetrievePlayer(nPlayerId), isCrouching == 0); // tmp fix
+				//callback.Execute<CPlayer *, bool>(pCore->RetrievePlayer(nPlayerId), bIsCrouchingNow == 1);
 		}
 		catch (Sqrat::Exception e)
 		{
