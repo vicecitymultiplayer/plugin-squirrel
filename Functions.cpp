@@ -135,6 +135,8 @@ void RegisterGlobals()
 
 		.Func(_SC("SetWastedSettings"), SetWastedSettings, 8, _SC("tnnnnxnn"))
 		.Func(_SC("GetWastedSettings"), GetWastedSettings, 1, _SC("t"))
+		.Func(_SC("SetKillDelay"), SetKillDelay, 2, _SC("ti"))
+		.Func(_SC("GetKillDelay"), GetKillDelay, 1, _SC("t"))
 
 		.Func(_SC("RawHideMapObject"), RawHideMapObject, 5, _SC("tiiii"))
 		.Func(_SC("HideMapObject"), HideMapObject, 5, _SC("tifff"))
