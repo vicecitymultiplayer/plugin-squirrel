@@ -115,6 +115,13 @@ void OnPlayerConnect( int nPlayerId )
 {
 	if (pCore != NULL)
 	{
+		lastPlrInfo[nPlayerId].lastArmour = 0;
+		lastPlrInfo[nPlayerId].lastHP = 100;
+		lastPlrInfo[nPlayerId].lastWep = 0;
+		lastPlrInfo[nPlayerId].lastX = 0.0f;
+		lastPlrInfo[nPlayerId].lastY = 0.0f;
+		lastPlrInfo[nPlayerId].lastZ = 0.0f;
+		
 		CPlayer * newPlayer = pCore->AllocatePlayer(nPlayerId);
 		Function callback = RootTable().GetFunction(_SC("onPlayerJoin"));
 		try
@@ -665,9 +672,9 @@ void OnVehicleUpdate( int nVehicleId, int nUpdateType )
 {
 	if (pCore != NULL)
 	{
-		savedVehicleData vehInfo = lastVehInfo[nVehicleId];
-		Vector lastPos = Vector(vehInfo.lastX, vehInfo.lastY, vehInfo.lastZ);
-		float  lastHP = vehInfo.lastHP;
+		savedVehicleData * vehInfo = &lastVehInfo[nVehicleId];
+		Vector lastPos = Vector(vehInfo->lastX, vehInfo->lastY, vehInfo->lastZ);
+		float  lastHP = vehInfo->lastHP;
 
 		float x, y, z;
 		functions->GetVehiclePos(nVehicleId, &x, &y, &z);
@@ -692,7 +699,7 @@ void OnVehicleUpdate( int nVehicleId, int nUpdateType )
 			}
 
 			callback.Release();
-			vehInfo.lastHP = hp;
+			vehInfo->lastHP = hp;
 		}
 
 		// Check for onVehicleMove triggers
@@ -713,12 +720,10 @@ void OnVehicleUpdate( int nVehicleId, int nUpdateType )
 			}
 
 			callback.Release();
-			vehInfo.lastX = x;
-			vehInfo.lastY = y;
-			vehInfo.lastZ = z;
+			vehInfo->lastX = x;
+			vehInfo->lastY = y;
+			vehInfo->lastZ = z;
 		}
-
-		lastVehInfo[nVehicleId] = vehInfo;
 	}
 }
 
@@ -726,11 +731,11 @@ void OnPlayerUpdate( int nPlayerId, int nUpdateType )
 {
 	if (pCore != NULL)
 	{
-		savedPlayerData plrInfo = lastPlrInfo[nPlayerId];
-		Vector lastPos = Vector(plrInfo.lastX, plrInfo.lastY, plrInfo.lastZ);
-		float  lastArmour = plrInfo.lastArmour;
-		float  lastHP = plrInfo.lastHP;
-		int    lastWep = plrInfo.lastWep;
+		savedPlayerData * plrInfo = &lastPlrInfo[nPlayerId];
+		Vector lastPos = Vector(plrInfo->lastX, plrInfo->lastY, plrInfo->lastZ);
+		float  lastArmour = plrInfo->lastArmour;
+		float  lastHP = plrInfo->lastHP;
+		int    lastWep = plrInfo->lastWep;
 
 		float x, y, z;
 		functions->GetPlayerPos(nPlayerId, &x, &y, &z);
@@ -754,9 +759,9 @@ void OnPlayerUpdate( int nPlayerId, int nUpdateType )
 			}
 
 			callback.Release();
-			plrInfo.lastX = x;
-			plrInfo.lastY = y;
-			plrInfo.lastZ = z;
+			plrInfo->lastX = x;
+			plrInfo->lastY = y;
+			plrInfo->lastZ = z;
 		}
 
 		// Check for onPlayerHealthChange triggers
@@ -774,7 +779,7 @@ void OnPlayerUpdate( int nPlayerId, int nUpdateType )
 			}
 
 			callback.Release();
-			plrInfo.lastHP = hp;
+			plrInfo->lastHP = hp;
 		}
 
 		// Check for onPlayerArmourChange triggers
@@ -792,7 +797,7 @@ void OnPlayerUpdate( int nPlayerId, int nUpdateType )
 			}
 
 			callback.Release();
-			plrInfo.lastArmour = armour;
+			plrInfo->lastArmour = armour;
 		}
 
 		// Check for onPlayerWeaponChange triggers
@@ -810,10 +815,8 @@ void OnPlayerUpdate( int nPlayerId, int nUpdateType )
 			}
 
 			callback.Release();
-			plrInfo.lastWep = wep;
+			plrInfo->lastWep = wep;
 		}
-
-		lastPlrInfo[nPlayerId] = plrInfo;
 	}
 }
 
