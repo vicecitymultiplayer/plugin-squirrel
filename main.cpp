@@ -33,7 +33,7 @@ void printfunc(HSQUIRRELVM v, const SQChar *s, ...)
 		int nChars = vsnprintf(szInitBuffer, sizeof(szInitBuffer), s, arglist);
 		if (nChars > sizeof(szInitBuffer) - 1)
 		{
-			char * szBuffer = new char[nChars + 1];
+			char * szBuffer = (char*)calloc(nChars + 1, sizeof(char));
 			if (szBuffer == NULL)
 			{
 				sprintf(szInitBuffer, "Error could not be printed: failed to malloc the buffer at %d nChars.", nChars + 1);
@@ -44,7 +44,7 @@ void printfunc(HSQUIRRELVM v, const SQChar *s, ...)
 				vsnprintf(szBuffer, nChars, s, arglist);
 				OutputScriptInfo(szBuffer);
 
-				delete[] szBuffer;
+				free(szBuffer);
 			}
 		}
 		else
@@ -64,7 +64,7 @@ void errorfunc(HSQUIRRELVM v, const SQChar *s, ...)
 		int nChars = vsnprintf(szInitBuffer, sizeof(szInitBuffer), s, arglist);
 		if (nChars > sizeof(szInitBuffer) - 1)
 		{
-			char * szBuffer = new char[nChars + 1];
+			char * szBuffer = (char*)calloc(nChars + 1, sizeof(char));
 			if (szBuffer == NULL)
 			{
 				sprintf(szInitBuffer, "Error could not be printed: failed to malloc the buffer at %d nChars.", nChars + 1);
@@ -75,7 +75,7 @@ void errorfunc(HSQUIRRELVM v, const SQChar *s, ...)
 				vsnprintf(szBuffer, nChars, s, arglist);
 				pCore->rawprint(szBuffer);
 
-				delete[] szBuffer;
+				free(szBuffer);
 			}
 		}
 		else
