@@ -47,6 +47,7 @@ void CVehicle::SetColour2( int colour2 )
 void CVehicle::SetLocked( bool isLocked ) { functions->SetVehicleDoorsLocked( this->nVehicleId, isLocked ); }
 void CVehicle::SetDamage( unsigned int damage ) { functions->SetVehicleDamageData( this->nVehicleId, damage ); }
 void CVehicle::SetAlarm( bool isAlarmOn ) { functions->SetVehicleAlarm( this->nVehicleId, isAlarmOn ); }
+void CVehicle::SetSiren(bool isSirenOn) { functions->SetVehicleSiren(this->nVehicleId, isSirenOn); }
 void CVehicle::SetLights( bool lightsOn ) { functions->SetVehicleLights( this->nVehicleId, lightsOn ); }
 
 int CVehicle::GetWorld() { return functions->GetVehicleWorld(this->nVehicleId); }
@@ -115,6 +116,7 @@ int CVehicle::GetColour2()
 bool CVehicle::GetLocked() { return (functions->GetVehicleDoorsLocked(this->nVehicleId) == 1 ? true : false); }
 unsigned int CVehicle::GetDamage() { return functions->GetVehicleDamageData(this->nVehicleId); }
 bool CVehicle::GetAlarm() { return (functions->GetVehicleAlarm(this->nVehicleId) == 1 ? true : false); }
+bool CVehicle::GetSiren() { return (functions->GetVehicleSiren(this->nVehicleId) == 1 ? true : false); }
 bool CVehicle::GetLights() { return (functions->GetVehicleLights(this->nVehicleId) == 1 ? true : false); }
 
 CPlayer * CVehicle::GetDriver()
@@ -300,6 +302,7 @@ void RegisterVehicle()
 		.Prop( _SC("Locked"), &CVehicle::GetLocked, &CVehicle::SetLocked )
 		.Prop( _SC("Damage"), &CVehicle::GetDamage, &CVehicle::SetDamage )
 		.Prop( _SC("Alarm"), &CVehicle::GetAlarm, &CVehicle::SetAlarm )
+		.Prop( _SC("Siren"), &CVehicle::GetSiren, &CVehicle::SetSiren )
 		.Prop( _SC("Lights"), &CVehicle::GetLights, &CVehicle::SetLights )
 		.Prop( _SC("Angle"), &CVehicle::GetRotation, &CVehicle::SetRotation )
 		.Prop( _SC("Rotation"), &CVehicle::GetRotation, &CVehicle::SetRotation )

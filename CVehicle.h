@@ -20,7 +20,8 @@ class CVehicle
 		void SetColour2( int colour2 );
 		void SetLocked( bool isLocked );
 		void SetDamage( unsigned int damage );
-		void SetAlarm( bool isAlarmOn );
+		void SetAlarm(bool isAlarmOn);
+		void SetSiren(bool isSirenOn);
 		void SetLights( bool lightsOn );
 		void SetRotation( Quaternion rotation );
 		void SetEulerRotation( Vector angle );
@@ -47,6 +48,7 @@ class CVehicle
 		bool GetLocked();
 		unsigned int GetDamage();
 		bool GetAlarm();
+		bool GetSiren();
 		bool GetLights();
 		CPlayer * GetDriver();
 		int GetID();

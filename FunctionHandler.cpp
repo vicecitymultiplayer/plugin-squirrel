@@ -146,6 +146,8 @@ void ToggleJoinMessages     ( bool toggle ) { functions->ToggleJoinMessages( ( t
 void ToggleDeathMessages    ( bool toggle ) { functions->ToggleDeathMessages( ( toggle ? 1 : 0 ) );    }
 void ToggleChatTagDefault   ( bool toggle ) { functions->ToggleChatTagsByDefaultEnabled( ( toggle ? 1 : 0 ) ); }
 void ToggleShowOnlyTeamMarkers(bool toggle) { functions->ToggleOnlyShowTeamMarkers(toggle); }
+void ToggleWeaponDrops      ( bool toggle ) { functions->ToggleClassicWeaponPickups(toggle); }
+void ToggleWallglitch       ( bool toggle ) { functions->ToggleWallglitch(toggle); }
 
 bool EnabledSyncFrameLimiter() { return ( functions->EnabledSyncFrameLimiter() != 0 );  }
 bool EnabledFrameLimiter()     { return ( functions->EnabledFrameLimiter() != 0 );      }
@@ -165,6 +167,8 @@ bool EnabledJoinMessages()     { return ( functions->EnabledJoinMessages() != 0 
 bool EnabledDeathMessages()    { return ( functions->EnabledDeathMessages() != 0 );     }
 bool EnabledChatTagDefault()   { return ( functions->EnabledChatTagsByDefault() != 0 ); }
 bool EnabledShowOnlyTeamMarkers() { return functions->EnabledOnlyShowTeamMarkers() != 0; }
+bool EnabledWeaponDrops()      { return functions->EnabledClassicWeaponPickups() != 0;  }
+bool EnabledWallglitch()       { return functions->EnabledWallglitch() != 0;            }
 
 void CreateExplosion( int world, int type, Vector * pos, int playerCaused, bool onGround )
 {
