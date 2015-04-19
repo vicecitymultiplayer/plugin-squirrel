@@ -1274,7 +1274,12 @@ int GetVehicleModelFromName( SQChar * name )
 					res = 134; // perennial
 				else if( lowername[1] == 'o' )
 				{
-					if( strlen( lowername ) > 6 )
+					if( strlen( lowername ) >= 3 )
+					{
+						if( lowername[2] == 'n' )
+							res = 143; // pony
+					}
+					else if( strlen( lowername ) > 6 )
 						res = 227; // police maverick
 					else
 						res = 156; // police
@@ -1297,8 +1302,6 @@ int GetVehicleModelFromName( SQChar * name )
 					res = 191; // pcj-600
 				else if (lowername[1] == 'h')
 					res = 207; // phoenix
-				else if (lowername[1] == 'n')
-					res = 143; // pony
 
 				break;
 			}
