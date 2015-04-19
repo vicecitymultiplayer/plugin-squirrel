@@ -1295,8 +1295,12 @@ int GetVehicleModelFromName( SQChar * name )
 				}
 				else if( lowername[1] == 'i' )
 					res = 178; // pizza boy
-				else if( lowername[1] == 'c' )
+				else if (lowername[1] == 'c')
 					res = 191; // pcj-600
+				else if (lowername[1] == 'h')
+					res = 207; // phoenix
+				else if (lowername[1] == 'n')
+					res = 143; // pony
 
 				break;
 			}
@@ -1406,8 +1410,10 @@ int GetVehicleModelFromName( SQChar * name )
 					res = 144; // mule
 				else if( lowername[1] == 'r' )
 					res = 153; // mr. whoopee
-				else if( lowername[1] == 'e' )
+				else if (lowername[1] == 'e')
 					res = 230; // mesa grande
+				else if (lowername[1] == 'o')
+					res = 148; // moonbeam
 
 				break;
 			}
@@ -1428,15 +1434,15 @@ int GetVehicleModelFromName( SQChar * name )
 				}
 				else if( lowername[1] == 'o' )
 				{
-					if( strlen( lowername ) >= 4 )
+					if( strlen( lowername ) >= 3 && lowername[2] == 'm' )
+						res = 210; // comet
+					else if( strlen(lowername) >= 4)
 					{
-						if( lowername[3] == 'c' )
+						if (lowername[3] == 'c')
 							res = 167; // coach
-						else if( lowername[3] == 's' )
+						else if (lowername[3] == 's')
 							res = 202; // coast guard
 					}
-					else if( strlen( lowername ) >= 3 && lowername[2] == 'm' )
-						res = 210; // comet
 				}
 				else if( lowername[1] == 'a' )
 				{
@@ -1507,14 +1513,40 @@ int GetVehicleModelFromName( SQChar * name )
 					{
 						if( lowername[2] == 'r' )
 							res = 163; // barracks ol
-						else if( lowername[2] == 'g' )
+						else if (lowername[2] == 'g')
 							res = 215; // baggage handler
+						else if (lowername[2] == 'n')
+							res = 159; // banshee
 					}
 				}
-				else if( lowername[1] == 'l' )
-					res = 226; // blista compact
-				else if( lowername[1] == 'e' )
+				else if (lowername[1] == 'u')
+				{
+					if (strlen(lowername) >= 3)
+					{
+						if (lowername[2] == 'r')
+							res = 212; // burrito
+						else if (lowername[2] == 's')
+							res = 161; // bus
+					}
+				}
+				else if (lowername[1] == 'l')
+				{
+					if (strlen(lowername) >= 3)
+					{
+						if (lowername[2] == 'i')
+							res = 226; // blista compact
+						else if (lowername[2] == 'o')
+						{
+							res = 234; // bloodra
+							if (strcmp(lowername, "bloodrb") == 0)
+								res = 235; // bloodrb
+						}
+					}
+				}
+				else if (lowername[1] == 'e')
 					res = 229; // benson
+				else if (lowername[1] == 'f')
+					res = 154; // bf injection
 
 				break;
 			}
@@ -1523,10 +1555,24 @@ int GetVehicleModelFromName( SQChar * name )
 			{
 				if( lowername[1] == 'u' )
 					res = 155; // hunter
-				else if( lowername[1] == 'e' )
-					res = 165; // helicopter
-				else if( lowername[1] == 'o' )
+				else if (lowername[1] == 'e')
+				{
+					if (strlen(lowername) >= 3)
+					{
+						if (lowername[2] == 'r')
+							res = 204; // hermes
+						else if (lowername[2] == 'l')
+							res = 165; // helicopter
+					}
+				}
+				else if (lowername[1] == 'o')
+				{
 					res = 224; // hotring racer
+					if (strcmp("hotrina", lowername) == 0)
+						res = 232; // hotrina
+					else if (strcmp("hotrinb", lowername) == 0)
+						res = 233; // hotrinb
+				}
 
 				break;
 			}
@@ -1565,20 +1611,30 @@ int GetVehicleModelFromName( SQChar * name )
 				res = 216; // kaufman cab
 				break;
 
+			case 'o':
+				res = 197; // oceanic
+				break;
+
+			case 'j':
+				res = 223; // cuban [j]etmax
+				break;
+				
 			case 'v':
 			{
 				if( lowername[1] == 'c' )
 					res = 218; // vcn maverick
-				else if( lowername[1] == 'i' )
+				else if (lowername[1] == 'i')
 				{
-					if( strlen( lowername ) >= 3 )
+					if (strlen(lowername) >= 3)
 					{
-						if( lowername[2] == 'r' )
+						if (lowername[2] == 'r')
 							res = 221; // virgo
-						else if( lowername[2] == 'c' )
+						else if (lowername[2] == 'c')
 							res = 236; // vicechee
 					}
 				}
+				else if (lowername[1] == 'o')
+					res = 142; // voodoo
 
 				break;
 			}
