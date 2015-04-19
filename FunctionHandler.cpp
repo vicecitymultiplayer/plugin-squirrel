@@ -1720,7 +1720,7 @@ const SQChar * GetVehicleNameFromModel ( int model )
 		case 190: return "Skimmer";
 		case 191: return "PCJ-600";
 		case 192: return "Faggio";
-		case 193: return "Freeay";
+		case 193: return "Freeway";
 		case 194: return "RC Baron";
 		case 195: return "RC Raider";
 		case 196: return "Glendale";
