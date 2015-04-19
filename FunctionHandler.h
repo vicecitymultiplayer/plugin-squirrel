@@ -73,7 +73,6 @@ void ToggleJoinMessages     ( bool toggle );
 void ToggleDeathMessages    ( bool toggle );
 void ToggleChatTagDefault   ( bool toggle );
 void ToggleShowOnlyTeamMarkers(bool toggle);
-void ToggleWeaponDrops      ( bool toggle );
 void ToggleWallglitch       ( bool toggle );
 
 bool EnabledSyncFrameLimiter ( void );
@@ -94,7 +93,6 @@ bool EnabledJoinMessages     ( void );
 bool EnabledDeathMessages    ( void );
 bool EnabledChatTagDefault   ( void );
 bool EnabledShowOnlyTeamMarkers(void);
-bool EnabledWeaponDrops      ( void );
 bool EnabledWallglitch       ( void );
 
 int CreateBlip( int world, Vector * pos, int scale, RGBa color, int nSpriteId );

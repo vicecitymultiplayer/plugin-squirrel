@@ -866,8 +866,6 @@ typedef struct {
 	// TODO: Move these functions to proper sections on major plugin update
 	int(*ToggleWallglitch) (unsigned int bToggle);
 	unsigned int(*EnabledWallglitch) (void);
-	int(*ToggleClassicWeaponPickups) (unsigned int bToggle);
-	unsigned int(*EnabledClassicWeaponPickups) (void);
 	int(*SetVehicleSiren) (int nVehicleId, unsigned int bToggle);
 	unsigned int(*GetVehicleSiren) (int nVehicleId);
 } PluginFuncs;
