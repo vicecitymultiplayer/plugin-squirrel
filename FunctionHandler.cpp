@@ -956,10 +956,16 @@ int GetWeaponID( const SQChar * name )
 		// [K]nife, [K]atana
 		case 'k':
 		{
-			// [Kn]ife
 			if( char2 && char2 == 'n' )
-				return 5;
-
+			{
+				// [Kn]ife
+				if( char3 == 'i' )
+					return 5;
+				// [Knu]ckles
+				else if ( char3 == 'u' )
+					return 1;
+			}
+			
 			// Default to katana
 			else
 				return 10;
@@ -1278,11 +1284,11 @@ int GetVehicleModelFromName( SQChar * name )
 					{
 						if( lowername[2] == 'n' )
 							res = 143; // pony
+						else if( strlen( lowername ) > 6 )
+							res = 227; // police maverick
+						else
+							res = 156; // police
 					}
-					else if( strlen( lowername ) > 6 )
-						res = 227; // police maverick
-					else
-						res = 156; // police
 				}
 				else if( lowername[1] == 'r' )
 					res = 160; // predator
