@@ -61,6 +61,9 @@ void OnPlayerOnFireChange  ( int nPlayerId, unsigned int bIsOnFireNow );
 void OnPlayerCrouchChange  ( int nPlayerId, unsigned int bIsCrouchingNow );
 void OnPlayerGameKeysChange ( int nPlayerId, int nOldKeys, int nNewKeys );
 
+void OnCheckpointEntered(int nCheckpointId, int nPlayerId);
+void OnCheckpointExited(int nCheckpointId, int nPlayerId);
+
 // Define some structures for tracking player data
 struct savedPlayerData
 {

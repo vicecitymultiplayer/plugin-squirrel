@@ -116,6 +116,7 @@ void RegisterGlobals()
 
 		.Func(_SC("CreateSprite"), CreateSprite, 8, _SC("tsiiiini"))
 		.Func(_SC("CreateTextdraw"), CreateTextdraw, 5, _SC("tsiii"))
+		.Func(_SC("CreateCheckpoint"), CreateCheckpoint, 5, _SC("tixxn"))
 
 		.Overload(_SC("CreateVehicle"), CreateVehicleCompat)
 		.Overload(_SC("CreateVehicle"), CreateVehicle)
@@ -131,6 +132,7 @@ void RegisterGlobals()
 		.Func(_SC("FindPickup"), FindPickup, 2, _SC("ti"))
 		.Func(_SC("FindObject"), FindObject, 2, _SC("ti"))
 		.Func(_SC("FindVehicle"), FindVehicle, 2, _SC("ti"))
+		.Func(_SC("FindCheckpoint"), FindCheckpoint, 2, _SC("ti"))
 
 		.Func(_SC("SetWorldBounds"), SetWorldBounds, 5, _SC("tnnnn"))
 		.Func(_SC("GetWorldBounds"), GetWorldBounds, 1, _SC("t"))

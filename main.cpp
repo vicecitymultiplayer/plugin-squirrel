@@ -163,6 +163,9 @@ extern "C" EXPORT unsigned int VcmpPluginInit( PluginFuncs* givenPluginFuncs, Pl
 	callbacks->OnPlayerCrouchChange = OnPlayerCrouchChange;
 	callbacks->OnPlayerGameKeysChange = OnPlayerGameKeysChange;
 
+	callbacks->OnCheckpointEntered = OnCheckpointEntered;
+	callbacks->OnCheckpointExited = OnCheckpointExited;
+
 	// Done!
 	return 1;
 }

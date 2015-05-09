@@ -421,6 +421,22 @@ typedef int (*SDK_SetObjectShotReport) (int nObjectId, unsigned int bToggle);
 typedef unsigned int (*SDK_IsObjectShotReport) (int nObjectId);
 typedef int (*SDK_SetObjectBumpReport) (int nObjectId, unsigned int bToggle);
 typedef unsigned int (*SDK_IsObjectBumpReport) (int nObjectId);
+typedef int (*SDK_ToggleWallglitch) (unsigned int bToggle);
+typedef unsigned int (*SDK_EnabledWallglitch) (void);
+typedef int (*SDK_SetVehicleSiren) (int nVehicleId, unsigned int bToggle);
+typedef unsigned int (*SDK_GetVehicleSiren) (int nVehicleId);
+typedef int (*SDK_GetPlayerUID2) (int nPlayerId, char* szBuffer, int nBufferLen);
+typedef int (*SDK_CreateCheckpoint) (int nWorld, float fPosX, float fPosY, float fPosZ, unsigned int nR, unsigned int nG, unsigned int nB, unsigned int nA, float fRadius);
+typedef int (*SDK_DeleteCheckpoint) (int nCheckpointId);
+typedef unsigned int (*SDK_IsCheckpointStreamedForPlayer) (int nCheckpointId, int nPlayerId);
+typedef int (*SDK_SetCheckpointWorld) (int nCheckpointId, int nWorld);
+typedef int (*SDK_GetCheckpointWorld) (int nCheckpointId);
+typedef int (*SDK_SetCheckpointColor) (int nCheckpointId, unsigned int nR, unsigned int nG, unsigned int nB, unsigned int nA);
+typedef unsigned int (*SDK_GetCheckpointColor) (int nCheckpointId, unsigned int* pnR, unsigned int* pnG, unsigned int* pnB, unsigned int* pnA);
+typedef int (*SDK_SetCheckpointPos) (int nCheckpointId, float fPosX, float fPosY, float fPosZ);
+typedef int (*SDK_GetCheckpointPos) (int nCheckpointId, float* pfPosX, float* pfPosY, float* pfPosZ);
+typedef int (*SDK_SetCheckpointRadius) (int nCheckpointId, float fRadius);
+typedef float (*SDK_GetCheckpointRadius) (int nCheckpointId);
 typedef int (*SDK_OnInitServer) (void);
 typedef void (*SDK_OnShutdownServer) (void);
 typedef void (*SDK_OnFrame) (float fElapsedTime);
@@ -462,6 +478,8 @@ typedef void (*SDK_OnPlayerAwayChange) (int nPlayerId, unsigned int bNewStatus);
 typedef void (*SDK_OnPlayerSpectate) (int nPlayerId, int nTargetId);
 typedef void (*SDK_OnPlayerCrashReport) (int nPlayerId, const char* pszReport);
 typedef void (*SDK_OnServerPerformanceReport) (int nNumStats, const char** ppszDescription, unsigned long long* pnMillisecsSpent);
+typedef void (*SDK_OnCheckpointEntered) (int nCheckpointId, int nPlayerId);
+typedef void (*SDK_OnCheckpointExited) (int nCheckpointId, int nPlayerId);
 
 typedef struct {
 	unsigned int						uStructSize;
@@ -864,10 +882,23 @@ typedef struct {
 	SDK_IsObjectBumpReport IsObjectBumpReport;
 
 	// TODO: Move these functions to proper sections on major plugin update
-	int(*ToggleWallglitch) (unsigned int bToggle);
-	unsigned int(*EnabledWallglitch) (void);
-	int(*SetVehicleSiren) (int nVehicleId, unsigned int bToggle);
-	unsigned int(*GetVehicleSiren) (int nVehicleId);
+	SDK_ToggleWallglitch ToggleWallglitch;
+	SDK_EnabledWallglitch EnabledWallglitch;
+	SDK_SetVehicleSiren SetVehicleSiren;
+	SDK_GetVehicleSiren GetVehicleSiren;
+	SDK_GetPlayerUID2 GetPlayerUID2;
+
+	SDK_CreateCheckpoint CreateCheckpoint;
+	SDK_DeleteCheckpoint DeleteCheckpoint;
+	SDK_IsCheckpointStreamedForPlayer IsCheckpointStreamedForPlayer;
+	SDK_SetCheckpointWorld SetCheckpointWorld;
+	SDK_GetCheckpointWorld GetCheckpointWorld;
+	SDK_SetCheckpointColor SetCheckpointColor;
+	SDK_GetCheckpointColor GetCheckpointColor;
+	SDK_SetCheckpointPos SetCheckpointPos;
+	SDK_GetCheckpointPos GetCheckpointPos;
+	SDK_SetCheckpointRadius SetCheckpointRadius;
+	SDK_GetCheckpointRadius GetCheckpointRadius;
 } PluginFuncs;
 
 typedef struct {
@@ -914,5 +945,9 @@ typedef struct {
 	SDK_OnPlayerSpectate OnPlayerSpectate;
 	SDK_OnPlayerCrashReport OnPlayerCrashReport;
 	SDK_OnServerPerformanceReport OnServerPerformanceReport;
+
+	// TODO: Move these functions to proper sections on major plugin update
+	SDK_OnCheckpointEntered OnCheckpointEntered;
+	SDK_OnCheckpointExited OnCheckpointExited;
 
 } PluginCallbacks;

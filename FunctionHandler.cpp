@@ -297,6 +297,15 @@ CTextdraw * CreateTextdraw(const SQChar * text, int x, int y, unsigned int colou
 	}
 }
 
+CCheckpoint * CreateCheckpoint(int world, Vector * pos, ARGB * color, float radius)
+{
+	int cId = functions->CreateCheckpoint(world, pos->x, pos->y, pos->z, color->r, color->g, color->b, color->a, radius);
+	if (cId < 0)
+		return NULL;
+	else
+		return pCore->AllocateCheckpoint(cId);
+}
+
 CVehicle * CreateVehicleExpanded( int model, int world, float x, float y, float z, float angle, int col1, int col2 )
 {
 	Vector pos = Vector( x, y, z );
@@ -318,6 +327,8 @@ CObject * CreateObjectExpanded( int model, int world, float x, float y, float z,
 CPickup * FindPickup(int id) { return pCore->RetrievePickup(id); }
 CObject * FindObject(int id) { return pCore->RetrieveObject(id); }
 CVehicle * FindVehicle(int id) { return pCore->RetrieveVehicle(id); }
+CCheckpoint * FindCheckpoint(int id) { return pCore->RetrieveCheckpoint(id); }
+
 void SetWorldBounds( float maxX, float minX, float maxY, float minY )
 {
 	functions->SetWorldBounds( maxX, minX, maxY, minY );

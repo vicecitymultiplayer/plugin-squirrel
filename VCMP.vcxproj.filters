@@ -135,6 +135,9 @@
     <ClInclude Include="sqrat\sqrat\sqratVM.h">
       <Filter>Header Files\Sqrat</Filter>
     </ClInclude>
+    <ClInclude Include="CCheckpoint.h">
+      <Filter>Header Files\Objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -180,6 +183,9 @@
       <Filter>Source Files\Objects</Filter>
     </ClCompile>
     <ClCompile Include="CTextdraw.cpp">
+      <Filter>Source Files\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="CCheckpoint.cpp">
       <Filter>Source Files\Objects</Filter>
     </ClCompile>
   </ItemGroup>

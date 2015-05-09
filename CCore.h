@@ -6,6 +6,7 @@
 #include "CObject.h"
 #include "CSprite.h"
 #include "CTextdraw.h"
+#include "CCheckpoint.h"
 #include "ConsoleUtils.h"
 
 #include <sqstdio.h>
@@ -66,16 +67,19 @@ class CCore
 		CPickup * AllocatePickup(int gPickupId, bool isOurs = true);
 		CPlayer * AllocatePlayer(int gPlayerId);
 		CVehicle * AllocateVehicle(int gVehicleId, bool isOurs = true);
+		CCheckpoint * AllocateCheckpoint(int gCheckpointId, bool isOurs = true);
 
 		CObject * RetrieveObject(int gObjectId);
 		CPickup * RetrievePickup(int gPickupId);
 		CPlayer * RetrievePlayer(int gPlayerId);
 		CVehicle * RetrieveVehicle(int gVehicleId);
+		CCheckpoint * RetrieveCheckpoint(int gCheckpointId);
 
 		void DereferenceObject(int gObjectId);
 		void DereferencePickup(int gPickupId);
 		void DereferencePlayer(int gPlayerId);
 		void DereferenceVehicle(int gVehicleId);
+		void DereferenceCheckpoint(int gCheckpointId);
 
 	private:
 		// Constructor
@@ -95,6 +99,7 @@ class CCore
 		std::array<CPickup *, MAX_PICKUPS> pickupMap;
 		std::array<CObject *, MAX_OBJECTS> objectMap;
 		std::array<CVehicle *, MAX_VEHICLES + 1> vehicleMap;
+		std::array<CCheckpoint*, MAX_CHECKPOINTS> checkpointMap;
 
 		// Our list of timers.
 		static const int maxTimers = 255;

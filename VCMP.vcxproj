@@ -189,6 +189,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CallbackHandler.h" />
+    <ClInclude Include="CCheckpoint.h" />
     <ClInclude Include="CCore.h" />
     <ClInclude Include="CObject.h" />
     <ClInclude Include="ConsoleUtils.h" />
@@ -228,6 +229,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CallbackHandler.cpp" />
+    <ClCompile Include="CCheckpoint.cpp" />
     <ClCompile Include="CCore.cpp" />
     <ClCompile Include="CObject.cpp" />
     <ClCompile Include="ConsoleUtils.cpp" />

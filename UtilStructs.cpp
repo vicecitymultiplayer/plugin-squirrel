@@ -93,6 +93,8 @@ void EntityVector::SetX(float fX)
 				case OBJVECTOR_ROTATION: functions->RotObjectToEuler(this->m_nEntityId, fX, this->y, this->z, 0); break;
 			}
 			break;
+
+		case ENTITY_CHECKPOINT: functions->SetCheckpointPos(this->m_nEntityId, fX, this->y, this->z); break;
 	}
 }
 
@@ -131,6 +133,8 @@ void EntityVector::SetY(float fY)
 				case OBJVECTOR_ROTATION: functions->RotObjectToEuler(this->m_nEntityId, this->x, fY, this->z, 0); break;
 			}
 			break;
+
+		case ENTITY_CHECKPOINT: functions->SetCheckpointPos(this->m_nEntityId, this->x, fY, this->z); break;
 	}
 }
 
@@ -169,6 +173,8 @@ void EntityVector::SetZ(float fZ)
 				case OBJVECTOR_ROTATION: functions->RotObjectToEuler(this->m_nEntityId, this->x, this->y, fZ, 0); break;
 			}
 			break;
+
+		case ENTITY_CHECKPOINT: functions->SetCheckpointPos(this->m_nEntityId, this->x, this->y, fZ); break;
 	}
 }
 

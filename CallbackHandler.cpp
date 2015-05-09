@@ -889,6 +889,12 @@ void OnEntityPoolChange (int nEntityType, int nEntityId, unsigned int bDeleted)
 			else
 				pCore->DereferencePickup(nEntityId);
 		}
+		else if (nEntityType == 4) {
+			if (!bDeleted)
+				pCore->AllocateCheckpoint(nEntityId, false);
+			else
+				pCore->DereferenceCheckpoint(nEntityId);
+		}
 	}
 }
 
@@ -1097,6 +1103,41 @@ void OnPlayerGameKeysChange(int nPlayerId, int nOldKeys, int nNewKeys)
 		catch (Sqrat::Exception e)
 		{
 			OutputWarning("onPlayerGameKeysChange failed to execute -- check the console for more details.");
+		}
+
+		callback.Release();
+	}
+}
+
+void OnCheckpointEntered(int nCheckpointId, int nPlayerId) {
+	if (pCore != NULL)
+	{
+		Function callback = RootTable().GetFunction(_SC("onCheckpointEntered"));
+		try
+		{
+			if (!callback.IsNull())
+				callback.Execute<CCheckpoint*, CPlayer*>(pCore->RetrieveCheckpoint(nCheckpointId), pCore->RetrievePlayer(nPlayerId));
+		}
+		catch (Sqrat::Exception e)
+		{
+			OutputWarning("onCheckpointEntered failed to execute -- check the console for more details.");
+		}
+
+		callback.Release();
+	}
+}
+void OnCheckpointExited(int nCheckpointId, int nPlayerId) {
+	if (pCore != NULL)
+	{
+		Function callback = RootTable().GetFunction(_SC("onCheckpointExited"));
+		try
+		{
+			if (!callback.IsNull())
+				callback.Execute<CCheckpoint*, CPlayer*>(pCore->RetrieveCheckpoint(nCheckpointId), pCore->RetrievePlayer(nPlayerId));
+		}
+		catch (Sqrat::Exception e)
+		{
+			OutputWarning("onCheckpointExited failed to execute -- check the console for more details.");
 		}
 
 		callback.Release();

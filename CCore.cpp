@@ -24,6 +24,7 @@ CCore::CCore()
 	this->pickupMap.fill(NULL);
 	this->objectMap.fill(NULL);
 	this->vehicleMap.fill(NULL);
+	this->checkpointMap.fill(NULL);
 
 	// Construct all timer arrays
 	unsigned int i;
@@ -90,6 +91,13 @@ CCore::~CCore()
 			this->vehicleMap[i] = NULL;
 		}
 	}
+
+	for (i = 0; i < MAX_CHECKPOINTS; i++) {
+		if (this->checkpointMap[i] != NULL) {
+			delete this->checkpointMap[i];
+			this->checkpointMap[i] = NULL;
+		}
+	}
 }
 
 void CCore::LoadVM()
@@ -141,6 +149,12 @@ void CCore::ScanForEntities()
 	{
 		if (functions->IsPlayerConnected(i))
 			this->AllocatePlayer(i);
+	}
+
+	for (i = 0; i < MAX_CHECKPOINTS; i++) {
+		if (functions->GetCheckpointWorld(i) >= 0) {
+			this->AllocateCheckpoint(i, false);
+		}
 	}
 }
 
@@ -210,6 +224,13 @@ void CCore::CleanWorld()
 			objectMap[i] = NULL;
 		}
 	}
+
+	for (i = 0; i < MAX_CHECKPOINTS; i++) {
+		if (checkpointMap[i] != NULL && checkpointMap[i]->isOurs) {
+			checkpointMap[i]->Delete();
+			checkpointMap[i] = NULL;
+		}
+	}
 }
 
 // Register *everything*
@@ -243,6 +264,7 @@ void CCore::RegisterEntities()
 	RegisterVehicle();
 	RegisterSprite();
 	RegisterTextdraw();
+	RegisterCheckpoint();
 
 	// Set the default internal error handlers up
 	sqstd_seterrorhandlers( v );
@@ -506,6 +528,22 @@ CVehicle * CCore::AllocateVehicle(int gVehicleId, bool isOurs)
 	return pVehicle;
 }
 
+CCheckpoint * CCore::AllocateCheckpoint(int gCheckpointId, bool isOurs)
+{
+	if (gCheckpointId < 0 || gCheckpointId >= MAX_CHECKPOINTS)
+		return NULL;
+	else if (functions->GetCheckpointWorld(gCheckpointId) == -1)
+		return NULL;
+	else if (this->checkpointMap[gCheckpointId] != NULL)
+		return this->checkpointMap[gCheckpointId];
+
+	CCheckpoint * pCheckpoint = new CCheckpoint();
+	pCheckpoint->Init(gCheckpointId, isOurs);
+
+	this->checkpointMap[pCheckpoint->nCheckpointId] = pCheckpoint;
+	return pCheckpoint;
+}
+
 void CCore::DereferenceObject(int gObjectId)
 {
 	if (gObjectId < 0 || gObjectId > MAX_OBJECTS - 1)
@@ -566,6 +604,21 @@ void CCore::DereferenceVehicle(int gVehicleId)
 	}
 }
 
+void CCore::DereferenceCheckpoint(int gCheckpointId)
+{
+	if (gCheckpointId < 0 || gCheckpointId >= MAX_CHECKPOINTS)
+		return;
+	else if (this->checkpointMap[gCheckpointId] == NULL)
+		return;
+	else
+	{
+		CCheckpoint * pCheckpoint = this->checkpointMap[gCheckpointId];
+		delete pCheckpoint;
+
+		this->checkpointMap[gCheckpointId] = NULL;
+	}
+}
+
 CObject * CCore::RetrieveObject(int gObjectId)
 {
 	if (gObjectId < 0 || gObjectId > MAX_OBJECTS - 1)
@@ -596,4 +649,12 @@ CVehicle * CCore::RetrieveVehicle(int gVehicleId)
 		return NULL;
 
 	return this->vehicleMap[gVehicleId];
+}
+
+CCheckpoint * CCore::RetrieveCheckpoint(int gCheckpointId)
+{
+	if (gCheckpointId < 0 || gCheckpointId >= MAX_CHECKPOINTS)
+		return NULL;
+
+	return this->checkpointMap[gCheckpointId];
 }
