@@ -74,7 +74,7 @@ typedef struct {
 #define SDK_VUPDATE_POSITION    2
 #define SDK_VUPDATE_HEALTH      4
 #define SDK_VUPDATE_COLOUR      5
-#define SDK_VUPDDATE_ROTATION   6
+#define SDK_VUPDATE_ROTATION    6
 
 typedef unsigned int (*SDK_GetServerVersion) (void);
 typedef unsigned int (*SDK_GetServerSettings) (ServerSettings* pstSettings);
@@ -868,6 +868,7 @@ typedef struct {
 	unsigned int(*EnabledWallglitch) (void);
 	int(*SetVehicleSiren) (int nVehicleId, unsigned int bToggle);
 	unsigned int(*GetVehicleSiren) (int nVehicleId);
+	int(*GetPlayerUID2) (int nPlayerId, char* szBuffer, int nBufferLen);
 } PluginFuncs;
 
 typedef struct {
