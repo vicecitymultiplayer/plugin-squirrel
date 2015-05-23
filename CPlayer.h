@@ -41,6 +41,7 @@ class CPlayer
 		void SetCanUseColors( bool canUseColors );
 		void SetDrunkStatus( bool isDrunk );
 		void SetWantedLevel(int wantedLevel);
+		void SetCrouchDisabled(bool canCrouch);
 
 	public:
 		EntityVector GetPosition();
@@ -97,6 +98,7 @@ class CPlayer
 		Vector GetPlayerAimPos(void);
 		Vector GetPlayerAimDir(void);
 		int GetWantedLevel(void);
+		bool GetCrouchDisabled(void);
 
 	public:
 		void Kick();
