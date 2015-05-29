@@ -297,13 +297,42 @@ CTextdraw * CreateTextdraw(const SQChar * text, int x, int y, unsigned int colou
 	}
 }
 
-CCheckpoint * CreateCheckpoint(int world, Vector * pos, ARGB * color, float radius)
+CCheckpoint * CreateCheckpoint(CPlayer* pPlayer, int world, Vector * pos, ARGB * color, float radius)
 {
-	int cId = functions->CreateCheckpoint(world, pos->x, pos->y, pos->z, color->r, color->g, color->b, color->a, radius);
+	if (!pos || !color) {
+		return NULL;
+	}
+
+	int id = (pPlayer ? pPlayer->GetID() : 255);
+
+	int cId = functions->CreateCheckpoint(id, world, pos->x, pos->y, pos->z, color->r, color->g, color->b, color->a, radius);
 	if (cId < 0)
 		return NULL;
-	else
-		return pCore->AllocateCheckpoint(cId);
+	else {
+		CCheckpoint * pCheckpoint = pCore->AllocateCheckpoint(cId);
+		pCheckpoint->nOwnerId = id;
+
+		return pCheckpoint;
+	}
+}
+
+CSphere * CreateSphere(CPlayer* pPlayer, int world, Vector * pos, cRGB * color, float radius)
+{
+	if (!pos || !color) {
+		return NULL;
+	}
+
+	int id = (pPlayer ? pPlayer->GetID() : 255);
+
+	int cId = functions->CreateSphere(id, world, pos->x, pos->y, pos->z, color->r, color->g, color->b, radius);
+	if (cId < 0)
+		return NULL;
+	else {
+		CSphere * pSphere = pCore->AllocateSphere(cId);
+		pSphere->nOwnerId = id;
+
+		return pSphere;
+	}
 }
 
 CVehicle * CreateVehicleExpanded( int model, int world, float x, float y, float z, float angle, int col1, int col2 )
@@ -328,6 +357,7 @@ CPickup * FindPickup(int id) { return pCore->RetrievePickup(id); }
 CObject * FindObject(int id) { return pCore->RetrieveObject(id); }
 CVehicle * FindVehicle(int id) { return pCore->RetrieveVehicle(id); }
 CCheckpoint * FindCheckpoint(int id) { return pCore->RetrieveCheckpoint(id); }
+CSphere * FindSphere(int id) { return pCore->RetrieveSphere(id); }
 
 void SetWorldBounds( float maxX, float minX, float maxY, float minY )
 {

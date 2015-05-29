@@ -95,6 +95,7 @@ void EntityVector::SetX(float fX)
 			break;
 
 		case ENTITY_CHECKPOINT: functions->SetCheckpointPos(this->m_nEntityId, fX, this->y, this->z); break;
+		case ENTITY_SPHERE: functions->SetSpherePos(this->m_nEntityId, fX, this->y, this->z); break;
 	}
 }
 
@@ -135,6 +136,7 @@ void EntityVector::SetY(float fY)
 			break;
 
 		case ENTITY_CHECKPOINT: functions->SetCheckpointPos(this->m_nEntityId, this->x, fY, this->z); break;
+		case ENTITY_SPHERE: functions->SetSpherePos(this->m_nEntityId, this->x, fY, this->z); break;
 	}
 }
 
@@ -175,6 +177,7 @@ void EntityVector::SetZ(float fZ)
 			break;
 
 		case ENTITY_CHECKPOINT: functions->SetCheckpointPos(this->m_nEntityId, this->x, this->y, fZ); break;
+		case ENTITY_SPHERE: functions->SetSpherePos(this->m_nEntityId, this->x, this->y, fZ); break;
 	}
 }
 

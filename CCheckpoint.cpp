@@ -38,6 +38,7 @@ void CCheckpoint::Delete()
 
 int CCheckpoint::GetID() { return this->nCheckpointId; }
 bool CCheckpoint::StreamedToPlayer(CPlayer * player) { return (functions->IsCheckpointStreamedForPlayer(this->nCheckpointId, player->nPlayerId) == 1 ? true : false); }
+CPlayer* CCheckpoint::GetOwner(void) { return pCore->RetrievePlayer(this->nOwnerId); }
 
 void RegisterCheckpoint()
 {
@@ -52,7 +53,8 @@ void RegisterCheckpoint()
 
 	// Read-only properties
 	c
-		.Prop( _SC("ID"), &CCheckpoint::GetID );
+		.Prop( _SC("ID"), &CCheckpoint::GetID )
+		.Prop( _SC("Owner"), &CCheckpoint::GetOwner );
 
 	// Functions
 	c

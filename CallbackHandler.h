@@ -63,6 +63,8 @@ void OnPlayerGameKeysChange ( int nPlayerId, int nOldKeys, int nNewKeys );
 
 void OnCheckpointEntered(int nCheckpointId, int nPlayerId);
 void OnCheckpointExited(int nCheckpointId, int nPlayerId);
+void OnSphereEntered(int nSphereId, int nPlayerId);
+void OnSphereExited(int nSphereId, int nPlayerId);
 
 // Define some structures for tracking player data
 struct savedPlayerData

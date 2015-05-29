@@ -313,14 +313,6 @@ Sqrat::string PlayerToString(CPlayer * p)
 	return p->GetName();
 }
 
-void CPlayer::SetCrouchDisabled(bool canCrouch) {
-	functions->TogglePlayerCrouchingDisabled(this->nPlayerId, canCrouch);
-}
-
-bool CPlayer::GetCrouchDisabled(void) {
-	return Boolify(functions->DisabledPlayerCrouching(this->nPlayerId));
-}
-
 void RegisterPlayer()
 {
 	Class<CPlayer> c(v, "CPlayer_INTERNAL");
@@ -336,7 +328,6 @@ void RegisterPlayer()
 		.Prop(_SC("Cash"), &CPlayer::GetMoney, &CPlayer::SetMoney)
 		.Prop(_SC("Color"), &CPlayer::GetColour, &CPlayer::SetColour)
 		.Prop(_SC("Colour"), &CPlayer::GetColour, &CPlayer::SetColour)
-		.Prop(_SC("CrouchingDisabled"), &CPlayer::GetCrouchDisabled, &CPlayer::SetCrouchDisabled)
 		.Prop(_SC("DrivebyAbility"), &CPlayer::GetDrivebyEnabled, &CPlayer::SetDrivebyEnabled)
 		.Prop(_SC("Frozen"), &CPlayer::GetFrozen, &CPlayer::SetFrozen)
 		.Prop(_SC("GreenScanlines"), &CPlayer::GetGreenScanlines, &CPlayer::SetGreenScanlines)

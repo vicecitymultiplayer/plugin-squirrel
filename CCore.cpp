@@ -98,6 +98,13 @@ CCore::~CCore()
 			this->checkpointMap[i] = NULL;
 		}
 	}
+
+	for (i = 0; i < MAX_SPHERES; i++) {
+		if (this->sphereMap[i] != NULL) {
+			delete this->sphereMap[i];
+			this->sphereMap[i] = NULL;
+		}
+	}
 }
 
 void CCore::LoadVM()
@@ -154,6 +161,12 @@ void CCore::ScanForEntities()
 	for (i = 0; i < MAX_CHECKPOINTS; i++) {
 		if (functions->GetCheckpointWorld(i) >= 0) {
 			this->AllocateCheckpoint(i, false);
+		}
+	}
+
+	for (i = 0; i < MAX_SPHERES; i++) {
+		if (functions->GetSphereWorld(i) >= 0) {
+			this->AllocateSphere(i, false);
 		}
 	}
 }
@@ -231,6 +244,13 @@ void CCore::CleanWorld()
 			checkpointMap[i] = NULL;
 		}
 	}
+
+	for (i = 0; i < MAX_SPHERES; i++) {
+		if (sphereMap[i] != NULL && sphereMap[i]->isOurs) {
+			sphereMap[i]->Delete();
+			sphereMap[i] = NULL;
+		}
+	}
 }
 
 // Register *everything*
@@ -265,6 +285,7 @@ void CCore::RegisterEntities()
 	RegisterSprite();
 	RegisterTextdraw();
 	RegisterCheckpoint();
+	RegisterSphere();
 
 	// Set the default internal error handlers up
 	sqstd_seterrorhandlers( v );
@@ -544,6 +565,22 @@ CCheckpoint * CCore::AllocateCheckpoint(int gCheckpointId, bool isOurs)
 	return pCheckpoint;
 }
 
+CSphere * CCore::AllocateSphere(int gSphereId, bool isOurs)
+{
+	if (gSphereId < 0 || gSphereId >= MAX_CHECKPOINTS)
+		return NULL;
+	else if (functions->GetSphereWorld(gSphereId) == -1)
+		return NULL;
+	else if (this->sphereMap[gSphereId] != NULL)
+		return this->sphereMap[gSphereId];
+
+	CSphere * pSphere = new CSphere();
+	pSphere->Init(gSphereId, isOurs);
+
+	this->sphereMap[pSphere->nSphereId] = pSphere;
+	return pSphere;
+}
+
 void CCore::DereferenceObject(int gObjectId)
 {
 	if (gObjectId < 0 || gObjectId > MAX_OBJECTS - 1)
@@ -619,6 +656,21 @@ void CCore::DereferenceCheckpoint(int gCheckpointId)
 	}
 }
 
+void CCore::DereferenceSphere(int gSphereId)
+{
+	if (gSphereId < 0 || gSphereId >= MAX_CHECKPOINTS)
+		return;
+	else if (this->sphereMap[gSphereId] == NULL)
+		return;
+	else
+	{
+		CSphere * pSphere = this->sphereMap[gSphereId];
+		delete pSphere;
+
+		this->sphereMap[gSphereId] = NULL;
+	}
+}
+
 CObject * CCore::RetrieveObject(int gObjectId)
 {
 	if (gObjectId < 0 || gObjectId > MAX_OBJECTS - 1)
@@ -657,4 +709,12 @@ CCheckpoint * CCore::RetrieveCheckpoint(int gCheckpointId)
 		return NULL;
 
 	return this->checkpointMap[gCheckpointId];
+}
+
+CSphere * CCore::RetrieveSphere(int gSphereId)
+{
+	if (gSphereId < 0 || gSphereId >= MAX_CHECKPOINTS)
+		return NULL;
+
+	return this->sphereMap[gSphereId];
 }

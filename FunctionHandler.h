@@ -11,6 +11,7 @@
 #include "CSprite.h"
 #include "CTextdraw.h"
 #include "CCheckpoint.h"
+#include "CSphere.h"
 
 #pragma once
 
@@ -146,7 +147,8 @@ CPickup * CreatePickup   ( int model, int world, int quantity, Vector * pos, int
 CObject * CreateObject   ( int model, int world, Vector * pos, int alpha );
 CSprite * CreateSprite   ( const SQChar * filename, uint16_t x, uint16_t y, uint16_t rX, uint16_t rY, float rot, uint16_t alpha );
 CTextdraw * CreateTextdraw ( const SQChar * text, int x, int y, unsigned int colour );
-CCheckpoint * CreateCheckpoint(int world, Vector * pos, ARGB * color, float radius);
+CCheckpoint * CreateCheckpoint(CPlayer* pPlayer, int world, Vector * pos, ARGB * color, float radius);
+CSphere * CreateSphere(CPlayer* pPlayer, int world, Vector * pos, cRGB * color, float radius);
 
 CVehicle * CreateVehicleExpanded ( int model, int world, float x, float y, float z, float angle, int col1, int col2 );
 CPickup * CreatePickupExpanded   ( int model, int world, int quantity, float x, float y, float z, int alpha, bool isAuto );
@@ -156,6 +158,7 @@ CPickup * FindPickup   ( int id );
 CObject * FindObject   ( int id );
 CVehicle * FindVehicle ( int id );
 CCheckpoint * FindCheckpoint(int id);
+CSphere * FindSphere(int id);
 
 void SetWorldBounds   ( float maxX, float minX, float maxY, float minY );
 Bounds GetWorldBounds ( void );

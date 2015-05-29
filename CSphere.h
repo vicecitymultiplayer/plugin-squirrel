@@ -3,20 +3,20 @@
 #include "UtilStructs.h"
 #pragma once
 
-class CCheckpoint
+class CSphere
 {
 	public:
-		void Init( int lnCheckpointId, bool lbIsOurs = true ) { this->isOurs = lbIsOurs; this->nCheckpointId = lnCheckpointId; }
+		void Init( int lnSphereId, bool lbIsOurs = true ) { this->isOurs = lbIsOurs; this->nSphereId = lnSphereId; }
 
 	public:
 		void SetWorld( int world );
-		void SetColor( ARGB color );
+		void SetColor( cRGB color );
 		void SetPos( Vector pos );
 		void SetRadius( float radius );
 
 	public:
 		int GetWorld();
-		ARGB GetColor();
+		cRGB GetColor();
 		EntityVector GetPos();
 		float GetRadius();
 		int GetID();
@@ -27,9 +27,9 @@ class CCheckpoint
 		bool StreamedToPlayer( CPlayer * player );
 			
 	public:
-		int nCheckpointId;
+		int nSphereId;
 		int nOwnerId;
 		bool isOurs;
 };
 
-void RegisterCheckpoint();
+void RegisterSphere();

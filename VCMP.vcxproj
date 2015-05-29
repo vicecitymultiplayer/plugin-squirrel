@@ -196,6 +196,7 @@
     <ClInclude Include="Constants.h" />
     <ClInclude Include="CPickup.h" />
     <ClInclude Include="CPlayer.h" />
+    <ClInclude Include="CSphere.h" />
     <ClInclude Include="CSprite.h" />
     <ClInclude Include="CTextdraw.h" />
     <ClInclude Include="CTimer.h" />
@@ -235,6 +236,7 @@
     <ClCompile Include="ConsoleUtils.cpp" />
     <ClCompile Include="CPickup.cpp" />
     <ClCompile Include="CPlayer.cpp" />
+    <ClCompile Include="CSphere.cpp" />
     <ClCompile Include="CSprite.cpp" />
     <ClCompile Include="CTextdraw.cpp" />
     <ClCompile Include="CTimer.cpp" />

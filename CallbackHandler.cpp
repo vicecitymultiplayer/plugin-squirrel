@@ -1116,7 +1116,7 @@ void OnCheckpointEntered(int nCheckpointId, int nPlayerId) {
 		try
 		{
 			if (!callback.IsNull())
-				callback.Execute<CCheckpoint*, CPlayer*>(pCore->RetrieveCheckpoint(nCheckpointId), pCore->RetrievePlayer(nPlayerId));
+				callback.Execute<CPlayer*, CCheckpoint*>(pCore->RetrievePlayer(nPlayerId), pCore->RetrieveCheckpoint(nCheckpointId));
 		}
 		catch (Sqrat::Exception e)
 		{
@@ -1126,6 +1126,7 @@ void OnCheckpointEntered(int nCheckpointId, int nPlayerId) {
 		callback.Release();
 	}
 }
+
 void OnCheckpointExited(int nCheckpointId, int nPlayerId) {
 	if (pCore != NULL)
 	{
@@ -1133,11 +1134,47 @@ void OnCheckpointExited(int nCheckpointId, int nPlayerId) {
 		try
 		{
 			if (!callback.IsNull())
-				callback.Execute<CCheckpoint*, CPlayer*>(pCore->RetrieveCheckpoint(nCheckpointId), pCore->RetrievePlayer(nPlayerId));
+				callback.Execute<CPlayer*, CCheckpoint*>(pCore->RetrievePlayer(nPlayerId), pCore->RetrieveCheckpoint(nCheckpointId));
 		}
 		catch (Sqrat::Exception e)
 		{
 			OutputWarning("onCheckpointExited failed to execute -- check the console for more details.");
+		}
+
+		callback.Release();
+	}
+}
+
+void OnSphereEntered(int nSphereId, int nPlayerId) {
+	if (pCore != NULL)
+	{
+		Function callback = RootTable().GetFunction(_SC("onSphereEntered"));
+		try
+		{
+			if (!callback.IsNull())
+				callback.Execute<CPlayer*, CSphere*>(pCore->RetrievePlayer(nPlayerId), pCore->RetrieveSphere(nSphereId));
+		}
+		catch (Sqrat::Exception e)
+		{
+			OutputWarning("onSphereEntered failed to execute -- check the console for more details.");
+		}
+
+		callback.Release();
+	}
+}
+
+void OnSphereExited(int nSphereId, int nPlayerId) {
+	if (pCore != NULL)
+	{
+		Function callback = RootTable().GetFunction(_SC("onSphereExited"));
+		try
+		{
+			if (!callback.IsNull())
+				callback.Execute<CPlayer*, CSphere*>(pCore->RetrievePlayer(nPlayerId), pCore->RetrieveSphere(nSphereId));
+		}
+		catch (Sqrat::Exception e)
+		{
+			OutputWarning("onSphereExited failed to execute -- check the console for more details.");
 		}
 
 		callback.Release();

@@ -426,7 +426,7 @@ typedef unsigned int (*SDK_EnabledWallglitch) (void);
 typedef int (*SDK_SetVehicleSiren) (int nVehicleId, unsigned int bToggle);
 typedef unsigned int (*SDK_GetVehicleSiren) (int nVehicleId);
 typedef int (*SDK_GetPlayerUID2) (int nPlayerId, char* szBuffer, int nBufferLen);
-typedef int (*SDK_CreateCheckpoint) (int nWorld, float fPosX, float fPosY, float fPosZ, unsigned int nR, unsigned int nG, unsigned int nB, unsigned int nA, float fRadius);
+typedef int (*SDK_CreateCheckpoint) (int nPlayerId, int nWorld, float fPosX, float fPosY, float fPosZ, unsigned int nR, unsigned int nG, unsigned int nB, unsigned int nA, float fRadius);
 typedef int (*SDK_DeleteCheckpoint) (int nCheckpointId);
 typedef unsigned int (*SDK_IsCheckpointStreamedForPlayer) (int nCheckpointId, int nPlayerId);
 typedef int (*SDK_SetCheckpointWorld) (int nCheckpointId, int nWorld);
@@ -437,6 +437,19 @@ typedef int (*SDK_SetCheckpointPos) (int nCheckpointId, float fPosX, float fPosY
 typedef int (*SDK_GetCheckpointPos) (int nCheckpointId, float* pfPosX, float* pfPosY, float* pfPosZ);
 typedef int (*SDK_SetCheckpointRadius) (int nCheckpointId, float fRadius);
 typedef float (*SDK_GetCheckpointRadius) (int nCheckpointId);
+typedef int (*SDK_GetCheckpointOwner) (int nCheckpointId);
+typedef int (*SDK_CreateSphere) (int nPlayerId, int nWorld, float fPosX, float fPosY, float fPosZ, unsigned int nR, unsigned int nG, unsigned int nB, float fRadius);
+typedef int (*SDK_DeleteSphere) (int nSphereId);
+typedef unsigned int (*SDK_IsSphereStreamedForPlayer) (int nSphereId, int nPlayerId);
+typedef int (*SDK_SetSphereWorld) (int nSphereId, int nWorld);
+typedef int (*SDK_GetSphereWorld) (int nSphereId);
+typedef int (*SDK_SetSphereColor) (int nSphereId, unsigned int nR, unsigned int nG, unsigned int nB);
+typedef unsigned int (*SDK_GetSphereColor) (int nSphereId, unsigned int* pnR, unsigned int* pnG, unsigned int* pnB);
+typedef int (*SDK_SetSpherePos) (int nSphereId, float fPosX, float fPosY, float fPosZ);
+typedef int (*SDK_GetSpherePos) (int nSphereId, float* pfPosX, float* pfPosY, float* pfPosZ);
+typedef int (*SDK_SetSphereRadius) (int nSphereId, float fRadius);
+typedef float (*SDK_GetSphereRadius) (int nSphereId);
+typedef int (*SDK_GetSphereOwner) (int nSphereId);
 typedef int (*SDK_OnInitServer) (void);
 typedef void (*SDK_OnShutdownServer) (void);
 typedef void (*SDK_OnFrame) (float fElapsedTime);
@@ -480,6 +493,8 @@ typedef void (*SDK_OnPlayerCrashReport) (int nPlayerId, const char* pszReport);
 typedef void (*SDK_OnServerPerformanceReport) (int nNumStats, const char** ppszDescription, unsigned long long* pnMillisecsSpent);
 typedef void (*SDK_OnCheckpointEntered) (int nCheckpointId, int nPlayerId);
 typedef void (*SDK_OnCheckpointExited) (int nCheckpointId, int nPlayerId);
+typedef void (*SDK_OnSphereEntered) (int nSphereId, int nPlayerId);
+typedef void (*SDK_OnSphereExited) (int nSphereId, int nPlayerId);
 
 typedef struct {
 	unsigned int						uStructSize;
@@ -899,6 +914,20 @@ typedef struct {
 	SDK_GetCheckpointPos GetCheckpointPos;
 	SDK_SetCheckpointRadius SetCheckpointRadius;
 	SDK_GetCheckpointRadius GetCheckpointRadius;
+	SDK_GetCheckpointOwner GetCheckpointOwner;
+
+	SDK_CreateSphere CreateSphere;
+	SDK_DeleteSphere DeleteSphere;
+	SDK_IsSphereStreamedForPlayer IsSphereStreamedForPlayer;
+	SDK_SetSphereWorld SetSphereWorld;
+	SDK_GetSphereWorld GetSphereWorld;
+	SDK_SetSphereColor SetSphereColor;
+	SDK_GetSphereColor GetSphereColor;
+	SDK_SetSpherePos SetSpherePos;
+	SDK_GetSpherePos GetSpherePos;
+	SDK_SetSphereRadius SetSphereRadius;
+	SDK_GetSphereRadius GetSphereRadius;
+	SDK_GetSphereOwner GetSphereOwner;
 } PluginFuncs;
 
 typedef struct {
@@ -949,5 +978,7 @@ typedef struct {
 	// TODO: Move these functions to proper sections on major plugin update
 	SDK_OnCheckpointEntered OnCheckpointEntered;
 	SDK_OnCheckpointExited OnCheckpointExited;
+	SDK_OnSphereEntered OnSphereEntered;
+	SDK_OnSphereExited OnSphereExited;
 
 } PluginCallbacks;
