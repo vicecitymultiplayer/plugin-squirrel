@@ -1146,6 +1146,8 @@ int GetWeaponID( const SQChar * name )
 		default:
 			return 255;
 	}
+
+	return 255;
 }
 
 DWORD SQGetTickCount( void )

@@ -295,8 +295,14 @@ void CPlayer::SetDrunkLevel(int visuals, int handling)
 
 SQChar * CPlayer::GetUniqueID()
 {
-	functions->GetPlayerUID(this->nPlayerId, this->m_uid, 40);
+	functions->GetPlayerUID(this->nPlayerId, this->m_uid, 41);
 	return m_uid;
+}
+
+SQChar * CPlayer::GetUniqueID2()
+{
+	functions->GetPlayerUID2(this->nPlayerId, this->m_uid2, 41);
+	return m_uid2;
 }
 
 int CPlayer::GetVehicleSlot()   { return functions->GetPlayerInVehicleSlot(this->nPlayerId);   }
@@ -384,6 +390,9 @@ void RegisterPlayer()
 		.Prop(_SC("Typing"), &CPlayer::Typing)
 		.Prop(_SC("UniqueWorld"), &CPlayer::GetUniqueWorld)
 		.Prop(_SC("UniqueID"), &CPlayer::GetUniqueID)
+		.Prop(_SC("UID"), &CPlayer::GetUniqueID)
+		.Prop(_SC("UniqueID2"), &CPlayer::GetUniqueID2)
+		.Prop(_SC("UID2"), &CPlayer::GetUniqueID2)
 		.Prop(_SC("VehicleSlot"), &CPlayer::GetVehicleSlot)
 		.Prop(_SC("VehicleStatus"), &CPlayer::GetVehicleStatus)
 		.Prop(_SC("Weapon"), &CPlayer::GetWeapon);
