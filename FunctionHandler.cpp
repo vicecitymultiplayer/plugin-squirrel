@@ -997,10 +997,16 @@ int GetWeaponID( const SQChar * name )
 		// [K]nife, [K]atana
 		case 'k':
 		{
-			// [Kn]ife
 			if( char2 && char2 == 'n' )
-				return 5;
-
+			{
+				// [Kn]ife
+				if( char3 == 'i' )
+					return 5;
+				// [Knu]ckles
+				else if ( char3 == 'u' )
+					return 1;
+			}
+			
 			// Default to katana
 			else
 				return 10;
@@ -1315,10 +1321,15 @@ int GetVehicleModelFromName( SQChar * name )
 					res = 134; // perennial
 				else if( lowername[1] == 'o' )
 				{
-					if( strlen( lowername ) > 6 )
-						res = 227; // police maverick
-					else
-						res = 156; // police
+					if( strlen( lowername ) >= 3 )
+					{
+						if( lowername[2] == 'n' )
+							res = 143; // pony
+						else if( strlen( lowername ) > 6 )
+							res = 227; // police maverick
+						else
+							res = 156; // police
+					}
 				}
 				else if( lowername[1] == 'r' )
 					res = 160; // predator
@@ -1338,8 +1349,6 @@ int GetVehicleModelFromName( SQChar * name )
 					res = 191; // pcj-600
 				else if (lowername[1] == 'h')
 					res = 207; // phoenix
-				else if (lowername[1] == 'n')
-					res = 143; // pony
 
 				break;
 			}
@@ -1752,7 +1761,7 @@ const SQChar * GetVehicleNameFromModel ( int model )
 		case 190: return "Skimmer";
 		case 191: return "PCJ-600";
 		case 192: return "Faggio";
-		case 193: return "Freeay";
+		case 193: return "Freeway";
 		case 194: return "RC Baron";
 		case 195: return "RC Raider";
 		case 196: return "Glendale";
