@@ -1,5 +1,11 @@
 #include "main.h"
 
+#include <math.h>
+
+// ------------------------------------------------------------------------------------------------
+inline bool EpsEq(const float a, const float b) noexcept
+{ return fabs(a - b) <= 0.000001f; }
+
 // Convert a Vector to string
 const std::string Vector::ToString()
 {
@@ -16,6 +22,30 @@ const std::string Quaternion::ToString()
 	out << _SC("(") << this->x << _SC(", ") << this->y << _SC(", ") << this->z << _SC(", ") << this->w << _SC(")");
 
 	return out.str();
+}
+
+int Vector::Cmp(const Vector &v) const
+{
+    if ((x > v.x && !EpsEq(x, v.x)) || \
+        (EpsEq(x, v.x) && y > v.y && !EpsEq(y, v.y)) || \
+        (EpsEq(x, v.x) && EpsEq(y, v.y) && z > v.z && !EpsEq(z, v.z))) return 1;
+    if ((x < v.x && !EpsEq(x, v.x)) || \
+        (EpsEq(x, v.x) && y < v.y && !EpsEq(y, v.y)) || \
+        (EpsEq(x, v.x) && EpsEq(y, v.y) && z < v.z && !EpsEq(z, v.z))) return -1;
+    else return 0;
+}
+
+int Quaternion::Cmp(const Quaternion &q) const
+{
+    if ((x > q.x && !EpsEq(x, q.x)) || \
+        (EpsEq(x, q.x) && y > q.y && !EpsEq(y, q.y)) || \
+        (EpsEq(x, q.x) && EpsEq(y, q.y) && z > q.z && !EpsEq(z, q.z)) || \
+        (EpsEq(x, q.x) && EpsEq(y, q.y) && EpsEq(z, q.z) && w > q.w && !EpsEq(w, q.w))) return 1;
+    if ((x < q.x && !EpsEq(x, q.x)) || \
+        (EpsEq(x, q.x) && y < q.y && !EpsEq(y, q.y)) || \
+        (EpsEq(x, q.x) && EpsEq(y, q.y) && z < q.z && !EpsEq(z, q.z)) || \
+        (EpsEq(x, q.x) && EpsEq(y, q.y) && EpsEq(z, q.z) && w < q.w && !EpsEq(w, q.w))) return -1;
+    else return 0;
 }
 
 float Vector::Length(void) const { return sqrt(pow(this->x, 2) + pow(this->y, 2) + pow(this->z, 2)); }
@@ -301,6 +331,7 @@ void RegisterStructures()
         .Func(_SC("_div"), &Vector::operator /)
         .Func<Vector(Vector::*)(void) const>(_SC("_unm"), &Vector::operator -)
         .Func<Vector(Vector::*)(const Vector&) const>(_SC("_sub"), &Vector::operator -)
+        .Func(_SC("_cmp"), &Vector::Cmp)
 
         .Func(_SC("_tostring"), &Vector::ToString)
     );
@@ -318,10 +349,10 @@ void RegisterStructures()
         .Func(_SC("_div"), &Quaternion::operator /)
         .Func<Quaternion(Quaternion::*)(void) const>(_SC("_unm"), &Quaternion::operator -)
         .Func<Quaternion(Quaternion::*)(const Quaternion&) const>(_SC("_sub"), &Quaternion::operator -)
+        .Func(_SC("_cmp"), &Quaternion::Cmp)
 
         .Func(_SC("_tostring"), &Quaternion::ToString)
     );
-
 
     Sqrat::RootTable().Bind(_SC("RGBa"), Sqrat::Class<RGBa>(Sqrat::DefaultVM::Get(), _SC("RGBa"))
         .Ctor<int, int, int, int>()
@@ -340,7 +371,6 @@ void RegisterStructures()
         .Var(_SC("g"), &cRGB::g)
         .Var(_SC("b"), &cRGB::b)
     );
-
 
     Sqrat::RootTable().Bind(_SC("Bounds"), Sqrat::Class<Bounds>(Sqrat::DefaultVM::Get(), _SC("Bounds"))
         .Ctor<float, float, float, float>()
