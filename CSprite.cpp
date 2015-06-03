@@ -64,21 +64,21 @@ void RegisterSprite()
 {
 	Class<CSprite> c(v, "CSprite_INTERNAL");
 	c
-		.Func(_SC("ShowForAll"), &CSprite::ShowForAll, 1, "x")
-		.Func(_SC("ShowForPlayer"), &CSprite::ShowForPlayer, 2, "xx")
-		.Func(_SC("HideFromAll"), &CSprite::HideFromAll, 1, "x")
-		.Func(_SC("HideFromPlayer"), &CSprite::HideFromPlayer, 2, "xx")
-		.Func(_SC("SetPosForAll"), &CSprite::SetPositionForAll, 3, "xii")
-		.Func(_SC("SetPosForPlayer"), &CSprite::SetPositionForPlayer, 4, "xxii")
-		.Func(_SC("SetCenterForAll"), &CSprite::SetRotationCenterForAll, 3, "xii")
-		.Func(_SC("SetCenterForPlayer"), &CSprite::SetRotationCenterForPlayer, 4, "xxii")
-		.Func(_SC("RotateForAll"), &CSprite::SetRotationForAll, 2, "xn")
-		.Func(_SC("RotateForPlayer"), &CSprite::SetRotationForPlayer, 3, "xxn")
-		.Func(_SC("SetAlphaForAll"), &CSprite::SetAlphaForAll, 2, "xi")
-		.Func(_SC("SetAlphaForPlayer"), &CSprite::SetAlphaForPlayer, 3, "xxi")
-		.Func(_SC("SetRelativeForAll"), &CSprite::SetRelativityForAll, 2, "xb")
-		.Func(_SC("SetRelativeForPlayer"), &CSprite::SetRelativityForPlayer, 3, "xxb")
-		.Func(_SC("Delete"), &CSprite::Delete, 1, "x");
+		.Func(_SC("ShowForAll"), &CSprite::ShowForAll )
+		.Func(_SC("ShowForPlayer"), &CSprite::ShowForPlayer )
+		.Func(_SC("HideFromAll"), &CSprite::HideFromAll )
+		.Func(_SC("HideFromPlayer"), &CSprite::HideFromPlayer )
+		.Func(_SC("SetPosForAll"), &CSprite::SetPositionForAll )
+		.Func(_SC("SetPosForPlayer"), &CSprite::SetPositionForPlayer )
+		.Func(_SC("SetCenterForAll"), &CSprite::SetRotationCenterForAll )
+		.Func(_SC("SetCenterForPlayer"), &CSprite::SetRotationCenterForPlayer )
+		.Func(_SC("RotateForAll"), &CSprite::SetRotationForAll )
+		.Func(_SC("RotateForPlayer"), &CSprite::SetRotationForPlayer )
+		.Func(_SC("SetAlphaForAll"), &CSprite::SetAlphaForAll )
+		.Func(_SC("SetAlphaForPlayer"), &CSprite::SetAlphaForPlayer )
+		.Func(_SC("SetRelativeForAll"), &CSprite::SetRelativityForAll )
+		.Func(_SC("SetRelativeForPlayer"), &CSprite::SetRelativityForPlayer )
+		.Func(_SC("Delete"), &CSprite::Delete );
 
 	RootTable(v).Bind(_SC("CSprite"), c);
 }

@@ -284,139 +284,137 @@ void EntityRGB::SetB(int nB)
 
 void RegisterStructures()
 {
-	Sqrat::ImprovedClass<Vector> a;
-	Sqrat::ImprovedClass<Quaternion> b;
-	Sqrat::ImprovedClass<RGBa> c;
-	Sqrat::ImprovedClass<cRGB> d;
-	Sqrat::ImprovedClass<Bounds> e;
-	Sqrat::ImprovedClass<WastedSettings> f;
-	Sqrat::ImprovedClass<ARGB> g;
-	Sqrat::ImprovedClass<EntityVector> h;
-	Sqrat::ImprovedClass<EntityQuaternion> j;
-	Sqrat::ImprovedClass<EntityRGB> k;
+    Sqrat::RootTable().Bind(_SC("Vector"), Sqrat::Class<Vector>(Sqrat::DefaultVM::Get(), _SC("Vector"))
+        .Ctor<float, float, float>()
 
-	a.Ctor<float, float, float>();
-	b.Ctor<float, float, float, float>();
-	e.Ctor<float, float, float, float>();
-	h.Ctor<int, int, int, float, float, float>();
-	j.Ctor<int, int, int, float, float, float, float>();
+        .Var(_SC("x"), &Vector::x)
+        .Var(_SC("y"), &Vector::y)
+        .Var(_SC("z"), &Vector::z)
 
-	// Because an unsigned char is crashy
-	c.Ctor<int, int, int, int>();
-	d.Ctor<int, int, int>();
-	f.Ctor<int, int, float, float, cRGB, int, int>();
-	g.Ctor<int, int, int, int>();
-	k.Ctor<int, int, int, int, int, int>();
+        .Func(_SC("Distance"), &Vector::Distance)
+        .Func(_SC("Dot"), &Vector::Dot)
+        .Func(_SC("Length"), &Vector::Length)
+        .Func(_SC("Normalize"), &Vector::Normalize)
 
-	a
-		.Var(_SC("x"), &Vector::x)
-		.Var(_SC("y"), &Vector::y)
-		.Var(_SC("z"), &Vector::z)
+        .Func(_SC("_add"), &Vector::operator +)
+        .Func(_SC("_mul"), &Vector::operator *)
+        .Func(_SC("_div"), &Vector::operator /)
+        .Func<Vector(Vector::*)(void) const>(_SC("_unm"), &Vector::operator -)
+        .Func<Vector(Vector::*)(const Vector&) const>(_SC("_sub"), &Vector::operator -)
 
-		.Func(_SC("Distance"), &Vector::Distance)
-		.Func(_SC("Dot"), &Vector::Dot)
-		.Func(_SC("Length"), &Vector::Length)
-		.Func(_SC("Normalize"), &Vector::Normalize)
+        .Func(_SC("_tostring"), &Vector::ToString)
+    );
 
-		.Func(_SC("_add"), &Vector::operator +)
-		.Func(_SC("_mul"), &Vector::operator *)
-		.Func(_SC("_div"), &Vector::operator /)
-		.Func<Vector(Vector::*)(void) const>(_SC("_unm"), &Vector::operator -)
-		.Func<Vector(Vector::*)(const Vector&) const>(_SC("_sub"), &Vector::operator -)
+    Sqrat::RootTable().Bind(_SC("Quaternion"), Sqrat::Class<Quaternion>(Sqrat::DefaultVM::Get(), _SC("Quaternion"))
+        .Ctor<float, float, float, float>()
 
-		.Func(_SC("_tostring"), &Vector::ToString);
+        .Var(_SC("w"), &Quaternion::w)
+        .Var(_SC("x"), &Quaternion::x)
+        .Var(_SC("y"), &Quaternion::y)
+        .Var(_SC("z"), &Quaternion::z)
 
-	b
-		.Var(_SC("w"), &Quaternion::w)
-		.Var(_SC("x"), &Quaternion::x)
-		.Var(_SC("y"), &Quaternion::y)
-		.Var(_SC("z"), &Quaternion::z)
+        .Func(_SC("_add"), &Quaternion::operator +)
+        .Func(_SC("_mul"), &Quaternion::operator *)
+        .Func(_SC("_div"), &Quaternion::operator /)
+        .Func<Quaternion(Quaternion::*)(void) const>(_SC("_unm"), &Quaternion::operator -)
+        .Func<Quaternion(Quaternion::*)(const Quaternion&) const>(_SC("_sub"), &Quaternion::operator -)
 
-		.Func(_SC("_add"), &Quaternion::operator +)
-		.Func(_SC("_mul"), &Quaternion::operator *)
-		.Func(_SC("_div"), &Quaternion::operator /)
-		.Func<Quaternion(Quaternion::*)(void) const>(_SC("_unm"), &Quaternion::operator -)
-		.Func<Quaternion(Quaternion::*)(const Quaternion&) const>(_SC("_sub"), &Quaternion::operator -)
+        .Func(_SC("_tostring"), &Quaternion::ToString)
+    );
 
-		.Func(_SC("_tostring"), &Quaternion::ToString);
 
-	c
-		.Var(_SC("r"), &RGBa::r)
-		.Var(_SC("g"), &RGBa::g)
-		.Var(_SC("b"), &RGBa::b)
-		.Var(_SC("a"), &RGBa::a);
+    Sqrat::RootTable().Bind(_SC("RGBa"), Sqrat::Class<RGBa>(Sqrat::DefaultVM::Get(), _SC("RGBa"))
+        .Ctor<int, int, int, int>()
 
-	d
-		.Var(_SC("r"), &cRGB::r)
-		.Var(_SC("g"), &cRGB::g)
-		.Var(_SC("b"), &cRGB::b);
+        .Var(_SC("r"), &RGBa::r)
+        .Var(_SC("g"), &RGBa::g)
+        .Var(_SC("b"), &RGBa::b)
+        .Var(_SC("a"), &RGBa::a)
+    );
 
-	e
-		.Var(_SC("MaxX"), &Bounds::maxX)
-		.Var(_SC("MinX"), &Bounds::minX)
-		.Var(_SC("MaxY"), &Bounds::maxY)
-		.Var(_SC("MinY"), &Bounds::minY);
 
-	f
-		.Var(_SC("DeathTime"), &WastedSettings::deathTime)
-		.Var(_SC("FadeTime"), &WastedSettings::fadeTime)
-		.Var(_SC("FadeInSpeed"), &WastedSettings::fadeInSpeed)
-		.Var(_SC("FadeOutSpeed"), &WastedSettings::fadeOutSpeed)
-		.Var(_SC("FadeColour"), &WastedSettings::fadeColour)
-		.Var(_SC("CorpseFadeDelay"), &WastedSettings::corpseFadeDelay)
-		.Var(_SC("CorpseFadeTime"), &WastedSettings::corpseFadeTime);
+    Sqrat::RootTable().Bind(_SC("cRGB"), Sqrat::Class<cRGB>(Sqrat::DefaultVM::Get(), _SC("cRGB"))
+        .Ctor<int, int, int>()
 
-	g
-		.Var(_SC("a"), &ARGB::a)
-		.Var(_SC("r"), &ARGB::r)
-		.Var(_SC("g"), &ARGB::g)
-		.Var(_SC("b"), &ARGB::b);
+        .Var(_SC("r"), &cRGB::r)
+        .Var(_SC("g"), &cRGB::g)
+        .Var(_SC("b"), &cRGB::b)
+    );
 
-	h
-		.Prop(_SC("x"), &EntityVector::GetX, &EntityVector::SetX)
-		.Prop(_SC("y"), &EntityVector::GetY, &EntityVector::SetY)
-		.Prop(_SC("z"), &EntityVector::GetZ, &EntityVector::SetZ)
 
-		.Func(_SC("Distance"), &EntityVector::Distance)
-		.Func(_SC("Dot"), &EntityVector::Dot)
-		.Func(_SC("Length"), &EntityVector::Length)
-		.Func(_SC("Normalize"), &EntityVector::Normalize)
+    Sqrat::RootTable().Bind(_SC("Bounds"), Sqrat::Class<Bounds>(Sqrat::DefaultVM::Get(), _SC("Bounds"))
+        .Ctor<float, float, float, float>()
 
-		.Func(_SC("_add"), &EntityVector::operator +)
-		.Func(_SC("_mul"), &EntityVector::operator *)
-		.Func(_SC("_div"), &EntityVector::operator /)
-		.Func<EntityVector(EntityVector::*)(void) const>(_SC("_unm"), &EntityVector::operator -)
-		.Func<EntityVector(EntityVector::*)(const Vector&) const>(_SC("_sub"), &EntityVector::operator -)
+        .Var(_SC("MaxX"), &Bounds::maxX)
+        .Var(_SC("MinX"), &Bounds::minX)
+        .Var(_SC("MaxY"), &Bounds::maxY)
+        .Var(_SC("MinY"), &Bounds::minY)
+    );
 
-		.Func(_SC("_tostring"), &Vector::ToString);
+    Sqrat::RootTable().Bind(_SC("WastedSettings"), Sqrat::Class<WastedSettings>(Sqrat::DefaultVM::Get(), _SC("WastedSettings"))
+        .Ctor<int, int, float, float, cRGB, int, int>()
 
-	j
-		.Prop(_SC("w"), &EntityQuaternion::GetW, &EntityQuaternion::SetW)
-		.Prop(_SC("x"), &EntityQuaternion::GetX, &EntityQuaternion::SetX)
-		.Prop(_SC("y"), &EntityQuaternion::GetY, &EntityQuaternion::SetY)
-		.Prop(_SC("z"), &EntityQuaternion::GetZ, &EntityQuaternion::SetZ)
+        .Var(_SC("DeathTime"), &WastedSettings::deathTime)
+        .Var(_SC("FadeTime"), &WastedSettings::fadeTime)
+        .Var(_SC("FadeInSpeed"), &WastedSettings::fadeInSpeed)
+        .Var(_SC("FadeOutSpeed"), &WastedSettings::fadeOutSpeed)
+        .Var(_SC("FadeColour"), &WastedSettings::fadeColour)
+        .Var(_SC("CorpseFadeDelay"), &WastedSettings::corpseFadeDelay)
+        .Var(_SC("CorpseFadeTime"), &WastedSettings::corpseFadeTime)
+    );
 
-		.Func(_SC("_add"), &EntityQuaternion::operator +)
-		.Func(_SC("_mul"), &EntityQuaternion::operator *)
-		.Func(_SC("_div"), &EntityQuaternion::operator /)
-		.Func<EntityQuaternion(EntityQuaternion::*)(void) const>(_SC("_unm"), &EntityQuaternion::operator -)
-		.Func<EntityQuaternion(EntityQuaternion::*)(const Quaternion&) const>(_SC("_sub"), &EntityQuaternion::operator -)
+    Sqrat::RootTable().Bind(_SC("ARGB"), Sqrat::Class<ARGB>(Sqrat::DefaultVM::Get(), _SC("ARGB"))
+        .Ctor<int, int, int, int>()
 
-		.Func(_SC("_tostring"), &EntityQuaternion::ToString);
+        .Var(_SC("a"), &ARGB::a)
+        .Var(_SC("r"), &ARGB::r)
+        .Var(_SC("g"), &ARGB::g)
+        .Var(_SC("b"), &ARGB::b)
+    );
 
-	k
-		.Prop(_SC("r"), &EntityRGB::GetR, &EntityRGB::SetR)
-		.Prop(_SC("g"), &EntityRGB::GetG, &EntityRGB::SetG)
-		.Prop(_SC("b"), &EntityRGB::GetB, &EntityRGB::SetB);
+    Sqrat::RootTable().Bind(_SC("EntityVector"), Sqrat::Class<EntityVector>(Sqrat::DefaultVM::Get(), _SC("EntityVector"))
+        .Ctor<int, int, int, float, float, float>()
 
-	RootTable(v).Bind(_SC("Vector"), a);
-	RootTable(v).Bind(_SC("Quaternion"), b);
-	RootTable(v).Bind(_SC("RGBA"), c);
-	RootTable(v).Bind(_SC("RGB"), d);
-	RootTable(v).Bind(_SC("Bounds"), e);
-	RootTable(v).Bind(_SC("WastedSettings"), f);
-	RootTable(v).Bind(_SC("ARGB"), g);
-	RootTable(v).Bind(_SC("EntityVector"), h);
-	RootTable(v).Bind(_SC("EntityQuaternon"), j);
-	RootTable(v).Bind(_SC("EntityRGB"), k);
+        .Prop(_SC("x"), &EntityVector::GetX, &EntityVector::SetX)
+        .Prop(_SC("y"), &EntityVector::GetY, &EntityVector::SetY)
+        .Prop(_SC("z"), &EntityVector::GetZ, &EntityVector::SetZ)
+
+        .Func(_SC("Distance"), &EntityVector::Distance)
+        .Func(_SC("Dot"), &EntityVector::Dot)
+        .Func(_SC("Length"), &EntityVector::Length)
+        .Func(_SC("Normalize"), &EntityVector::Normalize)
+
+        .Func(_SC("_add"), &EntityVector::operator +)
+        .Func(_SC("_mul"), &EntityVector::operator *)
+        .Func(_SC("_div"), &EntityVector::operator /)
+        .Func<EntityVector(EntityVector::*)(void) const>(_SC("_unm"), &EntityVector::operator -)
+        .Func<EntityVector(EntityVector::*)(const Vector&) const>(_SC("_sub"), &EntityVector::operator -)
+
+        .Func(_SC("_tostring"), &Vector::ToString)
+    );
+
+    Sqrat::RootTable().Bind(_SC("EntityQuaternion"), Sqrat::Class<EntityQuaternion>(Sqrat::DefaultVM::Get(), _SC("EntityQuaternion"))
+        .Ctor<int, int, int, float, float, float, float>()
+
+        .Prop(_SC("w"), &EntityQuaternion::GetW, &EntityQuaternion::SetW)
+        .Prop(_SC("x"), &EntityQuaternion::GetX, &EntityQuaternion::SetX)
+        .Prop(_SC("y"), &EntityQuaternion::GetY, &EntityQuaternion::SetY)
+        .Prop(_SC("z"), &EntityQuaternion::GetZ, &EntityQuaternion::SetZ)
+
+        .Func(_SC("_add"), &EntityQuaternion::operator +)
+        .Func(_SC("_mul"), &EntityQuaternion::operator *)
+        .Func(_SC("_div"), &EntityQuaternion::operator /)
+        .Func<EntityQuaternion(EntityQuaternion::*)(void) const>(_SC("_unm"), &EntityQuaternion::operator -)
+        .Func<EntityQuaternion(EntityQuaternion::*)(const Quaternion&) const>(_SC("_sub"), &EntityQuaternion::operator -)
+
+        .Func(_SC("_tostring"), &EntityQuaternion::ToString)
+    );
+
+    Sqrat::RootTable().Bind(_SC("EntityRGB"), Sqrat::Class<EntityRGB>(Sqrat::DefaultVM::Get(), _SC("EntityRGB"))
+        .Ctor<int, int, int, int, int, int>()
+
+        .Prop(_SC("r"), &EntityRGB::GetR, &EntityRGB::SetR)
+        .Prop(_SC("g"), &EntityRGB::GetG, &EntityRGB::SetG)
+        .Prop(_SC("b"), &EntityRGB::GetB, &EntityRGB::SetB)
+    );
 }

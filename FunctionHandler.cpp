@@ -1173,12 +1173,22 @@ float DistanceFromPoint( float x1, float y1, float x2, float y2 )
 }
 
 // This is a crude implementation to be replaced later.
+int BindKey( bool onKeyDown, int key )
+{
+    return BindKey( onKeyDown, key, 0 , 0 );
+}
+
+int BindKey( bool onKeyDown, int key, int key2 )
+{
+    return BindKey( onKeyDown, key, key2 , 0 );
+}
+
 int BindKey( bool onKeyDown, int key, int key2, int key3 )
 {
-	int keyslot = functions->GetKeyBindUnusedSlot();
-	functions->RegisterKeyBind( keyslot, onKeyDown, key, key2, key3 );
+    int keyslot = functions->GetKeyBindUnusedSlot();
+    functions->RegisterKeyBind( keyslot, onKeyDown, key, key2, key3 );
 
-	return keyslot;
+    return keyslot;
 }
 
 bool RemoveKeybind( int nKeybindId ) { return (functions->RemoveKeyBind( nKeybindId ) ? true : false); }
@@ -2150,128 +2160,6 @@ SQInteger InPoly( HSQUIRRELVM v )
 	}
 
 	return sq_throwerror( v, "Unexpected number or types of parameters for InPoly" );
-}
-
-// This function is so convoluted, we have to tiptoe around Sqrat.
-// This had better work.
-SQInteger NewTimer( HSQUIRRELVM v )
-{
-	// char * pFuncName, float interval, int maxPulses
-	if( sq_gettop( v ) < 4 )
-		return sq_throwerror( v, "Unexpected number of parameters for NewTimer [string, float, float]" );
-	else if( sq_gettype( v, 2 ) != OT_STRING )
-		return sq_throwerror( v, "The function name must be given as a string." );
-	else if( sq_gettype( v, 3 ) != OT_FLOAT && sq_gettype( v, 3 ) != OT_INTEGER )
-		return sq_throwerror( v, "The interval must be a float or integer." );
-	else if( sq_gettype( v, 4 ) != OT_FLOAT && sq_gettype( v, 4 ) != OT_INTEGER )
-		return sq_throwerror( v, "The maximum number of timer pulses must be a float or integer." );
-	else
-	{
-		const SQChar * pFuncName;
-		SQInteger maxPulses;
-		SQFloat fInterval;
-
-		sq_getstring( v, 2, &pFuncName );
-		{
-			if( sq_gettype( v, 3 ) == OT_INTEGER )
-			{
-				SQInteger interval;
-				sq_getinteger( v, 3, &interval );
-
-				fInterval = static_cast<SQFloat>(interval);
-			}
-			else
-				sq_getfloat( v, 3, &fInterval );
-
-			if( sq_gettype( v, 4 ) == OT_FLOAT )
-			{
-				SQFloat fMaxPulses;
-				sq_getfloat( v, 4, &fMaxPulses );
-
-				maxPulses = static_cast<SQInteger>(fMaxPulses);
-			}
-			else
-				sq_getinteger( v, 4, &maxPulses );
-		}
-
-		if( RootTable(v).GetFunction( pFuncName ).IsNull() )
-			return sq_throwerror( v, "The given timer callback does not exist." );
-		else if( fInterval <= 0.0f )
-			return sq_throwerror( v, "The timer's interval must be > 0" );
-		else if( maxPulses < 0 )
-			return sq_throwerror( v, "The timer's maximum number of pulses must be >= 0" );
-		else
-		{
-			CTimer * pTimer  = new CTimer;
-			if( sq_gettop( v ) > 4 )
-			{
-				pTimer->paramCount = sq_gettop(v) - 4;
-
-				for( int i = 5; i <= sq_gettop( v ); i++ )
-				{
-					TimerParam pTempParam;
-					pTempParam.datatype = sq_gettype( v, i );
-					switch( pTempParam.datatype )
-					{
-						case OT_INTEGER:
-							pTempParam.pData = new SQInteger();
-							sq_getinteger(v, i, (SQInteger *)pTempParam.pData);
-							break;
-
-						case OT_FLOAT:
-							pTempParam.pData = new SQFloat();
-							sq_getfloat(v, i, (SQFloat *)pTempParam.pData);
-							break;
-
-						case OT_BOOL:
-							pTempParam.pData = new SQBool();
-							sq_getbool(v, i, (SQBool *)pTempParam.pData);
-							break;
-
-						case OT_STRING:
-						{
-							const SQChar * pString = NULL;
-							sq_getstring(v, i, &pString);
-
-							Sqrat::string * pStringData = new Sqrat::string(pString);
-							pTempParam.pData = pStringData;
-							break;
-						}
-
-						/*case OT_TABLE:
-						case OT_ARRAY:
-						case OT_CLASS:*/
-						case OT_USERDATA:
-						case OT_USERPOINTER:
-						case OT_INSTANCE:
-						case OT_CLOSURE:
-						case OT_NATIVECLOSURE:
-						{
-							HSQOBJECT * o = new HSQOBJECT();
-							sq_getstackobj(v, i, o);
-							pTempParam.pData = o;
-							break;
-						}
-
-						case OT_NULL:
-						default:
-							break;
-					}
-
-					pTimer->params.push_back(pTempParam);
-				}
-			}
-
-			pTimer->pFunc = const_cast<SQChar *>(pFuncName);
-			pTimer->intervalInTicks   = fInterval;
-			pTimer->maxNumberOfPulses = maxPulses;
-
-			Sqrat::ClassType<CTimer>().PushInstance( v, pTimer );
-			pCore->AddTimer(pTimer);
-
-			return 1;
-		}
-	}
 }
 
 void SetVehiclesForcedRespawnHeight(SQFloat height) { functions->SetVehiclesForcedRespawnHeight(height); }

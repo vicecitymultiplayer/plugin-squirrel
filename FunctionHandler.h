@@ -186,7 +186,9 @@ bool IsWeaponDataModified ( int weaponID, int fieldID );
 bool ResetWeaponData      ( int weaponID );
 bool ResetAllWeaponData   ( void );
 
-int BindKey( bool onKeyDown, int key1, int key2 = 0, int key3 = 0 );
+int BindKey( bool onKeyDown, int key1 );
+int BindKey( bool onKeyDown, int key1, int key2 );
+int BindKey( bool onKeyDown, int key1, int key2, int key3 );
 bool RemoveKeybind( int nKeybindId );
 void RemoveAllKeybinds( void );
 
@@ -230,7 +232,6 @@ SQFloat GetVehiclesForcedRespawnHeight(void);
 
 SQInteger FindPlayer( HSQUIRRELVM v );
 SQInteger InPoly( HSQUIRRELVM v );
-SQInteger NewTimer( HSQUIRRELVM v );
 
 // These functions are for compatibility, but will be deprecated
 SQInteger SetAmmuWeapon(HSQUIRRELVM v);

@@ -13,93 +13,56 @@ typedef struct
 class CTimer
 {
 	public:
-		CTimer()
+        typedef std::vector<Sqrat::Object> ArgList;
+
+        CTimer()
+            : isPaused(true)
+            , intervalInTicks(0.0)
+            , ticksElapsed(0.0)
+            , maxNumberOfPulses(0)
+            , pulseCount(0)
+            , funcName()
+            , params()
+            , committingSeppuku(true)
+        {
+
+        }
+
+		CTimer(const Sqrat::string & fn, SQFloat tm, SQInteger mp, const ArgList & args)
+            : isPaused(false)
+            , intervalInTicks(tm)
+            , ticksElapsed(0.0)
+            , maxNumberOfPulses(mp)
+            , pulseCount(0)
+            , funcName(fn)
+            , params(args)
+            , committingSeppuku(false)
 		{
-			this->committingSeppuku = false;
-			this->ticksElapsed = 0.0f;
-			this->pulseCount = 0;
-			this->isPaused = false;
 
-			this->maxNumberOfPulses = 0;
-			this->intervalInTicks = 0.0f;
-			this->pFunc = NULL;
-			this->paramCount = 0;
-
-			this->params.clear();
 		}
 
 		~CTimer()
 		{
-/*			for (unsigned int i = 0; i < params.size(); i++)
-			{
-				if (this->params[i].pData != NULL)
-				{
-					switch (this->params[i].datatype)
-					{
-						case OT_INTEGER:
-							delete static_cast<SQInteger *>(this->params[i].pData);
-							break;
 
-						case OT_FLOAT:
-							delete static_cast<SQFloat *>(this->params[i].pData);
-							break;
-
-						case OT_BOOL:
-							delete static_cast<SQBool *>(this->params[i].pData);
-							break;
-
-						case OT_STRING:
-							delete static_cast<Sqrat::Var<string> *>(this->params[i].pData);
-							break;
-
-						case OT_TABLE:
-							delete static_cast<Sqrat::Var<Sqrat::Table> *>(this->params[i].pData);
-							break;
-
-						case OT_ARRAY:
-							delete static_cast<Sqrat::Var<Sqrat::Array> *>(this->params[i].pData);
-							break;
-
-						case OT_USERDATA:
-						case OT_USERPOINTER:
-						case OT_CLASS:
-						case OT_INSTANCE:
-							delete static_cast<Sqrat::Var<Sqrat::Object> *>(this->params[i].pData);
-							break;
-
-						case OT_CLOSURE:
-						case OT_NATIVECLOSURE:
-							delete static_cast<Sqrat::Var<Sqrat::Function> *>(this->params[i].pData);
-							break;
-
-						case OT_NULL:
-						default:
-							break;
-					}
-				}
-			}*/
-
-			if( this->params.size() > 0 )
-				this->params.clear();
 		}
-		
-		bool Pulse( float elapsedTime );
-		
+
+		bool Pulse( SQFloat elapsedTime );
+
 		// Is this timer paused?
 		bool isPaused;
 
 		// The interval to run it at
-		float intervalInTicks;
+		SQFloat intervalInTicks;
 
 	public:
-		float GetElapsedTicks();
+		SQFloat GetElapsedTicks();
 		void Delete();
 		void Start();
 		void Stop();
 
 	public:
 		// Ticks elapsed since last pulse
-		float ticksElapsed;
+		SQFloat ticksElapsed;
 
 		// Number of times to run, or 0 for an infinite number of runs.
 		unsigned int maxNumberOfPulses;
@@ -108,16 +71,103 @@ class CTimer
 		unsigned int pulseCount;
 
 		// The script function to use
-		SQChar * pFunc;
+		Sqrat::string funcName;
 
 		// The list of parameters
-		std::vector<TimerParam> params;
-
-		// The parameter count
-		unsigned char paramCount;
+		ArgList params;
 
 		// Are we killing ourselves off?
 		bool committingSeppuku;
 };
+
+CTimer * CreateTimer(const Sqrat::string & fn, SQFloat tm, SQUnsignedInteger32 mp);
+
+CTimer * CreateTimer(const Sqrat::string & fn, SQFloat tm, SQUnsignedInteger32 mp, \
+                        const Sqrat::Object & a1);
+
+CTimer * CreateTimer(const Sqrat::string & fn, SQFloat tm, SQUnsignedInteger32 mp, \
+                        const Sqrat::Object & a1, \
+                        const Sqrat::Object & a2);
+
+CTimer * CreateTimer(const Sqrat::string & fn, SQFloat tm, SQUnsignedInteger32 mp, \
+                        const Sqrat::Object & a1, \
+                        const Sqrat::Object & a2, \
+                        const Sqrat::Object & a3);
+
+CTimer * CreateTimer(const Sqrat::string & fn, SQFloat tm, SQUnsignedInteger32 mp, \
+                        const Sqrat::Object & a1, \
+                        const Sqrat::Object & a2, \
+                        const Sqrat::Object & a3, \
+                        const Sqrat::Object & a4);
+
+CTimer * CreateTimer(const Sqrat::string & fn, SQFloat tm, SQUnsignedInteger32 mp, \
+                        const Sqrat::Object & a1, \
+                        const Sqrat::Object & a2, \
+                        const Sqrat::Object & a3, \
+                        const Sqrat::Object & a4, \
+                        const Sqrat::Object & a5);
+
+CTimer * CreateTimer(const Sqrat::string & fn, SQFloat tm, SQUnsignedInteger32 mp, \
+                        const Sqrat::Object & a1, \
+                        const Sqrat::Object & a2, \
+                        const Sqrat::Object & a3, \
+                        const Sqrat::Object & a4, \
+                        const Sqrat::Object & a5, \
+                        const Sqrat::Object & a6);
+
+CTimer * CreateTimer(const Sqrat::string & fn, SQFloat tm, SQUnsignedInteger32 mp, \
+                        const Sqrat::Object & a1, \
+                        const Sqrat::Object & a2, \
+                        const Sqrat::Object & a3, \
+                        const Sqrat::Object & a4, \
+                        const Sqrat::Object & a5, \
+                        const Sqrat::Object & a6, \
+                        const Sqrat::Object & a7);
+
+CTimer * CreateTimer(const Sqrat::string & fn, SQFloat tm, SQUnsignedInteger32 mp, \
+                        const Sqrat::Object & a1, \
+                        const Sqrat::Object & a2, \
+                        const Sqrat::Object & a3, \
+                        const Sqrat::Object & a4, \
+                        const Sqrat::Object & a5, \
+                        const Sqrat::Object & a6, \
+                        const Sqrat::Object & a7, \
+                        const Sqrat::Object & a8);
+
+CTimer * CreateTimer(const Sqrat::string & fn, SQFloat tm, SQUnsignedInteger32 mp, \
+                        const Sqrat::Object & a1, \
+                        const Sqrat::Object & a2, \
+                        const Sqrat::Object & a3, \
+                        const Sqrat::Object & a4, \
+                        const Sqrat::Object & a5, \
+                        const Sqrat::Object & a6, \
+                        const Sqrat::Object & a7, \
+                        const Sqrat::Object & a8, \
+                        const Sqrat::Object & a9);
+
+CTimer * CreateTimer(const Sqrat::string & fn, SQFloat tm, SQUnsignedInteger32 mp, \
+                        const Sqrat::Object & a1, \
+                        const Sqrat::Object & a2, \
+                        const Sqrat::Object & a3, \
+                        const Sqrat::Object & a4, \
+                        const Sqrat::Object & a5, \
+                        const Sqrat::Object & a6, \
+                        const Sqrat::Object & a7, \
+                        const Sqrat::Object & a8, \
+                        const Sqrat::Object & a9, \
+                        const Sqrat::Object & a10);
+
+CTimer * CreateTimer(const Sqrat::string & fn, SQFloat tm, SQUnsignedInteger32 mp, \
+                        const Sqrat::Object & a1, \
+                        const Sqrat::Object & a2, \
+                        const Sqrat::Object & a3, \
+                        const Sqrat::Object & a4, \
+                        const Sqrat::Object & a5, \
+                        const Sqrat::Object & a6, \
+                        const Sqrat::Object & a7, \
+                        const Sqrat::Object & a8, \
+                        const Sqrat::Object & a9, \
+                        const Sqrat::Object & a10, \
+                        const Sqrat::Object & a11);
 
 void RegisterTimer();

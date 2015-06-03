@@ -26,6 +26,8 @@ struct SQExpState {
   bool       donot_get;   /* signal not to deref the next value */
 };
 
+#define MAX_COMPILER_ERROR_LEN 256
+
 struct SQScope {
 	SQInteger outers;
 	SQInteger stacksize;
@@ -78,7 +80,7 @@ public:
 		_lineinfo = lineinfo;_raiseerror = raiseerror;
 		_scope.outers = 0;
 		_scope.stacksize = 0;
-		compilererror = NULL;
+		_compilererror[0] = _SC('\0');
 	}
 	static void ThrowError(void *ud, const SQChar *s) {
 		SQCompiler *c = (SQCompiler *)ud;
@@ -86,12 +88,10 @@ public:
 	}
 	void Error(const SQChar *s, ...)
 	{
-		static SQChar temp[256];
 		va_list vl;
 		va_start(vl, s);
-		scvsprintf(temp, s, vl);
+		scvsprintf(_compilererror, MAX_COMPILER_ERROR_LEN, s, vl);
 		va_end(vl);
-		compilererror = temp;
 		longjmp(_errorjmp,1);
 	}
 	void Lex(){	_token = _lex.Lex();}
@@ -191,10 +191,10 @@ public:
 		}
 		else {
 			if(_raiseerror && _ss(_vm)->_compilererrorhandler) {
-				_ss(_vm)->_compilererrorhandler(_vm, compilererror, type(_sourcename) == OT_STRING?_stringval(_sourcename):_SC("unknown"),
+				_ss(_vm)->_compilererrorhandler(_vm, _compilererror, type(_sourcename) == OT_STRING?_stringval(_sourcename):_SC("unknown"),
 					_lex._currentline, _lex._currentcolumn);
 			}
-			_vm->_lasterror = SQString::Create(_ss(_vm), compilererror, -1);
+			_vm->_lasterror = SQString::Create(_ss(_vm), _compilererror, -1);
 			return false;
 		}
 		return true;
@@ -384,6 +384,7 @@ public:
 			SQInteger ds = _es.etype;
 			SQInteger pos = _es.epos;
 			if(ds == EXPR) Error(_SC("can't assign expression"));
+			else if(ds == BASE) Error(_SC("'base' cannot be modified"));
 			Lex(); Expression();
 
 			switch(op){
@@ -447,9 +448,19 @@ public:
 		}
 		_es = es;
 	}
+	template<typename T> void INVOKE_EXP(T f)
+	{
+		SQExpState es = _es;
+		_es.etype     = EXPR;
+		_es.epos      = -1;
+		_es.donot_get = false;
+		(this->*f)();
+		_es = es;
+	}
 	template<typename T> void BIN_EXP(SQOpcode op, T f,SQInteger op3 = 0)
 	{
-		Lex(); (this->*f)();
+		Lex(); 
+		INVOKE_EXP(f);
 		SQInteger op1 = _fs->PopTarget();SQInteger op2 = _fs->PopTarget();
 		_fs->AddInstruction(op, _fs->PushTarget(), op1, op2, op3);
 	}
@@ -462,7 +473,7 @@ public:
 			_fs->AddInstruction(_OP_OR, trg, 0, first_exp, 0);
 			SQInteger jpos = _fs->GetCurrentPos();
 			if(trg != first_exp) _fs->AddInstruction(_OP_MOVE, trg, first_exp);
-			Lex(); LogicalOrExp();
+			Lex(); INVOKE_EXP(&SQCompiler::LogicalOrExp);
 			_fs->SnoozeOpt();
 			SQInteger second_exp = _fs->PopTarget();
 			if(trg != second_exp) _fs->AddInstruction(_OP_MOVE, trg, second_exp);
@@ -481,7 +492,7 @@ public:
 			_fs->AddInstruction(_OP_AND, trg, 0, first_exp, 0);
 			SQInteger jpos = _fs->GetCurrentPos();
 			if(trg != first_exp) _fs->AddInstruction(_OP_MOVE, trg, first_exp);
-			Lex(); LogicalAndExp();
+			Lex(); INVOKE_EXP(&SQCompiler::LogicalAndExp);
 			_fs->SnoozeOpt();
 			SQInteger second_exp = _fs->PopTarget();
 			if(trg != second_exp) _fs->AddInstruction(_OP_MOVE, trg, second_exp);
@@ -765,6 +776,7 @@ public:
 					switch(ctype) {
 						case OT_INTEGER: EmitLoadConstInt(_integer(constval),_es.epos); break;
 						case OT_FLOAT: EmitLoadConstFloat(_float(constval),_es.epos); break;
+						case OT_BOOL: _fs->AddInstruction(_OP_LOADBOOL, _es.epos, _integer(constval)); break;
 						default: _fs->AddInstruction(_OP_LOAD,_es.epos,_fs->GetConstant(constval)); break;
 					}
 					_es.etype = EXPR;
@@ -848,11 +860,8 @@ public:
 		case TK_DELETE : DeleteExpr(); break;
 		case _SC('('): Lex(); CommaExpr(); Expect(_SC(')'));
 			break;
-		case TK___LINE__: EmitLoadConstInt(_lex._currentline, -1); Lex();
-		case TK___FILE__:
-			_fs->AddInstruction(_OP_LOAD, _fs->PushTarget(), _fs->GetConstant(_sourcename));
-			Lex();
-			break;
+		case TK___LINE__: EmitLoadConstInt(_lex._currentline,-1); Lex(); break;
+        case TK___FILE__: _fs->AddInstruction(_OP_LOAD, _fs->PushTarget(), _fs->GetConstant(_sourcename)); Lex(); break;
 		default: Error(_SC("expression expected"));
 		}
 		return -1;
@@ -1029,7 +1038,7 @@ public:
 			_fs->AddInstruction(_OP_JMP);
 			jmppos = _fs->GetCurrentPos();
 			Lex();
-			Statement(); OptionalSemicolon();
+			Statement(); if(_lex._prevtoken != _SC('}')) OptionalSemicolon();
 			END_SCOPE();
 			_fs->SetIntructionParam(jmppos, 1, _fs->GetCurrentPos() - jmppos);
 		}
@@ -1175,8 +1184,17 @@ public:
 			//condition
 			Lex(); Expression(); Expect(_SC(':'));
 			SQInteger trg = _fs->PopTarget();
-			_fs->AddInstruction(_OP_EQ, trg, trg, expr);
-			_fs->AddInstruction(_OP_JZ, trg, 0);
+			SQInteger eqtarget = trg;
+			bool local = _fs->IsLocal(trg);
+			if(local) {
+				eqtarget = _fs->PushTarget(); //we need to allocate a extra reg
+			}
+			_fs->AddInstruction(_OP_EQ, eqtarget, trg, expr);
+			_fs->AddInstruction(_OP_JZ, eqtarget, 0);
+			if(local) {
+				_fs->PopTarget();
+			}
+			
 			//end condition
 			if(skipcondjmp != -1) {
 				_fs->SetIntructionParam(skipcondjmp, 1, (_fs->GetCurrentPos() - skipcondjmp));
@@ -1256,6 +1274,11 @@ public:
 				break;
 			case TK_STRING_LITERAL:
 				val = _fs->CreateString(_lex._svalue,_lex._longstr.size()-1);
+				break;
+			case TK_TRUE:
+			case TK_FALSE:
+				val._type = OT_BOOL;
+				val._unVal.nInteger = _token == TK_TRUE ? 1 : 0;
 				break;
 			case '-':
 				Lex();
@@ -1497,7 +1520,7 @@ private:
 	SQInteger _debugop;
 	SQExpState   _es;
 	SQScope _scope;
-	SQChar *compilererror;
+	SQChar _compilererror[MAX_COMPILER_ERROR_LEN];
 	jmp_buf _errorjmp;
 	SQVM *_vm;
 };

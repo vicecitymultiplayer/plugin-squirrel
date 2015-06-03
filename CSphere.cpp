@@ -57,8 +57,8 @@ void RegisterSphere()
 
 	// Functions
 	c
-		.Func( _SC("Remove"), &CSphere::Delete, 1, "x" )
-		.Func( _SC("StreamedToPlayer"), &CSphere::StreamedToPlayer, 2, "xx" );
+		.Func( _SC("Remove"), &CSphere::Delete )
+		.Func( _SC("StreamedToPlayer"), &CSphere::StreamedToPlayer );
 
 	RootTable(v).Bind( _SC("CSphere"), c );
 }

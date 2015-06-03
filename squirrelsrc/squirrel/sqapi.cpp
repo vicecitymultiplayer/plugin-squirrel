@@ -34,7 +34,7 @@ bool sq_aux_gettypedarg(HSQUIRRELVM v,SQInteger idx,SQObjectType type,SQObjectPt
 
 SQInteger sq_aux_invalidtype(HSQUIRRELVM v,SQObjectType type)
 {
-	scsprintf(_ss(v)->GetScratchPad(100), _SC("unexpected type %s"), IdType2Name(type));
+	scsprintf(_ss(v)->GetScratchPad(100), 100 *sizeof(SQChar), _SC("unexpected type %s"), IdType2Name(type));
 	return sq_throwerror(v, _ss(v)->GetScratchPad(-1));
 }
 
@@ -569,6 +569,16 @@ SQUserPointer sq_getforeignptr(HSQUIRRELVM v)
 	return v->_foreignptr;
 }
 
+void sq_setsharedforeignptr(HSQUIRRELVM v,SQUserPointer p)
+{
+	_ss(v)->_foreignptr = p;
+}
+
+SQUserPointer sq_getsharedforeignptr(HSQUIRRELVM v)
+{
+	return _ss(v)->_foreignptr;
+}
+
 void sq_setvmreleasehook(HSQUIRRELVM v,SQRELEASEHOOK hook)
 {
 	v->_releasehook = hook;
@@ -577,6 +587,16 @@ void sq_setvmreleasehook(HSQUIRRELVM v,SQRELEASEHOOK hook)
 SQRELEASEHOOK sq_getvmreleasehook(HSQUIRRELVM v)
 {
 	return v->_releasehook;
+}
+
+void sq_setsharedreleasehook(HSQUIRRELVM v,SQRELEASEHOOK hook)
+{
+	_ss(v)->_releasehook = hook;
+}
+
+SQRELEASEHOOK sq_getsharedreleasehook(HSQUIRRELVM v)
+{
+	return _ss(v)->_releasehook;
 }
 
 void sq_push(HSQUIRRELVM v,SQInteger idx)

@@ -58,8 +58,8 @@ void RegisterCheckpoint()
 
 	// Functions
 	c
-		.Func( _SC("Remove"), &CCheckpoint::Delete, 1, "x" )
-		.Func( _SC("StreamedToPlayer"), &CCheckpoint::StreamedToPlayer, 2, "xx" );
+		.Func( _SC("Remove"), &CCheckpoint::Delete )
+		.Func( _SC("StreamedToPlayer"), &CCheckpoint::StreamedToPlayer );
 
 	RootTable(v).Bind( _SC("CCheckpoint"), c );
 }
