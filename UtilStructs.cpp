@@ -3,7 +3,7 @@
 #include <math.h>
 
 // ------------------------------------------------------------------------------------------------
-inline bool EpsEq(const float a, const float b) noexcept
+inline bool EpsEq(const float a, const float b)
 { return fabs(a - b) <= 0.000001f; }
 
 // Convert a Vector to string
