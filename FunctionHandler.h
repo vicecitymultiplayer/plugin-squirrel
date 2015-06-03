@@ -208,17 +208,11 @@ void PrivMessage        ( CPlayer * player, const SQChar * message );
 void PrivMessageAll     ( const SQChar * message );
 void SendPlayerMessage  ( CPlayer * playerToFake, CPlayer * playerTo, const SQChar * message );
 
-const SQChar * GetWeaponName   ( int weaponID );
-const SQChar * GetDistrictName ( float x, float y );
-const SQChar * GetSkinName     ( int skinID );
-int      GetWeaponID     ( const SQChar * name );
 DWORD    SQGetTickCount  ( void );
 
 float DistanceFromPoint ( float x1, float y1, float x2, float y2 );
 void ReloadScripts      ( void );
 
-int GetVehicleModelFromName ( SQChar * name );
-const SQChar * GetVehicleNameFromModel ( int model );
 void LoadVCMPModule( const SQChar * name );
 bool IsNum(const SQChar * line);
 
@@ -251,7 +245,6 @@ bool GetWeatherLock(void);
 void SetWeatherLock(bool isLocked);
 const SQChar * GetMapName(void);
 void SetMapName(const SQChar * mapName);
-int GetSkinID(const SQChar* name);
 
 Sqrat::Array GetPlayersArray();
 Sqrat::Array GetPickupsArray();

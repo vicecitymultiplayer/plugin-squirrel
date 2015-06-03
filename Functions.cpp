@@ -174,11 +174,6 @@ void RegisterGlobals()
 		.Func(_SC("PrivMessageAll"), PrivMessageAll )
 		.Func(_SC("SendPlayerMessage"), SendPlayerMessage )
 
-		.Func(_SC("GetWeaponName"), GetWeaponName )
-		.Func(_SC("GetDistrictName"), GetDistrictName )
-		.Func(_SC("GetSkinName"), GetSkinName )
-		.Func(_SC("GetWeaponID"), GetWeaponID )
-		.Func(_SC("GetSkinID"), GetSkinID )
 		.Func(_SC("GetTickCount"), SQGetTickCount )
 
 		.Func(_SC("SetWeaponDataValue"), SetWeaponDataValue )
@@ -191,8 +186,6 @@ void RegisterGlobals()
 		.Func(_SC("DistanceFromPoint"), DistanceFromPoint )
 		.Func(_SC("ReloadScripts"), ReloadScripts )
 
-		.Func(_SC("GetVehicleModelFromName"), GetVehicleModelFromName )
-		.Func(_SC("GetVehicleNameFromModel"), GetVehicleNameFromModel )
 		.Func(_SC("IsNum"), IsNum )
 
 		.Func(_SC("GetVehicleCount"), GetVehicleCount )
