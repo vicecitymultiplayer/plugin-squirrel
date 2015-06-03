@@ -212,8 +212,8 @@ SQRESULT sqstd_getfile(HSQUIRRELVM v, SQInteger idx, SQFILE *file)
 #define IO_BUFFER_SIZE 2048
 struct IOBuffer {
 	unsigned char buffer[IO_BUFFER_SIZE];
-	int size;
-	int ptr;
+	SQInteger size;
+	SQInteger ptr;
 	SQFILE file;
 };
 

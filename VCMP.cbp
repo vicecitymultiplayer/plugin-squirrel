@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="VCMP" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug Win32">
+				<Option output="VCMP" prefix_auto="1" extension_auto="1" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-DWIN32" />
+					<Add option="-D_DEBUG" />
+					<Add option="-D_WINDOWS" />
+					<Add option="-D_USRDLL" />
+					<Add option="-DVCMP_EXPORTS" />
+					<Add option="-D_CRT_SECURE_NO_WARNINGS" />
+					<Add option="-D_CRT_SECURE_NO_DEPRECATE" />
+					<Add directory="./sqrat" />
+					<Add directory="./squirrel" />
+				</Compiler>
+				<Linker>
+					<Add directory="$(VCInstallDir)lib" />
+					<Add directory="$(VCInstallDir)atlmfc/lib" />
+					<Add directory="$(WindowsSdkDir)lib" />
+					<Add directory="$(FrameworkSDKDir)/lib" />
+				</Linker>
+			</Target>
+			<Target title="Debug x64">
+				<Option output="VCMP" prefix_auto="1" extension_auto="1" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-DWIN32" />
+					<Add option="-D_DEBUG" />
+					<Add option="-D_WINDOWS" />
+					<Add option="-D_USRDLL" />
+					<Add option="-DVCMP_EXPORTS" />
+					<Add option="-D_CRT_SECURE_NO_WARNINGS" />
+					<Add option="-D_CRT_SECURE_NO_DEPRECATE" />
+					<Add directory="./sqrat" />
+					<Add directory="./squirrel" />
+				</Compiler>
+				<Linker>
+					<Add directory="$(VCInstallDir)lib" />
+					<Add directory="$(VCInstallDir)atlmfc/lib" />
+					<Add directory="$(WindowsSdkDir)lib" />
+					<Add directory="$(FrameworkSDKDir)/lib" />
+				</Linker>
+			</Target>
+			<Target title="Release x64">
+				<Option output="VCMP" prefix_auto="1" extension_auto="1" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-DWIN32" />
+					<Add option="-DNDEBUG" />
+					<Add option="-D_WINDOWS" />
+					<Add option="-D_USRDLL" />
+					<Add option="-DVCMP_EXPORTS" />
+					<Add option="-D_CRT_SECURE_NO_WARNINGS" />
+					<Add option="-D_CRT_SECURE_NO_DEPRECATE" />
+					<Add directory="." />
+					<Add directory="./squirrel" />
+					<Add directory="./sqrat" />
+				</Compiler>
+				<Linker>
+					<Add library="user32.lib" />
+					<Add library="shell32.lib" />
+					<Add library="kernel32.lib" />
+					<Add directory="$(VCInstallDir)lib/amd64" />
+					<Add directory="$(VCInstallDir)atlmfc/lib/amd64" />
+					<Add directory="$(WindowsSdkDir)lib/x64" />
+					<Add directory="$(FrameworkSDKDir)/lib/amd64" />
+					<Add directory="$(VCInstallDir)lib" />
+					<Add directory="$(VCInstallDir)atlmfc/lib" />
+					<Add directory="$(WindowsSdkDir)lib" />
+					<Add directory="$(FrameworkSDKDir)/lib" />
+					<Add directory="./lib" />
+				</Linker>
+			</Target>
+			<Target title="Release Win32">
+				<Option output="VCMP" prefix_auto="1" extension_auto="1" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-DWIN32" />
+					<Add option="-DNDEBUG" />
+					<Add option="-D_WINDOWS" />
+					<Add option="-D_USRDLL" />
+					<Add option="-DVCMP_EXPORTS" />
+					<Add option="-D_CRT_SECURE_NO_WARNINGS" />
+					<Add option="-D_CRT_SECURE_NO_DEPRECATE" />
+					<Add directory="." />
+					<Add directory="./squirrel" />
+					<Add directory="./sqrat" />
+				</Compiler>
+				<Linker>
+					<Add library="squirrel" />
+					<Add library="sqstdlib" />
+					<Add directory="$(VCInstallDir)lib" />
+					<Add directory="$(VCInstallDir)atlmfc/lib" />
+					<Add directory="$(WindowsSdkDir)lib" />
+					<Add directory="$(FrameworkSDKDir)/lib" />
+					<Add directory="./lib" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-std=c++0x" />
+		</Compiler>
+		<Unit filename="CCheckpoint.cpp" />
+		<Unit filename="CCheckpoint.h" />
+		<Unit filename="CCore.cpp" />
+		<Unit filename="CCore.h" />
+		<Unit filename="CObject.cpp" />
+		<Unit filename="CObject.h" />
+		<Unit filename="CPickup.cpp" />
+		<Unit filename="CPickup.h" />
+		<Unit filename="CPlayer.cpp" />
+		<Unit filename="CPlayer.h" />
+		<Unit filename="CSphere.cpp" />
+		<Unit filename="CSphere.h" />
+		<Unit filename="CSprite.cpp" />
+		<Unit filename="CSprite.h" />
+		<Unit filename="CTextdraw.cpp" />
+		<Unit filename="CTextdraw.h" />
+		<Unit filename="CTimer.cpp" />
+		<Unit filename="CTimer.h" />
+		<Unit filename="CVehicle.cpp" />
+		<Unit filename="CVehicle.h" />
+		<Unit filename="CallbackHandler.cpp" />
+		<Unit filename="CallbackHandler.h" />
+		<Unit filename="ConsoleUtils.cpp" />
+		<Unit filename="ConsoleUtils.h" />
+		<Unit filename="Constants.h" />
+		<Unit filename="Exports.cpp" />
+		<Unit filename="Exports.h" />
+		<Unit filename="FunctionHandler.cpp" />
+		<Unit filename="FunctionHandler.h" />
+		<Unit filename="Functions.cpp" />
+		<Unit filename="Functions.h" />
+		<Unit filename="SQImports.h" />
+		<Unit filename="SQModule.h" />
+		<Unit filename="UtilStructs.cpp" />
+		<Unit filename="UtilStructs.h" />
+		<Unit filename="VCMP.h" />
+		<Unit filename="main.cpp" />
+		<Unit filename="main.h" />
+		<Unit filename="sqrat/sqmodule.h" />
+		<Unit filename="sqrat/sqrat.h" />
+		<Unit filename="sqrat/sqrat/sqratAllocator.h" />
+		<Unit filename="sqrat/sqrat/sqratArray.h" />
+		<Unit filename="sqrat/sqrat/sqratClass.h" />
+		<Unit filename="sqrat/sqrat/sqratClassType.h" />
+		<Unit filename="sqrat/sqrat/sqratConst.h" />
+		<Unit filename="sqrat/sqrat/sqratFunction.h" />
+		<Unit filename="sqrat/sqrat/sqratGlobalMethods.h" />
+		<Unit filename="sqrat/sqrat/sqratMemberMethods.h" />
+		<Unit filename="sqrat/sqrat/sqratObject.h" />
+		<Unit filename="sqrat/sqrat/sqratOverloadMethods.h" />
+		<Unit filename="sqrat/sqrat/sqratScript.h" />
+		<Unit filename="sqrat/sqrat/sqratTable.h" />
+		<Unit filename="sqrat/sqrat/sqratTypes.h" />
+		<Unit filename="sqrat/sqrat/sqratUtil.h" />
+		<Unit filename="sqrat/sqrat/sqratVM.h" />
+		<Unit filename="sqrat/sqratimport.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

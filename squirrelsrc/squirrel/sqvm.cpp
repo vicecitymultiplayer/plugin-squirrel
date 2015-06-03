@@ -284,13 +284,13 @@ bool SQVM::ToString(const SQObjectPtr &o,SQObjectPtr &res)
 		res = o;
 		return true;
 	case OT_FLOAT:
-		scsprintf(_sp(rsl(NUMBER_MAX_CHAR+1)),_SC("%g"),_float(o));
+		scsprintf(_sp(rsl(NUMBER_MAX_CHAR+1)),rsl(NUMBER_MAX_CHAR),_SC("%g"),_float(o));
 		break;
 	case OT_INTEGER:
-		scsprintf(_sp(rsl(NUMBER_MAX_CHAR+1)),_PRINT_INT_FMT,_integer(o));
+		scsprintf(_sp(rsl(NUMBER_MAX_CHAR+1)),rsl(NUMBER_MAX_CHAR),_PRINT_INT_FMT,_integer(o));
 		break;
 	case OT_BOOL:
-		scsprintf(_sp(rsl(6)),_integer(o)?_SC("true"):_SC("false"));
+		scsprintf(_sp(rsl(6)),rsl(6),_integer(o)?_SC("true"):_SC("false"));
 		break;
 	case OT_TABLE:
 	case OT_USERDATA:
@@ -309,7 +309,7 @@ bool SQVM::ToString(const SQObjectPtr &o,SQObjectPtr &res)
 			}
 		}
 	default:
-		scsprintf(_sp(rsl(sizeof(void*)+20)),_SC("(%s : 0x%p)"),GetTypeName(o),(void*)_rawval(o));
+		scsprintf(_sp(rsl(sizeof(void*)+20)),rsl(sizeof(void*)+20),_SC("(%s : 0x%p)"),GetTypeName(o),(void*)_rawval(o));
 	}
 	res = SQString::Create(_ss(this),_spval);
 	return true;
@@ -351,8 +351,10 @@ bool SQVM::Init(SQVM *friendvm, SQInteger stacksize)
 	_callsstack = &_callstackdata[0];
 	_stackbase = 0;
 	_top = 0;
-	if(!friendvm) 
+	if(!friendvm) {
 		_roottable = SQTable::Create(_ss(this), 0);
+		sq_base_register(this);
+	}
 	else {
 		_roottable = friendvm->_roottable;
 		_errorhandler = friendvm->_errorhandler;
@@ -361,7 +363,7 @@ bool SQVM::Init(SQVM *friendvm, SQInteger stacksize)
 		_debughook_closure = friendvm->_debughook_closure;
 	}
 	
-	sq_base_register(this);
+	
 	return true;
 }
 
@@ -621,7 +623,10 @@ bool SQVM::CLASS_OP(SQObjectPtr &target,SQInteger baseclass,SQInteger attributes
 		int nparams = 2;
 		SQObjectPtr ret;
 		Push(target); Push(attrs);
-		Call(_class(target)->_metamethods[MT_INHERITED],nparams,_top - nparams, ret, false);
+		if(!Call(_class(target)->_metamethods[MT_INHERITED],nparams,_top - nparams, ret, false)) {
+			Pop(nparams);
+			return false;
+		}
 		Pop(nparams);
 	}
 	_class(target)->_attributes = attrs;
@@ -947,7 +952,7 @@ exception_restore:
 				
 						} continue;
 			case _OP_CMP:	_GUARD(CMP_OP((CmpOP)arg3,STK(arg2),STK(arg1),TARGET))	continue;
-			case _OP_EXISTS: TARGET = Get(STK(arg1), STK(arg2), temp_reg, true,DONT_FALL_BACK)?true:false;continue;
+			case _OP_EXISTS: TARGET = Get(STK(arg1), STK(arg2), temp_reg, true, EXISTS_FALL_BACK)?true:false;continue;
 			case _OP_INSTANCEOF: 
 				if(type(STK(arg1)) != OT_CLASS)
 				{Raise_Error(_SC("cannot apply instanceof between a %s and a %s"),GetTypeName(STK(arg1)),GetTypeName(STK(arg2))); SQ_THROW();}
@@ -1200,7 +1205,7 @@ bool SQVM::Get(const SQObjectPtr &self,const SQObjectPtr &key,SQObjectPtr &dest,
 		if(_table(self)->Get(key,dest))return true;
 		break;
 	case OT_ARRAY:
-		if(sq_isnumeric(key)) { if(_array(self)->Get(tointeger(key),dest)) { return true; } Raise_IdxError(key); return false; }
+		if(sq_isnumeric(key)) { if(_array(self)->Get(tointeger(key),dest)) { return true; } if(selfidx != EXISTS_FALL_BACK) Raise_IdxError(key); return false; }
 		break;
 	case OT_INSTANCE:
 		if(_instance(self)->Get(key,dest)) return true;
@@ -1216,7 +1221,7 @@ bool SQVM::Get(const SQObjectPtr &self,const SQObjectPtr &key,SQObjectPtr &dest,
 				dest = SQInteger(_stringval(self)[n]);
 				return true;
 			}
-			Raise_IdxError(key);
+			if(selfidx != EXISTS_FALL_BACK) Raise_IdxError(key);
 			return false;
 		}
 		break;
@@ -1242,7 +1247,7 @@ bool SQVM::Get(const SQObjectPtr &self,const SQObjectPtr &key,SQObjectPtr &dest,
 		
 	}
 //#endif
-	Raise_IdxError(key);
+	if(selfidx != EXISTS_FALL_BACK) Raise_IdxError(key);
 	return false;
 }
 

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="squirrel" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug Win32">
+				<Option output="../../lib/squirrel" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-DWIN32" />
+					<Add option="-D_DEBUG" />
+					<Add option="-D_LIB" />
+					<Add directory="../include" />
+				</Compiler>
+			</Target>
+			<Target title="Debug x64">
+				<Option output="../../lib/squirrel" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-DWIN32" />
+					<Add option="-D_DEBUG" />
+					<Add option="-D_LIB" />
+					<Add directory="../include" />
+				</Compiler>
+			</Target>
+			<Target title="Release x64">
+				<Option output="../../lib/squirrel" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-DWIN32" />
+					<Add option="-DNDEBUG" />
+					<Add option="-D_LIB" />
+					<Add option="-DGARBAGE_COLLECTOR" />
+					<Add directory="../include" />
+				</Compiler>
+			</Target>
+			<Target title="Template x64">
+				<Option output="../../lib/squirrel" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+			</Target>
+			<Target title="Release Win32">
+				<Option output="../../lib/squirrel" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-DWIN32" />
+					<Add option="-DNDEBUG" />
+					<Add option="-D_LIB" />
+					<Add option="-DGARBAGE_COLLECTOR" />
+					<Add directory="../include" />
+				</Compiler>
+			</Target>
+			<Target title="Template Win32">
+				<Option output="../../lib/squirrel" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+			</Target>
+		</Build>
+		<Unit filename="../../squirrel/sqstdaux.h" />
+		<Unit filename="../../squirrel/sqstdblob.h" />
+		<Unit filename="../../squirrel/sqstdio.h" />
+		<Unit filename="../../squirrel/sqstdmath.h" />
+		<Unit filename="../../squirrel/sqstdstring.h" />
+		<Unit filename="../../squirrel/sqstdsystem.h" />
+		<Unit filename="../../squirrel/squirrel.h" />
+		<Unit filename="../include/sqconfig.h" />
+		<Unit filename="sqapi.cpp" />
+		<Unit filename="sqarray.h" />
+		<Unit filename="sqbaselib.cpp" />
+		<Unit filename="sqclass.cpp" />
+		<Unit filename="sqclass.h" />
+		<Unit filename="sqclosure.h" />
+		<Unit filename="sqcompiler.cpp" />
+		<Unit filename="sqcompiler.h" />
+		<Unit filename="sqdebug.cpp" />
+		<Unit filename="sqfuncproto.h" />
+		<Unit filename="sqfuncstate.cpp" />
+		<Unit filename="sqfuncstate.h" />
+		<Unit filename="sqlexer.cpp" />
+		<Unit filename="sqlexer.h" />
+		<Unit filename="sqmem.cpp" />
+		<Unit filename="sqobject.cpp" />
+		<Unit filename="sqobject.h" />
+		<Unit filename="sqopcodes.h" />
+		<Unit filename="sqpcheader.h" />
+		<Unit filename="sqstate.cpp" />
+		<Unit filename="sqstate.h" />
+		<Unit filename="sqstring.h" />
+		<Unit filename="sqtable.cpp" />
+		<Unit filename="sqtable.h" />
+		<Unit filename="squserdata.h" />
+		<Unit filename="squtils.h" />
+		<Unit filename="sqvm.cpp" />
+		<Unit filename="sqvm.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
