@@ -3271,3 +3271,87 @@ int GetSkinID(const SQChar* name)
 	// Return the found ID
 	return id;
 }
+
+Sqrat::Array GetPlayersArray()
+{
+    Sqrat::Array arr( DefaultVM::Get() );
+    CPlayer * pPlayer = 0;
+
+    for ( unsigned i = 0; i < MAX_PLAYERS; ++i )
+    {
+        pPlayer = pCore->RetrievePlayer( i );
+        if ( pPlayer != NULL ) arr.Append<CPlayer *>( pPlayer ); 
+    }
+
+    return arr;
+}
+
+Sqrat::Array GetPickupsArray()
+{
+    Sqrat::Array arr( DefaultVM::Get() );
+    CPickup * pPickup = 0;
+
+    for ( unsigned i = 0; i < MAX_PICKUPS; ++i )
+    {
+        pPickup = pCore->RetrievePickup( i );
+        if ( pPickup != NULL ) arr.Append<CPickup *>( pPickup ); 
+    }
+
+    return arr;
+}
+
+Sqrat::Array GetObjectsArray()
+{
+    Sqrat::Array arr( DefaultVM::Get() );
+    CObject * pObject = 0;
+
+    for ( unsigned i = 0; i < MAX_OBJECTS; ++i )
+    {
+        pObject = pCore->RetrieveObject( i );
+        if ( pObject != NULL ) arr.Append<CObject *>( pObject ); 
+    }
+
+    return arr;
+}
+
+Sqrat::Array GetVehiclesArray()
+{
+    Sqrat::Array arr( DefaultVM::Get() );
+    CVehicle * pVehicle = 0;
+
+    for ( unsigned i = 0; i < MAX_VEHICLES; ++i )
+    {
+        pVehicle = pCore->RetrieveVehicle( i );
+        if ( pVehicle != NULL ) arr.Append<CVehicle *>( pVehicle ); 
+    }
+
+    return arr;
+}
+
+Sqrat::Array GetCheckpointsArray()
+{
+    Sqrat::Array arr( DefaultVM::Get() );
+    CCheckpoint * pCheckpoint = 0;
+
+    for ( unsigned i = 0; i < MAX_CHECKPOINTS; ++i )
+    {
+        pCheckpoint = pCore->RetrieveCheckpoint( i );
+        if ( pCheckpoint != NULL ) arr.Append<CCheckpoint *>( pCheckpoint ); 
+    }
+
+    return arr;
+}
+
+Sqrat::Array GetSpheresArray()
+{
+    Sqrat::Array arr( DefaultVM::Get() );
+    CSphere * pSphere = 0;
+
+    for ( unsigned i = 0; i < MAX_SPHERES; ++i )
+    {
+        pSphere = pCore->RetrieveSphere( i );
+        if ( pSphere != NULL ) arr.Append<CSphere *>( pSphere ); 
+    }
+
+    return arr;
+}

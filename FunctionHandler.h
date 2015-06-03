@@ -252,3 +252,10 @@ void SetWeatherLock(bool isLocked);
 const SQChar * GetMapName(void);
 void SetMapName(const SQChar * mapName);
 int GetSkinID(const SQChar* name);
+
+Sqrat::Array GetPlayersArray();
+Sqrat::Array GetPickupsArray();
+Sqrat::Array GetObjectsArray();
+Sqrat::Array GetVehiclesArray();
+Sqrat::Array GetCheckpointsArray();
+Sqrat::Array GetSpheresArray();

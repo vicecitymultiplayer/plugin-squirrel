@@ -25,6 +25,13 @@
 class CCore
 {
 	public:
+        typedef std::array<CPlayer *, MAX_PLAYERS> PlayerMap;
+        typedef std::array<CPickup *, MAX_PICKUPS> PickupMap;
+        typedef std::array<CObject *, MAX_OBJECTS> ObjectMap;
+        typedef std::array<CVehicle *, MAX_VEHICLES + 1> VehicleMap;
+        typedef std::array<CCheckpoint*, MAX_CHECKPOINTS> CheckpointMap;
+        typedef std::array<CSphere*, MAX_SPHERES> SphereMap;
+
 		static CCore * GetInstance()
 		{
 			if( pCoreInstance == NULL )
@@ -84,6 +91,13 @@ class CCore
 		void DereferenceVehicle(int gVehicleId);
 		void DereferenceCheckpoint(int gCheckpointId);
 		void DereferenceSphere(int gSphereId);
+    public:
+        const PlayerMap & GetPlayerMap() const { return playerMap; }
+        const PickupMap & GetPickupMap() const { return pickupMap; }
+        const ObjectMap & GetObjectMap() const { return objectMap; }
+        const VehicleMap & GetVehicleMap() const { return vehicleMap; }
+        const CheckpointMap & GetCheckpointMap() const { return checkpointMap; }
+        const SphereMap & GetSphereMap() const { return sphereMap; }
 
 	private:
 		// Constructor
@@ -99,12 +113,12 @@ class CCore
 		static CCore * pCoreInstance;
 
 		// Entity maps
-		std::array<CPlayer *, MAX_PLAYERS> playerMap;
-		std::array<CPickup *, MAX_PICKUPS> pickupMap;
-		std::array<CObject *, MAX_OBJECTS> objectMap;
-		std::array<CVehicle *, MAX_VEHICLES + 1> vehicleMap;
-		std::array<CCheckpoint*, MAX_CHECKPOINTS> checkpointMap;
-		std::array<CSphere*, MAX_SPHERES> sphereMap;
+		PlayerMap playerMap;
+		PickupMap pickupMap;
+		ObjectMap objectMap;
+		VehicleMap vehicleMap;
+		CheckpointMap checkpointMap;
+		SphereMap sphereMap;
 
 		// Our list of timers.
 		static const int maxTimers = 255;

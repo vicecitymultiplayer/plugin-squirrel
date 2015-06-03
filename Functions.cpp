@@ -227,7 +227,14 @@ void RegisterGlobals()
         .Overload<int (*)(bool, int, int)>(_SC("BindKey"), BindKey  )
         .Overload<int (*)(bool, int, int, int)>(_SC("BindKey"), BindKey  )
 		.Func(_SC("UnbindKey"), RemoveKeybind )
-		.Func(_SC("UnbindAll"), RemoveAllKeybinds );
+        .Func(_SC("UnbindAll"), RemoveAllKeybinds )
+
+        .Func(_SC("GetPlayersArray"), GetPlayersArray )
+        .Func(_SC("GetPickupsArray"), GetPickupsArray )
+        .Func(_SC("GetObjectsArray"), GetObjectsArray )
+        .Func(_SC("GetVehiclesArray"), GetVehiclesArray )
+        .Func(_SC("GetCheckpointsArray"), GetCheckpointsArray )
+		.Func(_SC("GetSpheresArray"), GetSpheresArray );
 }
 
 void RegisterConstants()
