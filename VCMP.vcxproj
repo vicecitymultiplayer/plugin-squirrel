@@ -204,6 +204,7 @@
     <ClInclude Include="Exports.h" />
     <ClInclude Include="FunctionHandler.h" />
     <ClInclude Include="Functions.h" />
+    <ClInclude Include="Identifiers.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="SQImports.h" />
     <ClInclude Include="SQModule.h" />
@@ -244,6 +245,7 @@
     <ClCompile Include="Exports.cpp" />
     <ClCompile Include="FunctionHandler.cpp" />
     <ClCompile Include="Functions.cpp" />
+    <ClCompile Include="Identifiers.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="UtilStructs.cpp" />
   </ItemGroup>
