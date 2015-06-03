@@ -2,20 +2,23 @@
 #include "Functions.h"
 
 // ------------------------------------------------------------------------------------------------
-#include <cstddef>
+#include <stddef.h>
+#include <float.h>
+#include <string.h>
+#include <ctype.h>
+
 #include <limits>
-#include <cfloat>
-#include <cstring>
-#include <locale>
 
 // ------------------------------------------------------------------------------------------------
 Sqrat::string CleanString(const SQChar * src)
 {
     const unsigned sz = strlen(src);
     Sqrat::string str(sz, 0);
+	SQChar c;
 
-    for (unsigned i = 0; i < sz; ++i) {
-        if ( std::isalnum( *(src + i) ) ) str += std::tolower( *(src + i) );
+	for (unsigned i = 0; i < sz; ++i, (c = *(src + i))) {
+		if ((c >= 48 && c <= 57) || (c >= 65 && c <= 90) || (c >= 97 && c <= 122))
+			str += tolower(c);
     }
 
     return str;
@@ -2152,18 +2155,34 @@ void RegisterIdentifiers()
         .Const(_SC("UNKNOWN"),      SQMOD_UNKNOWN)
         .Const(_SC("ARCH"),         SQMOD_ARCHITECTURE)
         .Const(_SC("PLATFORM"),     SQMOD_PLATFORM)
-        .Const(_SC("MIN_CHAR"),     std::numeric_limits<SQChar>::min())
-        .Const(_SC("MAX_CHAR"),     std::numeric_limits<SQChar>::max())
-        .Const(_SC("MIN_SHORT"),    std::numeric_limits<int16_t>::min())
-        .Const(_SC("MAX_SHORT"),    std::numeric_limits<int16_t>::max())
-        .Const(_SC("MIN_USHORT"),   std::numeric_limits<uint16_t>::min())
-        .Const(_SC("MAX_USHORT"),   std::numeric_limits<uint16_t>::max())
-        .Const(_SC("MIN_INT"),      std::numeric_limits<SQInteger>::min())
-        .Const(_SC("MAX_INT"),      std::numeric_limits<SQInteger>::max())
-        .Const(_SC("MIN_INT32"),    std::numeric_limits<SQInt32>::min())
-        .Const(_SC("MAX_INT32"),    std::numeric_limits<SQInt32>::max())
-        .Const(_SC("MIN_FLOAT"),    std::numeric_limits<SQFloat>::min())
-        .Const(_SC("MAX_FLOAT"),    std::numeric_limits<SQFloat>::max())
+#ifdef _MSC_VER
+        // FAKIN VISUAL STUDIO :@
+		.Const(_SC("MIN_CHAR"),   (std::numeric_limits<SQChar>::min)())
+		.Const(_SC("MAX_CHAR"),   (std::numeric_limits<SQChar>::max)())
+		.Const(_SC("MIN_SHORT"),  (std::numeric_limits<int16_t>::min)())
+		.Const(_SC("MAX_SHORT"),  (std::numeric_limits<int16_t>::max)())
+		.Const(_SC("MIN_USHORT"), (std::numeric_limits<uint16_t>::min)())
+		.Const(_SC("MAX_USHORT"), (std::numeric_limits<uint16_t>::max)())
+		.Const(_SC("MIN_INT"),    (std::numeric_limits<SQInteger>::min)())
+		.Const(_SC("MAX_INT"),    (std::numeric_limits<SQInteger>::max)())
+		.Const(_SC("MIN_INT32"),  (std::numeric_limits<SQInt32>::min)())
+		.Const(_SC("MAX_INT32"),  (std::numeric_limits<SQInt32>::max)())
+		.Const(_SC("MIN_FLOAT"),  (std::numeric_limits<SQFloat>::min)())
+		.Const(_SC("MAX_FLOAT"),  (std::numeric_limits<SQFloat>::max)())
+#else
+		.Const(_SC("MIN_CHAR"),   std::numeric_limits<SQChar>::min())
+		.Const(_SC("MAX_CHAR"),   std::numeric_limits<SQChar>::max())
+		.Const(_SC("MIN_SHORT"),  std::numeric_limits<int16_t>::min())
+		.Const(_SC("MAX_SHORT"),  std::numeric_limits<int16_t>::max())
+		.Const(_SC("MIN_USHORT"), std::numeric_limits<uint16_t>::min())
+		.Const(_SC("MAX_USHORT"), std::numeric_limits<uint16_t>::max())
+		.Const(_SC("MIN_INT"),    std::numeric_limits<SQInteger>::min())
+		.Const(_SC("MAX_INT"),    std::numeric_limits<SQInteger>::max())
+		.Const(_SC("MIN_INT32"),  std::numeric_limits<SQInt32>::min())
+		.Const(_SC("MAX_INT32"),  std::numeric_limits<SQInt32>::max())
+		.Const(_SC("MIN_FLOAT"),  std::numeric_limits<SQFloat>::min())
+		.Const(_SC("MAX_FLOAT"),  std::numeric_limits<SQFloat>::max())
+#endif
     );
 
     Sqrat::ConstTable().Enum(_SC("EARCHITECTURE"), Sqrat::Enumeration()
