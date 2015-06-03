@@ -15,11 +15,24 @@ class CTimer
 	public:
         typedef std::vector<Sqrat::Object> ArgList;
 
-		CTimer(const Sqrat::string & fn, SQFloat, SQInteger, const ArgList & args)
-            : isPaused(false)
+        CTimer()
+            : isPaused(true)
             , intervalInTicks(0.0)
             , ticksElapsed(0.0)
             , maxNumberOfPulses(0)
+            , pulseCount(0)
+            , funcName()
+            , params()
+            , committingSeppuku(true)
+        {
+
+        }
+
+		CTimer(const Sqrat::string & fn, SQFloat tm, SQInteger mp, const ArgList & args)
+            : isPaused(false)
+            , intervalInTicks(tm)
+            , ticksElapsed(0.0)
+            , maxNumberOfPulses(mp)
             , pulseCount(0)
             , funcName(fn)
             , params(args)
