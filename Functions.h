@@ -3,3 +3,4 @@
 
 void RegisterGlobals();
 void RegisterConstants();
+void RegisterIdentifiers();

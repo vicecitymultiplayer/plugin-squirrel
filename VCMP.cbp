@@ -142,6 +142,8 @@
 		<Unit filename="FunctionHandler.h" />
 		<Unit filename="Functions.cpp" />
 		<Unit filename="Functions.h" />
+		<Unit filename="Identifiers.cpp" />
+		<Unit filename="Identifiers.h" />
 		<Unit filename="SQImports.h" />
 		<Unit filename="SQModule.h" />
 		<Unit filename="UtilStructs.cpp" />

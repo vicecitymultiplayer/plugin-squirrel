@@ -287,6 +287,8 @@ void CCore::RegisterEntities()
 	RegisterCheckpoint();
 	RegisterSphere();
 
+    RegisterIdentifiers();
+
 	// Set the default internal error handlers up
 	sqstd_seterrorhandlers( v );
 }

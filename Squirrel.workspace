@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_workspace_file>
+	<Workspace title="Workspace">
+		<Project filename="squirrelsrc/squirrel/squirrel.cbp" />
+		<Project filename="squirrelsrc/sqstdlib/sqstdlib.cbp" />
+		<Project filename="VCMP.cbp" />
+	</Workspace>
+</CodeBlocks_workspace_file>

@@ -174,11 +174,6 @@ void RegisterGlobals()
 		.Func(_SC("PrivMessageAll"), PrivMessageAll )
 		.Func(_SC("SendPlayerMessage"), SendPlayerMessage )
 
-		.Func(_SC("GetWeaponName"), GetWeaponName )
-		.Func(_SC("GetDistrictName"), GetDistrictName )
-		.Func(_SC("GetSkinName"), GetSkinName )
-		.Func(_SC("GetWeaponID"), GetWeaponID )
-		.Func(_SC("GetSkinID"), GetSkinID )
 		.Func(_SC("GetTickCount"), SQGetTickCount )
 
 		.Func(_SC("SetWeaponDataValue"), SetWeaponDataValue )
@@ -191,8 +186,6 @@ void RegisterGlobals()
 		.Func(_SC("DistanceFromPoint"), DistanceFromPoint )
 		.Func(_SC("ReloadScripts"), ReloadScripts )
 
-		.Func(_SC("GetVehicleModelFromName"), GetVehicleModelFromName )
-		.Func(_SC("GetVehicleNameFromModel"), GetVehicleNameFromModel )
 		.Func(_SC("IsNum"), IsNum )
 
 		.Func(_SC("GetVehicleCount"), GetVehicleCount )
@@ -227,7 +220,14 @@ void RegisterGlobals()
         .Overload<int (*)(bool, int, int)>(_SC("BindKey"), BindKey  )
         .Overload<int (*)(bool, int, int, int)>(_SC("BindKey"), BindKey  )
 		.Func(_SC("UnbindKey"), RemoveKeybind )
-		.Func(_SC("UnbindAll"), RemoveAllKeybinds );
+        .Func(_SC("UnbindAll"), RemoveAllKeybinds )
+
+        .Func(_SC("GetPlayersArray"), GetPlayersArray )
+        .Func(_SC("GetPickupsArray"), GetPickupsArray )
+        .Func(_SC("GetObjectsArray"), GetObjectsArray )
+        .Func(_SC("GetVehiclesArray"), GetVehiclesArray )
+        .Func(_SC("GetCheckpointsArray"), GetCheckpointsArray )
+		.Func(_SC("GetSpheresArray"), GetSpheresArray );
 }
 
 void RegisterConstants()

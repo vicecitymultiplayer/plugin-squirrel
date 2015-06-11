@@ -65,6 +65,7 @@ class Vector
 		Vector& operator =(const Vector &v);
 		Vector& operator =(const float f);
 
+        int Cmp(const Vector &v) const;
 		const std::string ToString();
 };
 
@@ -145,6 +146,7 @@ class Quaternion
 		Quaternion& operator =(const Quaternion &q);
 		Quaternion& operator =(const float q);
 
+        int Cmp(const Quaternion &q) const;
 		const std::string ToString();
 };
 
@@ -195,7 +197,7 @@ public:
 	EntityQuaternion operator +(const Quaternion &v) const;
 	EntityQuaternion operator *(const float f) const;
 	EntityQuaternion operator /(const float f) const;
-	
+
 	float GetX() { return this->x; }
 	float GetY() { return this->y; }
 	float GetZ() { return this->z; }
@@ -270,13 +272,13 @@ class EntityRGB : public cRGB
 		void SetG(int g);
 		void SetB(int b);
 };
-	
+
 class ARGB
 {
 	public:
 		ARGB( int a, int r, int g, int b ) { this->r = r; this->g = g; this->b = b; this->a = a; }
 		ARGB() { this->a = 0; this->r = 0; this->g = 0; this->b = 0; }
-			
+
 		int a;
 		int r;
 		int g;
