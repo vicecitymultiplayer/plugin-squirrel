@@ -11,12 +11,12 @@
 Sqrat::string CleanString(const SQChar * src)
 {
     const unsigned sz = strlen(src);
-    Sqrat::string str(sz, 0);
-	SQChar c;
+    printf("%s\n", src);
+    Sqrat::string str;
 
-	for (unsigned i = 0; i < sz; ++i, (c = *(src + i))) {
-		if ((c >= 48 && c <= 57) || (c >= 65 && c <= 90) || (c >= 97 && c <= 122))
-			str += tolower(c);
+	for (unsigned i = 0; i < sz; ++i) {
+		if (isalpha(src[i]) || isdigit(src[i]))
+            str.push_back(tolower(src[i]));
     }
 
     return str;
@@ -1850,6 +1850,7 @@ SQInteger GetWeaponID(const SQChar * name)
 {
     // Clone the string into a clean editable version
     Sqrat::string str = CleanString(name);
+    printf("AFTER %s\n", str.c_str());
     // See if we still have a valid name after the cleanup
     if(str.length() < 1) return SQMOD_UNKNOWN;
     // Grab the actual length of the string
