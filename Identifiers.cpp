@@ -6,7 +6,7 @@
 #include <float.h>
 #include <string.h>
 #include <ctype.h>
-
+\
 // ------------------------------------------------------------------------------------------------
 Sqrat::string CleanString(const SQChar * src)
 {
@@ -1850,7 +1850,6 @@ SQInteger GetWeaponID(const SQChar * name)
 {
     // Clone the string into a clean editable version
     Sqrat::string str = CleanString(name);
-    printf("AFTER %s\n", str.c_str());
     // See if we still have a valid name after the cleanup
     if(str.length() < 1) return SQMOD_UNKNOWN;
     // Grab the actual length of the string
