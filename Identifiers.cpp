@@ -11,7 +11,6 @@
 Sqrat::string CleanString(const SQChar * src)
 {
     const unsigned sz = strlen(src);
-    printf("%s\n", src);
     Sqrat::string str;
 
 	for (unsigned i = 0; i < sz; ++i) {
