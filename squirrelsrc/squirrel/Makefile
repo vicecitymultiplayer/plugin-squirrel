@@ -37,7 +37,7 @@ SRCS= \
 	
 	
 sq32:
-	gcc -O2 -fno-exceptions -fno-rtti -Wall -fno-strict-aliasing -c $(SRCS) $(INCZ) $(DEFS)
+	gcc -O2 -m32 -fno-exceptions -fno-rtti -Wall -fno-strict-aliasing -c $(SRCS) $(INCZ) $(DEFS)
 	ar rc $(OUT) *.o
 	rm *.o
 

@@ -3,9 +3,9 @@ SQUIRREL=.
 MAKE=make
 
 sq32:
-	cd squirrel; $(MAKE) 
-	cd sqstdlib; $(MAKE) 
-	cd sq; $(MAKE) 
+	cd squirrel; $(MAKE) sq32
+	cd sqstdlib; $(MAKE) sq32
+	cd sq; $(MAKE) sq32
 
 sqprof:
 	cd squirrel; $(MAKE) sqprof
