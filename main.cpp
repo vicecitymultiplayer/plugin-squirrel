@@ -26,25 +26,29 @@ extern HSQUIRRELVM  v;
 void printfunc(HSQUIRRELVM v, const SQChar *s, ...) 
 {
 	va_list arglist;
+	char szInitBuffer[512];
 
 	va_start(arglist, s);
 	{
-		int nChars = strlen(s);
-		char * szBuffer = (char*)malloc(nChars + 1);
-		if (szBuffer == NULL)
+		int nChars = vsnprintf(szInitBuffer, sizeof(szInitBuffer), s, arglist);
+		if (nChars > sizeof(szInitBuffer) - 1)
 		{
-			char szInitBuffer[128];
-			sprintf(szInitBuffer, "Error could not be printed: failed to malloc the buffer at %d nChars.", nChars + 1);
-			pCore->rawprint(szInitBuffer);
+			char * szBuffer = (char*)calloc(nChars + 1, sizeof(char));
+			if (szBuffer == NULL)
+			{
+				sprintf(szInitBuffer, "Error could not be printed: failed to malloc the buffer at %d nChars.", nChars + 1);
+				pCore->rawprint(szInitBuffer);
+			}
+			else
+			{
+				vsnprintf(szBuffer, nChars, s, arglist);
+				OutputScriptInfo(szBuffer);
+
+				free(szBuffer);
+			}
 		}
 		else
-		{
-			memset(szBuffer, 0, nChars + 1);
-			vsnprintf(szBuffer, nChars, s, arglist);
-			OutputScriptInfo(szBuffer);
-
-			free(szBuffer);
-		}
+			OutputScriptInfo(szInitBuffer);
 	}
 	va_end(arglist);
 } 
@@ -53,25 +57,29 @@ void printfunc(HSQUIRRELVM v, const SQChar *s, ...)
 void errorfunc(HSQUIRRELVM v, const SQChar *s, ...) 
 {
 	va_list arglist;
+	char szInitBuffer[512];
 
 	va_start(arglist, s);
 	{
-		int nChars = strlen(s);
-		char * szBuffer = (char*)malloc(nChars + 1);
-		if (szBuffer == NULL)
+		int nChars = vsnprintf(szInitBuffer, sizeof(szInitBuffer), s, arglist);
+		if (nChars > sizeof(szInitBuffer) - 1)
 		{
-			char szInitBuffer[128];
-			sprintf(szInitBuffer, "Error could not be printed: failed to malloc the buffer at %d nChars.", nChars + 1);
-			pCore->rawprint(szInitBuffer);
+			char * szBuffer = (char*)calloc(nChars + 1, sizeof(char));
+			if (szBuffer == NULL)
+			{
+				sprintf(szInitBuffer, "Error could not be printed: failed to malloc the buffer at %d nChars.", nChars + 1);
+				pCore->rawprint(szInitBuffer);
+			}
+			else
+			{
+				vsnprintf(szBuffer, nChars, s, arglist);
+				pCore->rawprint(szBuffer);
+
+				free(szBuffer);
+			}
 		}
 		else
-		{
-			memset(szBuffer, 0, nChars + 1);
-			vsnprintf(szBuffer, nChars, s, arglist);
-			OutputScriptInfo(szBuffer);
-
-			free(szBuffer);
-		}
+			pCore->rawprint(szInitBuffer);
 	}
 	va_end(arglist);
 }
