@@ -12,6 +12,7 @@ extern CCore * pCore;
 void CPlayer::SetPosition( Vector pos ) { functions->SetPlayerPos( this->nPlayerId, pos.x, pos.y, pos.z ); }
 void CPlayer::SetHealth( float health ) { functions->SetPlayerHealth( this->nPlayerId, health ); }
 void CPlayer::SetArmour( float armour ) { functions->SetPlayerArmour( this->nPlayerId, armour ); }
+void CPlayer::PlaySound(int sound) { functions->PlaySound(GetUniqueWorld(), sound, NAN, NAN, NAN); }
 
 bool CPlayer::StreamedToPlayer( CPlayer * player )
 {
@@ -398,15 +399,16 @@ void RegisterPlayer()
 		.Prop(_SC("Weapon"), &CPlayer::GetWeapon);
 
 	// Functions
-	c.Func(_SC("AddSpeed"), &CPlayer::AddSpeed )
-		.Func(_SC("Ban"), &CPlayer::Ban )
-		.Func(_SC("Disarm"), &CPlayer::Disarm )
-		.Func(_SC("Eject"), &CPlayer::Eject )
-		.Func(_SC("GetAmmoAtSlot"), &CPlayer::GetAmmoAtSlot )
-		.Func(_SC("GetWeaponAtSlot"), &CPlayer::GetWeaponAtSlot )
-		.Func(_SC("GiveMoney"), &CPlayer::GiveMoney )
-		.Func(_SC("GiveWeapon"), &CPlayer::GiveWeapon )
-		.Func(_SC("Kick"), &CPlayer::Kick )
+	c.Func(_SC("AddSpeed"), &CPlayer::AddSpeed)
+		.Func(_SC("Ban"), &CPlayer::Ban)
+		.Func(_SC("Disarm"), &CPlayer::Disarm)
+		.Func(_SC("Eject"), &CPlayer::Eject)
+		.Func(_SC("GetAmmoAtSlot"), &CPlayer::GetAmmoAtSlot)
+		.Func(_SC("GetWeaponAtSlot"), &CPlayer::GetWeaponAtSlot)
+		.Func(_SC("GiveMoney"), &CPlayer::GiveMoney)
+		.Func(_SC("GiveWeapon"), &CPlayer::GiveWeapon)
+		.Func(_SC("Kick"), &CPlayer::Kick)
+		.Func(_SC("PlaySound"), &CPlayer::PlaySound)
 		.Func(_SC("Redirect"), &CPlayer::RedirectPlayerToServer )
 		.Func(_SC("RemoveWeapon"), &CPlayer::RemoveWeapon )
 		.Func(_SC("RemoveMarker"), &CPlayer::RemoveMarker )

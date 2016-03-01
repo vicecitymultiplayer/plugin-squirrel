@@ -94,6 +94,8 @@ void RegisterGlobals()
 
 		.Overload<void(*)(int, int, Vector *)>(_SC("PlaySound"), PlayGameSound )
 		.Overload<void(*)(int, int, float, float, float)>(_SC("PlaySound"), PlayGameSoundExpanded )
+		.Func(_SC("PlaySoundForPlayer"), PlayGameSoundForPlayer)
+		.Func(_SC("PlaySoundForWorld"), PlayGameSoundForWorld)
 
 		.Func(_SC("SetUseClasses"), SetUseClasses )
 		.Func(_SC("UsingClasses"), UsingClasses )
