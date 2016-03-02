@@ -102,6 +102,7 @@ class CPlayer
 		bool GetCrouchDisabled(void);
 
 	public:
+		void PlaySound(int sound);
 		void Kick();
 		void Ban();
 		void Spawn();

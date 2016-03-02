@@ -108,6 +108,8 @@ void CreateExplosion ( int world, int type, Vector * pos, int playerCaused, bool
 void CreateExplosionExpanded( int world, int type, float x, float y, float z, int playerCaused, bool onGround );
 
 void PlayGameSound   ( int player, int sound, Vector * pos );
+void PlayGameSoundForPlayer(CPlayer* pPlayer, int sound);
+void PlayGameSoundForWorld(int world, int sound);
 void PlayGameSoundExpanded( int player, int sound, float x, float y, float z );
 
 void SetUseClasses ( bool toUse );

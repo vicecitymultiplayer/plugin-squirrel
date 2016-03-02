@@ -180,6 +180,14 @@ void CreateExplosionExpanded( int world, int type, float x, float y, float z, in
 }
 
 void PlayGameSound ( int world, int sound, Vector * pos ) { functions->PlaySound( world, sound, pos->x, pos->y, pos->z ); }
+void PlayGameSoundForPlayer(CPlayer* pPlayer, int sound) {
+	functions->PlaySound(pPlayer->GetUniqueWorld(), sound, NAN, NAN, NAN);
+}
+
+void PlayGameSoundForWorld(int world, int sound) {
+	functions->PlaySound(world, sound, NAN, NAN, NAN);
+}
+
 void PlayGameSoundExpanded( int world, int sound, float x, float y, float z )
 {
 	Vector pos = Vector( x, y, z );
