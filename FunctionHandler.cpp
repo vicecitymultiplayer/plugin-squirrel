@@ -154,7 +154,7 @@ bool EnabledTaxiBoostJump()    { return ( functions->EnabledTaxiBoostJump() != 0
 bool EnabledDriveOnWater()     { return ( functions->EnabledDriveOnWater() != 0 );      }
 bool EnabledFastSwitch()       { return ( functions->EnabledFastSwitch() != 0 );        }
 bool EnabledFriendlyFire()     { return ( functions->EnabledFriendlyFire() != 0 );      }
-bool EnabledDisableDriveby()   { return ( functions->EnabledDisableDriveby() != 0 );    }
+bool EnabledDisableDriveby()   { return ( functions->EnabledDisableDriveby() == 0 );    }
 bool EnabledPerfectHandling()  { return ( functions->EnabledPerfectHandling() != 0 );   }
 bool EnabledFlyingCars()       { return ( functions->EnabledFlyingCars() != 0 );        }
 bool EnabledJumpSwitch()       { return ( functions->EnabledJumpSwitch() != 0 );        }
