@@ -6,26 +6,26 @@
 extern CCore * pCore;
 
 void CPickup::SetWorld( int world ) { functions->SetPickupWorld( this->nPickupId, world ); }
-void CPickup::SetAlpha( int alpha ) { functions->PickupSetAlpha( this->nPickupId, alpha ); }
-void CPickup::SetAuto( bool automatic ) { functions->PickupSetAutomatic( this->nPickupId, automatic ); }
+void CPickup::SetAlpha( int alpha ) { functions->SetPickupAlpha( this->nPickupId, alpha ); }
+void CPickup::SetAuto( bool automatic ) { functions->SetPickupIsAutomatic( this->nPickupId, automatic ); }
 void CPickup::SetAutoTimer( int timer ) { functions->SetPickupAutoTimer( this->nPickupId, timer ); }
-void CPickup::SetPos( Vector pos ) { functions->PickupSetPos( this->nPickupId, pos.x, pos.y, pos.z ); }
+void CPickup::SetPos( Vector pos ) { functions->SetPickupPosition( this->nPickupId, pos.x, pos.y, pos.z ); }
 
 int CPickup::GetWorld() { return functions->GetPickupWorld( this->nPickupId ); }
-int CPickup::GetAlpha() { return functions->PickupGetAlpha(this->nPickupId); }
-bool CPickup::GetAuto() { return (functions->PickupIsAutomatic(this->nPickupId) == 1 ? true : false); }
+int CPickup::GetAlpha() { return functions->GetPickupAlpha(this->nPickupId); }
+bool CPickup::GetAuto() { return (functions->IsPickupAutomatic(this->nPickupId) == 1 ? true : false); }
 int CPickup::GetAutoTimer() { return functions->GetPickupAutoTimer(this->nPickupId); }
 
 EntityVector CPickup::GetPos()
 {
 	float x, y, z;
-	functions->PickupGetPos( this->nPickupId, &x, &y, &z );
+	functions->GetPickupPosition( this->nPickupId, &x, &y, &z );
 
 	return EntityVector( this->nPickupId, ENTITY_PICKUP, -1, x, y, z );
 }
 
-int CPickup::GetModel() { return functions->PickupGetModel(this->nPickupId); }
-int CPickup::GetQuantity() { return functions->PickupGetQuantity(this->nPickupId); }
+int CPickup::GetModel() { return functions->GetPickupModel(this->nPickupId); }
+int CPickup::GetQuantity() { return functions->GetPickupQuantity(this->nPickupId); }
 void CPickup::Delete()
 {
 	//PS! this instance will be deleted due to a callback!!!
@@ -34,7 +34,7 @@ void CPickup::Delete()
 
 int CPickup::GetID() { return this->nPickupId; }
 bool CPickup::StreamedToPlayer(CPlayer * player) { return (functions->IsPickupStreamedForPlayer(this->nPickupId, player->nPlayerId) == 1 ? true : false); }
-void CPickup::Respawn() { functions->PickupRefresh(this->nPickupId); };
+void CPickup::Respawn() { functions->RefreshPickup(this->nPickupId); };
 
 void RegisterPickup()
 {

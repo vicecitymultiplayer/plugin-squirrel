@@ -92,8 +92,10 @@ extern "C" EXPORT unsigned int VcmpPluginInit( PluginFuncs* givenPluginFuncs, Pl
 	information = givenPluginInfo;
 
 	// Set our plugin information
-	information->uPluginVer = 0x110;
-	strcpy( information->szName, "SQHost2" );
+	information->pluginVersion = 0x110;
+	information->apiMajorVersion = PLUGIN_API_MAJOR;
+	information->apiMinorVersion = PLUGIN_API_MINOR;
+	strcpy( information->name, "SQHost2" );
 
 	// Define our exports
 	sq = NULL;
@@ -105,16 +107,16 @@ extern "C" EXPORT unsigned int VcmpPluginInit( PluginFuncs* givenPluginFuncs, Pl
 	pExp->uStructSize    = sizeof( SquirrelExports );
 
 	// Export them
-	functions->ExportFunctions( information->nPluginId, (void **)&pExp, sizeof( SquirrelExports ) );
+	functions->ExportFunctions( information->pluginId, (const void **)&pExp, sizeof( SquirrelExports ) );
 
 	// Get a core instance
 	pCore = CCore::GetInstance();
 
 	// Server events
-	callbacks->OnInitServer         = OnInitServer;
-	callbacks->OnShutdownServer	    = OnShutdownServer;
-	callbacks->OnFrame              = OnFrame;
-	callbacks->OnLoginAttempt       = OnLoginAttempt;
+	callbacks->OnServerInitialise	= OnInitServer;
+	callbacks->OnServerShutdown	    = OnShutdownServer;
+	callbacks->OnServerFrame		= OnFrame;
+	callbacks->OnIncomingConnection	= OnLoginAttempt;
 
 	callbacks->OnPlayerConnect      = OnPlayerConnect;
 	callbacks->OnPlayerDisconnect   = OnPlayerDisconnect;
@@ -132,29 +134,29 @@ extern "C" EXPORT unsigned int VcmpPluginInit( PluginFuncs* givenPluginFuncs, Pl
 	callbacks->OnPlayerBeginTyping  = OnPlayerBeginTyping;
 	callbacks->OnPlayerEndTyping    = OnPlayerEndTyping;
 
-	callbacks->OnPlayerRequestEnter = OnPlayerRequestEnter;
+	callbacks->OnPlayerRequestEnterVehicle = OnPlayerRequestEnter;
 	callbacks->OnPlayerEnterVehicle = OnPlayerEnterVehicle;
 	callbacks->OnPlayerExitVehicle  = OnPlayerExitVehicle;
 
-	callbacks->OnPickupClaimPicked  = OnPickupClaimPicked;
-	callbacks->OnPickupPickedUp     = OnPickupPickedUp;
+	callbacks->OnPickupPickAttempt  = OnPickupClaimPicked;
+	callbacks->OnPickupPicked	    = OnPickupPickedUp;
 	callbacks->OnPickupRespawn      = OnPickupRespawn;
 
 	callbacks->OnVehicleUpdate      = OnVehicleUpdate;
 	callbacks->OnVehicleExplode     = OnVehicleExplode;
 	callbacks->OnVehicleRespawn     = OnVehicleRespawn;
 
-	callbacks->OnPublicMessage      = OnPublicMessage;
-	callbacks->OnCommandMessage     = OnCommandMessage;
-	callbacks->OnPrivateMessage     = OnPrivateMessage;
-	callbacks->OnInternalCommand    = OnInternalCommand;
+	callbacks->OnPlayerMessage      = OnPublicMessage;
+	callbacks->OnPlayerCommand      = OnCommandMessage;
+	callbacks->OnPlayerPrivateMessage = OnPrivateMessage;
+	callbacks->OnPluginCommand      = OnInternalCommand;
 
 	callbacks->OnObjectShot         = OnObjectShot;
-	callbacks->OnObjectBump         = OnObjectBump;
+	callbacks->OnObjectTouched         = OnObjectBump;
 
 	callbacks->OnEntityPoolChange	= OnEntityPoolChange;
-	callbacks->OnKeyBindDown        = OnKeyBindDown;
-	callbacks->OnKeyBindUp          = OnKeyBindUp;
+	callbacks->OnPlayerKeyBindDown  = OnKeyBindDown;
+	callbacks->OnPlayerKeyBindUp    = OnKeyBindUp;
 
 	callbacks->OnPlayerNameChange   = OnPlayerNameChange;
 	callbacks->OnPlayerStateChange  = OnPlayerStateChange;
@@ -165,8 +167,6 @@ extern "C" EXPORT unsigned int VcmpPluginInit( PluginFuncs* givenPluginFuncs, Pl
 
 	callbacks->OnCheckpointEntered = OnCheckpointEntered;
 	callbacks->OnCheckpointExited = OnCheckpointExited;
-	callbacks->OnSphereEntered = OnSphereEntered;
-	callbacks->OnSphereExited = OnSphereExited;
 
 	// Done!
 	return 1;

@@ -9,7 +9,7 @@ inline bool Boolify( unsigned int n ) { return ( n ? true : false ); }
 // The core
 extern CCore * pCore;
 
-void CPlayer::SetPosition( Vector pos ) { functions->SetPlayerPos( this->nPlayerId, pos.x, pos.y, pos.z ); }
+void CPlayer::SetPosition( Vector pos ) { functions->SetPlayerPosition( this->nPlayerId, pos.x, pos.y, pos.z ); }
 void CPlayer::SetHealth( float health ) { functions->SetPlayerHealth( this->nPlayerId, health ); }
 void CPlayer::SetArmour( float armour ) { functions->SetPlayerArmour( this->nPlayerId, armour ); }
 void CPlayer::PlaySound(int sound) { functions->PlaySound(GetUniqueWorld(), sound, NAN, NAN, NAN); }
@@ -24,7 +24,7 @@ bool CPlayer::StreamedToPlayer( CPlayer * player )
 
 void CPlayer::SetAdmin( bool toSetAdmin ) { functions->SetPlayerAdmin( this->nPlayerId, toSetAdmin ); }
 void CPlayer::SetWorld( int world ) { functions->SetPlayerWorld( this->nPlayerId, world ); }
-void CPlayer::SetSecWorld( int world ) { functions->SetPlayerSecWorld( this->nPlayerId, world ); }
+void CPlayer::SetSecWorld( int world ) { functions->SetPlayerSecondaryWorld( this->nPlayerId, world ); }
 void CPlayer::SetTeam( int team ) { functions->SetPlayerTeam( this->nPlayerId, team ); }
 void CPlayer::SetSkin( int skin ) { functions->SetPlayerSkin( this->nPlayerId, skin ); }
 void CPlayer::SetColour( cRGB colour ) { functions->SetPlayerColour( this->nPlayerId, colour.toUInt() ); }
@@ -80,19 +80,19 @@ void CPlayer::SetVehicleSlot( CVehicle * vehiclePointer, int slot )
 	}
 }
 
-void CPlayer::SetFrozen( bool toFreeze ) { functions->TogglePlayerControllable( this->nPlayerId, !toFreeze ); }
-void CPlayer::SetDrivebyEnabled( bool canDb ) { functions->TogglePlayerDriveby( this->nPlayerId, canDb ); }
-void CPlayer::SetWhiteScanlines( bool hasWhiteScan ) { functions->TogglePlayerWhiteScanlines( this->nPlayerId, hasWhiteScan ); }
-void CPlayer::SetGreenScanlines( bool hasGreenScan ) { functions->TogglePlayerGreenScanlines( this->nPlayerId, hasGreenScan ); }
-void CPlayer::SetWidescreen( bool hasWidescreen ) { functions->TogglePlayerWidescreen( this->nPlayerId, hasWidescreen ); }
-void CPlayer::SetOnRadar( bool showOnRadar ) { functions->TogglePlayerHasMarker( this->nPlayerId, showOnRadar ); }
-void CPlayer::SetCanAttack( bool canAttack ) { functions->TogglePlayerAttackPriv( this->nPlayerId, canAttack ); }
+void CPlayer::SetFrozen( bool toFreeze ) { functions->SetPlayerOption( this->nPlayerId, vcmpPlayerOptionControllable, !toFreeze ); }
+void CPlayer::SetDrivebyEnabled( bool canDb ) { functions->SetPlayerOption( this->nPlayerId, vcmpPlayerOptionDriveBy, canDb ); }
+void CPlayer::SetWhiteScanlines( bool hasWhiteScan ) { functions->SetPlayerOption( this->nPlayerId, vcmpPlayerOptionWhiteScanlines, hasWhiteScan ); }
+void CPlayer::SetGreenScanlines( bool hasGreenScan ) { functions->SetPlayerOption( this->nPlayerId, vcmpPlayerOptionGreenScanlines, hasGreenScan ); }
+void CPlayer::SetWidescreen( bool hasWidescreen ) { functions->SetPlayerOption( this->nPlayerId, vcmpPlayerOptionWidescreen, hasWidescreen ); }
+void CPlayer::SetOnRadar( bool showOnRadar ) { functions->SetPlayerOption( this->nPlayerId, vcmpPlayerOptionHasMarker, showOnRadar ); }
+void CPlayer::SetCanAttack( bool canAttack ) { functions->SetPlayerOption( this->nPlayerId, vcmpPlayerOptionCanAttack, canAttack ); }
 void CPlayer::SetWeaponSlot( int slot ) { functions->SetPlayerWeaponSlot( this->nPlayerId, slot ); }
 
 EntityVector CPlayer::GetPosition()
 {
 	float x, y, z;
-	functions->GetPlayerPos(this->nPlayerId, &x, &y, &z);
+	functions->GetPlayerPosition(this->nPlayerId, &x, &y, &z);
 
 	return EntityVector(this->nPlayerId, ENTITY_PLAYER, PLRVECTOR_POS, x, y, z);
 }
@@ -109,7 +109,7 @@ SQChar * CPlayer::GetIP()
 
 bool CPlayer::GetSpawned() { return Boolify(functions->IsPlayerSpawned(this->nPlayerId) == 1); }
 int CPlayer::GetWorld() { return functions->GetPlayerWorld(this->nPlayerId); }
-int CPlayer::GetSecWorld() { return functions->GetPlayerSecWorld(this->nPlayerId); }
+int CPlayer::GetSecWorld() { return functions->GetPlayerSecondaryWorld(this->nPlayerId); }
 int CPlayer::GetUniqueWorld() { return functions->GetPlayerUniqueWorld(this->nPlayerId); }
 int CPlayer::GetState() { return functions->GetPlayerState(this->nPlayerId); }
 
@@ -148,30 +148,30 @@ int CPlayer::GetAlpha() { return functions->GetPlayerAlpha(this->nPlayerId); }
 
 CVehicle * CPlayer::GetVehicle()
 {
-	int vehicleId = functions->GetPlayerVehicleID( this->nPlayerId );
+	int vehicleId = functions->GetPlayerVehicleId( this->nPlayerId );
 	return pCore->RetrieveVehicle(vehicleId);
 }
 
-bool CPlayer::GetFrozen() { return !functions->EnabledPlayerControllable(this->nPlayerId); }
-bool CPlayer::GetDrivebyEnabled() { return Boolify(functions->EnabledPlayerDriveby(this->nPlayerId)); }
-bool CPlayer::GetWhiteScanlines() { return Boolify(functions->EnabledPlayerWhiteScanlines(this->nPlayerId)); }
-bool CPlayer::GetGreenScanlines() { return Boolify(functions->EnabledPlayerGreenScanlines(this->nPlayerId)); }
-bool CPlayer::GetWidescreen() { return Boolify(functions->EnabledPlayerWidescreen(this->nPlayerId)); }
-bool CPlayer::GetOnRadar() { return Boolify(functions->EnabledPlayerHasMarker(this->nPlayerId)); }
-bool CPlayer::GetCanAttack() { return Boolify(functions->EnabledPlayerAttackPriv(this->nPlayerId)); }
+bool CPlayer::GetFrozen() { return !functions->GetPlayerOption(this->nPlayerId, vcmpPlayerOptionControllable); }
+bool CPlayer::GetDrivebyEnabled() { return Boolify(functions->GetPlayerOption(this->nPlayerId, vcmpPlayerOptionDriveBy)); }
+bool CPlayer::GetWhiteScanlines() { return Boolify(functions->GetPlayerOption(this->nPlayerId, vcmpPlayerOptionWhiteScanlines)); }
+bool CPlayer::GetGreenScanlines() { return Boolify(functions->GetPlayerOption(this->nPlayerId, vcmpPlayerOptionGreenScanlines)); }
+bool CPlayer::GetWidescreen() { return Boolify(functions->GetPlayerOption(this->nPlayerId, vcmpPlayerOptionWidescreen)); }
+bool CPlayer::GetOnRadar() { return Boolify(functions->GetPlayerOption(this->nPlayerId, vcmpPlayerOptionHasMarker)); }
+bool CPlayer::GetCanAttack() { return Boolify(functions->GetPlayerOption(this->nPlayerId, vcmpPlayerOptionCanAttack)); }
 int CPlayer::GetWeaponSlot() { return functions->GetPlayerWeaponSlot(this->nPlayerId); }
 int CPlayer::GetWeapon() { return functions->GetPlayerWeapon(this->nPlayerId); }
 int CPlayer::GetWeaponAmmo() { return functions->GetPlayerWeaponAmmo(this->nPlayerId); }
 
 int CPlayer::GetWantedLevel(void) { return functions->GetPlayerWantedLevel(this->nPlayerId); }
-bool CPlayer::GetPlayerOnFireStatus(void) { return Boolify(functions->GetPlayerOnFireStatus(this->nPlayerId)); }
-bool CPlayer::GetPlayerCrouchStatus(void) { return Boolify(functions->GetPlayerCrouchStatus(this->nPlayerId)); }
+bool CPlayer::GetPlayerOnFireStatus(void) { return Boolify(functions->IsPlayerOnFire(this->nPlayerId)); }
+bool CPlayer::GetPlayerCrouchStatus(void) { return Boolify(functions->IsPlayerCrouching(this->nPlayerId)); }
 int CPlayer::GetPlayerAction(void) { return functions->GetPlayerAction(this->nPlayerId); }
 int CPlayer::GetPlayerGameKeys(void) { return functions->GetPlayerGameKeys(this->nPlayerId); }
 Vector CPlayer::GetPlayerAimPos(void)
 {
 	float x, y, z;
-	functions->GetPlayerAimPos(this->nPlayerId, &x, &y, &z);
+	functions->GetPlayerAimPosition(this->nPlayerId, &x, &y, &z);
 
 	return Vector(x, y, z);
 }
@@ -179,7 +179,7 @@ Vector CPlayer::GetPlayerAimPos(void)
 Vector CPlayer::GetPlayerAimDir(void)
 {
 	float x, y, z;
-	functions->GetPlayerAimDir(this->nPlayerId, &x, &y, &z);
+	functions->GetPlayerAimDirection(this->nPlayerId, &x, &y, &z);
 
 	return Vector(x, y, z);
 }
@@ -189,8 +189,8 @@ void CPlayer::Ban() { functions->BanPlayer( this->nPlayerId ); }
 void CPlayer::Spawn() { functions->ForcePlayerSpawn(this->nPlayerId); }
 void CPlayer::GiveMoney( int money ) { functions->GivePlayerMoney( this->nPlayerId, money ); }
 
-void CPlayer::ShowMarkers( bool setMarkers ) { functions->TogglePlayerShowMarkers( this->nPlayerId, setMarkers ); }
-bool CPlayer::ShowingMarkers() { return Boolify(functions->EnabledPlayerShowMarkers(this->nPlayerId)); }
+void CPlayer::ShowMarkers( bool setMarkers ) { functions->SetPlayerOption( this->nPlayerId, vcmpPlayerOptionShowMarkers, setMarkers ); }
+bool CPlayer::ShowingMarkers() { return Boolify(functions->GetPlayerOption(this->nPlayerId, vcmpPlayerOptionShowMarkers)); }
 
 void CPlayer::SetSpectateTarget(CPlayer * pTarget)
 {
@@ -275,23 +275,23 @@ void CPlayer::RestoreCamera() { functions->RestoreCamera(this->nPlayerId); }
 int CPlayer::GetKey() { return functions->GetPlayerKey(this->nPlayerId); }
 double CPlayer::GetFPS() { return functions->GetPlayerFPS(this->nPlayerId); }
 
-void CPlayer::SetMarker(int nDummy) { functions->TogglePlayerHasMarker(this->nPlayerId, 1); }
-void CPlayer::RemoveMarker() { functions->TogglePlayerHasMarker(this->nPlayerId, 0); }
-bool CPlayer::GetMarkerVisible() { return functions->EnabledPlayerHasMarker(this->nPlayerId) == 1; }
-void CPlayer::SetMarkerVisible(bool isVisible) { functions->TogglePlayerHasMarker(this->nPlayerId, isVisible); }
+void CPlayer::SetMarker(int nDummy) { functions->SetPlayerOption(this->nPlayerId, vcmpPlayerOptionHasMarker, 1); }
+void CPlayer::RemoveMarker() { functions->SetPlayerOption(this->nPlayerId, vcmpPlayerOptionHasMarker, 0); }
+bool CPlayer::GetMarkerVisible() { return functions->GetPlayerOption(this->nPlayerId, vcmpPlayerOptionHasMarker) == 1; }
+void CPlayer::SetMarkerVisible(bool isVisible) { functions->SetPlayerOption(this->nPlayerId, vcmpPlayerOptionHasMarker, isVisible); }
 
 bool CPlayer::GetAwayStatus() { return functions->IsPlayerAway(this->nPlayerId) == 1; }
-bool CPlayer::GetCanUseColors() { return functions->EnabledPlayerChatTags(this->nPlayerId) == 1; }
-void CPlayer::SetCanUseColors(bool canUse) { functions->TogglePlayerChatTagsEnabled(this->nPlayerId, canUse); }
+bool CPlayer::GetCanUseColors() { return functions->GetPlayerOption(this->nPlayerId, vcmpPlayerOptionChatTagsEnabled) == 1; }
+void CPlayer::SetCanUseColors(bool canUse) { functions->SetPlayerOption(this->nPlayerId, vcmpPlayerOptionChatTagsEnabled, canUse); }
 
-bool CPlayer::GetDrunkStatus() { return functions->EnabledPlayerDrunkEffects(this->nPlayerId) == 1; }
-void CPlayer::SetDrunkStatus(bool isDrunk) { functions->TogglePlayerDrunkEffects(this->nPlayerId, isDrunk); }
+bool CPlayer::GetDrunkStatus() { return functions->GetPlayerOption(this->nPlayerId, vcmpPlayerOptionDrunkEffects) == 1; }
+void CPlayer::SetDrunkStatus(bool isDrunk) { functions->SetPlayerOption(this->nPlayerId, vcmpPlayerOptionDrunkEffects, isDrunk); }
 void CPlayer::SetDrunkLevel(int visuals, int handling)
 {
 	if (visuals <= 0 && handling <= 0)
-		functions->TogglePlayerDrunkEffects(this->nPlayerId, 0);
+		functions->SetPlayerOption(this->nPlayerId, vcmpPlayerOptionDrunkEffects, 0);
 	else
-		functions->TogglePlayerDrunkEffects(this->nPlayerId, 1);
+		functions->SetPlayerOption(this->nPlayerId, vcmpPlayerOptionDrunkEffects, 1);
 }
 
 SQChar * CPlayer::GetUniqueID()

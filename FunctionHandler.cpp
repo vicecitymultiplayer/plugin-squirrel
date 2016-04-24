@@ -82,9 +82,9 @@ void SetMinute( int minute )              { functions->SetMinute( minute ); }
 void SetTime( int hour, int minute )      { SetHour(hour); SetMinute(minute); }
 void SetWeather( int weather )            { functions->SetWeather( weather ); }
 void SetGravity( float gravity )          { functions->SetGravity( gravity ); }
-void SetGamespeed( float speed )          { functions->SetGamespeed( speed ); }
+void SetGamespeed( float speed )          { functions->SetGameSpeed( speed ); }
 void SetWaterLevel( float waterLevel )    { functions->SetWaterLevel( waterLevel ); }
-void SetMaxHeight( float maxHeight )      { functions->SetMaxHeight( maxHeight ); }
+void SetMaxHeight( float maxHeight )      { functions->SetMaximumFlightAltitude( maxHeight ); }
 
 const SQChar * GetServerName()
 {
@@ -124,49 +124,49 @@ int          GetHour()       { return ( functions->GetHour() );       }
 int          GetMinute()     { return ( functions->GetMinute() );     }
 int          GetWeather()    { return ( functions->GetWeather() );    }
 float        GetGravity()    { return ( functions->GetGravity() );    }
-float        GetGamespeed()  { return ( functions->GetGamespeed() );  }
+float        GetGamespeed()  { return ( functions->GetGameSpeed() );  }
 float        GetWaterLevel() { return ( functions->GetWaterLevel() ); }
-float        GetMaxHeight()  { return ( functions->GetMaxHeight() );  }
+float        GetMaxHeight()  { return ( functions->GetMaximumFlightAltitude() );  }
 
-void ToggleSyncFrameLimiter ( bool toggle ) { functions->ToggleSyncFrameLimiter( ( toggle ? 1 : 0 ) ); }
-void ToggleFrameLimiter     ( bool toggle ) { functions->ToggleFrameLimiter( ( toggle ? 1 : 0 ) );     }
-void ToggleTaxiBoostJump    ( bool toggle ) { functions->ToggleTaxiBoostJump( ( toggle ? 1 : 0 ) );    }
-void ToggleDriveOnWater     ( bool toggle ) { functions->ToggleDriveOnWater( ( toggle ? 1 : 0 ) );     }
-void ToggleFastSwitch       ( bool toggle ) { functions->ToggleFastSwitch( ( toggle ? 1 : 0 ) );       }
-void ToggleFriendlyFire     ( bool toggle ) { functions->ToggleFriendlyFire( ( toggle ? 1 : 0 ) );     }
-void ToggleDisableDriveby   ( bool toggle ) { functions->ToggleDisableDriveby( ( toggle ? 0 : 1 ) );   }
-void TogglePerfectHandling  ( bool toggle ) { functions->TogglePerfectHandling( ( toggle ? 1 : 0 ) );  }
-void ToggleFlyingCars       ( bool toggle ) { functions->ToggleFlyingCars( ( toggle ? 1 : 0 ) );       }
-void ToggleJumpSwitch       ( bool toggle ) { functions->ToggleJumpSwitch( ( toggle ? 1 : 0 ) );       }
-void ToggleShowOnRadar      ( bool toggle ) { functions->ToggleShowMarkers( ( toggle ? 1 : 0 ) );      }
-void ToggleStuntBike        ( bool toggle ) { functions->ToggleStuntBike( ( toggle ? 1 : 0 ) );        }
-void ToggleShootInAir       ( bool toggle ) { functions->ToggleShootInAir( ( toggle ? 1 : 0 ) );       }
-void ToggleShowNametags     ( bool toggle ) { functions->ToggleShowNametags( ( toggle ? 1 : 0 ) );     }
-void ToggleJoinMessages     ( bool toggle ) { functions->ToggleJoinMessages( ( toggle ? 1 : 0 ) );     }
-void ToggleDeathMessages    ( bool toggle ) { functions->ToggleDeathMessages( ( toggle ? 1 : 0 ) );    }
-void ToggleChatTagDefault   ( bool toggle ) { functions->ToggleChatTagsByDefaultEnabled( ( toggle ? 1 : 0 ) ); }
-void ToggleShowOnlyTeamMarkers(bool toggle) { functions->ToggleOnlyShowTeamMarkers(toggle); }
-void ToggleWallglitch       ( bool toggle ) { functions->ToggleWallglitch(toggle); }
+void ToggleSyncFrameLimiter ( bool toggle ) { functions->SetServerOption( vcmpServerOptionSyncFrameLimiter, ( toggle ? 1 : 0 ) ); }
+void ToggleFrameLimiter     ( bool toggle ) { functions->SetServerOption( vcmpServerOptionFrameLimiter, ( toggle ? 1 : 0 ) );     }
+void ToggleTaxiBoostJump    ( bool toggle ) { functions->SetServerOption( vcmpServerOptionTaxiBoostJump, ( toggle ? 1 : 0 ) );    }
+void ToggleDriveOnWater     ( bool toggle ) { functions->SetServerOption( vcmpServerOptionDriveOnWater, ( toggle ? 1 : 0 ) );     }
+void ToggleFastSwitch       ( bool toggle ) { functions->SetServerOption( vcmpServerOptionFastSwitch, ( toggle ? 1 : 0 ) );       }
+void ToggleFriendlyFire     ( bool toggle ) { functions->SetServerOption( vcmpServerOptionFriendlyFire, ( toggle ? 1 : 0 ) );     }
+void ToggleDisableDriveby   ( bool toggle ) { functions->SetServerOption( vcmpServerOptionDisableDriveBy, ( toggle ? 0 : 1 ) );   }
+void TogglePerfectHandling  ( bool toggle ) { functions->SetServerOption( vcmpServerOptionPerfectHandling, ( toggle ? 1 : 0 ) );  }
+void ToggleFlyingCars       ( bool toggle ) { functions->SetServerOption( vcmpServerOptionFlyingCars, ( toggle ? 1 : 0 ) );       }
+void ToggleJumpSwitch       ( bool toggle ) { functions->SetServerOption( vcmpServerOptionJumpSwitch, ( toggle ? 1 : 0 ) );       }
+void ToggleShowOnRadar      ( bool toggle ) { functions->SetServerOption( vcmpServerOptionShowMarkers, ( toggle ? 1 : 0 ) );      }
+void ToggleStuntBike        ( bool toggle ) { functions->SetServerOption( vcmpServerOptionStuntBike, ( toggle ? 1 : 0 ) );        }
+void ToggleShootInAir       ( bool toggle ) { functions->SetServerOption( vcmpServerOptionShootInAir, ( toggle ? 1 : 0 ) );       }
+void ToggleShowNametags     ( bool toggle ) { functions->SetServerOption( vcmpServerOptionShowNameTags, ( toggle ? 1 : 0 ) );     }
+void ToggleJoinMessages     ( bool toggle ) { functions->SetServerOption( vcmpServerOptionJoinMessages, ( toggle ? 1 : 0 ) );     }
+void ToggleDeathMessages    ( bool toggle ) { functions->SetServerOption( vcmpServerOptionDeathMessages, ( toggle ? 1 : 0 ) );    }
+void ToggleChatTagDefault   ( bool toggle ) { functions->SetServerOption( vcmpServerOptionChatTagsEnabled, ( toggle ? 1 : 0 ) );  }
+void ToggleShowOnlyTeamMarkers(bool toggle) { functions->SetServerOption( vcmpServerOptionOnlyShowTeamMarkers,  ( toggle ? 1 : 0 ) ); }
+void ToggleWallglitch       ( bool toggle ) { functions->SetServerOption( vcmpServerOptionWallGlitch,  ( toggle ? 1 : 0 ) );      }
 
-bool EnabledSyncFrameLimiter() { return ( functions->EnabledSyncFrameLimiter() != 0 );  }
-bool EnabledFrameLimiter()     { return ( functions->EnabledFrameLimiter() != 0 );      }
-bool EnabledTaxiBoostJump()    { return ( functions->EnabledTaxiBoostJump() != 0 );     }
-bool EnabledDriveOnWater()     { return ( functions->EnabledDriveOnWater() != 0 );      }
-bool EnabledFastSwitch()       { return ( functions->EnabledFastSwitch() != 0 );        }
-bool EnabledFriendlyFire()     { return ( functions->EnabledFriendlyFire() != 0 );      }
-bool EnabledDisableDriveby()   { return ( functions->EnabledDisableDriveby() == 0 );    }
-bool EnabledPerfectHandling()  { return ( functions->EnabledPerfectHandling() != 0 );   }
-bool EnabledFlyingCars()       { return ( functions->EnabledFlyingCars() != 0 );        }
-bool EnabledJumpSwitch()       { return ( functions->EnabledJumpSwitch() != 0 );        }
-bool EnabledShowOnRadar()      { return ( functions->EnabledShowMarkers() != 0 );       }
-bool EnabledStuntBike()        { return ( functions->EnabledStuntBike() != 0 );         }
-bool EnabledShootInAir()       { return ( functions->EnabledShootInAir() != 0 );        }
-bool EnabledShowNametags()     { return ( functions->EnabledShowNametags() != 0 );      }
-bool EnabledJoinMessages()     { return ( functions->EnabledJoinMessages() != 0 );      }
-bool EnabledDeathMessages()    { return ( functions->EnabledDeathMessages() != 0 );     }
-bool EnabledChatTagDefault()   { return ( functions->EnabledChatTagsByDefault() != 0 ); }
-bool EnabledShowOnlyTeamMarkers() { return functions->EnabledOnlyShowTeamMarkers() != 0; }
-bool EnabledWallglitch()       { return functions->EnabledWallglitch() != 0;            }
+bool EnabledSyncFrameLimiter() { return ( functions->GetServerOption(vcmpServerOptionSyncFrameLimiter) != 0 );  }
+bool EnabledFrameLimiter()     { return ( functions->GetServerOption(vcmpServerOptionFrameLimiter) != 0 );      }
+bool EnabledTaxiBoostJump()    { return ( functions->GetServerOption(vcmpServerOptionTaxiBoostJump) != 0 );     }
+bool EnabledDriveOnWater()     { return ( functions->GetServerOption(vcmpServerOptionDriveOnWater) != 0 );      }
+bool EnabledFastSwitch()       { return ( functions->GetServerOption(vcmpServerOptionFastSwitch) != 0 );        }
+bool EnabledFriendlyFire()     { return ( functions->GetServerOption(vcmpServerOptionFriendlyFire) != 0 );      }
+bool EnabledDisableDriveby()   { return ( functions->GetServerOption(vcmpServerOptionDisableDriveBy) == 0 );    }
+bool EnabledPerfectHandling()  { return ( functions->GetServerOption(vcmpServerOptionPerfectHandling) != 0 );   }
+bool EnabledFlyingCars()       { return ( functions->GetServerOption(vcmpServerOptionFlyingCars) != 0 );        }
+bool EnabledJumpSwitch()       { return ( functions->GetServerOption(vcmpServerOptionJumpSwitch) != 0 );        }
+bool EnabledShowOnRadar()      { return ( functions->GetServerOption(vcmpServerOptionShowMarkers) != 0 );       }
+bool EnabledStuntBike()        { return ( functions->GetServerOption(vcmpServerOptionStuntBike) != 0 );         }
+bool EnabledShootInAir()       { return ( functions->GetServerOption(vcmpServerOptionShootInAir) != 0 );        }
+bool EnabledShowNametags()     { return ( functions->GetServerOption(vcmpServerOptionShowNameTags) != 0 );      }
+bool EnabledJoinMessages()     { return ( functions->GetServerOption(vcmpServerOptionJoinMessages) != 0 );      }
+bool EnabledDeathMessages()    { return ( functions->GetServerOption(vcmpServerOptionDeathMessages) != 0 );     }
+bool EnabledChatTagDefault()   { return ( functions->GetServerOption(vcmpServerOptionChatTagsEnabled) != 0 ); }
+bool EnabledShowOnlyTeamMarkers() { return functions->GetServerOption(vcmpServerOptionOnlyShowTeamMarkers) != 0; }
+bool EnabledWallglitch()       { return functions->GetServerOption(vcmpServerOptionWallGlitch) != 0;            }
 
 void CreateExplosion( int world, int type, Vector * pos, int playerCaused, bool onGround )
 {
@@ -194,8 +194,8 @@ void PlayGameSoundExpanded( int world, int sound, float x, float y, float z )
 	PlayGameSound( world, sound, &pos );
 }
 
-void SetUseClasses ( bool toUse )                         { functions->SetUseClasses( toUse ); }
-bool UsingClasses  ()                                     { return ( functions->GetUseClasses() != 0 ); }
+void SetUseClasses ( bool toUse )                         { functions->SetServerOption( vcmpServerOptionUseClasses, toUse ); }
+bool UsingClasses  ()                                     { return ( functions->GetServerOption( vcmpServerOptionUseClasses ) != 0 ); }
 
 void AddClass( int team, cRGB * colour, int skin, Vector * spawnPos, float spawnAngle, int wep1, int ammo1, int wep2, int ammo2, int wep3, int ammo3 )
 {
@@ -210,8 +210,8 @@ void AddClassExpanded ( int team, int r, int g, int b, int skin, float x, float 
 	AddClass( team, &col, skin, &spawn, spawnAngle, wep1, ammo1, wep2, ammo2, wep3, ammo3 );
 }
 
-void SetSpawnPlayerPos( Vector * pos )  { functions->SetSpawnPlayerPos( pos->x, pos->y, pos->z ); }
-void SetSpawnCameraPos( Vector * pos )  { functions->SetSpawnCameraPos( pos->x, pos->y, pos->z ); }
+void SetSpawnPlayerPos( Vector * pos )  { functions->SetSpawnPlayerPosition( pos->x, pos->y, pos->z ); }
+void SetSpawnCameraPos( Vector * pos )  { functions->SetSpawnCameraPosition( pos->x, pos->y, pos->z ); }
 void SetSpawnCameraLook( Vector * pos ) { functions->SetSpawnCameraLookAt( pos->x, pos->y, pos->z ); }
 
 void SetSpawnPlayerPosExpanded  ( float x, float y, float z ) { Vector p = Vector( x, y, z ); SetSpawnPlayerPos( &p ); }
@@ -230,7 +230,7 @@ bool IsWorldCompatibleWithPlayer( CPlayer * cPlayer, int world )
 	return false;
 }
 
-int  GetPlayerIDFromName( const SQChar* name ) { return functions->GetPlayerIDFromName( const_cast<char *>( name ) ); }
+int  GetPlayerIDFromName( const SQChar* name ) { return functions->GetPlayerIdFromName( const_cast<char *>( name ) ); }
 
 CVehicle * CreateVehicle( int model, int world, Vector * pos, float angle, int col1, int col2 )
 {
@@ -277,35 +277,7 @@ CObject * CreateObject( int model, int world, Vector * pos, int alpha )
 		return pCore->AllocateObject(oId);
 }
 
-CSprite * CreateSprite(const SQChar * filename, uint16_t x, uint16_t y, uint16_t rX, uint16_t rY, float rot, uint16_t alpha)
-{
-	int sId = functions->CreateSprite(-1, filename, x, y, rX, rY, rot, alpha, 0);
-	if (sId < 0)
-		return NULL;
-	else
-	{
-		CSprite * pSprite = new CSprite();
-		pSprite->nSpriteId = sId;
-
-		return pSprite;
-	}
-}
-
-CTextdraw * CreateTextdraw(const SQChar * text, int x, int y, unsigned int colour)
-{
-	int sId = functions->CreateTextdraw(-1, text, x, y, colour, 0);
-	if (sId < 0)
-		return NULL;
-	else
-	{
-		CTextdraw * pTextdraw = new CTextdraw();
-		pTextdraw->nTextdrawId = sId;
-
-		return pTextdraw;
-	}
-}
-
-CCheckpoint * CreateCheckpoint(CPlayer* pPlayer, int world, Vector * pos, ARGB * color, float radius)
+CCheckpoint * CreateCheckpoint(CPlayer* pPlayer, int world, bool isSphere, Vector * pos, ARGB * color, float radius)
 {
 	if (!pos || !color) {
 		return NULL;
@@ -313,7 +285,7 @@ CCheckpoint * CreateCheckpoint(CPlayer* pPlayer, int world, Vector * pos, ARGB *
 
 	int id = (pPlayer ? pPlayer->GetID() : 255);
 
-	int cId = functions->CreateCheckpoint(id, world, pos->x, pos->y, pos->z, color->r, color->g, color->b, color->a, radius);
+	int cId = functions->CreateCheckPoint(id, world, isSphere, pos->x, pos->y, pos->z, color->r, color->g, color->b, color->a, radius);
 	if (cId < 0)
 		return NULL;
 	else {
@@ -321,25 +293,6 @@ CCheckpoint * CreateCheckpoint(CPlayer* pPlayer, int world, Vector * pos, ARGB *
 		pCheckpoint->nOwnerId = id;
 
 		return pCheckpoint;
-	}
-}
-
-CSphere * CreateSphere(CPlayer* pPlayer, int world, Vector * pos, cRGB * color, float radius)
-{
-	if (!pos || !color) {
-		return NULL;
-	}
-
-	int id = (pPlayer ? pPlayer->GetID() : 255);
-
-	int cId = functions->CreateSphere(id, world, pos->x, pos->y, pos->z, color->r, color->g, color->b, radius);
-	if (cId < 0)
-		return NULL;
-	else {
-		CSphere * pSphere = pCore->AllocateSphere(cId);
-		pSphere->nOwnerId = id;
-
-		return pSphere;
 	}
 }
 
@@ -365,7 +318,6 @@ CPickup * FindPickup(int id) { return pCore->RetrievePickup(id); }
 CObject * FindObject(int id) { return pCore->RetrieveObject(id); }
 CVehicle * FindVehicle(int id) { return pCore->RetrieveVehicle(id); }
 CCheckpoint * FindCheckpoint(int id) { return pCore->RetrieveCheckpoint(id); }
-CSphere * FindSphere(int id) { return pCore->RetrieveSphere(id); }
 
 void SetWorldBounds( float maxX, float minX, float maxY, float minY )
 {
@@ -478,7 +430,7 @@ void ResetVehicleHandling( int model ) { functions->ResetHandling( model ); }
 bool GetCinematicBorder ( CPlayer * player )
 {
 	if( player != NULL )
-		return ( functions->EnabledPlayerWidescreen( player->nPlayerId ) != 0 );
+		return ( functions->GetPlayerOption( player->nPlayerId, vcmpPlayerOptionWidescreen ) != 0 );
 
 	return false;
 }
@@ -486,7 +438,7 @@ bool GetCinematicBorder ( CPlayer * player )
 bool GetGreenScanLines  ( CPlayer * player )
 {
 	if( player != NULL )
-		return ( functions->EnabledPlayerGreenScanlines( player->nPlayerId ) != 0 );
+		return ( functions->GetPlayerOption( player->nPlayerId, vcmpPlayerOptionGreenScanlines ) != 0 );
 
 	return false;
 }
@@ -494,7 +446,7 @@ bool GetGreenScanLines  ( CPlayer * player )
 bool GetWhiteScanLines  ( CPlayer * player )
 {
 	if( player != NULL )
-		return ( functions->EnabledPlayerWhiteScanlines( player->nPlayerId ) != 0 );
+		return ( functions->GetPlayerOption( player->nPlayerId, vcmpPlayerOptionWhiteScanlines ) != 0 );
 
 	return false;
 }
@@ -502,19 +454,19 @@ bool GetWhiteScanLines  ( CPlayer * player )
 void SetCinematicBorder ( CPlayer * player, bool toEnable )
 {
 	if( player != NULL )
-		functions->TogglePlayerWidescreen( player->nPlayerId, toEnable );
+		functions->SetPlayerOption( player->nPlayerId, vcmpPlayerOptionWidescreen, toEnable );
 }
 
 void SetGreenScanLines  ( CPlayer * player, bool toEnable )
 {
 	if( player != NULL )
-		functions->TogglePlayerGreenScanlines( player->nPlayerId, toEnable );
+		functions->SetPlayerOption( player->nPlayerId, vcmpPlayerOptionGreenScanlines, toEnable );
 }
 
 void SetWhiteScanLines  ( CPlayer * player, bool toEnable )
 {
 	if( player != NULL )
-		functions->TogglePlayerWhiteScanlines( player->nPlayerId, toEnable );
+		functions->SetPlayerOption( player->nPlayerId, vcmpPlayerOptionWhiteScanlines, toEnable );
 }
 
 void KickPlayer         ( CPlayer * player )
@@ -1819,8 +1771,8 @@ const SQChar * GetVehicleNameFromModel ( int model )
 	}
 }
 
-void SetKillDelay( int delay ) { functions->SetKillCmdDelay( delay ); }
-int GetKillDelay( void ) { return functions->GetKillCmdDelay(); }
+void SetKillDelay( int delay ) { functions->SetKillCommandDelay( delay ); }
+int GetKillDelay( void ) { return functions->GetKillCommandDelay(); }
 
 void DestroyBlip( int blipID ) { functions->DestroyCoordBlip( blipID ); }
 int CreateBlip( int world, Vector * pos, int scale, RGBa color, int nSpriteId )
@@ -1843,7 +1795,7 @@ double GetWeaponDataValue ( int weaponID, int fieldID ) { return functions->GetW
 bool ResetWeaponDataValue ( int weaponID, int fieldID ) { return (functions->ResetWeaponDataValue( weaponID, fieldID ) ? true : false); }
 bool IsWeaponDataModified ( int weaponID, int fieldID ) { return (functions->IsWeaponDataValueModified( weaponID, fieldID ) ? true : false); }
 bool ResetWeaponData      ( int weaponID ) { return (functions->ResetWeaponData( weaponID ) ? true : false); }
-bool ResetAllWeaponData   () { return (functions->ResetAllWeaponData() ? true : false); }
+void ResetAllWeaponData   () { return functions->ResetAllWeaponData(); }
 
 bool IsNum(const SQChar * line)
 {
@@ -1859,7 +1811,7 @@ int GetVehicleCount()
 {
 	int count = 0;
 	for (int i = 0; i < MAX_VEHICLES; i++)
-	if (functions->GetVehicleModel(i) > 0)
+	if (functions->CheckEntityExists(vcmpEntityPoolVehicle, i) > 0)
 		count++;
 
 	return count;
@@ -1869,7 +1821,7 @@ int GetPickupCount()
 {
 	int count = 0;
 	for (int i = 0; i < MAX_PICKUPS; i++)
-	if (functions->PickupGetModel(i) > 0)
+	if (functions->CheckEntityExists(vcmpEntityPoolPickup, i) > 0)
 		count++;
 
 	return count;
@@ -1879,7 +1831,7 @@ int GetObjectCount()
 {
 	int count = 0;
 	for (int i = 0; i < MAX_OBJECTS; i++)
-	if (functions->GetObjectModel(i) > 0)
+	if (functions->CheckEntityExists(vcmpEntityPoolObject, i) > 0)
 		count++;
 
 	return count;

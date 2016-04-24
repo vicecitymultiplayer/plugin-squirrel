@@ -98,13 +98,6 @@ CCore::~CCore()
 			this->checkpointMap[i] = NULL;
 		}
 	}
-
-	for (i = 0; i < MAX_SPHERES; i++) {
-		if (this->sphereMap[i] != NULL) {
-			delete this->sphereMap[i];
-			this->sphereMap[i] = NULL;
-		}
-	}
 }
 
 void CCore::LoadVM()
@@ -123,7 +116,7 @@ void CCore::LoadVM()
 	this->RegisterEntities();
 
 	// Signal outside plugins to register whatever the hell they want
-	functions->SendCustomCommand(0x7D6E22D8, "");
+	functions->SendPluginCommand(0x7D6E22D8, "");
 }
 
 // Look for entities such as vehicles and objects that were created by other plugins
@@ -133,21 +126,21 @@ void CCore::ScanForEntities()
 	unsigned int i;
 	for( i = 0; i < MAX_VEHICLES; i++ )
 	{
-		if (functions->GetVehicleModel(i) > 0)
+		if (functions->CheckEntityExists(vcmpEntityPoolVehicle, i))
 			this->AllocateVehicle(i, false);
 	}
 
 	// Scan for pickups
 	for( i = 0; i < MAX_PICKUPS; i++ )
 	{
-		if (functions->PickupGetModel(i) > 0)
+		if (functions->CheckEntityExists(vcmpEntityPoolPickup, i))
 			this->AllocatePickup(i, false);
 	}
 
 	// Scan for objects
 	for( i = 0; i < MAX_OBJECTS; i++ )
 	{
-		if (functions->GetObjectModel(i) > 0)
+		if (functions->CheckEntityExists(vcmpEntityPoolObject, i))
 			this->AllocateObject(i, false);
 	}
 
@@ -159,14 +152,8 @@ void CCore::ScanForEntities()
 	}
 
 	for (i = 0; i < MAX_CHECKPOINTS; i++) {
-		if (functions->GetCheckpointWorld(i) >= 0) {
+		if (functions->CheckEntityExists(vcmpEntityPoolCheckPoint, i)) {
 			this->AllocateCheckpoint(i, false);
-		}
-	}
-
-	for (i = 0; i < MAX_SPHERES; i++) {
-		if (functions->GetSphereWorld(i) >= 0) {
-			this->AllocateSphere(i, false);
 		}
 	}
 }
@@ -244,13 +231,6 @@ void CCore::CleanWorld()
 			checkpointMap[i] = NULL;
 		}
 	}
-
-	for (i = 0; i < MAX_SPHERES; i++) {
-		if (sphereMap[i] != NULL && sphereMap[i]->isOurs) {
-			sphereMap[i]->Delete();
-			sphereMap[i] = NULL;
-		}
-	}
 }
 
 // Register *everything*
@@ -282,10 +262,7 @@ void CCore::RegisterEntities()
 	RegisterPlayer();
 	RegisterTimer();
 	RegisterVehicle();
-	RegisterSprite();
-	RegisterTextdraw();
 	RegisterCheckpoint();
-	RegisterSphere();
 
 	// Set the default internal error handlers up
 	sqstd_seterrorhandlers( v );
@@ -505,7 +482,7 @@ CObject * CCore::AllocateObject(int gObjectId, bool isOurs)
 {
 	if (gObjectId < 0 || gObjectId > MAX_OBJECTS - 1)
 		return NULL;
-	else if (functions->GetObjectModel(gObjectId) < 1)
+	else if (!functions->CheckEntityExists(vcmpEntityPoolObject, gObjectId))
 		return NULL;
 	else if (this->objectMap[gObjectId] != NULL)
 		return this->objectMap[gObjectId];
@@ -521,7 +498,7 @@ CPickup * CCore::AllocatePickup(int gPickupId, bool isOurs)
 {
 	if (gPickupId < 0 || gPickupId > MAX_PICKUPS - 1)
 		return NULL;
-	else if (functions->PickupGetModel(gPickupId) < 1)
+	else if (!functions->CheckEntityExists(vcmpEntityPoolPickup, gPickupId))
 		return NULL;
 	else if (this->pickupMap[gPickupId] != NULL)
 		return this->pickupMap[gPickupId];
@@ -537,7 +514,7 @@ CVehicle * CCore::AllocateVehicle(int gVehicleId, bool isOurs)
 {
 	if (gVehicleId <= 0 || gVehicleId > MAX_VEHICLES)
 		return NULL;
-	else if (functions->GetVehicleModel(gVehicleId) < 1)
+	else if (!functions->CheckEntityExists(vcmpEntityPoolVehicle, gVehicleId))
 		return NULL;
 	else if (this->vehicleMap[gVehicleId] != NULL)
 		return this->vehicleMap[gVehicleId];
@@ -553,7 +530,7 @@ CCheckpoint * CCore::AllocateCheckpoint(int gCheckpointId, bool isOurs)
 {
 	if (gCheckpointId < 0 || gCheckpointId >= MAX_CHECKPOINTS)
 		return NULL;
-	else if (functions->GetCheckpointWorld(gCheckpointId) == -1)
+	else if (!functions->CheckEntityExists(vcmpEntityPoolCheckPoint, gCheckpointId))
 		return NULL;
 	else if (this->checkpointMap[gCheckpointId] != NULL)
 		return this->checkpointMap[gCheckpointId];
@@ -563,22 +540,6 @@ CCheckpoint * CCore::AllocateCheckpoint(int gCheckpointId, bool isOurs)
 
 	this->checkpointMap[pCheckpoint->nCheckpointId] = pCheckpoint;
 	return pCheckpoint;
-}
-
-CSphere * CCore::AllocateSphere(int gSphereId, bool isOurs)
-{
-	if (gSphereId < 0 || gSphereId >= MAX_CHECKPOINTS)
-		return NULL;
-	else if (functions->GetSphereWorld(gSphereId) == -1)
-		return NULL;
-	else if (this->sphereMap[gSphereId] != NULL)
-		return this->sphereMap[gSphereId];
-
-	CSphere * pSphere = new CSphere();
-	pSphere->Init(gSphereId, isOurs);
-
-	this->sphereMap[pSphere->nSphereId] = pSphere;
-	return pSphere;
 }
 
 void CCore::DereferenceObject(int gObjectId)
@@ -656,21 +617,6 @@ void CCore::DereferenceCheckpoint(int gCheckpointId)
 	}
 }
 
-void CCore::DereferenceSphere(int gSphereId)
-{
-	if (gSphereId < 0 || gSphereId >= MAX_CHECKPOINTS)
-		return;
-	else if (this->sphereMap[gSphereId] == NULL)
-		return;
-	else
-	{
-		CSphere * pSphere = this->sphereMap[gSphereId];
-		delete pSphere;
-
-		this->sphereMap[gSphereId] = NULL;
-	}
-}
-
 CObject * CCore::RetrieveObject(int gObjectId)
 {
 	if (gObjectId < 0 || gObjectId > MAX_OBJECTS - 1)
@@ -709,12 +655,4 @@ CCheckpoint * CCore::RetrieveCheckpoint(int gCheckpointId)
 		return NULL;
 
 	return this->checkpointMap[gCheckpointId];
-}
-
-CSphere * CCore::RetrieveSphere(int gSphereId)
-{
-	if (gSphereId < 0 || gSphereId >= MAX_CHECKPOINTS)
-		return NULL;
-
-	return this->sphereMap[gSphereId];
 }

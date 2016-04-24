@@ -18,7 +18,7 @@ extern CCore * pCore;
 extern PluginInfo       *   information;
 extern PluginCallbacks  *   callbacks;
 
-int OnInitServer()
+uint8_t OnInitServer()
 {
 	// Print the initialization message.
 	printf("\n");
@@ -138,7 +138,7 @@ void OnPlayerConnect( int nPlayerId )
 	}
 }
 
-void OnPlayerDisconnect( int nPlayerId, int nReason )
+void OnPlayerDisconnect( int nPlayerId, vcmpDisconnectReason nReason )
 {
 	if( pCore != NULL )
 	{
@@ -148,7 +148,7 @@ void OnPlayerDisconnect( int nPlayerId, int nReason )
 		try
 		{
 			if (!callback.IsNull())
-				callback(playerInstance, nReason);
+				callback(playerInstance, (int)nReason);
 		}
 		catch (Sqrat::Exception e)
 		{
@@ -163,7 +163,7 @@ void OnPlayerDisconnect( int nPlayerId, int nReason )
 	}
 }
 
-int OnPlayerRequestClass( int nPlayerId, int nOffset )
+uint8_t OnPlayerRequestClass(int nPlayerId, int nOffset)
 {
 	if (pCore != NULL)
 	{
@@ -189,7 +189,7 @@ int OnPlayerRequestClass( int nPlayerId, int nOffset )
 		return 1;
 }
 
-int OnPlayerRequestSpawn( int nPlayerId )
+uint8_t OnPlayerRequestSpawn(int nPlayerId)
 {
 	if (pCore != NULL)
 	{
@@ -235,7 +235,7 @@ void OnPlayerSpawn( int nPlayerId )
 	}
 }
 
-void OnPlayerDeath( int nPlayerId, int nKillerId, int nReason, int nBodyPart )
+void OnPlayerDeath( int nPlayerId, int nKillerId, int nReason, vcmpBodyPart nBodyPart )
 {
 	if (pCore != NULL)
 	{
@@ -288,7 +288,7 @@ void OnPlayerDeath( int nPlayerId, int nKillerId, int nReason, int nBodyPart )
 	}
 }
 
-int OnPlayerRequestEnter( int nPlayerId, int nVehicleId, int nSlotId )
+uint8_t OnPlayerRequestEnter(int nPlayerId, int nVehicleId, int nSlotId)
 {
 	if (pCore != NULL)
 	{
@@ -358,7 +358,7 @@ void OnPlayerExitVehicle( int nPlayerId, int nVehicleId )
 	}
 }
 
-int OnPickupClaimPicked( int nPickupId, int nPlayerId )
+uint8_t OnPickupClaimPicked(int nPickupId, int nPlayerId)
 {
 	if (pCore != NULL)
 	{
@@ -469,7 +469,7 @@ void OnVehicleRespawn( int nVehicleId )
 	}
 }
 
-int OnPublicMessage( int nPlayerId, const char* pszText )
+uint8_t OnPublicMessage(int nPlayerId, const char* pszText)
 {
 	if (pCore != NULL)
 	{
@@ -495,7 +495,7 @@ int OnPublicMessage( int nPlayerId, const char* pszText )
 }
 
 extern HSQAPI sq;
-int OnCommandMessage( int nPlayerId, const char* pszText )
+uint8_t OnCommandMessage(int nPlayerId, const char* pszText)
 {
 	if (pCore != NULL)
 	{
@@ -554,7 +554,7 @@ int OnCommandMessage( int nPlayerId, const char* pszText )
 	return 1;
 }
 
-int OnPrivateMessage( int nPlayerId, int nTargetId, const char* pszText )
+uint8_t OnPrivateMessage(int nPlayerId, int nTargetId, const char* pszText)
 {
 	if (pCore != NULL)
 	{
@@ -620,7 +620,7 @@ void OnPlayerEndTyping( int nPlayerId )
 	}
 }
 
-int OnLoginAttempt( char* playerName, const char* password, const char* pszIpAddress )
+uint8_t OnLoginAttempt( char* playerName, size_t size, const char* password, const char* pszIpAddress )
 {
 	if (pCore != NULL)
 	{
@@ -668,7 +668,7 @@ void OnNameChangeable( char * playerName, char ** namePtr )
 	}*/
 }
 
-void OnVehicleUpdate( int nVehicleId, int nUpdateType )
+void OnVehicleUpdate( int nVehicleId, vcmpVehicleUpdate nUpdateType )
 {
 	if (pCore != NULL)
 	{
@@ -677,7 +677,7 @@ void OnVehicleUpdate( int nVehicleId, int nUpdateType )
 		float  lastHP = vehInfo->lastHP;
 
 		float x, y, z;
-		functions->GetVehiclePos(nVehicleId, &x, &y, &z);
+		functions->GetVehiclePosition(nVehicleId, &x, &y, &z);
 
 		float hp = functions->GetVehicleHealth(nVehicleId);
 
@@ -727,7 +727,7 @@ void OnVehicleUpdate( int nVehicleId, int nUpdateType )
 	}
 }
 
-void OnPlayerUpdate( int nPlayerId, int nUpdateType )
+void OnPlayerUpdate( int nPlayerId, vcmpPlayerUpdate nUpdateType )
 {
 	if (pCore != NULL)
 	{
@@ -738,7 +738,7 @@ void OnPlayerUpdate( int nPlayerId, int nUpdateType )
 		int    lastWep = plrInfo->lastWep;
 
 		float x, y, z;
-		functions->GetPlayerPos(nPlayerId, &x, &y, &z);
+		functions->GetPlayerPosition(nPlayerId, &x, &y, &z);
 
 		float hp = functions->GetPlayerHealth(nPlayerId);
 		float armour = functions->GetPlayerArmour(nPlayerId);
@@ -859,37 +859,37 @@ void OnObjectBump( int nObjectId, int nPlayerId )
 }
 
 // We don't handle this one because we don't take internal commands from other modules.
-int OnInternalCommand( unsigned int uCmdType, const char* pszText )
+uint8_t OnInternalCommand( uint32_t uCmdType, const char* pszText )
 {
 	return 1;
 }
 
-void OnEntityPoolChange (int nEntityType, int nEntityId, unsigned int bDeleted)
+void OnEntityPoolChange (vcmpEntityPool nEntityType, int nEntityId, uint8_t bDeleted)
 {
 	if (pCore != NULL)
 	{
-		if (nEntityType == 1)
+		if (nEntityType == vcmpEntityPoolVehicle)
 		{
 			if (!bDeleted)
 				pCore->AllocateVehicle(nEntityId, false);
 			else
 				pCore->DereferenceVehicle(nEntityId);
 		}
-		else if (nEntityType == 2)
+		else if (nEntityType == vcmpEntityPoolObject)
 		{
 			if (!bDeleted)
 				pCore->AllocateObject(nEntityId, false);
 			else
 				pCore->DereferenceObject(nEntityId);
 		}
-		else if (nEntityType == 3)
+		else if (nEntityType == vcmpEntityPoolPickup)
 		{
 			if (!bDeleted)
 				pCore->AllocatePickup(nEntityId, false);
 			else
 				pCore->DereferencePickup(nEntityId);
 		}
-		else if (nEntityType == 4) {
+		else if (nEntityType == vcmpEntityPoolCheckPoint) {
 			if (!bDeleted)
 				pCore->AllocateCheckpoint(nEntityId, false);
 			else
@@ -936,7 +936,7 @@ void OnKeyBindUp(int nPlayerId, int nBindId)
 	}
 }
 
-void OnPlayerAwayChange(int nPlayerId, unsigned int bNewStatus)
+void OnPlayerAwayChange(int nPlayerId, uint8_t bNewStatus)
 {
 	if (pCore != NULL)
 	{
@@ -1031,7 +1031,7 @@ void OnPlayerActionChange(int nPlayerId, int nOldAction, int nNewAction)
 	}
 }
 
-void OnPlayerStateChange(int nPlayerId, int nOldState, int nNewState)
+void OnPlayerStateChange(int nPlayerId, vcmpPlayerState nOldState, vcmpPlayerState nNewState)
 {
 	if (pCore != NULL)
 	{
@@ -1050,7 +1050,7 @@ void OnPlayerStateChange(int nPlayerId, int nOldState, int nNewState)
 	}
 }
 
-void OnPlayerOnFireChange(int nPlayerId, unsigned int bIsOnFireNow)
+void OnPlayerOnFireChange(int nPlayerId, uint8_t bIsOnFireNow)
 {
 	if (pCore != NULL)
 	{
@@ -1069,14 +1069,14 @@ void OnPlayerOnFireChange(int nPlayerId, unsigned int bIsOnFireNow)
 	}
 }
 
-void OnPlayerCrouchChange(int nPlayerId, unsigned int bIsCrouchingNow)
+void OnPlayerCrouchChange(int nPlayerId, uint8_t bIsCrouchingNow)
 {
 	if (pCore != NULL)
 	{
 		Function callback = RootTable().GetFunction(_SC("onPlayerCrouchChange"));
 		try
 		{
-			bool isCrouching = functions->GetPlayerCrouchStatus(nPlayerId);
+			bool isCrouching = functions->IsPlayerCrouching(nPlayerId);
 			if (!callback.IsNull())
 				callback.Execute<CPlayer *, bool>(pCore->RetrievePlayer(nPlayerId), isCrouching == 0); // tmp fix
 				//callback.Execute<CPlayer *, bool>(pCore->RetrievePlayer(nPlayerId), bIsCrouchingNow == 1);
@@ -1090,7 +1090,7 @@ void OnPlayerCrouchChange(int nPlayerId, unsigned int bIsCrouchingNow)
 	}
 }
 
-void OnPlayerGameKeysChange(int nPlayerId, int nOldKeys, int nNewKeys)
+void OnPlayerGameKeysChange(int nPlayerId, uint32_t nOldKeys, uint32_t nNewKeys)
 {
 	if (pCore != NULL)
 	{
@@ -1139,42 +1139,6 @@ void OnCheckpointExited(int nCheckpointId, int nPlayerId) {
 		catch (Sqrat::Exception e)
 		{
 			OutputWarning("onCheckpointExited failed to execute -- check the console for more details.");
-		}
-
-		callback.Release();
-	}
-}
-
-void OnSphereEntered(int nSphereId, int nPlayerId) {
-	if (pCore != NULL)
-	{
-		Function callback = RootTable().GetFunction(_SC("onSphereEntered"));
-		try
-		{
-			if (!callback.IsNull())
-				callback.Execute<CPlayer*, CSphere*>(pCore->RetrievePlayer(nPlayerId), pCore->RetrieveSphere(nSphereId));
-		}
-		catch (Sqrat::Exception e)
-		{
-			OutputWarning("onSphereEntered failed to execute -- check the console for more details.");
-		}
-
-		callback.Release();
-	}
-}
-
-void OnSphereExited(int nSphereId, int nPlayerId) {
-	if (pCore != NULL)
-	{
-		Function callback = RootTable().GetFunction(_SC("onSphereExited"));
-		try
-		{
-			if (!callback.IsNull())
-				callback.Execute<CPlayer*, CSphere*>(pCore->RetrievePlayer(nPlayerId), pCore->RetrieveSphere(nSphereId));
-		}
-		catch (Sqrat::Exception e)
-		{
-			OutputWarning("onSphereExited failed to execute -- check the console for more details.");
 		}
 
 		callback.Release();
