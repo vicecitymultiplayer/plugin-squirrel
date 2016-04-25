@@ -7,6 +7,7 @@
 // Script and VM core
 #include "CCore.h"
 #include "SQModule.h"
+#include "CStream.h"
 
 // Create arrays for several structures.
 savedVehicleData lastVehInfo[MAX_VEHICLES];
@@ -642,6 +643,26 @@ uint8_t OnLoginAttempt( char* playerName, size_t size, const char* password, con
 	}
 	else
 		return 1;
+}
+
+void OnClientScriptData( int playerId, const uint8_t* data, size_t size ) {
+	CStream::LoadInput(data, size);
+
+	if (pCore != NULL) {
+		CPlayer* playerInstance = pCore->RetrievePlayer(playerId);
+		Function callback = RootTable().GetFunction(_SC("onClientScriptData"));
+
+		try {
+			if (!callback.IsNull()) {
+				callback.Evaluate<CPlayer*>(playerInstance);
+			}
+		}
+		catch (Sqrat::Exception e) {
+			OutputWarning("onClientScriptData failed to execute -- check the console for more details.");
+		}
+
+		callback.Release();
+	}
 }
 
 void OnNameChangeable( char * playerName, char ** namePtr )

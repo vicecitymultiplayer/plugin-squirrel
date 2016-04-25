@@ -28,6 +28,7 @@ void OnPlayerAwayChange    ( int nPlayerId, uint8_t bNewAwayStatus );
 void OnPlayerSpectate      ( int nPlayerId, int nTargetId );
 
 uint8_t OnLoginAttempt     (char* playerName, size_t size, const char* password, const char* pszIpAddress);
+void OnClientScriptData    ( int playerId, const uint8_t* data, size_t size);
 void OnNameChangeable      ( char * playerName, char ** namePtr );
 
 uint8_t  OnPickupClaimPicked(int nPickupId, int nVehicleId);

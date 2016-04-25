@@ -1,6 +1,7 @@
 #include "CCore.h"
 #include "Functions.h"
 #include "ConsoleUtils.h"
+#include "CStream.h"
 #include <cassert>
 
 // Static members
@@ -263,6 +264,8 @@ void CCore::RegisterEntities()
 	RegisterTimer();
 	RegisterVehicle();
 	RegisterCheckpoint();
+
+	CStream::RegisterStream();
 
 	// Set the default internal error handlers up
 	sqstd_seterrorhandlers( v );

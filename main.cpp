@@ -117,6 +117,7 @@ extern "C" EXPORT unsigned int VcmpPluginInit( PluginFuncs* givenPluginFuncs, Pl
 	callbacks->OnServerShutdown	    = OnShutdownServer;
 	callbacks->OnServerFrame		= OnFrame;
 	callbacks->OnIncomingConnection	= OnLoginAttempt;
+	callbacks->OnClientScriptData   = OnClientScriptData;
 
 	callbacks->OnPlayerConnect      = OnPlayerConnect;
 	callbacks->OnPlayerDisconnect   = OnPlayerDisconnect;

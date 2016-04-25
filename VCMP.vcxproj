@@ -196,6 +196,7 @@
     <ClInclude Include="Constants.h" />
     <ClInclude Include="CPickup.h" />
     <ClInclude Include="CPlayer.h" />
+    <ClInclude Include="CStream.h" />
     <ClInclude Include="CTimer.h" />
     <ClInclude Include="CVehicle.h" />
     <ClInclude Include="Exports.h" />
@@ -233,6 +234,7 @@
     <ClCompile Include="ConsoleUtils.cpp" />
     <ClCompile Include="CPickup.cpp" />
     <ClCompile Include="CPlayer.cpp" />
+    <ClCompile Include="CStream.cpp" />
     <ClCompile Include="CTimer.cpp" />
     <ClCompile Include="CVehicle.cpp" />
     <ClCompile Include="Exports.cpp" />
