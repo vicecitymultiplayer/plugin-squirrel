@@ -73,6 +73,8 @@ void ToggleDeathMessages    ( bool toggle );
 void ToggleChatTagDefault   ( bool toggle );
 void ToggleShowOnlyTeamMarkers(bool toggle);
 void ToggleWallglitch       ( bool toggle );
+void ToggleDisableBackfaceCulling ( bool toggle );
+void ToggleDisableHeliBladeDamage ( bool toggle );
 
 bool EnabledSyncFrameLimiter ( void );
 bool EnabledFrameLimiter     ( void );
@@ -93,6 +95,8 @@ bool EnabledDeathMessages    ( void );
 bool EnabledChatTagDefault   ( void );
 bool EnabledShowOnlyTeamMarkers(void);
 bool EnabledWallglitch       ( void );
+bool EnabledDisableBackfaceCulling ( void );
+bool EnabledDisableHeliBladeDamage ( void );
 
 int CreateBlip( int world, Vector * pos, int scale, RGBa color, int nSpriteId );
 void DestroyBlip( int blipID );

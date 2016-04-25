@@ -147,6 +147,8 @@ void ToggleDeathMessages    ( bool toggle ) { functions->SetServerOption( vcmpSe
 void ToggleChatTagDefault   ( bool toggle ) { functions->SetServerOption( vcmpServerOptionChatTagsEnabled, ( toggle ? 1 : 0 ) );  }
 void ToggleShowOnlyTeamMarkers(bool toggle) { functions->SetServerOption( vcmpServerOptionOnlyShowTeamMarkers,  ( toggle ? 1 : 0 ) ); }
 void ToggleWallglitch       ( bool toggle ) { functions->SetServerOption( vcmpServerOptionWallGlitch,  ( toggle ? 1 : 0 ) );      }
+void ToggleDisableBackfaceCulling( bool toggle ) { functions->SetServerOption( vcmpServerOptionDisableBackfaceCulling,  ( toggle ? 1 : 0 ) ); }
+void ToggleDisableHeliBladeDamage( bool toggle ) { functions->SetServerOption( vcmpServerOptionDisableHeliBladeDamage,  ( toggle ? 1 : 0 ) ); }
 
 bool EnabledSyncFrameLimiter() { return ( functions->GetServerOption(vcmpServerOptionSyncFrameLimiter) != 0 );  }
 bool EnabledFrameLimiter()     { return ( functions->GetServerOption(vcmpServerOptionFrameLimiter) != 0 );      }
@@ -164,9 +166,11 @@ bool EnabledShootInAir()       { return ( functions->GetServerOption(vcmpServerO
 bool EnabledShowNametags()     { return ( functions->GetServerOption(vcmpServerOptionShowNameTags) != 0 );      }
 bool EnabledJoinMessages()     { return ( functions->GetServerOption(vcmpServerOptionJoinMessages) != 0 );      }
 bool EnabledDeathMessages()    { return ( functions->GetServerOption(vcmpServerOptionDeathMessages) != 0 );     }
-bool EnabledChatTagDefault()   { return ( functions->GetServerOption(vcmpServerOptionChatTagsEnabled) != 0 ); }
-bool EnabledShowOnlyTeamMarkers() { return functions->GetServerOption(vcmpServerOptionOnlyShowTeamMarkers) != 0; }
+bool EnabledChatTagDefault()   { return ( functions->GetServerOption(vcmpServerOptionChatTagsEnabled) != 0 );   }
+bool EnabledShowOnlyTeamMarkers() { return functions->GetServerOption(vcmpServerOptionOnlyShowTeamMarkers) != 0;}
 bool EnabledWallglitch()       { return functions->GetServerOption(vcmpServerOptionWallGlitch) != 0;            }
+bool EnabledDisableBackfaceCulling() { return functions->GetServerOption(vcmpServerOptionDisableBackfaceCulling) != 0; }
+bool EnabledDisableHeliBladeDamage() { return functions->GetServerOption(vcmpServerOptionDisableHeliBladeDamage) != 0; }
 
 void CreateExplosion( int world, int type, Vector * pos, int playerCaused, bool onGround )
 {
