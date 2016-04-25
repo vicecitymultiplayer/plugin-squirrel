@@ -1,6 +1,6 @@
 #pragma once
 #include <stdlib.h>
-#include "sqrat.h"
+#include "sqrat/sqrat.h"
 
 #define STREAM_MAX_SIZE 4096
 
