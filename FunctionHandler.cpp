@@ -287,7 +287,7 @@ CCheckpoint * CreateCheckpoint(CPlayer* pPlayer, int world, bool isSphere, Vecto
 		return NULL;
 	}
 
-	int id = (pPlayer ? pPlayer->GetID() : 255);
+	int id = (pPlayer ? pPlayer->GetID() : -1);
 
 	int cId = functions->CreateCheckPoint(id, world, isSphere, pos->x, pos->y, pos->z, color->r, color->g, color->b, color->a, radius);
 	if (cId < 0)
@@ -1875,7 +1875,7 @@ SQInteger FindPlayer( HSQUIRRELVM v )
 			const char * pName;
 			sq_getstring( v, 2, &pName );
 
-			int pID = 255;
+			int pID = -1;
 			int i;
 
 			char * lowerName = strdup( pName );
@@ -1901,7 +1901,7 @@ SQInteger FindPlayer( HSQUIRRELVM v )
 			nameBuf = NULL;
 			free( lowerName );
 
-			if (pID == 255)
+			if (pID == -1)
 			{
 				sq_pushnull(v);
 				return 1;

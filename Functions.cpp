@@ -120,7 +120,7 @@ void RegisterGlobals()
 		.Func(_SC("GetPlayerIDFromName"), GetPlayerIDFromName, 2, _SC("ts"))
 		.Func(_SC("IsWorldCompatibleWithPlayer"), IsWorldCompatibleWithPlayer, 2, _SC("txi"))
 
-		.Func(_SC("CreateCheckpoint"), CreateCheckpoint, 6, _SC("txb|oixxn"))
+		.Func(_SC("CreateCheckpoint"), CreateCheckpoint, 7, _SC("tx|oibxxn"))
 
 		.Overload(_SC("CreateVehicle"), CreateVehicleCompat)
 		.Overload(_SC("CreateVehicle"), CreateVehicle)
