@@ -185,6 +185,8 @@ SQChar* CStream::ReadString(void) {
 	memcpy(result, &inputStreamData[inputStreamPosition], length);
 	result[length] = '\0';
 
+	inputStreamPosition += length;
+
 	return result;
 }
 
