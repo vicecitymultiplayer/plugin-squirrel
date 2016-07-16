@@ -2,19 +2,21 @@
 SQUIRREL=.
 MAKE=make
 
-all: sq32 sq64
+sq32: folders
+	cd squirrel; $(MAKE)
+	cd sqstdlib; $(MAKE)
+	cd sq; $(MAKE)
 
-sq32:
-	cd squirrel; $(MAKE) sq32
-	cd sqstdlib; $(MAKE) sq32
-	cd sq; $(MAKE) sq32
-
-sqprof:
+sqprof: folders
 	cd squirrel; $(MAKE) sqprof
 	cd sqstdlib; $(MAKE) sqprof
 	cd sq; $(MAKE) sqprof
 
-sq64:
+sq64: folders
 	cd squirrel; $(MAKE) sq64
 	cd sqstdlib; $(MAKE) sq64
 	cd sq; $(MAKE) sq64
+
+folders:
+	mkdir -p lib
+	mkdir -p bin
