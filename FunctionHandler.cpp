@@ -3347,3 +3347,11 @@ int GetSkinID(const SQChar* name)
 	// Return the found ID
 	return id;
 }
+
+void SetFallTimer(int delay) {
+	functions->SetFallTimer(delay);
+}
+
+int GetFallTimer(void) {
+	return functions->GetFallTimer();
+}

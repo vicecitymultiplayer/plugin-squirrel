@@ -1014,6 +1014,25 @@ void OnPlayerCrashDump(int nPlayerId, const char * szCrashReport)
 	}
 }
 
+void OnPlayerModuleList(int nPlayerId, const char* szModuleList)
+{
+	if (pCore != NULL)
+	{
+		Function callback = RootTable().GetFunction(_SC("onPlayerModuleList"));
+		try
+		{
+			if (!callback.IsNull())
+				callback.Execute<CPlayer *, const SQChar *>(pCore->RetrievePlayer(nPlayerId), szModuleList);
+		}
+		catch (Sqrat::Exception e)
+		{
+			OutputWarning("onPlayerModuleList failed to execute -- check the console for more details.");
+		}
+
+		callback.Release();
+	}
+}
+
 void OnPlayerNameChange(int nPlayerId, const char * oldName, const char * newName)
 {
 	if (pCore != NULL)

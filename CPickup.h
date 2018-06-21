@@ -13,6 +13,7 @@ class CPickup
 		void SetAuto( bool automatic );
 		void SetAutoTimer( int timer );
 		void SetPos( Vector pos );
+		void SetSingleUse(bool bSingleUse);
 
 	public:
 		int GetWorld();
@@ -23,6 +24,7 @@ class CPickup
 		int GetModel();
 		int GetQuantity();
 		int GetID();
+		bool GetSingleUse();
 
 	public:
 		void Delete();

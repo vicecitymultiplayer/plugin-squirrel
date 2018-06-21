@@ -43,14 +43,17 @@ void CVehicle::SetColour2( int colour2 )
 }
 
 void CVehicle::SetLocked( bool isLocked ) { functions->SetVehicleOption( this->nVehicleId, vcmpVehicleOptionDoorsLocked, isLocked ); }
+void CVehicle::SetLightFlags(unsigned int flags) { functions->SetVehicleLightsData(this->nVehicleId, flags); }
 void CVehicle::SetDamage( unsigned int damage ) { functions->SetVehicleDamageData( this->nVehicleId, damage ); }
 void CVehicle::SetAlarm( bool isAlarmOn ) { functions->SetVehicleOption( this->nVehicleId, vcmpVehicleOptionAlarm, isAlarmOn ); }
 void CVehicle::SetSiren(bool isSirenOn) { functions->SetVehicleOption(this->nVehicleId, vcmpVehicleOptionSiren, isSirenOn); }
 void CVehicle::SetLights( bool lightsOn ) { functions->SetVehicleOption( this->nVehicleId, vcmpVehicleOptionLights, lightsOn ); }
+void CVehicle::SetSingleUse(bool bSingleUse) { functions->SetVehicleOption(this->nVehicleId, vcmpVehicleOptionSingleUse, bSingleUse); }
 
 int CVehicle::GetWorld() { return functions->GetVehicleWorld(this->nVehicleId); }
 int CVehicle::GetModel() { return functions->GetVehicleModel(this->nVehicleId); }
 int CVehicle::GetImmunity() { return functions->GetVehicleImmunityFlags(this->nVehicleId); }
+bool CVehicle::GetSingleUse(void) { return (functions->GetVehicleOption(this->nVehicleId, vcmpVehicleOptionSingleUse) == 1 ? true : false); }
 
 EntityVector CVehicle::GetPosition()
 {
@@ -113,9 +116,20 @@ int CVehicle::GetColour2()
 
 bool CVehicle::GetLocked() { return (functions->GetVehicleOption(this->nVehicleId, vcmpVehicleOptionDoorsLocked) == 1 ? true : false); }
 unsigned int CVehicle::GetDamage() { return functions->GetVehicleDamageData(this->nVehicleId); }
+unsigned int CVehicle::GetLightFlags(void) { return functions->GetVehicleLightsData(this->nVehicleId); }
 bool CVehicle::GetAlarm() { return (functions->GetVehicleOption(this->nVehicleId, vcmpVehicleOptionAlarm) == 1 ? true : false); }
 bool CVehicle::GetSiren() { return (functions->GetVehicleOption(this->nVehicleId, vcmpVehicleOptionSiren) == 1 ? true : false); }
 bool CVehicle::GetLights() { return (functions->GetVehicleOption(this->nVehicleId, vcmpVehicleOptionLights) == 1 ? true : false); }
+
+bool CVehicle::GetTaxiLight(void) {
+	return (functions->GetVehicleLightsData(this->nVehicleId) & (1 << 8)) != 0;
+}
+
+void CVehicle::SetTaxiLight(bool bEnabled) {
+	uint32_t dwLightsData = functions->GetVehicleLightsData(this->nVehicleId);
+	dwLightsData |= (1 << 8);
+	functions->SetVehicleLightsData(this->nVehicleId, dwLightsData);
+}
 
 CPlayer * CVehicle::GetDriver()
 {
@@ -298,6 +312,8 @@ void RegisterVehicle()
 		.Prop( _SC("Colour1"), &CVehicle::GetColour1, &CVehicle::SetColour1 )
 		.Prop( _SC("Colour2"), &CVehicle::GetColour2, &CVehicle::SetColour2 )
 		.Prop( _SC("Locked"), &CVehicle::GetLocked, &CVehicle::SetLocked )
+		.Prop( _SC("LightFlags"), &CVehicle::GetLightFlags, &CVehicle::SetLightFlags )
+		.Prop( _SC("TaxiLight"), &CVehicle::GetTaxiLight, &CVehicle::SetTaxiLight )
 		.Prop( _SC("Damage"), &CVehicle::GetDamage, &CVehicle::SetDamage )
 		.Prop( _SC("Alarm"), &CVehicle::GetAlarm, &CVehicle::SetAlarm )
 		.Prop( _SC("Siren"), &CVehicle::GetSiren, &CVehicle::SetSiren )
@@ -312,7 +328,8 @@ void RegisterVehicle()
 		.Prop( _SC("RelativeTurnSpeed"), &CVehicle::GetRelativeTurnSpeed, &CVehicle::SetRelativeTurnSpeed )
 		.Prop( _SC("Radio"), &CVehicle::GetRadio, &CVehicle::SetRadio )
 		.Prop( _SC("RadioLocked"), &CVehicle::GetRadioLockStatus, &CVehicle::SetRadioLocked )
-		.Prop( _SC("IsGhost"), &CVehicle::GetGhost, &CVehicle::SetGhost );
+		.Prop( _SC("IsGhost"), &CVehicle::GetGhost, &CVehicle::SetGhost )
+		.Prop( _SC("SingleUse"), &CVehicle::GetSingleUse, &CVehicle::SetSingleUse );
 
 	// Read-only properties
 	c

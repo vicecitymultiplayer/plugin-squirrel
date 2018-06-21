@@ -169,6 +169,8 @@ extern "C" EXPORT unsigned int VcmpPluginInit( PluginFuncs* givenPluginFuncs, Pl
 	callbacks->OnCheckpointEntered = OnCheckpointEntered;
 	callbacks->OnCheckpointExited = OnCheckpointExited;
 
+	callbacks->OnPlayerModuleList = OnPlayerModuleList;
+
 	// Done!
 	return 1;
 }

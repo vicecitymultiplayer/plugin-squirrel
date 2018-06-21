@@ -133,6 +133,7 @@ class CPlayer
 		void SetMarker( int nDummy );
 		void SetDrunkLevel(int visuals, int handling);
 		bool RedirectPlayerToServer(const char* szIP, unsigned int usPort, const char* szNickname, const char* szServerPass, const char* szUserPass);
+		void RequestModuleList(void);
 
 	public:
 		int nPlayerId;

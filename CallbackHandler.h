@@ -59,6 +59,7 @@ void OnPlayerStateChange   ( int nPlayerId, vcmpPlayerState nOldState, vcmpPlaye
 void OnPlayerOnFireChange  ( int nPlayerId, uint8_t bIsOnFireNow );
 void OnPlayerCrouchChange  ( int nPlayerId, uint8_t bIsCrouchingNow );
 void OnPlayerGameKeysChange ( int nPlayerId, uint32_t nOldKeys, uint32_t nNewKeys );
+void OnPlayerModuleList(int nPlayerId, const char* szModuleList);
 
 void OnCheckpointEntered(int nCheckpointId, int nPlayerId);
 void OnCheckpointExited(int nCheckpointId, int nPlayerId);

@@ -10,11 +10,13 @@ void CPickup::SetAlpha( int alpha ) { functions->SetPickupAlpha( this->nPickupId
 void CPickup::SetAuto( bool automatic ) { functions->SetPickupIsAutomatic( this->nPickupId, automatic ); }
 void CPickup::SetAutoTimer( int timer ) { functions->SetPickupAutoTimer( this->nPickupId, timer ); }
 void CPickup::SetPos( Vector pos ) { functions->SetPickupPosition( this->nPickupId, pos.x, pos.y, pos.z ); }
+void CPickup::SetSingleUse(bool bSingleUse) { functions->SetPickupOption(this->nPickupId, vcmpPickupOption::vcmpPickupOptionSingleUse, bSingleUse ? 1 : 0); }
 
 int CPickup::GetWorld() { return functions->GetPickupWorld( this->nPickupId ); }
 int CPickup::GetAlpha() { return functions->GetPickupAlpha(this->nPickupId); }
 bool CPickup::GetAuto() { return (functions->IsPickupAutomatic(this->nPickupId) == 1 ? true : false); }
 int CPickup::GetAutoTimer() { return functions->GetPickupAutoTimer(this->nPickupId); }
+bool CPickup::GetSingleUse(void) { return (functions->GetPickupOption(this->nPickupId, vcmpPickupOption::vcmpPickupOptionSingleUse) == 1 ? true : false); }
 
 EntityVector CPickup::GetPos()
 {
@@ -47,7 +49,8 @@ void RegisterPickup()
 		.Prop( _SC("Automatic"), &CPickup::GetAuto, &CPickup::SetAuto )
 		.Prop( _SC("Timer"), &CPickup::GetAutoTimer, &CPickup::SetAutoTimer )
 		.Prop( _SC("RespawnTime"), &CPickup::GetAutoTimer, &CPickup::SetAutoTimer )
-		.Prop( _SC("Pos"), &CPickup::GetPos, &CPickup::SetPos );
+		.Prop( _SC("Pos"), &CPickup::GetPos, &CPickup::SetPos )
+		.Prop( _SC("SingleUse"), &CPickup::GetSingleUse, &CPickup::SetSingleUse );
 
 	// Read-only properties
 	c

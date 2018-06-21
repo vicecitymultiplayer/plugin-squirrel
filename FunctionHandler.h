@@ -37,6 +37,7 @@ void SetGamespeed       ( float speed );
 void SetWaterLevel      ( float waterLevel );
 void SetMaxHeight       ( float maxHeight );
 void SetKillDelay       ( int delay );
+void SetFallTimer       ( int delay );
 
 const SQChar * GetServerName     ( void );
 int      GetMaxPlayers     ( void );
@@ -52,6 +53,7 @@ float GetGamespeed  ( void );
 float GetWaterLevel ( void );
 float GetMaxHeight  ( void );
 int   GetKillDelay  ( void );
+int   GetFallTimer  ( void );
 int   GetPlayers    ( void );
 
 void ToggleSyncFrameLimiter ( bool toggle );

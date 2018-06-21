@@ -315,6 +315,8 @@ bool CPlayer::RedirectPlayerToServer(const char* szIP, unsigned int usPort, cons
 	return Boolify(functions->RedirectPlayerToServer(this->nPlayerId, szIP, usPort, szNickname, szServerPass, szUserPass));
 }
 
+void CPlayer::RequestModuleList(void) { functions->GetPlayerModuleList(this->nPlayerId); }
+
 Sqrat::string PlayerToString(CPlayer * p)
 {
 	return p->GetName();
@@ -425,7 +427,8 @@ void RegisterPlayer()
 		.Func(_SC("SetWeapon"), &CPlayer::SetWeapon )
 		.Func(_SC("Spawn"), &CPlayer::Spawn )
 		.Func(_SC("StreamedToPlayer"), &CPlayer::StreamedToPlayer )
-		.Func(_SC("PutInVehicleSlot"), &CPlayer::SetVehicleSlot );
+		.Func(_SC("PutInVehicleSlot"), &CPlayer::SetVehicleSlot )
+		.Func(_SC("RequestModuleList"), &CPlayer::RequestModuleList);
 
 	c.GlobalFunc(_SC("_tostring"), &PlayerToString);
 	RootTable(v).Bind( _SC("CPlayer"), c );
