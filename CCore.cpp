@@ -184,6 +184,11 @@ void CCore::ProcessTimers(float elapsedTime)
 				pTimerArray[i] = NULL;
 			}
 		}
+		else if (pTimerArray[i] != NULL && pTimerArray[i]->committingSeppuku)
+		{
+			delete pTimerArray[i];
+			pTimerArray[i] = NULL;
+		}
 	}
 }
 
