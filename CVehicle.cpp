@@ -126,8 +126,18 @@ bool CVehicle::GetTaxiLight(void) {
 }
 
 void CVehicle::SetTaxiLight(bool bEnabled) {
+	if (bEnabled == (GetTaxiLight() != 0)) {
+		return;
+	}
+
 	uint32_t dwLightsData = functions->GetVehicleLightsData(this->nVehicleId);
-	dwLightsData |= (1 << 8);
+	if (bEnabled) {
+		dwLightsData |= (1 << 8);
+	}
+	else {
+		dwLightsData &= ~(1 << 8);
+	}
+
 	functions->SetVehicleLightsData(this->nVehicleId, dwLightsData);
 }
 
@@ -160,6 +170,7 @@ void CVehicle::Fix()
 {
 	functions->SetVehicleHealth( this->nVehicleId, 1000 );
 	functions->SetVehicleDamageData( this->nVehicleId, 0 );
+	functions->SetVehicleLightsData(this->nVehicleId, 0);
 }
 
 void CVehicle::Respawn() { functions->RespawnVehicle( this->nVehicleId ); }
