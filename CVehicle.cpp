@@ -170,7 +170,10 @@ void CVehicle::Fix()
 {
 	functions->SetVehicleHealth( this->nVehicleId, 1000 );
 	functions->SetVehicleDamageData( this->nVehicleId, 0 );
-	functions->SetVehicleLightsData(this->nVehicleId, 0);
+
+	uint32_t dwLightsData = functions->GetVehicleLightsData(this->nVehicleId);
+	dwLightsData &= 0xFFFFFF00;
+	functions->SetVehicleLightsData(this->nVehicleId, dwLightsData);
 }
 
 void CVehicle::Respawn() { functions->RespawnVehicle( this->nVehicleId ); }
