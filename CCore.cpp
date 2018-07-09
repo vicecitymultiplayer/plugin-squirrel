@@ -38,6 +38,9 @@ CCore::CCore()
 
 CCore::~CCore()
 {
+    DropAllTimers();
+    ProcessTimers(0.0f);
+
 	if( script != NULL )
 	{
 		delete script;
