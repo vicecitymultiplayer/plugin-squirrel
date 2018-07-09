@@ -3,7 +3,7 @@
 #include "main.h"
 
 void CObject::SetWorld( int world ) { functions->SetObjectWorld( this->nObjectId, world ); }
-void CObject::SetPos( Vector pos ) { functions->SetObjectPos( this->nObjectId, pos.x, pos.y, pos.z ); }
+void CObject::SetPos( Vector pos ) { functions->SetObjectPosition( this->nObjectId, pos.x, pos.y, pos.z ); }
 
 int CObject::GetModel() { return functions->GetObjectModel( this->nObjectId ); }
 int CObject::GetAlpha() { return functions->GetObjectAlpha(this->nObjectId); }
@@ -12,7 +12,7 @@ int CObject::GetWorld() { return functions->GetObjectWorld(this->nObjectId); }
 EntityVector CObject::GetPos()
 {
 	float x, y, z;
-	functions->GetObjectPos( this->nObjectId, &x, &y, &z );
+	functions->GetObjectPosition( this->nObjectId, &x, &y, &z );
 
 	return EntityVector(this->nObjectId, ENTITY_OBJECT, OBJVECTOR_POS, x, y, z);
 }
@@ -20,7 +20,7 @@ EntityVector CObject::GetPos()
 EntityQuaternion CObject::GetRotation()
 {
 	float w, x, y, z;
-	functions->GetObjectRot( this->nObjectId, &x, &y, &z, &w );
+	functions->GetObjectRotation( this->nObjectId, &x, &y, &z, &w );
 
 	return EntityQuaternion(this->nObjectId, ENTITY_OBJECT, -1, x, y, z, w);
 }
@@ -28,7 +28,7 @@ EntityQuaternion CObject::GetRotation()
 EntityVector CObject::GetRotationEuler()
 {
 	float x, y, z;
-	functions->GetObjectRotEuler( this->nObjectId, &x, &y, &z );
+	functions->GetObjectRotationEuler( this->nObjectId, &x, &y, &z );
 
 	return EntityVector(this->nObjectId, ENTITY_OBJECT, OBJVECTOR_ROTATION, x, y, z);
 }
@@ -51,22 +51,22 @@ void CObject::MoveBy( Vector offset, int time )
 
 void CObject::RotateTo( Quaternion rotation, int time )
 {
-	functions->RotObjectTo( this->nObjectId, rotation.x, rotation.y, rotation.z, rotation.w, time );
+	functions->RotateObjectTo( this->nObjectId, rotation.x, rotation.y, rotation.z, rotation.w, time );
 }
 
 void CObject::RotateBy( Quaternion rotOffset, int time )
 {
-	functions->RotObjectBy( this->nObjectId, rotOffset.x, rotOffset.y, rotOffset.z, rotOffset.w, time );
+	functions->RotateObjectBy( this->nObjectId, rotOffset.x, rotOffset.y, rotOffset.z, rotOffset.w, time );
 }
 
 void CObject::RotateToEuler( Vector rotation, int time )
 {
-	functions->RotObjectToEuler( this->nObjectId, rotation.x, rotation.y, rotation.z, time );
+	functions->RotateObjectToEuler( this->nObjectId, rotation.x, rotation.y, rotation.z, time );
 }
 
 void CObject::RotateByEuler( Vector rotOffset, int time )
 {
-	functions->RotObjectByEuler( this->nObjectId, rotOffset.x, rotOffset.y, rotOffset.z, time );
+	functions->RotateObjectByEuler( this->nObjectId, rotOffset.x, rotOffset.y, rotOffset.z, time );
 }
 
 void CObject::SetAlpha( int alpha, int fadeTime ) { functions->SetObjectAlpha( this->nObjectId, alpha, fadeTime ); }
@@ -79,10 +79,10 @@ bool CObject::StreamedToPlayer( CPlayer * player )
 	return false;
 }
 
-void CObject::SetReportingShots( bool toReport ) { functions->SetObjectShotReport( this->nObjectId, toReport ); }
-void CObject::SetReportingBumps( bool toReport ) { functions->SetObjectBumpReport( this->nObjectId, toReport ); }
-bool CObject::GetReportingShots() { return ( functions->IsObjectShotReport( this->nObjectId ) == 1 ? true : false ); }
-bool CObject::GetReportingBumps() { return ( functions->IsObjectBumpReport( this->nObjectId ) == 1 ? true : false ); }
+void CObject::SetReportingShots( bool toReport ) { functions->SetObjectShotReportEnabled( this->nObjectId, toReport ); }
+void CObject::SetReportingBumps( bool toReport ) { functions->SetObjectTouchedReportEnabled( this->nObjectId, toReport ); }
+bool CObject::GetReportingShots() { return ( functions->IsObjectShotReportEnabled( this->nObjectId ) == 1 ? true : false ); }
+bool CObject::GetReportingBumps() { return ( functions->IsObjectTouchedReportEnabled( this->nObjectId ) == 1 ? true : false ); }
 
 void RegisterObject()
 {

@@ -4,10 +4,7 @@
 #include "CTimer.h"
 #include "CVehicle.h"
 #include "CObject.h"
-#include "CSprite.h"
-#include "CTextdraw.h"
 #include "CCheckpoint.h"
-#include "CSphere.h"
 #include "ConsoleUtils.h"
 
 #include <sqstdio.h>
@@ -69,21 +66,18 @@ class CCore
 		CPlayer * AllocatePlayer(int gPlayerId);
 		CVehicle * AllocateVehicle(int gVehicleId, bool isOurs = true);
 		CCheckpoint * AllocateCheckpoint(int gCheckpointId, bool isOurs = true);
-		CSphere * AllocateSphere(int gSphereId, bool isOurs = true);
 
 		CObject * RetrieveObject(int gObjectId);
 		CPickup * RetrievePickup(int gPickupId);
 		CPlayer * RetrievePlayer(int gPlayerId);
 		CVehicle * RetrieveVehicle(int gVehicleId);
 		CCheckpoint * RetrieveCheckpoint(int gCheckpointId);
-		CSphere * RetrieveSphere(int gSphereId);
 
 		void DereferenceObject(int gObjectId);
 		void DereferencePickup(int gPickupId);
 		void DereferencePlayer(int gPlayerId);
 		void DereferenceVehicle(int gVehicleId);
 		void DereferenceCheckpoint(int gCheckpointId);
-		void DereferenceSphere(int gSphereId);
 
 	private:
 		// Constructor
@@ -104,7 +98,6 @@ class CCore
 		std::array<CObject *, MAX_OBJECTS> objectMap;
 		std::array<CVehicle *, MAX_VEHICLES + 1> vehicleMap;
 		std::array<CCheckpoint*, MAX_CHECKPOINTS> checkpointMap;
-		std::array<CSphere*, MAX_SPHERES> sphereMap;
 
 		// Our list of timers.
 		static const int maxTimers = 255;

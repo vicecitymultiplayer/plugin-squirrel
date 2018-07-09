@@ -8,23 +8,21 @@ extern CCore * pCore;
 
 void CVehicle::SetWorld( int world ) { functions->SetVehicleWorld( this->nVehicleId, world ); }
 void CVehicle::SetImmunity( int immunity ) { functions->SetVehicleImmunityFlags( this->nVehicleId, immunity ); }
-void CVehicle::SetPosition( Vector pos ) { functions->SetVehiclePos( this->nVehicleId, pos.x, pos.y, pos.z, 0 ); }
+void CVehicle::SetPosition( Vector pos ) { functions->SetVehiclePosition( this->nVehicleId, pos.x, pos.y, pos.z, 0 ); }
 
 void CVehicle::SetSpawnPos( Vector pos )
 {
-	float zRot;
-	functions->GetVehicleSpawnPos( this->nVehicleId, NULL, NULL, NULL, &zRot );
-	functions->SetVehicleSpawnPos( this->nVehicleId, pos.x, pos.y, pos.z, zRot );
+	functions->SetVehicleSpawnPosition( this->nVehicleId, pos.x, pos.y, pos.z );
 }
 
 void CVehicle::SetSpawnAngle(Quaternion angle)
 {
-	functions->SetVehicleSpawnRot(this->nVehicleId, angle.x, angle.y, angle.z, angle.w);
+	functions->SetVehicleSpawnRotation(this->nVehicleId, angle.x, angle.y, angle.z, angle.w);
 }
 
 void CVehicle::SetSpawnAngleEuler(Vector angle)
 {
-	functions->SetVehicleSpawnRotEuler(this->nVehicleId, angle.x, angle.y, angle.z);
+	functions->SetVehicleSpawnRotationEuler(this->nVehicleId, angle.x, angle.y, angle.z);
 }
 
 void CVehicle::SetIdleRespawnTimer( unsigned int time ) { functions->SetVehicleIdleRespawnTimer( this->nVehicleId, time ); }
@@ -44,20 +42,23 @@ void CVehicle::SetColour2( int colour2 )
 	functions->SetVehicleColour( this->nVehicleId, col1, colour2 );
 }
 
-void CVehicle::SetLocked( bool isLocked ) { functions->SetVehicleDoorsLocked( this->nVehicleId, isLocked ); }
+void CVehicle::SetLocked( bool isLocked ) { functions->SetVehicleOption( this->nVehicleId, vcmpVehicleOptionDoorsLocked, isLocked ); }
+void CVehicle::SetLightFlags(unsigned int flags) { functions->SetVehicleLightsData(this->nVehicleId, flags); }
 void CVehicle::SetDamage( unsigned int damage ) { functions->SetVehicleDamageData( this->nVehicleId, damage ); }
-void CVehicle::SetAlarm( bool isAlarmOn ) { functions->SetVehicleAlarm( this->nVehicleId, isAlarmOn ); }
-void CVehicle::SetSiren(bool isSirenOn) { functions->SetVehicleSiren(this->nVehicleId, isSirenOn); }
-void CVehicle::SetLights( bool lightsOn ) { functions->SetVehicleLights( this->nVehicleId, lightsOn ); }
+void CVehicle::SetAlarm( bool isAlarmOn ) { functions->SetVehicleOption( this->nVehicleId, vcmpVehicleOptionAlarm, isAlarmOn ); }
+void CVehicle::SetSiren(bool isSirenOn) { functions->SetVehicleOption(this->nVehicleId, vcmpVehicleOptionSiren, isSirenOn); }
+void CVehicle::SetLights( bool lightsOn ) { functions->SetVehicleOption( this->nVehicleId, vcmpVehicleOptionLights, lightsOn ); }
+void CVehicle::SetSingleUse(bool bSingleUse) { functions->SetVehicleOption(this->nVehicleId, vcmpVehicleOptionSingleUse, bSingleUse); }
 
 int CVehicle::GetWorld() { return functions->GetVehicleWorld(this->nVehicleId); }
 int CVehicle::GetModel() { return functions->GetVehicleModel(this->nVehicleId); }
 int CVehicle::GetImmunity() { return functions->GetVehicleImmunityFlags(this->nVehicleId); }
+bool CVehicle::GetSingleUse(void) { return (functions->GetVehicleOption(this->nVehicleId, vcmpVehicleOptionSingleUse) == 1 ? true : false); }
 
 EntityVector CVehicle::GetPosition()
 {
 	float x, y, z;
-	functions->GetVehiclePos( this->nVehicleId, &x, &y, &z );
+	functions->GetVehiclePosition( this->nVehicleId, &x, &y, &z );
 
 	return EntityVector( this->nVehicleId, ENTITY_VEHICLE, VEHVECTOR_POS, x, y, z );
 }
@@ -65,7 +66,7 @@ EntityVector CVehicle::GetPosition()
 EntityVector CVehicle::GetSpawnPos()
 {
 	float x, y, z;
-	functions->GetVehicleSpawnPos( this->nVehicleId, &x, &y, &z, NULL );
+	functions->GetVehicleSpawnPosition( this->nVehicleId, &x, &y, &z );
 
 	return EntityVector( this->nVehicleId, ENTITY_VEHICLE, VEHVECTOR_SPAWNPOS, x, y, z );
 }
@@ -73,7 +74,7 @@ EntityVector CVehicle::GetSpawnPos()
 EntityQuaternion CVehicle::GetSpawnAngle()
 {
 	float x, y, z, w;
-	functions->GetVehicleSpawnRot(this->nVehicleId, &x, &y, &z, &w);
+	functions->GetVehicleSpawnRotation(this->nVehicleId, &x, &y, &z, &w);
 
 	return EntityQuaternion(this->nVehicleId, ENTITY_VEHICLE, VEHQUAT_SPAWNANGLE, x, y, z, w);
 }
@@ -81,7 +82,7 @@ EntityQuaternion CVehicle::GetSpawnAngle()
 EntityVector CVehicle::GetSpawnAngleEuler()
 {
 	float x, y, z;
-	functions->GetVehicleSpawnRotEuler(this->nVehicleId, &x, &y, &z);
+	functions->GetVehicleSpawnRotationEuler(this->nVehicleId, &x, &y, &z);
 
 	return EntityVector(this->nVehicleId, ENTITY_VEHICLE, VEHVECTOR_SPAWNANGLE, x, y, z);
 }
@@ -113,11 +114,32 @@ int CVehicle::GetColour2()
 	return col2;
 }
 
-bool CVehicle::GetLocked() { return (functions->GetVehicleDoorsLocked(this->nVehicleId) == 1 ? true : false); }
+bool CVehicle::GetLocked() { return (functions->GetVehicleOption(this->nVehicleId, vcmpVehicleOptionDoorsLocked) == 1 ? true : false); }
 unsigned int CVehicle::GetDamage() { return functions->GetVehicleDamageData(this->nVehicleId); }
-bool CVehicle::GetAlarm() { return (functions->GetVehicleAlarm(this->nVehicleId) == 1 ? true : false); }
-bool CVehicle::GetSiren() { return (functions->GetVehicleSiren(this->nVehicleId) == 1 ? true : false); }
-bool CVehicle::GetLights() { return (functions->GetVehicleLights(this->nVehicleId) == 1 ? true : false); }
+unsigned int CVehicle::GetLightFlags(void) { return functions->GetVehicleLightsData(this->nVehicleId); }
+bool CVehicle::GetAlarm() { return (functions->GetVehicleOption(this->nVehicleId, vcmpVehicleOptionAlarm) == 1 ? true : false); }
+bool CVehicle::GetSiren() { return (functions->GetVehicleOption(this->nVehicleId, vcmpVehicleOptionSiren) == 1 ? true : false); }
+bool CVehicle::GetLights() { return (functions->GetVehicleOption(this->nVehicleId, vcmpVehicleOptionLights) == 1 ? true : false); }
+
+bool CVehicle::GetTaxiLight(void) {
+	return (functions->GetVehicleLightsData(this->nVehicleId) & (1 << 8)) != 0;
+}
+
+void CVehicle::SetTaxiLight(bool bEnabled) {
+	if (bEnabled == (GetTaxiLight() != 0)) {
+		return;
+	}
+
+	uint32_t dwLightsData = functions->GetVehicleLightsData(this->nVehicleId);
+	if (bEnabled) {
+		dwLightsData |= (1 << 8);
+	}
+	else {
+		dwLightsData &= ~(1 << 8);
+	}
+
+	functions->SetVehicleLightsData(this->nVehicleId, dwLightsData);
+}
 
 CPlayer * CVehicle::GetDriver()
 {
@@ -126,7 +148,7 @@ CPlayer * CVehicle::GetDriver()
 	{
 		if( functions->IsPlayerConnected( i ) )
 		{
-			if( functions->GetPlayerVehicleID( i ) == this->nVehicleId
+			if( functions->GetPlayerVehicleId( i ) == this->nVehicleId
 				&& functions->GetPlayerInVehicleSlot(i) == 0 )
 			{
 				driver = i;
@@ -148,10 +170,14 @@ void CVehicle::Fix()
 {
 	functions->SetVehicleHealth( this->nVehicleId, 1000 );
 	functions->SetVehicleDamageData( this->nVehicleId, 0 );
+
+	uint32_t dwLightsData = functions->GetVehicleLightsData(this->nVehicleId);
+	dwLightsData &= 0xFFFFFF00;
+	functions->SetVehicleLightsData(this->nVehicleId, dwLightsData);
 }
 
 void CVehicle::Respawn() { functions->RespawnVehicle( this->nVehicleId ); }
-void CVehicle::Kill() { functions->KillVehicle( this->nVehicleId ); }
+void CVehicle::Kill() { functions->ExplodeVehicle( this->nVehicleId ); }
 int CVehicle::GetPartStatus( int part ) { return functions->GetVehiclePartStatus( this->nVehicleId, part ); }
 void CVehicle::SetPartStatus( int part, int status ) { functions->SetVehiclePartStatus( this->nVehicleId, part, status ); }
 int CVehicle::GetTyreStatus( int tyre ) { return functions->GetVehicleTyreStatus( this->nVehicleId, tyre ); }
@@ -185,7 +211,7 @@ bool CVehicle::IsHandlingSet( int rule ) { return ( functions->ExistsInstHandlin
 EntityQuaternion CVehicle::GetRotation()
 {
 	float w, x, y, z;
-	functions->GetVehicleRot( this->nVehicleId, &x, &y, &z, &w );
+	functions->GetVehicleRotation( this->nVehicleId, &x, &y, &z, &w );
 
 	return EntityQuaternion(this->nVehicleId, ENTITY_VEHICLE, VEHQUAT_ANGLE, x, y, z, w);
 }
@@ -193,7 +219,7 @@ EntityQuaternion CVehicle::GetRotation()
 EntityVector CVehicle::GetEulerRotation()
 {
 	float x, y, z;
-	functions->GetVehicleRotEuler( this->nVehicleId, &x, &y, &z );
+	functions->GetVehicleRotationEuler( this->nVehicleId, &x, &y, &z );
 
 	return EntityVector( this->nVehicleId, ENTITY_VEHICLE, VEHVECTOR_ANGLE, x, y, z );
 }
@@ -201,7 +227,7 @@ EntityVector CVehicle::GetEulerRotation()
 EntityVector CVehicle::GetSpeed()
 {
 	float x, y, z;
-	functions->GetVehicleSpeed( this->nVehicleId, &x, &y, &z );
+	functions->GetVehicleSpeed( this->nVehicleId, &x, &y, &z, false );
 
 	return EntityVector( this->nVehicleId, ENTITY_VEHICLE, VEHVECTOR_SPEED, x, y, z );
 }
@@ -209,7 +235,7 @@ EntityVector CVehicle::GetSpeed()
 EntityVector CVehicle::GetRelativeSpeed()
 {
 	float x, y, z;
-	functions->GetVehicleRelSpeed( this->nVehicleId, &x, &y, &z );
+	functions->GetVehicleSpeed( this->nVehicleId, &x, &y, &z, true );
 
 	return EntityVector( this->nVehicleId, ENTITY_VEHICLE, VEHVECTOR_RELSPEED, x, y, z );
 }
@@ -217,7 +243,7 @@ EntityVector CVehicle::GetRelativeSpeed()
 EntityVector CVehicle::GetTurnSpeed()
 {
 	float x, y, z;
-	functions->GetVehicleTurnSpeed( this->nVehicleId, &x, &y, &z );
+	functions->GetVehicleTurnSpeed( this->nVehicleId, &x, &y, &z, false );
 
 	return EntityVector( this->nVehicleId, ENTITY_VEHICLE, VEHVECTOR_TURNSPEED, x, y, z );
 }
@@ -225,17 +251,17 @@ EntityVector CVehicle::GetTurnSpeed()
 EntityVector CVehicle::GetRelativeTurnSpeed()
 {
 	float x, y, z;
-	functions->GetVehicleRelTurnSpeed( this->nVehicleId, &x, &y, &z );
+	functions->GetVehicleTurnSpeed( this->nVehicleId, &x, &y, &z, true );
 
 	return EntityVector( this->nVehicleId, ENTITY_VEHICLE, VEHVECTOR_RELTURNSPEED, x, y, z );
 }
 
-void CVehicle::SetRotation( Quaternion rotation ) { functions->SetVehicleRot( this->nVehicleId, rotation.x, rotation.y, rotation.z, rotation.w ); }
-void CVehicle::SetEulerRotation( Vector rotation ) { functions->SetVehicleRotEuler( this->nVehicleId, rotation.x, rotation.y, rotation.z ); }
-void CVehicle::SetSpeed( Vector speed ) { functions->SetVehicleSpeed( this->nVehicleId, speed.x, speed.y, speed.z ); }
-void CVehicle::SetRelativeSpeed( Vector speed ) { functions->SetVehicleRelSpeed( this->nVehicleId, speed.x, speed.y, speed.z ); }
-void CVehicle::SetTurnSpeed( Vector speed ) { functions->SetVehicleTurnSpeed( this->nVehicleId, speed.x, speed.y, speed.z ); }
-void CVehicle::SetRelativeTurnSpeed( Vector speed ) { functions->SetVehicleRelTurnSpeed( this->nVehicleId, speed.x, speed.y, speed.z ); }
+void CVehicle::SetRotation( Quaternion rotation ) { functions->SetVehicleRotation( this->nVehicleId, rotation.x, rotation.y, rotation.z, rotation.w ); }
+void CVehicle::SetEulerRotation( Vector rotation ) { functions->SetVehicleRotationEuler( this->nVehicleId, rotation.x, rotation.y, rotation.z ); }
+void CVehicle::SetSpeed( Vector speed ) { functions->SetVehicleSpeed( this->nVehicleId, speed.x, speed.y, speed.z, false, false ); }
+void CVehicle::SetRelativeSpeed( Vector speed ) { functions->SetVehicleSpeed( this->nVehicleId, speed.x, speed.y, speed.z, false, true ); }
+void CVehicle::SetTurnSpeed( Vector speed ) { functions->SetVehicleTurnSpeed( this->nVehicleId, speed.x, speed.y, speed.z, false, false ); }
+void CVehicle::SetRelativeTurnSpeed( Vector speed ) { functions->SetVehicleTurnSpeed( this->nVehicleId, speed.x, speed.y, speed.z, false, true ); }
 void CVehicle::SetFlatTyres( bool isFlat )
 {
 	if( isFlat )
@@ -256,32 +282,32 @@ void CVehicle::SetFlatTyres( bool isFlat )
 
 void CVehicle::AddVehicleSpeed( Vector speed )
 {
-	functions->AddVehicleSpeed( this->nVehicleId, speed.x, speed.y, speed.z );
+	functions->SetVehicleSpeed( this->nVehicleId, speed.x, speed.y, speed.z, true, false );
 }
 
 void CVehicle::AddVehicleRelSpeed( Vector speed )
 {
-	functions->AddVehicleRelSpeed( this->nVehicleId, speed.x, speed.y, speed.z );
+	functions->SetVehicleSpeed( this->nVehicleId, speed.x, speed.y, speed.z, true, true );
 }
 
 void CVehicle::AddVehicleTurnSpeed( Vector speed )
 {
-	functions->AddVehicleTurnSpeed( this->nVehicleId, speed.x, speed.y, speed.z );
+	functions->SetVehicleTurnSpeed( this->nVehicleId, speed.x, speed.y, speed.z, true, false );
 }
 
 void CVehicle::AddVehicleRelTurnSpeed( Vector speed )
 {
-	functions->AddVehicleRelTurnSpeed( this->nVehicleId, speed.x, speed.y, speed.z );
+	functions->SetVehicleTurnSpeed( this->nVehicleId, speed.x, speed.y, speed.z, true, true );
 }
 
 int CVehicle::GetRadio() { return functions->GetVehicleRadio(this->nVehicleId); }
 void CVehicle::SetRadio(const int nRadioId) { functions->SetVehicleRadio(this->nVehicleId, nRadioId); }
 
-bool CVehicle::GetRadioLockStatus() { return functions->IsVehicleRadioLocked(this->nVehicleId) == 1; }
-void CVehicle::SetRadioLocked(const bool isLocked) { functions->SetVehicleRadioLocked(this->nVehicleId, isLocked); }
+bool CVehicle::GetRadioLockStatus() { return functions->GetVehicleOption(this->nVehicleId, vcmpVehicleOptionRadioLocked) == 1; }
+void CVehicle::SetRadioLocked(const bool isLocked) { functions->SetVehicleOption(this->nVehicleId, vcmpVehicleOptionRadioLocked, isLocked); }
 
-bool CVehicle::GetGhost() { return functions->GetVehicleGhostState(this->nVehicleId) == 1; }
-void CVehicle::SetGhost(const bool isGhost) { functions->SetVehicleGhostState(this->nVehicleId, isGhost); }
+bool CVehicle::GetGhost() { return functions->GetVehicleOption(this->nVehicleId, vcmpVehicleOptionGhost) == 1; }
+void CVehicle::SetGhost(const bool isGhost) { functions->SetVehicleOption(this->nVehicleId, vcmpVehicleOptionGhost, isGhost); }
 
 void RegisterVehicle()
 {
@@ -300,6 +326,8 @@ void RegisterVehicle()
 		.Prop( _SC("Colour1"), &CVehicle::GetColour1, &CVehicle::SetColour1 )
 		.Prop( _SC("Colour2"), &CVehicle::GetColour2, &CVehicle::SetColour2 )
 		.Prop( _SC("Locked"), &CVehicle::GetLocked, &CVehicle::SetLocked )
+		.Prop( _SC("LightFlags"), &CVehicle::GetLightFlags, &CVehicle::SetLightFlags )
+		.Prop( _SC("TaxiLight"), &CVehicle::GetTaxiLight, &CVehicle::SetTaxiLight )
 		.Prop( _SC("Damage"), &CVehicle::GetDamage, &CVehicle::SetDamage )
 		.Prop( _SC("Alarm"), &CVehicle::GetAlarm, &CVehicle::SetAlarm )
 		.Prop( _SC("Siren"), &CVehicle::GetSiren, &CVehicle::SetSiren )
@@ -314,7 +342,8 @@ void RegisterVehicle()
 		.Prop( _SC("RelativeTurnSpeed"), &CVehicle::GetRelativeTurnSpeed, &CVehicle::SetRelativeTurnSpeed )
 		.Prop( _SC("Radio"), &CVehicle::GetRadio, &CVehicle::SetRadio )
 		.Prop( _SC("RadioLocked"), &CVehicle::GetRadioLockStatus, &CVehicle::SetRadioLocked )
-		.Prop( _SC("IsGhost"), &CVehicle::GetGhost, &CVehicle::SetGhost );
+		.Prop( _SC("IsGhost"), &CVehicle::GetGhost, &CVehicle::SetGhost )
+		.Prop( _SC("SingleUse"), &CVehicle::GetSingleUse, &CVehicle::SetSingleUse );
 
 	// Read-only properties
 	c

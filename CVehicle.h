@@ -20,6 +20,7 @@ class CVehicle
 		void SetColour2( int colour2 );
 		void SetLocked( bool isLocked );
 		void SetDamage( unsigned int damage );
+		void SetLightFlags( unsigned int flags );
 		void SetAlarm(bool isAlarmOn);
 		void SetSiren(bool isSirenOn);
 		void SetLights( bool lightsOn );
@@ -32,6 +33,8 @@ class CVehicle
 		void SetRadio( int nRadioId );
 		void SetRadioLocked( bool isRadioLocked );
 		void SetGhost( bool isGhost );
+		void SetSingleUse( bool isSingleUse );
+		void SetTaxiLight(bool hasTaxiLight);
 
 	public:
 		int GetWorld();
@@ -47,6 +50,7 @@ class CVehicle
 		int GetColour2();
 		bool GetLocked();
 		unsigned int GetDamage();
+		unsigned int GetLightFlags();
 		bool GetAlarm();
 		bool GetSiren();
 		bool GetLights();
@@ -65,6 +69,8 @@ class CVehicle
 		bool GetRadioLockStatus();
 		bool GetGhost();
 		Vector GetTurretRotation();
+		bool GetSingleUse(void);
+		bool GetTaxiLight(void);
 
 	public:
 		void Delete();

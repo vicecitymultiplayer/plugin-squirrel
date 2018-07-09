@@ -8,10 +8,7 @@
 #include "CPlayer.h"
 #include "CTimer.h"
 #include "CVehicle.h"
-#include "CSprite.h"
-#include "CTextdraw.h"
 #include "CCheckpoint.h"
-#include "CSphere.h"
 
 #pragma once
 
@@ -40,6 +37,7 @@ void SetGamespeed       ( float speed );
 void SetWaterLevel      ( float waterLevel );
 void SetMaxHeight       ( float maxHeight );
 void SetKillDelay       ( int delay );
+void SetFallTimer       ( int delay );
 
 const SQChar * GetServerName     ( void );
 int      GetMaxPlayers     ( void );
@@ -55,6 +53,7 @@ float GetGamespeed  ( void );
 float GetWaterLevel ( void );
 float GetMaxHeight  ( void );
 int   GetKillDelay  ( void );
+int   GetFallTimer  ( void );
 int   GetPlayers    ( void );
 
 void ToggleSyncFrameLimiter ( bool toggle );
@@ -76,6 +75,8 @@ void ToggleDeathMessages    ( bool toggle );
 void ToggleChatTagDefault   ( bool toggle );
 void ToggleShowOnlyTeamMarkers(bool toggle);
 void ToggleWallglitch       ( bool toggle );
+void ToggleDisableBackfaceCulling ( bool toggle );
+void ToggleDisableHeliBladeDamage ( bool toggle );
 
 bool EnabledSyncFrameLimiter ( void );
 bool EnabledFrameLimiter     ( void );
@@ -96,6 +97,8 @@ bool EnabledDeathMessages    ( void );
 bool EnabledChatTagDefault   ( void );
 bool EnabledShowOnlyTeamMarkers(void);
 bool EnabledWallglitch       ( void );
+bool EnabledDisableBackfaceCulling ( void );
+bool EnabledDisableHeliBladeDamage ( void );
 
 int CreateBlip( int world, Vector * pos, int scale, RGBa color, int nSpriteId );
 void DestroyBlip( int blipID );
@@ -147,10 +150,7 @@ CVehicle * CreateVehicleCompat ( int model, Vector * pos, float angle, int col1,
 CVehicle * CreateVehicle ( int model, int world, Vector * pos, float angle, int col1, int col2 );
 CPickup * CreatePickup   ( int model, int world, int quantity, Vector * pos, int alpha, bool isAuto );
 CObject * CreateObject   ( int model, int world, Vector * pos, int alpha );
-CSprite * CreateSprite   ( const SQChar * filename, uint16_t x, uint16_t y, uint16_t rX, uint16_t rY, float rot, uint16_t alpha );
-CTextdraw * CreateTextdraw ( const SQChar * text, int x, int y, unsigned int colour );
-CCheckpoint * CreateCheckpoint(CPlayer* pPlayer, int world, Vector * pos, ARGB * color, float radius);
-CSphere * CreateSphere(CPlayer* pPlayer, int world, Vector * pos, cRGB * color, float radius);
+CCheckpoint * CreateCheckpoint(CPlayer* pPlayer, int world, bool isSphere, Vector * pos, ARGB * color, float radius);
 
 CVehicle * CreateVehicleExpanded ( int model, int world, float x, float y, float z, float angle, int col1, int col2 );
 CPickup * CreatePickupExpanded   ( int model, int world, int quantity, float x, float y, float z, int alpha, bool isAuto );
@@ -160,7 +160,6 @@ CPickup * FindPickup   ( int id );
 CObject * FindObject   ( int id );
 CVehicle * FindVehicle ( int id );
 CCheckpoint * FindCheckpoint(int id);
-CSphere * FindSphere(int id);
 
 void SetWorldBounds   ( float maxX, float minX, float maxY, float minY );
 Bounds GetWorldBounds ( void );
@@ -186,7 +185,7 @@ double GetWeaponDataValue ( int weaponID, int fieldID );
 bool ResetWeaponDataValue ( int weaponID, int fieldID );
 bool IsWeaponDataModified ( int weaponID, int fieldID );
 bool ResetWeaponData      ( int weaponID );
-bool ResetAllWeaponData   ( void );
+void ResetAllWeaponData   ( void );
 
 int BindKey( bool onKeyDown, int key1, int key2 = 0, int key3 = 0 );
 bool RemoveKeybind( int nKeybindId );

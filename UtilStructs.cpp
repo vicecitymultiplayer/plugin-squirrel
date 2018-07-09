@@ -66,7 +66,7 @@ void EntityVector::SetX(float fX)
 		case ENTITY_PLAYER:
 			switch (m_nFlags)
 			{
-				case PLRVECTOR_POS: functions->SetPlayerPos(this->m_nEntityId, fX, this->y, this->z); break;
+				case PLRVECTOR_POS: functions->SetPlayerPosition(this->m_nEntityId, fX, this->y, this->z); break;
 				case PLRVECTOR_SPEED: functions->SetPlayerSpeed(this->m_nEntityId, fX, this->y, this->z); break;
 			}
 			break;
@@ -74,28 +74,27 @@ void EntityVector::SetX(float fX)
 		case ENTITY_VEHICLE:
 			switch (m_nFlags)
 			{
-				case VEHVECTOR_POS: functions->SetVehiclePos(this->m_nEntityId, fX, this->y, this->z, 0); break;
-				case VEHVECTOR_SPAWNPOS: functions->SetVehicleSpawnPos(this->m_nEntityId, fX, this->y, this->z, 0.0f); break;
-				case VEHVECTOR_ANGLE: functions->SetVehicleRotEuler(this->m_nEntityId, fX, this->y, this->z); break;
-				case VEHVECTOR_SPAWNANGLE: functions->SetVehicleSpawnRotEuler(this->m_nEntityId, fX, this->y, this->z); break;
-				case VEHVECTOR_SPEED: functions->SetVehicleSpeed(this->m_nEntityId, fX, this->y, this->z); break;
-				case VEHVECTOR_RELSPEED: functions->SetVehicleRelSpeed(this->m_nEntityId, fX, this->y, this->z); break;
-				case VEHVECTOR_TURNSPEED: functions->SetVehicleTurnSpeed(this->m_nEntityId, fX, this->y, this->z); break;
-				case VEHVECTOR_RELTURNSPEED: functions->SetVehicleRelTurnSpeed(this->m_nEntityId, fX, this->y, this->z); break;
+				case VEHVECTOR_POS: functions->SetVehiclePosition(this->m_nEntityId, fX, this->y, this->z, 0); break;
+				case VEHVECTOR_SPAWNPOS: functions->SetVehicleSpawnPosition(this->m_nEntityId, fX, this->y, this->z); break;
+				case VEHVECTOR_ANGLE: functions->SetVehicleRotationEuler(this->m_nEntityId, fX, this->y, this->z); break;
+				case VEHVECTOR_SPAWNANGLE: functions->SetVehicleSpawnRotationEuler(this->m_nEntityId, fX, this->y, this->z); break;
+				case VEHVECTOR_SPEED: functions->SetVehicleSpeed(this->m_nEntityId, fX, this->y, this->z, false, false); break;
+				case VEHVECTOR_RELSPEED: functions->SetVehicleSpeed(this->m_nEntityId, fX, this->y, this->z, false, true); break;
+				case VEHVECTOR_TURNSPEED: functions->SetVehicleTurnSpeed(this->m_nEntityId, fX, this->y, this->z, false, false); break;
+				case VEHVECTOR_RELTURNSPEED: functions->SetVehicleTurnSpeed(this->m_nEntityId, fX, this->y, this->z, false, true); break;
 			}
 			break;
 
-		case ENTITY_PICKUP: functions->PickupSetPos(this->m_nEntityId, fX, this->y, this->z); break;
+		case ENTITY_PICKUP: functions->SetPickupPosition(this->m_nEntityId, fX, this->y, this->z); break;
 		case ENTITY_OBJECT:
 			switch (m_nFlags)
 			{
-				case OBJVECTOR_POS: functions->SetObjectPos(this->m_nEntityId, fX, this->y, this->z); break;
-				case OBJVECTOR_ROTATION: functions->RotObjectToEuler(this->m_nEntityId, fX, this->y, this->z, 0); break;
+				case OBJVECTOR_POS: functions->SetObjectPosition(this->m_nEntityId, fX, this->y, this->z); break;
+				case OBJVECTOR_ROTATION: functions->RotateObjectToEuler(this->m_nEntityId, fX, this->y, this->z, 0); break;
 			}
 			break;
 
-		case ENTITY_CHECKPOINT: functions->SetCheckpointPos(this->m_nEntityId, fX, this->y, this->z); break;
-		case ENTITY_SPHERE: functions->SetSpherePos(this->m_nEntityId, fX, this->y, this->z); break;
+		case ENTITY_CHECKPOINT: functions->SetCheckPointPosition(this->m_nEntityId, fX, this->y, this->z); break;
 	}
 }
 
@@ -107,7 +106,7 @@ void EntityVector::SetY(float fY)
 		case ENTITY_PLAYER:
 			switch (m_nFlags)
 			{
-				case PLRVECTOR_POS: functions->SetPlayerPos(this->m_nEntityId, this->x, fY, this->z); break;
+				case PLRVECTOR_POS: functions->SetPlayerPosition(this->m_nEntityId, this->x, fY, this->z); break;
 				case PLRVECTOR_SPEED: functions->SetPlayerSpeed(this->m_nEntityId, this->x, fY, this->z); break;
 			}
 			break;
@@ -115,28 +114,27 @@ void EntityVector::SetY(float fY)
 		case ENTITY_VEHICLE:
 			switch (m_nFlags)
 			{
-				case VEHVECTOR_POS: functions->SetVehiclePos(this->m_nEntityId, this->x, fY, this->z, 0); break;
-				case VEHVECTOR_SPAWNPOS: functions->SetVehicleSpawnPos(this->m_nEntityId, this->x, fY, this->z, 0.0f); break;
-				case VEHVECTOR_ANGLE: functions->SetVehicleRotEuler(this->m_nEntityId, this->x, fY, this->z); break;
-				case VEHVECTOR_SPAWNANGLE: functions->SetVehicleSpawnRotEuler(this->m_nEntityId, this->x, fY, this->z); break;
-				case VEHVECTOR_SPEED: functions->SetVehicleSpeed(this->m_nEntityId, this->x, fY, this->z); break;
-				case VEHVECTOR_RELSPEED: functions->SetVehicleRelSpeed(this->m_nEntityId, this->x, fY, this->z); break;
-				case VEHVECTOR_TURNSPEED: functions->SetVehicleTurnSpeed(this->m_nEntityId, this->x, fY, this->z); break;
-				case VEHVECTOR_RELTURNSPEED: functions->SetVehicleRelTurnSpeed(this->m_nEntityId, this->x, fY, this->z); break;
+				case VEHVECTOR_POS: functions->SetVehiclePosition(this->m_nEntityId, this->x, fY, this->z, 0); break;
+				case VEHVECTOR_SPAWNPOS: functions->SetVehicleSpawnPosition(this->m_nEntityId, this->x, fY, this->z); break;
+				case VEHVECTOR_ANGLE: functions->SetVehicleRotationEuler(this->m_nEntityId, this->x, fY, this->z); break;
+				case VEHVECTOR_SPAWNANGLE: functions->SetVehicleSpawnRotationEuler(this->m_nEntityId, this->x, fY, this->z); break;
+				case VEHVECTOR_SPEED: functions->SetVehicleSpeed(this->m_nEntityId, this->x, fY, this->z, false, false); break;
+				case VEHVECTOR_RELSPEED: functions->SetVehicleSpeed(this->m_nEntityId, this->x, fY, this->z, false, true); break;
+				case VEHVECTOR_TURNSPEED: functions->SetVehicleTurnSpeed(this->m_nEntityId, this->x, fY, this->z, false, false); break;
+				case VEHVECTOR_RELTURNSPEED: functions->SetVehicleTurnSpeed(this->m_nEntityId, this->x, fY, this->z, false, true); break;
 			}
 			break;
 
-		case ENTITY_PICKUP: functions->PickupSetPos(this->m_nEntityId, this->x, fY, this->z); break;
+		case ENTITY_PICKUP: functions->SetPickupPosition(this->m_nEntityId, this->x, fY, this->z); break;
 		case ENTITY_OBJECT:
 			switch (m_nFlags)
 			{
-				case OBJVECTOR_POS: functions->SetObjectPos(this->m_nEntityId, this->x, fY, this->z); break;
-				case OBJVECTOR_ROTATION: functions->RotObjectToEuler(this->m_nEntityId, this->x, fY, this->z, 0); break;
+				case OBJVECTOR_POS: functions->SetObjectPosition(this->m_nEntityId, this->x, fY, this->z); break;
+				case OBJVECTOR_ROTATION: functions->RotateObjectToEuler(this->m_nEntityId, this->x, fY, this->z, 0); break;
 			}
 			break;
 
-		case ENTITY_CHECKPOINT: functions->SetCheckpointPos(this->m_nEntityId, this->x, fY, this->z); break;
-		case ENTITY_SPHERE: functions->SetSpherePos(this->m_nEntityId, this->x, fY, this->z); break;
+		case ENTITY_CHECKPOINT: functions->SetCheckPointPosition(this->m_nEntityId, this->x, fY, this->z); break;
 	}
 }
 
@@ -148,7 +146,7 @@ void EntityVector::SetZ(float fZ)
 		case ENTITY_PLAYER:
 			switch (m_nFlags)
 			{
-				case PLRVECTOR_POS: functions->SetPlayerPos(this->m_nEntityId, this->x, this->y, fZ); break;
+				case PLRVECTOR_POS: functions->SetPlayerPosition(this->m_nEntityId, this->x, this->y, fZ); break;
 				case PLRVECTOR_SPEED: functions->SetPlayerSpeed(this->m_nEntityId, this->x, this->y, fZ); break;
 			}
 			break;
@@ -156,28 +154,27 @@ void EntityVector::SetZ(float fZ)
 		case ENTITY_VEHICLE:
 			switch (m_nFlags)
 			{
-				case VEHVECTOR_POS: functions->SetVehiclePos(this->m_nEntityId, this->x, this->y, fZ, 0); break;
-				case VEHVECTOR_SPAWNPOS: functions->SetVehicleSpawnPos(this->m_nEntityId, this->x, this->y, fZ, 0.0f); break;
-				case VEHVECTOR_ANGLE: functions->SetVehicleRotEuler(this->m_nEntityId, this->x, this->y, fZ); break;
-				case VEHVECTOR_SPAWNANGLE: functions->SetVehicleSpawnRotEuler(this->m_nEntityId, this->x, this->y, fZ); break;
-				case VEHVECTOR_SPEED: functions->SetVehicleSpeed(this->m_nEntityId, this->x, this->y, fZ); break;
-				case VEHVECTOR_RELSPEED: functions->SetVehicleRelSpeed(this->m_nEntityId, this->x, this->y, fZ); break;
-				case VEHVECTOR_TURNSPEED: functions->SetVehicleTurnSpeed(this->m_nEntityId, this->x, this->y, fZ); break;
-				case VEHVECTOR_RELTURNSPEED: functions->SetVehicleRelTurnSpeed(this->m_nEntityId, this->x, this->y, fZ); break;
+				case VEHVECTOR_POS: functions->SetVehiclePosition(this->m_nEntityId, this->x, this->y, fZ, 0); break;
+				case VEHVECTOR_SPAWNPOS: functions->SetVehicleSpawnPosition(this->m_nEntityId, this->x, this->y, fZ); break;
+				case VEHVECTOR_ANGLE: functions->SetVehicleRotationEuler(this->m_nEntityId, this->x, this->y, fZ); break;
+				case VEHVECTOR_SPAWNANGLE: functions->SetVehicleSpawnRotationEuler(this->m_nEntityId, this->x, this->y, fZ); break;
+				case VEHVECTOR_SPEED: functions->SetVehicleSpeed(this->m_nEntityId, this->x, this->y, fZ, false, false); break;
+				case VEHVECTOR_RELSPEED: functions->SetVehicleSpeed(this->m_nEntityId, this->x, this->y, fZ, false, true); break;
+				case VEHVECTOR_TURNSPEED: functions->SetVehicleTurnSpeed(this->m_nEntityId, this->x, this->y, fZ, false, false); break;
+				case VEHVECTOR_RELTURNSPEED: functions->SetVehicleTurnSpeed(this->m_nEntityId, this->x, this->y, fZ, false, true); break;
 			}
 			break;
 
-		case ENTITY_PICKUP: functions->PickupSetPos(this->m_nEntityId, this->x, this->y, fZ); break;
+		case ENTITY_PICKUP: functions->SetPickupPosition(this->m_nEntityId, this->x, this->y, fZ); break;
 		case ENTITY_OBJECT:
 			switch (m_nFlags)
 			{
-				case OBJVECTOR_POS: functions->SetObjectPos(this->m_nEntityId, this->x, this->y, fZ); break;
-				case OBJVECTOR_ROTATION: functions->RotObjectToEuler(this->m_nEntityId, this->x, this->y, fZ, 0); break;
+				case OBJVECTOR_POS: functions->SetObjectPosition(this->m_nEntityId, this->x, this->y, fZ); break;
+				case OBJVECTOR_ROTATION: functions->RotateObjectToEuler(this->m_nEntityId, this->x, this->y, fZ, 0); break;
 			}
 			break;
 
-		case ENTITY_CHECKPOINT: functions->SetCheckpointPos(this->m_nEntityId, this->x, this->y, fZ); break;
-		case ENTITY_SPHERE: functions->SetSpherePos(this->m_nEntityId, this->x, this->y, fZ); break;
+		case ENTITY_CHECKPOINT: functions->SetCheckPointPosition(this->m_nEntityId, this->x, this->y, fZ); break;
 	}
 }
 
@@ -195,12 +192,12 @@ void EntityQuaternion::SetX(float fX)
 		case ENTITY_VEHICLE:
 			switch (this->m_nFlags)
 			{
-				case VEHQUAT_ANGLE: functions->SetVehicleRot(this->m_nEntityId, fX, this->y, this->z, this->w); break;
-				case VEHQUAT_SPAWNANGLE: functions->SetVehicleSpawnRot(this->m_nEntityId, fX, this->y, this->z, this->w); break;
+				case VEHQUAT_ANGLE: functions->SetVehicleRotation(this->m_nEntityId, fX, this->y, this->z, this->w); break;
+				case VEHQUAT_SPAWNANGLE: functions->SetVehicleSpawnRotation(this->m_nEntityId, fX, this->y, this->z, this->w); break;
 			}
 			break;
 
-		case ENTITY_OBJECT: functions->RotObjectTo(this->m_nEntityId, fX, this->y, this->z, this->w, 0); break;
+		case ENTITY_OBJECT: functions->RotateObjectTo(this->m_nEntityId, fX, this->y, this->z, this->w, 0); break;
 	}
 }
 
@@ -212,12 +209,12 @@ void EntityQuaternion::SetY(float fY)
 		case ENTITY_VEHICLE:
 			switch (this->m_nFlags)
 			{
-				case VEHQUAT_ANGLE: functions->SetVehicleRot(this->m_nEntityId, this->x, fY, this->z, this->w); break;
-				case VEHQUAT_SPAWNANGLE: functions->SetVehicleSpawnRot(this->m_nEntityId, this->x, fY, this->z, this->w); break;
+				case VEHQUAT_ANGLE: functions->SetVehicleRotation(this->m_nEntityId, this->x, fY, this->z, this->w); break;
+				case VEHQUAT_SPAWNANGLE: functions->SetVehicleSpawnRotation(this->m_nEntityId, this->x, fY, this->z, this->w); break;
 			}
 			break;
 
-		case ENTITY_OBJECT: functions->RotObjectTo(this->m_nEntityId, this->x, fY, this->z, this->w, 0); break;
+		case ENTITY_OBJECT: functions->RotateObjectTo(this->m_nEntityId, this->x, fY, this->z, this->w, 0); break;
 	}
 }
 
@@ -229,12 +226,12 @@ void EntityQuaternion::SetZ(float fZ)
 		case ENTITY_VEHICLE:
 			switch (this->m_nFlags)
 			{
-				case VEHQUAT_ANGLE: functions->SetVehicleRot(this->m_nEntityId, this->x, this->y, fZ, this->w); break;
-				case VEHQUAT_SPAWNANGLE: functions->SetVehicleSpawnRot(this->m_nEntityId, this->x, this->y, fZ, this->w); break;
+				case VEHQUAT_ANGLE: functions->SetVehicleRotation(this->m_nEntityId, this->x, this->y, fZ, this->w); break;
+				case VEHQUAT_SPAWNANGLE: functions->SetVehicleSpawnRotation(this->m_nEntityId, this->x, this->y, fZ, this->w); break;
 			}
 			break;
 
-		case ENTITY_OBJECT: functions->RotObjectTo(this->m_nEntityId, this->x, this->y, fZ, this->w, 0); break;
+		case ENTITY_OBJECT: functions->RotateObjectTo(this->m_nEntityId, this->x, this->y, fZ, this->w, 0); break;
 	}
 }
 
@@ -246,12 +243,12 @@ void EntityQuaternion::SetW(float fW)
 		case ENTITY_VEHICLE:
 			switch (this->m_nFlags)
 			{
-				case VEHQUAT_ANGLE: functions->SetVehicleRot(this->m_nEntityId, this->x, this->y, this->z, fW); break;
-				case VEHQUAT_SPAWNANGLE: functions->SetVehicleSpawnRot(this->m_nEntityId, this->x, this->y, this->z, fW); break;
+				case VEHQUAT_ANGLE: functions->SetVehicleRotation(this->m_nEntityId, this->x, this->y, this->z, fW); break;
+				case VEHQUAT_SPAWNANGLE: functions->SetVehicleSpawnRotation(this->m_nEntityId, this->x, this->y, this->z, fW); break;
 			}
 			break;
 
-		case ENTITY_OBJECT: functions->RotObjectTo(this->m_nEntityId, this->x, this->y, this->z, fW, 0); break;
+		case ENTITY_OBJECT: functions->RotateObjectTo(this->m_nEntityId, this->x, this->y, this->z, fW, 0); break;
 	}
 }
 

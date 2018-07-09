@@ -69,17 +69,11 @@
     <ClInclude Include="UtilStructs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CSprite.h">
-      <Filter>Header Files\Objects</Filter>
-    </ClInclude>
     <ClInclude Include="SQModule.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SQImports.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CTextdraw.h">
-      <Filter>Header Files\Objects</Filter>
     </ClInclude>
     <ClInclude Include="sqrat\sqmodule.h">
       <Filter>Header Files\Sqrat</Filter>
@@ -138,7 +132,7 @@
     <ClInclude Include="CCheckpoint.h">
       <Filter>Header Files\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="CSphere.h">
+    <ClInclude Include="CStream.h">
       <Filter>Header Files\Objects</Filter>
     </ClInclude>
   </ItemGroup>
@@ -182,16 +176,10 @@
     <ClCompile Include="UtilStructs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CSprite.cpp">
-      <Filter>Source Files\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="CTextdraw.cpp">
-      <Filter>Source Files\Objects</Filter>
-    </ClCompile>
     <ClCompile Include="CCheckpoint.cpp">
       <Filter>Source Files\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="CSphere.cpp">
+    <ClCompile Include="CStream.cpp">
       <Filter>Source Files\Objects</Filter>
     </ClCompile>
   </ItemGroup>
