@@ -546,6 +546,8 @@ uint8_t OnCommandMessage(int nPlayerId, const char* pszText)
 
 			// Call the function
 			sq->call(v, 4, 0, 1);
+            
+            free(szText);
 		}
 
 		// Restore the stack
