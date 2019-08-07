@@ -38,7 +38,7 @@ CCore::CCore()
 
 CCore::~CCore()
 {
-    DropAllTimers();
+    DropAllTimers(true);
     ProcessTimers(0.0f);
 
 	if( script != NULL )
@@ -195,12 +195,19 @@ void CCore::ProcessTimers(float elapsedTime)
 	}
 }
 
-void CCore::DropAllTimers()
+void CCore::DropAllTimers(bool immediately)
 {
 	for( int i = 0; i < this->maxTimers; i++ )
 	{
-		if( pTimerArray[i] != NULL )
-			pTimerArray[i]->committingSeppuku = true;
+		if( pTimerArray[i] != NULL ) {
+			if (!immediately) {
+				pTimerArray[i]->committingSeppuku = true;
+			}
+			else {
+				delete pTimerArray[i];
+				pTimerArray[i] = NULL;
+			}
+		}
 	}
 }
 

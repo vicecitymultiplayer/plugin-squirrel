@@ -1,5 +1,9 @@
 #include "main.h"
 
+inline float square(float f) {
+	return f * f;
+}
+
 // Convert a Vector to string
 const std::string Vector::ToString()
 {
@@ -18,8 +22,8 @@ const std::string Quaternion::ToString()
 	return out.str();
 }
 
-float Vector::Length(void) const { return sqrt(pow(this->x, 2) + pow(this->y, 2) + pow(this->z, 2)); }
-float Vector::Distance(const Vector &v) const { return sqrt(pow(this->x - v.x, 2) + pow(this->y - v.y, 2) + pow(this->z - v.z, 2)); }
+float Vector::Length(void) const { return sqrt(square(this->x) + square(this->y) + square(this->z)); }
+float Vector::Distance(const Vector &v) const { return sqrt(square(this->x - v.x) + square(this->y - v.y) + square(this->z - v.z)); }
 float Vector::Dot(const Vector &v) { return (this->x * v.x) + (this->y * v.y) + (this->z * v.z); }
 Vector& Vector::Normalize(void)
 {

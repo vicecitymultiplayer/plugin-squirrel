@@ -143,7 +143,8 @@ int CStream::ReadInt(void) {
 		return 0;
 	}
 
-	int result = *(int*)&inputStreamData[inputStreamPosition];
+	int result;
+	memcpy(&result, &inputStreamData[inputStreamPosition], sizeof(result));
 	inputStreamPosition += sizeof(int);
 	return result;
 }
@@ -154,7 +155,8 @@ float CStream::ReadFloat(void) {
 		return 0.0f;
 	}
 
-	float result = *(float*)&inputStreamData[inputStreamPosition];
+	float result;
+        memcpy(&result, &inputStreamData[inputStreamPosition], sizeof(result));
 	inputStreamPosition += sizeof(float);
 	return result;
 }
@@ -165,7 +167,8 @@ uint16_t CStream::ReadBEInt16(void) {
 		return 0;
 	}
 
-	uint16_t result = *(int16_t*)&inputStreamData[inputStreamPosition];
+	uint16_t result;
+	memcpy(&result, &inputStreamData[inputStreamPosition], sizeof(result));
 	inputStreamPosition += sizeof(uint16_t);
 	return ((result >> 8) & 0xFF) | ((result & 0xFF) << 8);
 }

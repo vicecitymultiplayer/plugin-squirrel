@@ -40,7 +40,7 @@ class CCore
 		~CCore();
 		void AddTimer( CTimer * pTimer );
 		void CleanWorld();
-		void DropAllTimers();
+		void DropAllTimers(bool immediately = false);
 		void LoadVM();
 		void ProcessTimers( float elapsedTime );
 		void RegisterEntities();

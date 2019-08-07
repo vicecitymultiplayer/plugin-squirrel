@@ -9,6 +9,10 @@
 #include <ctype.h>
 #include <stdlib.h>
 
+inline float square(float f) {
+	return f * f;
+}
+
 inline void szlower( char * string )
 {
 	int i;
@@ -1130,8 +1134,8 @@ DWORD SQGetTickCount( void )
 
 float DistanceFromPoint( float x1, float y1, float x2, float y2 )
 {
-	float matrixX = pow( (x2 - x1), 2 );
-	float matrixY = pow( (y2 - y1), 2 );
+	float matrixX = square(x2 - x1);
+	float matrixY = square(y2 - y1);
 	float matrixF = sqrt( matrixX + matrixY );
 	return matrixF;
 }
@@ -1157,7 +1161,7 @@ void ReloadScripts( void )
 		pCore->ChangeReloadPermission(false);
 
 		// Get rid of ALL declared timers
-		pCore->DropAllTimers();
+		pCore->DropAllTimers(true);
 
 		// Clean the world up
 		pCore->CleanWorld();
@@ -1952,7 +1956,7 @@ inline size_t Internal_NumTok(const char* szText, const char cDelimiter)
 		{
 			if ((*++p) && (*p != cDelimiter)) iCounter++;
 		}
-		else *p++;
+		else p++;
 	}
 
 	return iCounter;
@@ -2131,8 +2135,8 @@ SQInteger NewTimer( HSQUIRRELVM v )
 		return sq_throwerror( v, "The maximum number of timer pulses must be a float or integer." );
 	else
 	{
-		const SQChar * pFuncName;
-		SQInteger maxPulses;
+		const SQChar * pFuncName = NULL;
+		SQInteger maxPulses = 0;
 		SQFloat fInterval;
 
 		sq_getstring( v, 2, &pFuncName );
